@@ -1,0 +1,57 @@
+@charset "utf-8";
+
+/*----------global-----------*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {margin:0; padding:0; border:0; font-size:100%; font:inherit; vertical-align:baseline;}
+body{font-family:microsoft yahei,SimSun,verdana,arial; background-color:#fff; color:#333; font-size:12px; line-height:1.2; word-break:break-all; text-align:left;}
+input,textarea,button{font-size:12px; color:#333;}
+input,button,select,textarea,a{outline:none; font-family:microsoft yahei;}
+textarea{resize:none;}
+img{border:none;}
+input,select,img,button{vertical-align:middle;}
+button,label{cursor:pointer; display:inline-block;}
+ul,ol,li,dl,dt,dd{list-style-type:none; text-align:left;}
+blockquote,q{quotes:none;}
+blockquote:before, blockquote:after,
+q:before,q:after{content:''; content:none;}
+
+
+/*-------gra-------*/
+.clear{overflow:hidden; _zoom:1;}
+.cr{*width:13px; *height:13px; vertical-align:-2px; *vertical-align:1px; _vertical-align:0; margin-right:5px;}
+.hide{display:none !important;}
+.fl{float:left;}
+.fr{float:right;}
+.box{}
+.box-empty{height:82px;}
+.box-emptylog{height:52px;}
+.wrap{width:100%;}
+.wrap-full{width:1000px; margin:0 auto;}
+.content{margin-bottom:20px;}
+
+/*-------input-------*/
+.ipt{font-family:microsoft yahei; display:inline-block; border:1px solid #dcdcdc; background-color:#fff; padding:0 6px; border-radius:2px; -webkit-border-radius:2px; -moz-border-radius:2px; color:#777;}
+.ipt:hover{border:1px solid #aaa;}
+.ipt-lgn{height:31px; line-height:31px;}
+.ipt-width195{width:195px;}
+.ipt-width116{width:116px;}
+.pic-ver{display:inline-block; margin-left:5px;}
+/*------button------*/
+.btn{border:none; display:inline-block; text-align:center; cursor:pointer; width:auto; overflow:visible; border-radius:2px; -webkit-border-radius:2px; -moz-border-radius:2px; background-image:url(../images/btnbg.png); background-repeat:repeat-x;}
+.btn:hover{text-decoration:none;}
+.btn-blue{width:130px; height:38px; border:1px solid #4a9dd4; background-color:#7fc1ed; padding:0 20px; color:#fff; background-position:0 -108px; font-size:14px;}
+.btn-blue:hover{background-position:0 -144px;}
+.btn-blue:active{background-position:0 -180px;}
+/*-----boxlogin------*/
+.bg-big{background:url(../images/bg_big.jpg) no-repeat center 0;}
+.bg-loginbox{background:url(../images/bg_loginbox.png) no-repeat 0 0;}
+.loginbox{width:373px; height:441px; margin-top:15px;}
+.lgn-tit{font-size:21px; font-weight:bold; padding:30px 0 0 30px; color:#0066cc;}
+.form-horizontal{padding-top:16px;}
+.form-ver{display:block; margin:0 auto 16px; width:260px; height:26px; line-height:26px; background-color:#ffefef; border:1px solid #f4d6d6; color:#dd4b4b; text-indent:10px;}
+.control-group{margin-bottom:15px;}
+.form-empty{display:block; height:30px;}
+.control-label{width:100px; text-align:right; line-height:33px; color:#666; cursor:default; font-size:14px;}
+.controls{width:260px; text-align:left; color:#666;}
+/*------footer------*/
+.footer{border-top:1px solid #e5e5e5;}
+.footer p{padding:10px 0; text-align:center; color:#999; line-height:22px;}
