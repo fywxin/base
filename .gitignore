@@ -15,5 +15,7 @@ hs_err_pid*
 
 .classpath
 .project
-/.settings
-/target
+.settings/
+target/
+*.log
+Thumbs.db
