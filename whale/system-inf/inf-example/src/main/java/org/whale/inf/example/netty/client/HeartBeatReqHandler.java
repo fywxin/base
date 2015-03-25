@@ -30,7 +30,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 				heartBeat = ctx.executor().scheduleAtFixedRate(new HeartBeatTask(ctx), 0, 5000, TimeUnit.MILLISECONDS);
 				
 			//心跳应答
-			} if(message.getHeader().getType() == Header.LOGIN_RESP){
+			} if(message.getHeader().getType() == Header.HEART_BEAT_RESP){
 				System.out.println("心跳响应时间 : "+System.currentTimeMillis());
 				
 			} else{
@@ -58,7 +58,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 			header.setType(Header.HEART_BEAT_REQ);
 			
 			messgae.setHeader(header);
-			System.out.println("client heartBeat。。。");
+			System.out.println("发起心跳...");
 			ctx.writeAndFlush(messgae);
 		}
 		

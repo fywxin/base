@@ -16,7 +16,7 @@ public class NettyMessageEncoder extends MessageToMessageEncoder<NettyMessage> {
 	
 	@Override
 	protected void encode(ChannelHandlerContext ctx, NettyMessage msg, List<Object> out) throws Exception {
-		System.out.println("encode....");
+		
 		if(msg == null || msg.getHeader() == null){
 			throw new RpcException("消息对象不能为空");
 		}
@@ -48,7 +48,9 @@ public class NettyMessageEncoder extends MessageToMessageEncoder<NettyMessage> {
 		}else{
 			sendBuf.writeInt(0);
 		}
-		sendBuf.setInt(4, sendBuf.readableBytes());
+		
+		//-8 因为length的位置是 第8位开始，所以有效的长度应该是
+		sendBuf.setInt(4, sendBuf.readableBytes()-8);
 		
 		out.add(sendBuf);
 	}

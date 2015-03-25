@@ -19,16 +19,16 @@ public class HeartBeatRespHandler extends ChannelInboundHandlerAdapter {
 		
 		NettyMessage message = (NettyMessage)msg;
 		if(message != null && message.getHeader() != null){
-			if(message.getHeader().getType() == Header.MSG_REQ){
-				NettyMessage messgae = new NettyMessage();
+			if(message.getHeader().getType() == Header.HEART_BEAT_REQ){
+				NettyMessage resMesg = new NettyMessage();
 				Header header = new Header();
 				header.setSessionId(message.getHeader().getSessionId());
 				header.setType(Header.HEART_BEAT_RESP);
 				
-				messgae.setHeader(header);
+				resMesg.setHeader(header);
 				
-				System.out.println("server heartBeat。。。");
-				ctx.writeAndFlush(messgae);
+				System.out.println("服务端返回心跳...");
+				ctx.writeAndFlush(resMesg);
 			}else{
 				ctx.fireChannelRead(msg);
 			}

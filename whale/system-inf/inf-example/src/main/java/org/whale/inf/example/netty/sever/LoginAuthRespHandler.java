@@ -16,12 +16,13 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		System.out.println("收到用户登录请求");
+		
 		NettyMessage message = (NettyMessage)msg;
 		if(message != null){
 			
 			//应用登录消息
 			if(message.getHeader() != null && message.getHeader().getType() == Header.LOGIN_REQ){
+				System.out.println("收到用户登录请求");
 				Map<String, String> attach = message.getHeader().getAttachment();
 				if(attach == null || attach.size() < 1){
 					ctx.writeAndFlush(error(message.getHeader().getSessionId(), 401, "用户名或密码不能为空"));
@@ -30,12 +31,14 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
 				String userName = (String)attach.get("userName");
 				String password = (String)attach.get("password");
 				if(this.checkLogin(userName, password)){
+					
 					String sid = UUID.randomUUID().toString();
 					sessions.put(userName, sid);
 					System.out.println("用户登录成功，sid:"+sid);
 					ctx.writeAndFlush(success(message.getHeader().getSessionId(), sid));
 					return ;
 				}else{
+					System.out.println("用户登录失败： 用户名或密码错误");
 					ctx.writeAndFlush(error(message.getHeader().getSessionId(), 401, "用户名或密码错误"));
 					return ;
 				}

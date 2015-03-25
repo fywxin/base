@@ -19,42 +19,45 @@ public class NettyMessageDecoder extends LengthFieldBasedFrameDecoder {
 	protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
 		
 		ByteBuf frame = (ByteBuf)super.decode(ctx, in);
-		System.out.println("decode...."+(frame == null));
-//		if(frame == null)
-//			return null;
+		//System.out.println("decode...."+(frame == null));
+		if(frame == null){
+			System.out.println("frame 解析不匹配");
+			return null;
+		}
+		
 		NettyMessage nettyMessage = new NettyMessage();
 		Header header = new Header();
-		header.setCrcCode(in.readInt());
-		header.setLength(in.readInt());
-		header.setSessionId(in.readLong());
-		header.setType(in.readByte());
-		header.setPriority(in.readByte());
+		header.setCrcCode(frame.readInt());
+		header.setLength(frame.readInt());
+		header.setSessionId(frame.readLong());
+		header.setType(frame.readByte());
+		header.setPriority(frame.readByte());
 		byte[] byteArr = null;
 //		in.readBytes(byteArr);
 //		header.setToken(new String(byteArr, "UTF-8"));
-		int size = in.readInt();
+		int size = frame.readInt();
 		if(size > 0){
 			Map<String, String> attach = new HashMap<String, String>();
 			int keySize = 0;
 			String key = null;
 			String value = null;
 			for(int i=0; i<size; i++){
-				keySize = in.readInt();
+				keySize = frame.readInt();
 				byteArr = new byte[keySize];
-				in.readBytes(byteArr);
+				frame.readBytes(byteArr);
 				key = new String(byteArr, "UTF-8");
-				keySize = in.readInt();
+				keySize = frame.readInt();
 				byteArr = new byte[keySize];
-				in.readBytes(byteArr);
+				frame.readBytes(byteArr);
 				value = new String(byteArr, "UTF-8");
 				attach.put(key, value);
 			}
 			header.setAttachment(attach);
 		}
-		size = in.readInt();
+		size = frame.readInt();
 		if(size > 0){
 			byteArr = new byte[size];
-			in.readBytes(byteArr);
+			frame.readBytes(byteArr);
 			Object body = JSON.parseObject(new String(byteArr, "UTF-8"));
 			nettyMessage.setBody(body);
 		}

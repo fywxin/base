@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.whale.inf.example.netty.common.NettyMessageDecoder;
 import org.whale.inf.example.netty.common.NettyMessageEncoder;
-import org.whale.inf.example.netty.sever.NettyServer;
 
 public class NettyClient {
 
@@ -38,6 +37,7 @@ public class NettyClient {
 					@Override
 					protected void initChannel(Channel ch) throws Exception {
 						ch.pipeline()
+							//frame最大长度，
 							.addLast(new NettyMessageDecoder(1024*1024, 4, 4))
 							.addLast(new NettyMessageEncoder())
 							.addLast(new ReadTimeoutHandler(50))
@@ -55,7 +55,7 @@ public class NettyClient {
 				@Override
 				public void run() {
 					try {
-						TimeUnit.SECONDS.sleep(5);
+						TimeUnit.SECONDS.sleep(500);
 						connect(host, port); //发起重新连接
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -67,6 +67,7 @@ public class NettyClient {
 	
 	public static void main(String[] args) throws InterruptedException {
 		new NettyClient().connect("127.0.0.1", 8021);
+		
 	}
 	
 }

@@ -37,17 +37,18 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 		attach.put("password", "mei123");
 		header.setAttachment(attach);
 		nettyMessage.setHeader(header);
-		System.out.println("用户请求登录...");
+		System.out.println("0. 发起用户登录请求...");
 		ctx.writeAndFlush(nettyMessage);
 	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		System.out.println("用户请求登录返回...");
+		
 		NettyMessage message = (NettyMessage)msg;
 		if(message != null){
 			Map<String, String> attach = null;
 			if(message.getHeader() != null && message.getHeader().getType() == Header.LOGIN_RESP && (attach = message.getHeader().getAttachment()).size() > 0){
+				System.out.println("1. 接受到用户登录结果");
 				String rs = (String)attach.get("rs");
 				String sid = (String)attach.get("sid");
 				if(rs == null || sid == null || !"true".equalsIgnoreCase(rs)){
@@ -58,6 +59,8 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 					sessionId = sid;
 					ctx.fireChannelRead(msg); //应用登录成功后，开始触发心跳检测
 				}
+			}else{
+				ctx.fireChannelRead(msg);
 			}
 		}else{
 			ctx.fireChannelRead(msg);
