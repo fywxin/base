@@ -30,7 +30,7 @@ public class NettyServer {
 					ch.pipeline()
 						.addLast(new NettyMessageDecoder(1024*1024, 4, 4))
 						.addLast(new NettyMessageEncoder())
-						.addLast(new ReadTimeoutHandler(50))
+						.addLast(new ReadTimeoutHandler(10))
 						.addLast(new LoginAuthRespHandler())
 						.addLast(new HeartBeatRespHandler());
 				}

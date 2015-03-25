@@ -27,7 +27,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 		if(message != null && message.getHeader() != null){
 			//应用登录成功后，开始启动心跳消息
 			if(message.getHeader().getType() == Header.LOGIN_RESP){
-				heartBeat = ctx.executor().scheduleAtFixedRate(new HeartBeatTask(ctx), 0, 5000, TimeUnit.MILLISECONDS);
+				heartBeat = ctx.executor().scheduleAtFixedRate(new HeartBeatTask(ctx), 0, 2000, TimeUnit.MILLISECONDS);
 				
 			//心跳应答
 			} if(message.getHeader().getType() == Header.HEART_BEAT_RESP){
