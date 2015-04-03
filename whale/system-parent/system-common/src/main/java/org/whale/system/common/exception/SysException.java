@@ -12,7 +12,7 @@ public class SysException extends BaseException {
 	/**
 	 * 系统异常
 	 */
-	public SysException(String message, Exception cause) {
+	public SysException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

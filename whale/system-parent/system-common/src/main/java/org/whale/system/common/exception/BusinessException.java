@@ -13,7 +13,7 @@ public class BusinessException extends BaseException {
 	/**
 	 * 业务异常
 	 */
-	public BusinessException(String message, Exception cause) {
+	public BusinessException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

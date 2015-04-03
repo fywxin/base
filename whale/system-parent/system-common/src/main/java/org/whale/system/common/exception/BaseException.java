@@ -13,8 +13,12 @@ public class BaseException extends RuntimeException {
 	/**
 	 * 系统异常
 	 */
-	public BaseException(String message, Exception cause) {
+	public BaseException(String message, Throwable cause) {
 		super(message, cause);
+	}
+	
+	public BaseException(Throwable cause){
+		super(cause);
 	}
 
 	/**

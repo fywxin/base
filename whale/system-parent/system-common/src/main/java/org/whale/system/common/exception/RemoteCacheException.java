@@ -13,7 +13,7 @@ public class RemoteCacheException extends SysException {
 		super(msg);
 	}
 
-	public RemoteCacheException(String msg, Exception cause){
+	public RemoteCacheException(String msg, Throwable cause){
 		super(msg, cause);
 	}
 }

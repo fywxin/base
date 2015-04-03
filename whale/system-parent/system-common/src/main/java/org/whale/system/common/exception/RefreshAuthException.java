@@ -10,7 +10,7 @@ public class RefreshAuthException extends SysException {
 
 	private static final long serialVersionUID = 23231L;
 	
-	public RefreshAuthException(String message, Exception cause) {
+	public RefreshAuthException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

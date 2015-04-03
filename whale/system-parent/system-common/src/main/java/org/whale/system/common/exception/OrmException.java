@@ -13,7 +13,7 @@ public class OrmException extends BaseException {
 		super(msg);
 	}
 
-	public OrmException(String msg, Exception cause){
+	public OrmException(String msg, Throwable cause){
 		super(msg, cause);
 	}
 }

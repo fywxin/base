@@ -13,7 +13,7 @@ public class AuthAnnotationException extends SysException {
 	/**
 	 * 权限定义异常
 	 */
-	public AuthAnnotationException(String message, Exception cause) {
+	public AuthAnnotationException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

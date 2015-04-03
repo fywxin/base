@@ -12,7 +12,7 @@ public class ForbidVisitException extends BusinessException {
 	/**
 	 * 禁止访问
 	 */
-	public ForbidVisitException(String message, Exception cause) {
+	public ForbidVisitException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

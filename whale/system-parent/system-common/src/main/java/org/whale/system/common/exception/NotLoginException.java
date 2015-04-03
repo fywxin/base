@@ -13,7 +13,7 @@ public class NotLoginException extends BusinessException {
 	/**
 	 * 用户未登入系统
 	 */
-	public NotLoginException(String message, Exception cause) {
+	public NotLoginException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
