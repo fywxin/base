@@ -140,6 +140,29 @@ public class WebUtil {
 		doPrint(request, response, buildRs(false, msg, obj));
 	}
 	
+	/**
+	 * 将处理失败结果（用户设置失败提示信息,用户返回失败相关数据） 返回给客服端ajax脚本
+	 * @param request
+	 * @param response
+	 * @param msg
+	 * @param code 编码
+	 */
+	public static void printFail(HttpServletRequest request, HttpServletResponse response, String msg, String code) {
+		doPrint(request, response, new Result(false, msg, code).toString());
+	}
+	
+	/**
+	 * 将处理失败结果（用户设置失败提示信息,用户返回失败相关数据） 返回给客服端ajax脚本
+	 * @param request
+	 * @param response
+	 * @param msg 信息
+	 * @param code 编码
+	 * @param obj 数据
+	 */
+	public static void printFail(HttpServletRequest request, HttpServletResponse response, String msg, String code, Object obj) {
+		doPrint(request, response, new Result(false, msg, obj, code).toString());
+	}
+	
 	
 	/**
 	 * 返回信息最后JSON格式
@@ -332,6 +355,8 @@ public class WebUtil {
 		
 		private boolean rs = true;
 		
+		private String code = "1";
+		
 		private String msg;
 		
 		private Object datas;
@@ -347,6 +372,19 @@ public class WebUtil {
 			this.rs = rs;
 			this.msg = msg;
 			this.datas = datas;
+		}
+		
+		public Result(boolean rs, String msg, String code) {
+			this.rs = rs;
+			this.msg = msg;
+			this.code = code;
+		}
+		
+		public Result(boolean rs, String msg, Object datas, String code) {
+			this.rs = rs;
+			this.msg = msg;
+			this.datas = datas;
+			this.code = code;
 		}
 		
 		
@@ -374,10 +412,18 @@ public class WebUtil {
 			this.datas = datas;
 		}
 
+		public String getCode() {
+			return code;
+		}
+
+		public void setCode(String code) {
+			this.code = code;
+		}
+
 		@Override
 		public String toString() {
 			StringBuilder strb = new StringBuilder("{\"rs\":");
-			strb.append(rs ? "true" : "false")
+			strb.append(rs ? "true" : "false").append(",code:").append(code)
 				.append(",\"msg\":\"").append(null == msg ? "" : msg)
 				.append("\",\"datas\":").append(null == datas ? "{}" : JSON.toJSONString(datas))
 				.append("}");
