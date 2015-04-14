@@ -423,8 +423,8 @@ public class WebUtil {
 		@Override
 		public String toString() {
 			StringBuilder strb = new StringBuilder("{\"rs\":");
-			strb.append(rs ? "true" : "false").append(",code:").append(code)
-				.append(",\"msg\":\"").append(null == msg ? "" : msg)
+			strb.append(rs ? "true" : "false").append(",\"code\":\"").append(code)
+				.append("\",\"msg\":\"").append(null == msg ? "" : msg)
 				.append("\",\"datas\":").append(null == datas ? "{}" : JSON.toJSONString(datas))
 				.append("}");
 			return strb.toString();
