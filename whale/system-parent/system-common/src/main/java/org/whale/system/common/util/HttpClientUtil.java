@@ -188,14 +188,15 @@ public class HttpClientUtil {
 				logger.debug("url: ["+url+"] 返回内容 : " + resStr);
 				return resStr;
 			}
+		//http://www.blogjava.net/wangxinsh55/archive/2012/07/16/383210.html
 		//发生异常，一定要catch，然后调用 httpGet.abort(); 来释放连接，否则会 CLOSE_WAIT 数量大多，导致连接被占用完
 		//org.apache.http.conn.ConnectionPoolTimeoutException: Timeout waiting for connection
 		}  catch (IOException e) {
 			request.abort();
 			throw new HttpClientIOException(e);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			request.abort();
-			throw e;
+			throw new HttpClientIOException(e);
 		} 
 		logger.debug("url: [{}] 返回内容：空", url);
 		return null;
