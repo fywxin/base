@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.BaseService;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.AuthDao;

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.whale.system.base.BaseCrudEvent;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.BaseService;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;

@@ -9,8 +9,8 @@ import org.whale.ext.dao.DomainDao;
 import org.whale.ext.domain.Attr;
 import org.whale.ext.domain.Domain;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.BaseService;
 import org.whale.system.common.util.Strings;
+import org.whale.system.service.BaseService;
 
 @Service
 public class DomainService extends BaseService<Domain, Long> {

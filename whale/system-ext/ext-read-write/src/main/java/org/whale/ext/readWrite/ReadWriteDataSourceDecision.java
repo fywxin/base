@@ -17,14 +17,14 @@ public class ReadWriteDataSourceDecision {
     }
     
     
-    private static final ThreadLocal<DataSourceType> holder = new ThreadLocal<DataSourceType>();
+    private static final ThreadLocal<DateSourceTypeAndFrom> holder = new ThreadLocal<DateSourceTypeAndFrom>();
 
-    public static void markWrite() {
-        holder.set(DataSourceType.write);
+    public static void markWrite(String fromClass) {
+        holder.set(new DateSourceTypeAndFrom(DataSourceType.write, fromClass));
     }
     
-    public static void markRead() {
-        holder.set(DataSourceType.read);
+    public static void markRead(String fromClass) {
+        holder.set(new DateSourceTypeAndFrom(DataSourceType.read, fromClass));
     }
     
     public static void reset() {
@@ -35,12 +35,52 @@ public class ReadWriteDataSourceDecision {
         return null == holder.get(); 
     }
     
+    public static String getFromClass(){
+    	if(isChoiceNone())
+    		return null;
+    	return holder.get().getFromClass();
+    }
+    
     public static boolean isChoiceWrite() {
-        return DataSourceType.write == holder.get();
+    	if(isChoiceNone())
+    		return false;
+        return DataSourceType.write == holder.get().getDataSourceType();
     }
     
     public static boolean isChoiceRead() {
-        return DataSourceType.read == holder.get();
+    	if(isChoiceNone())
+    		return false;
+        return DataSourceType.read == holder.get().getDataSourceType();
+    }
+    
+   public static class DateSourceTypeAndFrom{
+	   
+    	private DataSourceType dataSourceType;
+    	
+    	private String fromClass;
+    	
+    	public DateSourceTypeAndFrom(){}
+    	
+    	public DateSourceTypeAndFrom(DataSourceType dataSourceType, String fromClass){
+    		this.dataSourceType = dataSourceType;
+    		this.fromClass = fromClass;
+    	}
+
+		public DataSourceType getDataSourceType() {
+			return dataSourceType;
+		}
+
+		public void setDataSourceType(DataSourceType dataSourceType) {
+			this.dataSourceType = dataSourceType;
+		}
+
+		public String getFromClass() {
+			return fromClass;
+		}
+
+		public void setFromClass(String fromClass) {
+			this.fromClass = fromClass;
+		}
     }
 
 }

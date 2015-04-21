@@ -2,8 +2,10 @@ package org.whale.ext.readWrite;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.slf4j.Logger;
@@ -84,7 +86,10 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
     private boolean forceChoiceReadWhenWrite = false;
     
     private Map<String, Boolean> readMethodMap = new HashMap<String, Boolean>();
-
+    
+    //不会访问数据库，可以忽略的方法
+    private Set<String> ignoreMethods = new HashSet<String>();
+    
     /**
      * 当之前操作是写的时候，是否强制从从库读
      * 默认（false） 当之前操作是写，默认强制从写库读
@@ -99,7 +104,6 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-
         if(!(bean instanceof NameMatchTransactionAttributeSource)) {
             return bean;
         }
@@ -156,24 +160,23 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
     }
     
     
-    
-    
-    
     public Object determineReadOrWriteDB(ProceedingJoinPoint pjp) throws Throwable {
-        
+    	//默认忽略的方法
+    	if(ignoreMethods.contains(pjp.getSignature().getName())){
+    		 return pjp.proceed();
+    	}
+    	
         if (isChoiceReadDB(pjp.getSignature().getName())) {
-            ReadWriteDataSourceDecision.markRead();
+            ReadWriteDataSourceDecision.markRead(pjp.getTarget().getClass().getName());
         } else {
-            ReadWriteDataSourceDecision.markWrite();
+            ReadWriteDataSourceDecision.markWrite(pjp.getTarget().getClass().getName());
         }
             
         try {
             return pjp.proceed();
         } finally {
             ReadWriteDataSourceDecision.reset();
-        }
-        
-        
+        }  
     }
     
     private boolean isChoiceReadDB(String methodName) {
@@ -205,10 +208,18 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
         return false;
     }
 
-
     protected boolean isMatch(String methodName, String mappedName) {
         return PatternMatchUtils.simpleMatch(mappedName, methodName);
     }
 
+	public Set<String> getIgnoreMethods() {
+		return ignoreMethods;
+	}
+	
+	public void setIgnoreMethods(Set<String> ignoreMethods) {
+		this.ignoreMethods = ignoreMethods;
+	}
+
+    
 }
 

@@ -1,7 +1,10 @@
-package org.whale.system.base;
+package org.whale.system.service;
 
 import java.io.Serializable;
 import java.util.List;
+
+import org.whale.system.base.BaseDao;
+import org.whale.system.base.Page;
 
 public abstract class BaseService<T, PK extends Serializable> {
 	

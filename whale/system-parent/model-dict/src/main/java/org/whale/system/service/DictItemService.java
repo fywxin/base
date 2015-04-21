@@ -8,7 +8,6 @@ import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Service;
 import org.whale.system.base.BaseCrudEvent;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.BaseService;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.DictDao;
 import org.whale.system.dao.DictItemDao;

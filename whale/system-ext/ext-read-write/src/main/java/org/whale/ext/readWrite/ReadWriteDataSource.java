@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
@@ -13,9 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.datasource.AbstractDataSource;
 import org.springframework.util.CollectionUtils;
+import org.whale.ext.readWrite.router.Router;
 
 /**
- * 
+ * http://jinnianshilongnian.iteye.com/blog/1720618
  * <pre>
  * 读/写动态选择数据库实现
  * 目前实现功能
@@ -42,8 +42,8 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
     private String[] readDataSourceNames;
     private DataSource[] readDataSources;
     private int readDataSourceCount;
-
-    private AtomicInteger counter = new AtomicInteger(1);
+    
+    private Router router;
 
     
     /**
@@ -94,18 +94,7 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
     }
     
     private DataSource determineReadDataSource() {
-        //按照顺序选择读库 
-        //TODO 算法改进 
-        int index = counter.incrementAndGet() % readDataSourceCount;
-        if(index < 0) {
-            index = - index;
-        }
-            
-        String dataSourceName = readDataSourceNames[index];
-        
-        log.debug("current determine read datasource : {}", dataSourceName);
-
-        return readDataSources[index];
+        return router.route(writeDataSource, readDataSources, readDataSourceNames);
     }
     
     @Override
@@ -117,5 +106,11 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
     public Connection getConnection(String username, String password) throws SQLException {
         return determineDataSource().getConnection(username, password);
     }
-
+    
+	public Router getRouter() {
+		return router;
+	}
+	public void setRouter(Router router) {
+		this.router = router;
+	}
 }

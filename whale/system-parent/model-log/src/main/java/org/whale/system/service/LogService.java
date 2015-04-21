@@ -3,7 +3,6 @@ package org.whale.system.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.BaseService;
 import org.whale.system.dao.LogDao;
 import org.whale.system.domain.Log;
 

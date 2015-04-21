@@ -126,6 +126,7 @@
 	    <property name="filters" value="${filters}" /> 
 	</bean>
 	
+	<!-- 数据源聚合器 -->
 	<bean id="readWriteDataSource" class="org.whale.ext.readWrite.ReadWriteDataSource">
         <property name="writeDataSource" ref="writeDataSource"/>
         <property name="readDataSourceMap">
@@ -134,10 +135,31 @@
               <entry key="readDataSource4002" value-ref="readDataSource4002"/>
            </map>
         </property>
+        <property name="router" ref="weightRouter"></property>
+    </bean>
+    
+    <!-- 轮询路由选择 
+    <bean id="roundRobinRouter" class="org.whale.ext.readWrite.router.RoundRobinRouter"></bean>-->
+     <!-- 最小活跃选择  
+    <bean id="leastActiveRouter" class="org.whale.ext.readWrite.router.LeastActiveRouter"></bean>-->
+    
+    <!-- 按权重选择  -->
+    <bean id="weightRouter" class="org.whale.ext.readWrite.router.WeightRouter">
+    	<property name="weightMap">
+    		<map>
+    			<entry key="readDataSource4001" value="1"/>
+              	<entry key="readDataSource4002" value="2"/>
+    		</map>
+    	</property>
     </bean>
     
     <bean id="readWriteDataSourceTransactionProcessor" class="org.whale.ext.readWrite.ReadWriteDataSourceProcessor">
        <property name="forceChoiceReadWhenWrite" value="true"/>
+       <property name="ignoreMethods">
+       	<set>
+       		<value>access</value>
+       	</set>
+       </property>
     </bean>
 	
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
