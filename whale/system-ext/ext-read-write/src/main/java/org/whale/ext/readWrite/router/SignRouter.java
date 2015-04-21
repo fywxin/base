@@ -1,5 +1,6 @@
 package org.whale.ext.readWrite.router;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -21,10 +22,10 @@ public class SignRouter  extends AbstractRouter {
 	private Object lock = new Object();
 
 	@Override
-	public DataSource doSelect(DataSource writeDataSource, DataSource[] readDataSources, String[] readDataSourceNames) {
+	public int doSelect(DataSource writeDataSource, List<DataSource> readDataSources, List<String> readDataSourceNames) {
 		DataSource dataSource = signMap.get(ReadWriteDataSourceDecision.getFromClass());
 		if(dataSource != null)
-			return dataSource;
+			return -1;
 			
 		if(pollRouter == null){
 			synchronized (lock) {

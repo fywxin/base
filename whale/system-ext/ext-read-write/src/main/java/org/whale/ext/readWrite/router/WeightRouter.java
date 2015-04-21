@@ -1,5 +1,6 @@
 package org.whale.ext.readWrite.router;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -35,18 +36,18 @@ public class WeightRouter extends AbstractRouter {
 	}
 
 	@Override
-	public DataSource doSelect(DataSource writeDataSource, DataSource[] readDataSources, String[] readDataSourceNames) {
+	public int doSelect(DataSource writeDataSource, List<DataSource> readDataSources, List<String> readDataSourceNames) {
 		if(weightMap == null || weightMap.size() < 1 || same){
 			return this.pollSelect(writeDataSource, readDataSources, readDataSourceNames);
 		}
 		
-		int length = readDataSources.length; // 总个数
+		int length = readDataSources.size(); // 总个数
         int totalWeight = 0; // 总权重
         boolean sameWeight = true; // 权重是否都一样
         for (int i = 0; i < length; i++) {
-            int weight = weightMap.get(readDataSourceNames[i]);
+            int weight = weightMap.get(readDataSourceNames.get(i));
             totalWeight += weight; // 累计总权重
-            if (sameWeight && i > 0 && weight !=  weightMap.get(readDataSourceNames[i-1])) {
+            if (sameWeight && i > 0 && weight !=  weightMap.get(readDataSourceNames.get(i-1))) {
                 sameWeight = false; // 计算所有权重是否一样
             }
         }
@@ -57,9 +58,9 @@ public class WeightRouter extends AbstractRouter {
             int offset = random.nextInt(totalWeight);
             // 并确定随机值落在哪个片断上
             for (int i = 0; i < length; i++) {
-                offset -= weightMap.get(readDataSourceNames[i]);
+                offset -= weightMap.get(readDataSourceNames.get(i));
                 if (offset < 0) {
-                    return readDataSources[i];
+                    return i;
                 }
             }
         }
@@ -68,7 +69,7 @@ public class WeightRouter extends AbstractRouter {
         return this.pollSelect(writeDataSource, readDataSources, readDataSourceNames);
 	}
 	
-	private DataSource pollSelect(DataSource writeDataSource, DataSource[] readDataSources, String[] readDataSourceNames){
+	private int pollSelect(DataSource writeDataSource, List<DataSource> readDataSources, List<String> readDataSourceNames){
 		if(pollRouter == null){
 			synchronized (lock) {
 				if(pollRouter == null){

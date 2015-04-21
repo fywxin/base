@@ -1,5 +1,7 @@
 package org.whale.ext.readWrite.router;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import com.alibaba.druid.pool.DruidDataSource;
@@ -15,18 +17,20 @@ public class LeastActiveRouter extends AbstractRouter {
 
 	@Override
 	@SuppressWarnings("all")
-	public DataSource doSelect(DataSource writeDataSource, DataSource[] readDataSources, String[] readDataSourceNames) {
-		DruidDataSource selDataSource = (DruidDataSource)readDataSources[0];
+	public int doSelect(DataSource writeDataSource, List<DataSource> readDataSources, List<String> readDataSourceNames) {
+		DruidDataSource selDataSource = (DruidDataSource)readDataSources.get(0);
 		DruidDataSource compareDataSource = null;
 		
-		for(int i=1; i<readDataSources.length; i++ ){
-			compareDataSource = (DruidDataSource)readDataSources[i];
+		int index = 0;
+		for(int i=1; i<readDataSources.size(); i++ ){
+			compareDataSource = (DruidDataSource)readDataSources.get(i);
 			if((selDataSource.getMaxActive()-selDataSource.getActiveCount()) < (compareDataSource.getMaxActive() - compareDataSource.getActiveCount())){
 				selDataSource = compareDataSource;
+				index = i;
 			}
 		}
 		
-		return selDataSource;
+		return index;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package org.whale.ext.readWrite.router;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
@@ -16,13 +17,13 @@ public class RoundRobinRouter extends AbstractRouter {
 	private AtomicInteger counter = new AtomicInteger(1);
 
 	@Override
-	public DataSource doSelect(DataSource writeDataSource, DataSource[] readDataSources, String[] readDataSourceNames) {
-		int index = counter.incrementAndGet() % readDataSources.length;
+	public int doSelect(DataSource writeDataSource, List<DataSource> readDataSources, List<String> readDataSourceNames) {
+		int index = counter.incrementAndGet() % readDataSources.size();
         if(index < 0) {
             index = - index;
         }
 
-        return readDataSources[index];
+        return index;
 	}
 
 }

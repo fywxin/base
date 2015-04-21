@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.NestedRuntimeException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
 import org.springframework.transaction.interceptor.RuleBasedTransactionAttribute;
@@ -86,28 +87,19 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
     private boolean forceChoiceReadWhenWrite = false;
     
     private Map<String, Boolean> readMethodMap = new HashMap<String, Boolean>();
-    
     //不会访问数据库，可以忽略的方法
     private Set<String> ignoreMethods = new HashSet<String>();
-    
-    /**
-     * 当之前操作是写的时候，是否强制从从库读
-     * 默认（false） 当之前操作是写，默认强制从写库读
-     * @param forceReadOnWrite
-     */
-    
-    public void setForceChoiceReadWhenWrite(boolean forceChoiceReadWhenWrite) {
-        
-        this.forceChoiceReadWhenWrite = forceChoiceReadWhenWrite;
-    }
-    
+    //通知移除失去连接的数据源
+    private ReadWriteDataSource readWriteDataSource;
 
+    /**
+     * 设置事务传播机制
+     */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if(!(bean instanceof NameMatchTransactionAttributeSource)) {
             return bean;
         }
-        
         try {
             NameMatchTransactionAttributeSource transactionAttributeSource = (NameMatchTransactionAttributeSource)bean;
             Field nameMapField = ReflectionUtils.findField(NameMatchTransactionAttributeSource.class, "nameMap");
@@ -137,7 +129,6 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
                 log.debug("read/write transaction process  method:{} force read:{}", methodName, isForceChoiceRead);
                 readMethodMap.put(methodName, isForceChoiceRead);
             }
-            
         } catch (Exception e) {
             throw new ReadWriteDataSourceTransactionException("process read/write transaction error", e);
         }
@@ -145,21 +136,13 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
         return bean;
     }
     
-    
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
-
-    private class ReadWriteDataSourceTransactionException extends NestedRuntimeException {
-		private static final long serialVersionUID = 1232323L;
-
-		public ReadWriteDataSourceTransactionException(String message, Throwable cause) {
-            super(message, cause);
-        }
-    }
-    
-    
+    /**
+     * 根据调用的service方法，判断该使用那种数据源
+     * 
+     * @param pjp
+     * @return
+     * @throws Throwable
+     */
     public Object determineReadOrWriteDB(ProceedingJoinPoint pjp) throws Throwable {
     	//默认忽略的方法
     	if(ignoreMethods.contains(pjp.getSignature().getName())){
@@ -174,7 +157,13 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
             
         try {
             return pjp.proceed();
-        } finally {
+            
+        //TODO  不确定数据库断开连接时抛出的异常是什么
+        }catch(DataAccessException e){
+        	e.printStackTrace();
+        	readWriteDataSource.removeDataSource(ReadWriteDataSourceDecision.get().getDataSourceName());
+        	throw e;
+        }finally {
             ReadWriteDataSourceDecision.reset();
         }  
     }
@@ -211,6 +200,20 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
     protected boolean isMatch(String methodName, String mappedName) {
         return PatternMatchUtils.simpleMatch(mappedName, methodName);
     }
+    
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+    private class ReadWriteDataSourceTransactionException extends NestedRuntimeException {
+		private static final long serialVersionUID = 1232323L;
+
+		public ReadWriteDataSourceTransactionException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+    
 
 	public Set<String> getIgnoreMethods() {
 		return ignoreMethods;
@@ -220,6 +223,24 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
 		this.ignoreMethods = ignoreMethods;
 	}
 
+
+	public ReadWriteDataSource getReadWriteDataSource() {
+		return readWriteDataSource;
+	}
+
+
+	public void setReadWriteDataSource(ReadWriteDataSource readWriteDataSource) {
+		this.readWriteDataSource = readWriteDataSource;
+	}
+	/**
+     * 当之前操作是写的时候，是否强制从从库读
+     * 默认（false） 当之前操作是写，默认强制从写库读
+     * @param forceReadOnWrite
+     */
+    public void setForceChoiceReadWhenWrite(boolean forceChoiceReadWhenWrite) {
+        
+        this.forceChoiceReadWhenWrite = forceChoiceReadWhenWrite;
+    }
     
 }
 

@@ -1,6 +1,5 @@
 package org.whale.ext.readWrite;
 
-
 /**
  * <pre>
  * 读/写动态数据库 决策者
@@ -53,11 +52,17 @@ public class ReadWriteDataSourceDecision {
         return DataSourceType.read == holder.get().getDataSourceType();
     }
     
+    public static DateSourceTypeAndFrom get(){
+    	return holder.get();
+    }
+    
    public static class DateSourceTypeAndFrom{
 	   
     	private DataSourceType dataSourceType;
     	
     	private String fromClass;
+    	
+    	private String dataSourceName;
     	
     	public DateSourceTypeAndFrom(){}
     	
@@ -81,6 +86,15 @@ public class ReadWriteDataSourceDecision {
 		public void setFromClass(String fromClass) {
 			this.fromClass = fromClass;
 		}
+
+		public String getDataSourceName() {
+			return dataSourceName;
+		}
+
+		public void setDataSourceName(String dataSourceName) {
+			this.dataSourceName = dataSourceName;
+		}
+
     }
 
 }

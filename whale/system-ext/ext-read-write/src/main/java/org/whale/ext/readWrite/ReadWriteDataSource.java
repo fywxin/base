@@ -2,8 +2,16 @@ package org.whale.ext.readWrite;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.sql.DataSource;
 
@@ -13,6 +21,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.datasource.AbstractDataSource;
 import org.springframework.util.CollectionUtils;
 import org.whale.ext.readWrite.router.Router;
+
+import com.alibaba.druid.pool.DruidDataSource;
 
 /**
  * http://jinnianshilongnian.iteye.com/blog/1720618
@@ -38,26 +48,21 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
     private DataSource writeDataSource;
     private Map<String, DataSource> readDataSourceMap;
     
-    
-    private String[] readDataSourceNames;
-    private DataSource[] readDataSources;
+    private List<String> readDataSourceNames;
+    private List<DataSource> readDataSources;
     private int readDataSourceCount;
     
     private Router router;
 
+    private Set<String> lostConnectDataSoucreNames = new HashSet<String>();
+    
+    private String testSql = "select count(1) from sys_user";
+    
+    private ExecutorService executor = Executors.newCachedThreadPool();
     
     /**
-     * 设置读库（name, DataSource）
-     * @param readDataSourceMap
+     * 读取配置的数据源
      */
-    public void setReadDataSourceMap(Map<String, DataSource> readDataSourceMap) {
-        this.readDataSourceMap = readDataSourceMap;
-    }
-    public void setWriteDataSource(DataSource writeDataSource) {
-        this.writeDataSource = writeDataSource;
-    }
-    
-    
     @Override
     public void afterPropertiesSet() throws Exception {
         if(writeDataSource == null) {
@@ -68,18 +73,24 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
         }
         readDataSourceCount = readDataSourceMap.size();
         
-        readDataSources = new DataSource[readDataSourceCount];
-        readDataSourceNames = new String[readDataSourceCount];
+        readDataSources = new CopyOnWriteArrayList<DataSource>();
+        readDataSourceNames = new CopyOnWriteArrayList<String>();
         
-        int i = 0;
         for(Entry<String, DataSource> e : readDataSourceMap.entrySet()) {
-            readDataSources[i] = e.getValue();
-            readDataSourceNames[i] = e.getKey();
-            i++;
+        	readDataSources.add(e.getValue());
+        	readDataSourceNames.add(e.getKey());
         }
+        log.debug("从读数据源"+readDataSourceCount+"个："+ readDataSourceMap.keySet());
+//        
+//        ResumeThread thread = new ResumeThread();
+//        thread.setName("从读数据源定时恢复线程");
+//        thread.start();
     }
     
-    
+    /**
+     * 根据service 调用方法，判断使用读还是写数据源
+     * @return
+     */
     private DataSource determineDataSource() {
         if(ReadWriteDataSourceDecision.isChoiceWrite()) {
             log.debug("current determine write datasource");
@@ -93,8 +104,53 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
         return determineReadDataSource();
     }
     
+    /**
+     * 路由选择使用哪个读数据源
+     * 
+     * @return
+     */
     private DataSource determineReadDataSource() {
-        return router.route(writeDataSource, readDataSources, readDataSourceNames);
+    	int i = router.route(writeDataSource, readDataSources, readDataSourceNames);
+    	if(i < 0 || i > readDataSources.size()-1){
+    		return writeDataSource;
+    	}
+    	//记录当前线程使用的数据源，当数据源失去连接异常时，将此数据源移除
+    	ReadWriteDataSourceDecision.get().setDataSourceName(readDataSourceNames.get(i));
+    	
+    	System.out.println("使用线程："+readDataSourceNames.get(i));
+    	return readDataSources.get(i);
+    }
+    
+    /**
+     * 移除失效的数据源
+     * 
+     * @param dataSourceName
+     */
+    public synchronized void removeDataSource(String dataSourceName){
+    	log.warn("开始移除数据源："+dataSourceName);
+    	
+    	int index = readDataSourceNames.indexOf(dataSourceName);
+    	if(index == -1){
+    		log.warn("移除数据源失败：查找不到数据源："+dataSourceName);
+    		return ;
+    	}
+    	//TODO 高并发情况下，可能存在不一致
+    	readDataSources.remove(index);
+    	readDataSourceNames.remove(index);
+    	
+    	lostConnectDataSoucreNames.add(dataSourceName);
+    	
+    	try {
+			while(!executor.submit(new ResumeTask(dataSourceName)).get().booleanValue()){
+				
+			}
+		} catch (Exception e) {}
+    	
+    	log.warn("成功移除数据源 ：" + dataSourceName+"\n当前可用数据源："+readDataSourceNames+"\n失去连接数据源："+lostConnectDataSoucreNames);
+    }
+    
+    public void addDataSource(String name, DataSource dataSource){
+    	
     }
     
     @Override
@@ -113,4 +169,89 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
 	public void setRouter(Router router) {
 		this.router = router;
 	}
+	public void setReadDataSourceMap(Map<String, DataSource> readDataSourceMap) {
+        this.readDataSourceMap = readDataSourceMap;
+    }
+    public void setWriteDataSource(DataSource writeDataSource) {
+        this.writeDataSource = writeDataSource;
+    }
+    
+    public String getTestSql() {
+		return testSql;
+	}
+	public void setTestSql(String testSql) {
+		this.testSql = testSql;
+	}
+
+
+	/**
+     * 数据源是否可用恢复线程
+     * @author 王金绍
+     *
+    class ResumeThread extends Thread{
+
+		@Override
+		public void run() {
+			while(true){
+				if(lostConnectDataSoucreNames.size() > 0){
+					DruidDataSource dataSource = null;
+					for(String name : lostConnectDataSoucreNames){
+						dataSource = (DruidDataSource)readDataSourceMap.get(name);
+						if(dataSource != null){
+							try{
+								Statement stmt = dataSource.getConnection().createStatement();
+								if(stmt.execute(testSql)){
+									lostConnectDataSoucreNames.remove(name);
+									readDataSources.add(dataSource);
+									readDataSourceNames.add(name);
+									
+									log.warn("恢复数据源："+name+"成功"+"\n当前可用数据源："+readDataSourceNames+"\n失去连接数据源："+lostConnectDataSoucreNames);
+								}
+								try {
+									Thread.sleep(1000L);
+								} catch (InterruptedException e) {}
+							}catch(Exception e){
+								
+							}
+						}
+					}
+				}
+				
+				try {
+					Thread.sleep(2000L);
+				} catch (InterruptedException e) {}
+			}
+		}
+    }*/
+    
+    class ResumeTask implements Callable<Boolean>{
+    	
+    	String dataSourceName;
+    	
+    	public ResumeTask(String name){
+    		this.dataSourceName = name;
+    	}
+
+		@Override
+		public Boolean call() throws Exception {
+			boolean rs = false;
+			try{
+				DruidDataSource dataSource = (DruidDataSource)readDataSourceMap.get(dataSourceName);
+				if(dataSource != null){
+					Statement stmt = dataSource.getConnection().createStatement();
+					rs = stmt.execute(testSql);
+					if(rs){
+						lostConnectDataSoucreNames.remove(dataSourceName);
+						readDataSources.add(dataSource);
+						readDataSourceNames.add(dataSourceName);
+						
+						log.warn("恢复数据源："+dataSourceName+"成功"+"\n当前可用数据源："+readDataSourceNames+"\n失去连接数据源："+lostConnectDataSoucreNames);
+					}
+				}
+			}catch(Exception e){
+				return false;
+			}
+			return rs;
+		}
+    }
 }

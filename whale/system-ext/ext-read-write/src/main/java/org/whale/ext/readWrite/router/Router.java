@@ -1,5 +1,7 @@
 package org.whale.ext.readWrite.router;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 /**
@@ -10,6 +12,16 @@ import javax.sql.DataSource;
  */
 public interface Router {
 
-	DataSource route(DataSource writeDataSource, DataSource[] readDataSources, String[] readDataSourceNames);
+	/**
+	 * 路由选择, 返回数据源数组下标
+	 * 
+	 * 返回-1，表示没有找到匹配的，使用 writeDataSource
+	 * 
+	 * @param writeDataSource
+	 * @param readDataSources
+	 * @param readDataSourceNames
+	 * @return
+	 */
+	int route(DataSource writeDataSource, List<DataSource> readDataSources, List<String> readDataSourceNames);
 	
 }

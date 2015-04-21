@@ -1,5 +1,7 @@
 package org.whale.ext.readWrite.router;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 /**
@@ -11,13 +13,13 @@ import javax.sql.DataSource;
 public abstract class AbstractRouter implements Router{
 
 	@Override
-	public DataSource route(DataSource writeDataSource, DataSource[] readDataSources, String[] readDataSourceNames) {
-		if(readDataSources == null || readDataSources.length == 0)
-			return writeDataSource;
-		if(readDataSources.length == 1)
-			return readDataSources[0];
+	public int route(DataSource writeDataSource, List<DataSource> readDataSources, List<String> readDataSourceNames) {
+		if(readDataSources == null || readDataSources.size() == 0)
+			return -1;
+		if(readDataSources.size() == 1)
+			return 0;
 		return doSelect(writeDataSource, readDataSources, readDataSourceNames);
 	}
 
-	public abstract DataSource doSelect(DataSource writeDataSource, DataSource[] readDataSources, String[] readDataSourceNames);
+	public abstract int doSelect(DataSource writeDataSource, List<DataSource> readDataSources, List<String> readDataSourceNames);
 }
