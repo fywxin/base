@@ -23,6 +23,8 @@ public class WeightRouter extends AbstractRouter {
 	private Object lock = new Object();
 	
 	private final Random random = new Random();
+	
+	private boolean same = false;
 
 	public Map<String, Integer> getWeightMap() {
 		return weightMap;
@@ -34,7 +36,7 @@ public class WeightRouter extends AbstractRouter {
 
 	@Override
 	public DataSource doSelect(DataSource writeDataSource, DataSource[] readDataSources, String[] readDataSourceNames) {
-		if(weightMap == null || weightMap.size() < 1){
+		if(weightMap == null || weightMap.size() < 1 || same){
 			return this.pollSelect(writeDataSource, readDataSources, readDataSourceNames);
 		}
 		
@@ -48,6 +50,8 @@ public class WeightRouter extends AbstractRouter {
                 sameWeight = false; // 计算所有权重是否一样
             }
         }
+        same = sameWeight;
+        
         if (totalWeight > 0 && ! sameWeight) {
             // 如果权重不相同且权重大于0则按总权重数随机
             int offset = random.nextInt(totalWeight);
