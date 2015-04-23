@@ -18,27 +18,20 @@ public class HttpClientPoolConUtil {
 	private PoolingClientConnectionManager cm;
 
 	private DefaultHttpClient httpclient;
+	// 连接超时
+	private int connectionTimeout = 60000;
+	// 读超时
+	private int readTimeout = 60000;
+	// 连接池最大连接数
+	private int threadMaxTotal = 64;
+	// 每个路由最大连接数
+	private int maxPerRoute = 64;
+	//连接不够用时等待超时时间，如未设置此参数，则气质默认等于 connectionTimeout， 此值一定要设置，且不能太大
+	private long connManagerTimeout = 1000L;
 
-	//连接超时
-	private int connectionTimeout = 60000*60;
-
-	//等待数据超时时间
-	private int readTimeout = 60000*60;
-
-	//设置整个连接池最大连接数 
-	private int threadMaxTotal = 16;
-
-	//每个路由最大连接数 ： 即连接到每个域名的最大连接数  ： 因为只有一个路由，所以让他等于最大值
-	private int maxPerRoute = 16;
-	
-	//连接不够用的时候等待超时时间
-	private Long connManagerTimeout = 1000L;
-
-	/** Whether or not methods that have successfully sent their request will be retried */
-	private boolean requestSentRetryEnabled = true;
-
-	// 失败重复次数
-	private int retryCount = 2;
+	// 关闭重试
+	private boolean requestSentRetryEnabled = false;
+	private int retryCount = 0;
 
 	public HttpClientPoolConUtil() {
 		//参数设置工具类：@HttpConnectionParams
@@ -61,7 +54,6 @@ public class HttpClientPoolConUtil {
 			httpclient.getConnectionManager().shutdown();
 		}
 	}
-
 
 	public HttpClient getHttpclient() {
 		return httpclient;

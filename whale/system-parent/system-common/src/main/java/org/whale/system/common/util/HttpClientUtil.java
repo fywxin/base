@@ -179,6 +179,10 @@ public class HttpClientUtil {
 			
 			StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() >= HttpStatus.SC_MULTIPLE_CHOICES) {
+				if(response != null){
+					EntityUtils.consume(response.getEntity());
+				}
+				request.abort();
 				logger.warn("状态码错误！ url: ["+url+"] state: ["+statusLine.getStatusCode()+"] resp: ["+statusLine.getReasonPhrase()+"]" );
 				throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
 			}else if(statusLine.getStatusCode() == HttpStatus.SC_OK){
@@ -196,7 +200,7 @@ public class HttpClientUtil {
 			throw new HttpClientIOException(e);
 		} catch (Exception e) {
 			request.abort();
-			throw new HttpClientIOException(e);
+			throw new HttpClientException(e);
 		} 
 		logger.debug("url: [{}] 返回内容：空", url);
 		return null;
