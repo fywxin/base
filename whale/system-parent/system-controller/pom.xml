@@ -58,7 +58,6 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>javaee</groupId>
 			<artifactId>javaee-api</artifactId>

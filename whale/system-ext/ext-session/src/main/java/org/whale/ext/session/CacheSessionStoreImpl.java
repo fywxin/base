@@ -19,7 +19,7 @@ public class CacheSessionStoreImpl implements ICacheSessionStore {
 	public static final String SESSION_CACHE_NAME = "SES_NaMe";
 
 	@Autowired
-	private ICacheService cacheService;
+	private ICacheService<CacheSession> cacheService;
 
 	@Override
 	public void putSession(String id, CacheSession session, Integer expTime) {
@@ -33,7 +33,7 @@ public class CacheSessionStoreImpl implements ICacheSessionStore {
 
 	@Override
 	public void removeSession(String id) {
-		this.cacheService.evict(SESSION_CACHE_NAME, id);
+		this.cacheService.del(SESSION_CACHE_NAME, id);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class CacheSessionStoreImpl implements ICacheSessionStore {
 		return this.cacheService.getKeys(SESSION_CACHE_NAME);
 	}
 
-	public void setCacheService(ICacheService cacheService) {
+	public void setCacheService(ICacheService<CacheSession> cacheService) {
 		this.cacheService = cacheService;
 	}
 	

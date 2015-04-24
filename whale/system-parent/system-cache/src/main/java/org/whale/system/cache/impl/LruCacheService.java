@@ -1,5 +1,6 @@
 package org.whale.system.cache.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -10,13 +11,12 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.whale.system.cache.ICacheService;
 import org.whale.system.cache.impl.jvm.CacheEntry;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.util.PropertiesUtil;
 
 
-public class LruCacheService implements ICacheService {
+public class LruCacheService<M extends Serializable> extends AbstractCacheService<M> {
 
 	private static final Logger logger = LoggerFactory .getLogger(LruCacheService.class);
 
@@ -32,7 +32,6 @@ public class LruCacheService implements ICacheService {
 			protected boolean removeEldestEntry(Entry<String, CacheEntry> eldest) {
 				return size() > PropertiesUtil.getValueInt("cache.lru.size", SysConstant.MAX_LRU_CACHE_SIZE);
 			}
-
 		};
 		
 		Thread thread = new LruCacheExpScanThread();
@@ -43,37 +42,69 @@ public class LruCacheService implements ICacheService {
 	}
 	
 	@Override
-	public void put(String cacheName, String key, Object value) {
-		this.put(cacheName, key, value, null);
-	}
-
-	@Override
-	public void put(String cacheName, String key, Object value, Integer expTime) {
-		logger.info("key:" + this.getKey(cacheName, key) + "  value : " + value);
+	public void doPut(String cacheName, String key, M value, Integer seconds) {
 		synchronized (cache) {
-			this.cache.put(this.getKey(cacheName, key), new CacheEntry(value, expTime));
+			this.cache.put(this.getKey(cacheName, key), new CacheEntry(value, seconds));
 		}
 	}
 
 	@Override
-	public Object get(String cacheName, String key) {
-		logger.info("取值 key:" + this.getKey(cacheName, key));
+	public void mdoPut(String cacheName, Map<String, M> keyValues, Integer seconds) {
+		synchronized (cache) {
+			for(Map.Entry<String, M> entry : keyValues.entrySet()){
+				this.cache.put(this.getKey(cacheName, entry.getKey()), new CacheEntry(entry.getValue(), seconds));
+			}
+		}
+	}
+
+
+	@Override
+	@SuppressWarnings("all")
+	public M doGet(String cacheName, String key) {
 		synchronized (cache) {
 			CacheEntry cacheEntry = (CacheEntry)this.cache.get(this.getKey(cacheName, key));
 			if(cacheEntry == null)
 				return null;
 			cacheEntry.updateLastActiveTime();
-			return cacheEntry.getValue();
+			return (M)cacheEntry.getValue();
 		}
 	}
 
 	@Override
-	public void evict(String cacheName, String key) {
+	@SuppressWarnings("all")
+	public List<M> mdoGet(String cacheName, List<String> keys) {
+		synchronized (cache) {
+			List<M> rs = new ArrayList<M>(keys.size());
+			CacheEntry cacheEntry = null;
+			for(String key : keys){
+				cacheEntry = (CacheEntry)this.cache.get(this.getKey(cacheName, key));
+				if(cacheEntry == null){
+					rs.add(null);
+				}else{
+					cacheEntry.updateLastActiveTime();
+					rs.add((M)cacheEntry.getValue());
+				}
+			}
+			return rs;
+		}
+	}
+
+	@Override
+	public void doDel(String cacheName, String key) {
 		synchronized (cache) {
 			this.cache.remove(this.getKey(cacheName, key));
 		}
 	}
 
+	@Override
+	public void mdoDel(String cacheName, List<String> keys) {
+		synchronized (cache) {
+			for(String key : keys){
+				this.cache.remove(this.getKey(cacheName, key));
+			}
+		}
+	}
+	
 	@Override
 	public void clear(String cacheName) {
 		synchronized (cache) {
@@ -86,10 +117,20 @@ public class LruCacheService implements ICacheService {
 		}
 	}
 
-	private String getKey(String cacheName, Object key){
-		StringBuilder strb = new StringBuilder();
-		return strb.append(cacheName).append("_").append(key.toString()).toString();
+	@Override
+	public Set<String> getKeys(String cacheName) {
+		Set<String> ks = new HashSet<String>();
+		synchronized (cache) {
+			Set<String> keys = this.cache.keySet();
+			for (String key : keys) {
+				if (key.startsWith(cacheName + "_")) {
+					ks.add(key);
+				}
+			}
+		}
+		return ks;
 	}
+
 
 	@Override
 	public Object getNativeCache() {
@@ -123,21 +164,7 @@ public class LruCacheService implements ICacheService {
 					logger.error("LRU CACHE: 清除过期缓存出现异常：", e);
 				}
 			}
-			
 		}
 	}
-
-	@Override
-	public Set<String> getKeys(String cacheName) {
-		Set<String> ks = new HashSet<String>();
-		synchronized (cache) {
-			Set<String> keys = this.cache.keySet();
-			for (String key : keys) {
-				if (key.startsWith(cacheName + "_")) {
-					ks.add(key);
-				}
-			}
-		}
-		return ks;
-	}
+	
 }

@@ -1,6 +1,8 @@
 package org.whale.system.cache.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -8,11 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.whale.system.cache.ICacheService;
 import org.whale.system.cache.impl.jvm.CacheEntry;
 import org.whale.system.common.util.PropertiesUtil;
 
-public class JvmCacheService implements ICacheService {
+public class JvmCacheService<M extends Serializable> extends AbstractCacheService<M> {
 	
 	private static final Logger logger = LoggerFactory.getLogger(JvmCacheService.class);
 	
@@ -29,31 +30,62 @@ public class JvmCacheService implements ICacheService {
 	}
 	
 	@Override
-	public void put(String cacheName, String key, Object value) {
-		this.put(cacheName, key, value, null);
+	public void doPut(String cacheName, String key, M value, Integer seconds) {
+		this.cache.put(this.getKey(cacheName, key), new CacheEntry(value, seconds));
 	}
 
 	@Override
-	public void put(String cacheName, String key, Object value, Integer expTime) {
-		logger.info("key:"+this.getKey(cacheName, key) + "  value : "+value);
-		this.cache.put(this.getKey(cacheName, key), new CacheEntry(value, expTime));
+	public void mdoPut(String cacheName, Map<String, M> keyValues, Integer seconds) {
+		Map<String, CacheEntry> map = new HashMap<String, CacheEntry>(keyValues.size() * 2);
+		for(Map.Entry<String, M> entry : keyValues.entrySet()){
+			map.put(this.getKey(cacheName, entry.getKey()), new CacheEntry(entry.getValue(), seconds));
+		}
+		this.cache.putAll(map);
 	}
 
 	@Override
-	public Object get(String cacheName, String key) {
-		logger.info("取值 key:"+this.getKey(cacheName, key));
+	@SuppressWarnings("all")
+	public M doGet(String cacheName, String key) {
 		CacheEntry cacheEntry = this.cache.get(this.getKey(cacheName, key));
 		if(cacheEntry == null)
 			return null;
 		cacheEntry.updateLastActiveTime();
-		return cacheEntry.getValue();
+		return (M)cacheEntry.getValue();
 	}
 
 	@Override
-	public void evict(String cacheName, String key) {
+	public List<M> mdoGet(String cacheName, List<String> keys) {
+		List<M> list = new ArrayList<M>(keys.size());
+		for(String key : keys){
+			list.add(doGet(cacheName, key));
+		}
+		return list;
+	}
+
+	@Override
+	public void doDel(String cacheName, String key) {
 		this.cache.remove(this.getKey(cacheName, key));
 	}
 
+	@Override
+	public void mdoDel(String cacheName, List<String> keys) {
+		for(String key : keys){
+			this.doDel(cacheName, key);
+		}
+	}
+	
+	@Override
+	public Set<String> getKeys(String cacheName) {
+		Set<String> ks = this.cache.keySet();
+		Set<String> keys = this.cache.keySet();
+		for(String key : keys){
+			if(key.startsWith(cacheName+"_")){
+				ks.add(key);
+			}
+		}
+		return ks;
+	}
+	
 	@Override
 	public void clear(String cacheName) {
 		Set<String> keys = this.cache.keySet();
@@ -62,11 +94,6 @@ public class JvmCacheService implements ICacheService {
 				this.cache.remove(key);
 			}
 		}
-	}
-
-	private String getKey(String cacheName, Object key){
-		StringBuilder strb = new StringBuilder();
-		return strb.append(cacheName).append("_").append(key.toString()).toString();
 	}
 
 	@Override
@@ -105,16 +132,8 @@ public class JvmCacheService implements ICacheService {
 		}
 	}
 
-	@Override
-	public Set<String> getKeys(String cacheName) {
-		Set<String> ks = this.cache.keySet();
-		Set<String> keys = this.cache.keySet();
-		for(String key : keys){
-			if(key.startsWith(cacheName+"_")){
-				ks.add(key);
-			}
-		}
-		return ks;
-	}
+	
+
+	
 	
 }

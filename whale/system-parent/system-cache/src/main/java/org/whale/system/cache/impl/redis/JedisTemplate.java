@@ -47,6 +47,21 @@ public class JedisTemplate {
 			closeResource(jedis, broken);
 		}
 	}
+	
+	public Object execute2(JedisAction2 jedisAction) throws JedisException {
+		Jedis jedis = null;
+		boolean broken = false;
+		try {
+			jedis = jedisPool.getResource();
+			return jedisAction.action(jedis);
+		} catch (JedisConnectionException e) {
+			logger.error("Redis connection lost.", e);
+			broken = true;
+			throw e;
+		} finally {
+			closeResource(jedis, broken);
+		}
+	}
 
 	/**
 	 * 执行无返回结果的action。
@@ -97,6 +112,10 @@ public class JedisTemplate {
 	public interface JedisAction<T> {
 		T action(Jedis jedis);
 	}
+	
+	public interface JedisAction2 {
+		Object action(Jedis jedis);
+	}
 
 	/**
 	 * 无返回结果的回调接口定义。
@@ -117,6 +136,30 @@ public class JedisTemplate {
 			@Override
 			public Boolean action(Jedis jedis) {
 				return jedis.del(keys) == 1 ? true : false;
+			}
+		});
+	}
+	
+	public void del(final byte[] key){
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.del(key);
+			}
+		});
+	}
+	
+	public void del(final List<byte[]> keys){
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				byte[][] _keys = new byte[keys.size()][];
+				for(int i=0; i<keys.size(); i++){
+					_keys[i] = keys.get(i);
+				}
+				jedis.del(_keys);
 			}
 		});
 	}
@@ -144,6 +187,50 @@ public class JedisTemplate {
 			}
 		});
 	}
+	
+	public byte[] get(final byte[] key){
+		Object rs= execute2(new JedisAction2() {
+			@Override
+			public Object action(Jedis jedis) {
+				return jedis.get(key);
+			}
+		});
+		
+		return (byte[])rs;
+	}
+	
+	public List<String> mget(final List<String> keys){
+		return execute(new JedisAction<List<String>>() {
+			@Override
+			public List<String> action(Jedis jedis) {
+				String[] _keys = new String[keys.size()];
+				Iterator<String> it = keys.iterator();
+				int i=0;
+				while(it.hasNext()){
+					_keys[i] = it.next();
+					i++;
+				}
+				return jedis.mget(_keys);
+			}
+		});
+	}
+	
+	@SuppressWarnings("all")
+	public List<byte[]> mgetByte(final List<byte[]> keys){
+		Object rs= execute2(new JedisAction2() {
+			@Override
+			public Object action(Jedis jedis) {
+				byte[][] _keys = new byte[keys.size()][];
+				for(int i=0; i<keys.size(); i++){
+					_keys[i] = keys.get(i);
+				}
+				
+				return jedis.mget(_keys);
+			}
+		});
+		
+		return (List<byte[]>)rs;
+	}
 
 	/**
 	 * 如果key不存在, 返回null.
@@ -168,6 +255,8 @@ public class JedisTemplate {
 		String result = hget(key, field);
 		return result != null ? Integer.valueOf(result) : null;
 	}
+	
+	//--------------------------set----------------------------
 
 	public void set(final String key, final String value) {
 		execute(new JedisActionNoResult() {
@@ -178,6 +267,42 @@ public class JedisTemplate {
 			}
 		});
 	}
+	
+	public void set(final byte[] key, final byte[] value) {
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.set(key, value);
+			}
+		});
+	}
+	
+	public void mset(final Map<String, String> vals){
+		 execute(new JedisActionNoResult() {
+			@Override
+			public void action(Jedis jedis) {
+				Pipeline p = jedis.pipelined();
+				for(Map.Entry<String, String> entry : vals.entrySet()){
+					p.set(entry.getKey(), entry.getValue());
+				}
+				p.sync();
+			}
+		});
+	}
+	
+	public void msetByte(final List<byte[]> key, final List<byte[]> value) {
+		execute(new JedisActionNoResult() {
+			@Override
+			public void action(Jedis jedis) {
+				Pipeline p = jedis.pipelined();
+				for(int i=0; i<key.size(); i++){
+					p.set(key.get(i), value.get(i));
+				}
+				p.sync();
+			}
+		});
+	}
 
 	public void setex(final String key, final String value, final int seconds) {
 		execute(new JedisActionNoResult() {
@@ -185,6 +310,42 @@ public class JedisTemplate {
 			@Override
 			public void action(Jedis jedis) {
 				jedis.setex(key, seconds, value);
+			}
+		});
+	}
+	
+	public void setex(final byte[] key, final byte[] value, final int seconds) {
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.setex(key, seconds, value);
+			}
+		});
+	}
+	
+	public void msetex(final Map<String, String> vals, final int seconds) {
+		execute(new JedisActionNoResult() {
+			@Override
+			public void action(Jedis jedis) {
+				Pipeline p = jedis.pipelined();
+				for(Map.Entry<String, String> entry : vals.entrySet()){
+					p.setex(entry.getKey(), seconds, entry.getValue());
+				}
+				p.sync();
+			}
+		});
+	}
+	
+	public void msetexByte(final List<byte[]> key, final List<byte[]> value, final int seconds) {
+		execute(new JedisActionNoResult() {
+			@Override
+			public void action(Jedis jedis) {
+				Pipeline p = jedis.pipelined();
+				for(int i=0; i<key.size(); i++){
+					p.setex(key.get(i), seconds, value.get(i));
+				}
+				p.sync();
 			}
 		});
 	}
@@ -402,24 +563,10 @@ public class JedisTemplate {
 		});
 	}
 	
-	public List<String> mget(final Set<String> keys){
-		return execute(new JedisAction<List<String>>() {
-			@Override
-			public List<String> action(Jedis jedis) {
-				String[] _keys = new String[keys.size()];
-				Iterator<String> it = keys.iterator();
-				int i=0;
-				while(it.hasNext()){
-					_keys[i] = it.next();
-					i++;
-				}
-				return jedis.mget(_keys);
-			}
-		});
-	}
 	
 	
-	public List<Long> batchIncr(final String[] keys){
+	
+	public List<Long> mincr(final String[] keys){
 		 return execute(new JedisAction<List<Long>>() {
 			@Override
 			public List<Long> action(Jedis jedis) {
@@ -440,7 +587,7 @@ public class JedisTemplate {
 	}
 	
 	
-	public List<Long> batchDecr(final String[] keys){
+	public List<Long> mdecr(final String[] keys){
 		 return execute(new JedisAction<List<Long>>() {
 			@Override
 			public List<Long> action(Jedis jedis) {
@@ -459,31 +606,5 @@ public class JedisTemplate {
 			}
 		});
 	}
-	
-	public void batchSetex(final Map<String, String> vals, final Integer expTime){
-		 execute(new JedisActionNoResult() {
-			@Override
-			public void action(Jedis jedis) {
-				Pipeline p = jedis.pipelined();
-				for(Map.Entry<String, String> entry : vals.entrySet()){
-					p.setex(entry.getKey(), expTime, entry.getValue());
-				}
-				p.sync();
-			}
-		});
-	}
-	
-	public void batchSet(final Map<String, String> vals){
-		 execute(new JedisActionNoResult() {
-			@Override
-			public void action(Jedis jedis) {
-				Pipeline p = jedis.pipelined();
-				for(Map.Entry<String, String> entry : vals.entrySet()){
-					p.set(entry.getKey(), entry.getValue());
-				}
-				p.sync();
-			}
-		});
-	}
-	
+
 }

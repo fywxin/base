@@ -19,7 +19,7 @@
   </properties>
 
   <dependencies>
-    <dependency>
+    	<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>system-jdbc</artifactId>
 			<version>${project.parent.version}</version>
@@ -34,6 +34,12 @@
 			<groupId>javaee</groupId>
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.whale</groupId>
+			<artifactId>system-cache</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
   </dependencies>
 </project>

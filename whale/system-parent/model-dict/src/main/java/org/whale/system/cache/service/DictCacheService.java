@@ -1,5 +1,6 @@
 package org.whale.system.cache.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -34,7 +35,7 @@ public class DictCacheService implements Bootable{
 	@Autowired
 	private DictItemDao dictItemDao;
 	@Autowired(required=false)
-	private ICacheService cacheService;
+	private ICacheService<Dict> cacheService;
 	
 	
 	public void initDicts() {
@@ -82,24 +83,28 @@ public class DictCacheService implements Bootable{
 	}
 	
 	public void clearDicts(){
-		logger.info("AUTH: 权限初清空开始....");
+		logger.info("AUTH: 字典清空开始....");
 		List<Dict> dictList = this.dictDao.queryAll();
-		for(Dict dict : dictList){
-			if(dict != null){
-				this.delDict(dict.getDictCode());
-				logger.info("AUTH: 字典["+dict.getDictCode()+"]清空...");
+		if(dictList != null){
+			List<String> dictCodes = new ArrayList<String>();
+			for(Dict dict : dictList){
+				if(dict != null){
+					dictCodes.add(dict.getDictCode());
+				}
 			}
+			
+			this.delDict(dictCodes);
 		}
-		logger.info("AUTH: 权限清空完成!");
+		logger.info("AUTH: 字典清空完成!");
 	}
 	
-	public void delDict(String dictCode){
+	public void delDict(List<String> dictCodes){
 		try {
 			if(cacheService == null){
 				logger.warn("缓存被禁用，采用无缓存模式运行！");
 			}else{
-				this.cacheService.evict(CACHE_PREX, dictCode);
-				logger.info("CACHE: 字典["+dictCode+"]删除完成！");
+				this.cacheService.mdel(CACHE_PREX, dictCodes);
+				logger.info("CACHE: 字典["+dictCodes+"]删除完成！");
 			}
 		} catch (RemoteCacheException e) {
 			logger.error("CACHE: 远程缓存不可用！", e);

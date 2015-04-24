@@ -6,7 +6,7 @@ package org.whale.system.common.exception;
  * @author 王金绍
  * 2014年9月19日-下午5:39:28
  */
-public class RemoteCacheException extends SysException {
+public class RemoteCacheException extends CacheException {
 	private static final long serialVersionUID = -121221L;
 
 	public RemoteCacheException(String msg){

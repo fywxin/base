@@ -1,117 +1,158 @@
 package org.whale.system.cache.impl;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.whale.system.cache.ICacheService;
+import org.whale.system.cache.code.Code;
 import org.whale.system.cache.impl.redis.JedisTemplate;
+import org.whale.system.common.exception.CacheException;
 import org.whale.system.common.exception.RemoteCacheException;
 import org.whale.system.common.exception.SysException;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-
-public class RedisService implements ICacheService {
+public class RedisService<M extends Serializable> extends AbstractCacheService<M> {
 	
 	@Autowired
 	private JedisTemplate JedisTemplate;
+	@Autowired
+	private Code<M> code;
 	
 	@Override
-	public void put(String cacheName, String key, Object value) {
-		this.put(cacheName, key, value, null);
-	}
-
-	@Override
-	public void put(String cacheName, String key, Object value, Integer expTime) {
+	public void doPut(String cacheName, String key, M value, Integer seconds) {
+		byte[] keyByte = null;
+		byte[] valByte = null;
 		try {
-			if(expTime == null || expTime < 1){
-				this.JedisTemplate.set(this.getKey(cacheName, key), JSON.toJSONString(value, SerializerFeature.WriteClassName));
+			keyByte = this.getByteKey(cacheName, key);
+			valByte = code.encode(cacheName, value);
+		} catch (IOException e) {
+			throw new CacheException("Redis缓存编码异常！", e);
+		}
+		
+		try {
+			if(seconds == null || seconds < 1){
+				this.JedisTemplate.set(keyByte, valByte);
 			}else{
-				this.JedisTemplate.setex(this.getKey(cacheName, key), JSON.toJSONString(value, SerializerFeature.WriteClassName), expTime);
+				this.JedisTemplate.setex(keyByte, valByte, seconds);
 			}
 		} catch (Exception e) {
 			throw new RemoteCacheException("Redis缓存出现异常！", e);
 		}
 	}
-
 	@Override
-	public Object get(String cacheName, String key) {
+	public void mdoPut(String cacheName, Map<String, M> keyValues, Integer seconds) {
+		List<byte[]> keyBytes = new ArrayList<byte[]>(keyValues.size());
+		List<byte[]> valBytes = new ArrayList<byte[]>(keyValues.size());
 		try {
-			return JSON.parse(this.JedisTemplate.get(this.getKey(cacheName, key)));
+			for(Map.Entry<String, M> entry : keyValues.entrySet()){
+				keyBytes.add(this.getByteKey(cacheName, entry.getKey()));
+				valBytes.add(this.code.encode(cacheName, entry.getValue()));
+			}
+		} catch (IOException e) {
+			throw new CacheException("Redis缓存编码异常！", e);
+		}
+		try {
+			if(seconds == null || seconds < 1){
+				this.JedisTemplate.msetByte(keyBytes, valBytes);
+			}else{
+				this.JedisTemplate.msetexByte(keyBytes, valBytes, seconds);
+			}
 		} catch (Exception e) {
 			throw new RemoteCacheException("Redis缓存出现异常！", e);
 		}
 	}
-
 	@Override
-	public void evict(String cacheName, String key) {
+	public M doGet(String cacheName, String key) {
+		byte[] bytes = null;
 		try {
-			this.JedisTemplate.del(this.getKey(cacheName, key));
+			bytes = this.JedisTemplate.get(this.getByteKey(cacheName, key));
+		} catch (Exception e) {
+			throw new RemoteCacheException("Redis缓存出现异常！", e);
+		}
+		if(bytes != null){
+			try {
+				M m = this.code.decode(cacheName, bytes);
+				return m;
+			} catch (Exception e) {
+				throw new CacheException("Redis缓存解码异常！", e);
+			}
+		}
+		return null;
+	}
+	@Override
+	public List<M> mdoGet(String cacheName, List<String> keys) {
+		List<byte[]> keyBytes = new ArrayList<byte[]>(keys.size());
+		try {
+			for(String key : keys){
+				keyBytes.add(this.getByteKey(cacheName, key));
+			}
+		} catch (Exception e) {
+			throw new CacheException("Redis缓存编码异常！", e);
+		}
+		
+		
+		List<byte[]> rsBytes = null;
+		if(keyBytes.size() > 0){
+			try {
+				rsBytes = this.JedisTemplate.mgetByte(keyBytes);
+			} catch (Exception e) {
+				throw new RemoteCacheException("Redis缓存出现异常！", e);
+			}
+			if(rsBytes != null && rsBytes.size() > 0){
+				List<M> rs = new ArrayList<M>(rsBytes.size());
+				try {
+					for(byte[] rsByte : rsBytes){
+						rs.add(this.code.decode(cacheName, rsByte));
+					}
+					return rs;
+				} catch (Exception e) {
+					throw new CacheException("Redis缓存解码异常！", e);
+				}
+			}
+		}
+		
+		return null;
+	}
+	@Override
+	public void doDel(String cacheName, String key) {
+		try {
+			this.JedisTemplate.del(this.getByteKey(cacheName, key));
 		} catch (Exception e) {
 			throw new RemoteCacheException("Redis缓存出现异常！", e);
 		}
 	}
-
+	@Override
+	public void mdoDel(String cacheName, List<String> keys) {
+		List<byte[]> keyBytes = new ArrayList<byte[]>(keys.size());
+		try {
+			for(String key : keys){
+				keyBytes.add(this.getByteKey(cacheName, key));
+			}
+		} catch (Exception e) {
+			throw new CacheException("Redis缓存编码异常！", e);
+		}
+		if(keyBytes.size() > 0){
+			try {
+				this.JedisTemplate.del(keyBytes);
+			} catch (Exception e) {
+				throw new RemoteCacheException("Redis缓存出现异常！", e);
+			}
+		}
+	}
+	
 	@Override
 	public void clear(String cacheName) {
 		throw new SysException("Redis 不支持缓存批量清空功能！");
 	}
-	
-	private String getKey(String cacheName, Object key){
-		StringBuilder strb = new StringBuilder();
-		return strb.append(cacheName).append("_").append(key.toString()).toString();
-	}
-
 	@Override
 	public Object getNativeCache() {
-		return JedisTemplate;
+		return this.JedisTemplate;
 	}
-
 	@Override
 	public Set<String> getKeys(String cacheName) {
 		return JedisTemplate.keys(cacheName+"*");
 	}
-
-	
-
-	
-//	public static void main(String[] args) {
-//		UserAuth userAuth = new UserAuth();
-//		userAuth.setUserId(1L);
-//		
-//		System.out.println(JSON.toJSONString(userAuth, SerializerFeature.WriteClassName));
-//		String str = "{\"@type\":\"org.whale.system.auth.domain.UserAuth\",\"userId\":1}";
-//		UserAuth userAuth2 = (UserAuth)JSON.parse(str);
-//		System.out.println(userAuth2.getUserId());
-//		
-//		
-//		Dict dict = new Dict();
-//		dict.setDictId(2L);
-//		dict.setDictCode("dictCode");
-//		
-//		DictItem item = new DictItem();
-//		item.setDictId(2L);
-//		item.setDictItemId(1L);
-//		item.setItemName("itemName1");
-//		
-//		DictItem item2 = new DictItem();
-//		item2.setDictId(2L);
-//		item2.setDictItemId(2L);
-//		item2.setItemName("itemName2");
-//		
-//		List<DictItem> items = new ArrayList<DictItem>();
-//		items.add(item2);
-//		items.add(item);
-//		
-//		dict.setItems(items);
-//		
-//		System.out.println(JSON.toJSONString(dict, SerializerFeature.WriteClassName));
-//		
-//		String rs = "{\"@type\":\"org.whale.system.domain.Dict\",\"dictCode\":\"dictCode\",\"dictId\":2,\"dictType\":0,\"items\":[{\"dictId\":2,\"dictItemId\":2,\"itemName\":\"itemName2\"},{\"dictId\":2,\"dictItemId\":1,\"itemName\":\"itemName1\"}]}";
-//		Dict di = (Dict)JSON.parse(rs);
-//		System.out.println(di.getDictCode());
-//		items = di.getItems();
-//		System.out.println(items.size());
-//		System.out.println(items.get(0).getItemName());
-//	}
 }

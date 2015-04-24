@@ -70,16 +70,9 @@ public class RoleController extends BaseController {
 	}
 	
 	
-	//@org.whale.system.auth.annotation.Auth(code="ROLE_LIST",name="查询角色")
+	@org.whale.system.auth.annotation.Auth(code="ROLE_LIST",name="查询角色")
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, String roleName, String roleCode){
-		
-		try {
-			Thread.sleep(54000L);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		Page page = this.newPage(request);
 		page.put("roleName", roleName);
 		page.put("roleCode", roleCode);

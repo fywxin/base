@@ -38,7 +38,7 @@ public class UserAuthCacheService implements Bootable{
 	@Autowired
 	private AuthDao authDao;
 	@Autowired(required=false)
-	private ICacheService cacheService;
+	private ICacheService<UserAuth> cacheService;
 	
 	public void initUserAuths(){
 		logger.info("AUTH: 权限初始化开始....");
@@ -94,7 +94,7 @@ public class UserAuthCacheService implements Bootable{
 			if(cacheService == null){
 				logger.warn("缓存被禁用，采用无缓存模式运行！");
 			}else{
-				this.cacheService.evict(CACHE_PREX, userId.toString());
+				this.cacheService.del(CACHE_PREX, userId.toString());
 				logger.info("AUTH: 用户["+userId+"]权限删除完成！");
 			}
 		}catch(RemoteCacheException e){

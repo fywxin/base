@@ -1,5 +1,6 @@
 package org.whale.system.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -157,7 +158,7 @@ public class DictController extends BaseController {
 		}
 		Dict dict = this.dictService.get(dictId);
 		this.dictService.delete(dictId);
-		this.dictCacheService.delDict(dict.getDictCode());
+		this.dictCacheService.delDict(Arrays.asList(dict.getDictCode()));
 		WebUtil.printSuccess(request, response);
 	}
 	

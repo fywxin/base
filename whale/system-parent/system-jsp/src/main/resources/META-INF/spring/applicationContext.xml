@@ -107,33 +107,34 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />
 	</aop:config>
 	
-	<bean id="jvmCacheService" class="org.whale.system.cache.impl.JvmCacheService"></bean>
+<!-- 	<bean id="jvmCacheService" class="org.whale.system.cache.impl.JvmCacheService"></bean> -->
 	
 	<!-- 系统权限过滤 -->
 	<bean id="userAuthCacheService" class="org.whale.system.auth.cache.UserAuthCacheService"></bean>
 	<bean id="authManager" class="org.whale.system.auth.service.DefalutAuthManager"></bean>
 	<bean id="authBeanStore" class="org.whale.system.auth.scan.AuthBeanStore"></bean>
 	
-<!-- 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig"> -->
-<!-- 		<property name="maxTotal" value="${redis.pool.maxTotal}" /> -->
-<!-- 		<property name="maxIdle" value="${redis.pool.maxIdle}" /> -->
-<!-- 		<property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}" /> -->
-<!-- 		<property name="testOnBorrow" value="${redis.pool.testOnBorrow}" /> -->
-<!-- 	</bean> -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="${redis.pool.maxTotal}" />
+		<property name="maxIdle" value="${redis.pool.maxIdle}" />
+		<property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}" />
+		<property name="testOnBorrow" value="${redis.pool.testOnBorrow}" />
+	</bean>
 	
-<!-- 	<bean id="jedisPool" class="redis.clients.jedis.JedisPool" destroy-method="destroy"> -->
-<!-- 		<constructor-arg index="0" ref="jedisPoolConfig" /> -->
-<!-- 		<constructor-arg index="1" value="${redis.ip}" /> -->
-<!-- 		<constructor-arg index="2" value="${redis.port}" /> -->
-<!-- 		<constructor-arg index="3" value="${redis.timeout}" /> -->
-<!-- 		<constructor-arg index="4" value="${redis.password}" /> -->
-<!-- 	</bean> -->
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool" destroy-method="destroy">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1" value="${redis.ip}" />
+		<constructor-arg index="2" value="${redis.port}" />
+		<constructor-arg index="3" value="${redis.timeout}" />
+		<constructor-arg index="4" value="${redis.password}" />
+	</bean>
 	
-<!-- 	<bean id="jedisTemplate" class="org.whale.system.cache.impl.redis.JedisTemplate"> -->
-<!-- 		<constructor-arg ref="jedisPool" /> -->
-<!-- 	</bean> -->
+	<bean id="jedisTemplate" class="org.whale.system.cache.impl.redis.JedisTemplate">
+		<constructor-arg ref="jedisPool" />
+	</bean>
 	
-<!-- 	<bean id="redisService" class="org.whale.system.cache.impl.RedisService"></bean> -->
+	<bean id="jsonCode" class="org.whale.system.cache.code.CodeJson"></bean>
+	<bean id="redisService" class="org.whale.system.cache.impl.RedisService"></bean>
 	
 	
 	

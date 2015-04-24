@@ -1,53 +1,72 @@
 package org.whale.system.cache.impl;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import net.rubyeye.xmemcached.GetsResponse;
 import net.rubyeye.xmemcached.MemcachedClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.whale.system.cache.ICacheService;
 import org.whale.system.common.exception.RemoteCacheException;
 import org.whale.system.common.exception.SysException;
 
-public class MemcacheService implements ICacheService {
+public class MemcacheService<M extends Serializable> extends AbstractCacheService<M> {
 	
 	@Autowired
 	private MemcachedClient memcachedClient;
 	
 	@Override
-	public void put(String cacheName, String key, Object value) {
-		this.put(cacheName, key, value, -1);
-	}
-	
-	@Override
-	public void put(String cacheName, String key, Object value, Integer expTime) {
+	public void doPut(String cacheName, String key, M value, Integer seconds) {
 		try {
-			if(key == null)
-				return ;
-			this.memcachedClient.setWithNoReply(this.getKey(cacheName, key), expTime, value);
+			if(seconds == null || seconds < 1){
+				this.memcachedClient.setWithNoReply(this.getKey(cacheName, key), -1, value);
+			}else{
+				this.memcachedClient.setWithNoReply(this.getKey(cacheName, key), seconds, value);
+			}
 		} catch (Exception e) {
 			throw new RemoteCacheException("memcahced缓存出现异常！", e);
 		}
 	}
 
 	@Override
-	public Object get(String cacheName, String key) {
-		if(key == null)
+	public void mdoPut(String cacheName, Map<String, M> keyValues, Integer seconds) {
+		for(Map.Entry<String, M> entry : keyValues.entrySet()){
+			this.doPut(cacheName, entry.getKey(), entry.getValue(), seconds);
+		}
+	}
+
+	@Override
+	public M doGet(String cacheName, String key) {
+		try {
+			return this.memcachedClient.get(this.getKey(cacheName, key));
+		} catch (Exception e) {
+			throw new RemoteCacheException("memcahced缓存出现异常！", e);
+		}
+	}
+
+	@Override
+	public List<M> mdoGet(String cacheName, List<String> keys) {
+		try {
+			Map<String, GetsResponse<M>> rs = this.memcachedClient.gets(keys);
+			if(rs != null){
+				List<M> list = new ArrayList<M>(rs.size());
+				for(String key : keys){
+					list.add(rs.get(key).getValue());
+				}
+				return list;
+			}
 			return null;
-		Object value = null;
-		try {
-			value = this.memcachedClient.get(this.getKey(cacheName, key));
 		} catch (Exception e) {
 			throw new RemoteCacheException("memcahced缓存出现异常！", e);
 		}
-		return value;
 	}
 
 	@Override
-	public void evict(String cacheName, String key) {
-		try {
-			if(key == null)
-				return ;
+	public void doDel(String cacheName, String key) {
+		try{
 			this.memcachedClient.deleteWithNoReply(this.getKey(cacheName, key));
 		} catch (Exception e) {
 			throw new RemoteCacheException("memcahced缓存出现异常！", e);
@@ -55,13 +74,16 @@ public class MemcacheService implements ICacheService {
 	}
 
 	@Override
+	public void mdoDel(String cacheName, List<String> keys) {
+		for(String key : keys){
+			this.doDel(cacheName, key);
+		}
+	}
+	
+
+	@Override
 	public void clear(String cacheName) {
 		throw new SysException("Memcacahed 不支持缓存批量清空功能！");
-	}
-
-	private String getKey(String cacheName, Object key){
-		StringBuilder strb = new StringBuilder();
-		return strb.append(cacheName).append("_").append(key.toString()).toString();
 	}
 
 	@Override
@@ -74,5 +96,4 @@ public class MemcacheService implements ICacheService {
 		throw new SysException("Memcacahed 不支持缓存批量获取key集合功能！");
 	}
 
-	
 }
