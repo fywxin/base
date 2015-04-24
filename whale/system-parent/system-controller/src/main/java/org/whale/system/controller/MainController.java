@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -59,6 +60,8 @@ public class MainController extends BaseController {
 	private DictCacheService dictCacheService;
 	@Autowired
 	private UserAuthCacheService userAuthCacheService;
+	
+	private Boolean sort = Boolean.FALSE;
 
 	/**
 	 * 用户登录
@@ -210,7 +213,7 @@ public class MainController extends BaseController {
 		uc.setSuperAdmin(user.getIsAdmin());
 		
 		if(accessores != null && accessores.size() > 0){
-			for(UserContextAccessor accessor : accessores){
+			for(UserContextAccessor accessor : this.getAccessores()){
 				accessor.addCustomDatas(uc);
 			}
 		}
@@ -422,4 +425,20 @@ public class MainController extends BaseController {
 		return strb.toString();
 	}
 
+	public List<UserContextAccessor> getAccessores() {
+		if(accessores == null || accessores.size() < 1)
+			return null;
+		
+		if(!sort.booleanValue()){
+			synchronized(sort){
+				Collections.sort(accessores, new OrderComparator());
+			}
+		}
+		
+		return accessores;
+	}
+
+	public void setAccessores(List<UserContextAccessor> accessores) {
+		this.accessores = accessores;
+	}
 }
