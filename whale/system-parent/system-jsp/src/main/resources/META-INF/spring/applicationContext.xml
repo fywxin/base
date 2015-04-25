@@ -135,6 +135,7 @@
 	
 	<bean id="codeJson" class="org.whale.system.cache.code.CodeJson"></bean>
 	<bean id="codeHessian" class="org.whale.system.cache.code.CodeHessian"></bean>
+	<bean id="codeProtoBuf" class="org.whale.system.cache.code.CodeProtoBuf"></bean>
 	<bean id="redisService" class="org.whale.system.cache.impl.RedisService">
 		<property name="defCode" ref="codeHessian"></property>
 		<property name="codeMap">
