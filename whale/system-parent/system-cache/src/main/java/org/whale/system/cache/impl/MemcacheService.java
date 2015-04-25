@@ -13,6 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.whale.system.common.exception.RemoteCacheException;
 import org.whale.system.common.exception.SysException;
 
+/**
+ * memcached 缓存实现， 学习memcache NIO通信
+ *
+ * @author 王金绍
+ * 2015年4月25日 下午10:28:54
+ */
 public class MemcacheService<M extends Serializable> extends AbstractCacheService<M> {
 	
 	@Autowired

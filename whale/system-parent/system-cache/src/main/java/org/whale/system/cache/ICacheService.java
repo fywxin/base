@@ -22,7 +22,7 @@ public interface ICacheService<M extends Serializable> {
 	void put(String cacheName, String key, M value);
 	
 	/**
-	 * 批量存储
+	 * 批量保存记录，不会过期
 	 * 
 	 * @param cacheName
 	 * @param keyValues
@@ -41,7 +41,7 @@ public interface ICacheService<M extends Serializable> {
 	void put(String cacheName, String key, M value, Integer seconds);
 	
 	/**
-	 * 批量存储不过期缓存
+	 * 批量保存记录，seconds 秒后过期
 	 * 
 	 * @param cacheName
 	 * @param keyValues
@@ -57,7 +57,7 @@ public interface ICacheService<M extends Serializable> {
 	M get(String cacheName, String key);
 	
 	/**
-	 * 批量获取
+	 * 批量获取缓存记录数据
 	 * 
 	 * @param cacheName
 	 * @param keys

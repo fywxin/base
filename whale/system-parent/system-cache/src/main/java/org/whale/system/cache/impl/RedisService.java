@@ -14,12 +14,20 @@ import org.whale.system.common.exception.CacheException;
 import org.whale.system.common.exception.RemoteCacheException;
 import org.whale.system.common.exception.SysException;
 
+/**
+ * Redis 缓存实现，才有自定义byte 编码，提高效率
+ *
+ * @author 王金绍
+ * 2015年4月25日 下午10:27:29
+ */
 public class RedisService<M extends Serializable> extends AbstractCacheService<M> {
 	
 	@Autowired
 	private JedisTemplate JedisTemplate;
-	@Autowired
-	private Code<M> code;
+	//默认编码
+	private Code<M> defCode;
+	//按不同字典选择编码解码器
+	private Map<String, Code<M>> codeMap;
 	
 	@Override
 	public void doPut(String cacheName, String key, M value, Integer seconds) {
@@ -27,7 +35,7 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 		byte[] valByte = null;
 		try {
 			keyByte = this.getByteKey(cacheName, key);
-			valByte = code.encode(cacheName, value);
+			valByte = getCode(cacheName).encode(cacheName, value);
 		} catch (IOException e) {
 			throw new CacheException("Redis缓存编码异常！", e);
 		}
@@ -49,7 +57,7 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 		try {
 			for(Map.Entry<String, M> entry : keyValues.entrySet()){
 				keyBytes.add(this.getByteKey(cacheName, entry.getKey()));
-				valBytes.add(this.code.encode(cacheName, entry.getValue()));
+				valBytes.add(this.getCode(cacheName).encode(cacheName, entry.getValue()));
 			}
 		} catch (IOException e) {
 			throw new CacheException("Redis缓存编码异常！", e);
@@ -74,7 +82,7 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 		}
 		if(bytes != null){
 			try {
-				M m = this.code.decode(cacheName, bytes);
+				M m = this.getCode(cacheName).decode(cacheName, bytes);
 				return m;
 			} catch (Exception e) {
 				throw new CacheException("Redis缓存解码异常！", e);
@@ -105,7 +113,7 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 				List<M> rs = new ArrayList<M>(rsBytes.size());
 				try {
 					for(byte[] rsByte : rsBytes){
-						rs.add(this.code.decode(cacheName, rsByte));
+						rs.add(this.getCode(cacheName).decode(cacheName, rsByte));
 					}
 					return rs;
 				} catch (Exception e) {
@@ -154,5 +162,28 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 	@Override
 	public Set<String> getKeys(String cacheName) {
 		return JedisTemplate.keys(cacheName+"*");
+	}
+	
+	
+	private Code<M> getCode(String cacheName){
+		if(this.codeMap == null)
+			return this.defCode;
+		Code<M> code = this.codeMap.get(cacheName);
+		if(code == null)
+			code = this.defCode;
+		return code;
+	}
+	
+	public Code<M> getDefCode() {
+		return defCode;
+	}
+	public void setDefCode(Code<M> defCode) {
+		this.defCode = defCode;
+	}
+	public Map<String, Code<M>> getCodeMap() {
+		return codeMap;
+	}
+	public void setCodeMap(Map<String, Code<M>> codeMap) {
+		this.codeMap = codeMap;
 	}
 }
