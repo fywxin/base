@@ -1,6 +1,7 @@
-package org.whale.system.addon;
+package org.whale.system.jdbc.filter.impl;
 
 import org.whale.system.base.BaseDao;
+import org.whale.system.jdbc.IOrmDao;
 
 /**
  * 执行BaseDao方法上下文
@@ -9,20 +10,29 @@ import org.whale.system.base.BaseDao;
  * 2014年9月17日-上午11:39:27
  */
 @SuppressWarnings("all")
-public class OptContext {
+public class OrmExeContext {
 
 	private String methodName;
 	
+	private String sql;
+	
 	private Object arg;
 	
-	private BaseDao baseDao;
+	private IOrmDao baseDao;
 	
 	private int order;
 	
-	public OptContext(){}
+	public OrmExeContext(){}
 	
-	public OptContext(String methodName, Object arg, BaseDao baseDao){
+	public OrmExeContext(String methodName, Object arg, IOrmDao baseDao){
 		this.methodName = methodName;
+		this.arg = arg;
+		this.baseDao = baseDao;
+	}
+	
+	public OrmExeContext(String methodName, String sql, Object arg, IOrmDao baseDao){
+		this.methodName = methodName;
+		this.sql = sql;
 		this.arg = arg;
 		this.baseDao = baseDao;
 	}
@@ -43,11 +53,11 @@ public class OptContext {
 		this.arg = arg;
 	}
 
-	public BaseDao getBaseDao() {
+	public IOrmDao getBaseDao() {
 		return baseDao;
 	}
 
-	public void setBaseDao(BaseDao baseDao) {
+	public void setBaseDao(IOrmDao baseDao) {
 		this.baseDao = baseDao;
 	}
 
@@ -58,5 +68,14 @@ public class OptContext {
 	public void setOrder(int order) {
 		this.order = order;
 	}
+
+	public String getSql() {
+		return sql;
+	}
+
+	public void setSql(String sql) {
+		this.sql = sql;
+	}
+	
 	
 }

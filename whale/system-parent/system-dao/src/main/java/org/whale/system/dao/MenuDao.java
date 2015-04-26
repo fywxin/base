@@ -48,7 +48,9 @@ public class MenuDao extends BaseDao<Menu, Long> {
 		return this.getObject(strb.toString(), menuName);
 	}
 	
+	
 	final String getCurOrder_SQL = "select max(orderNo) from sys_menu where parentId = ?";
+	@SuppressWarnings("all")
 	public Integer getCurOrder(Long parentId){
 		
 		return this.jdbcTemplate.queryForInt(getCurOrder_SQL, parentId);

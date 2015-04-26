@@ -28,6 +28,10 @@ public class Log extends BaseEntry{
 	private String tableName;
 	@Column(cnName="请求路径",width=128)
 	private String uri;
+	
+	@Column(cnName="执行sql语句",width=512)
+	private String sqlStr;
+	
 	@Column(cnName="数据", width=2048)
     private String datas;
 	@Column(cnName="ip地址", width=15)
@@ -134,5 +138,12 @@ public class Log extends BaseEntry{
 	public void setRsType(Integer rsType) {
 		this.rsType = rsType;
 	}
+	public String getSqlStr() {
+		return sqlStr;
+	}
+	public void setSqlStr(String sqlStr) {
+		this.sqlStr = sqlStr;
+	}
+
 	
 }

@@ -5,14 +5,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.whale.system.addon.LogAddon;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.domain.Log;
+import org.whale.system.filter.LogFilter;
 
 public class LogInterceptor extends HandlerInterceptorAdapter {
 
+	@SuppressWarnings("all")
 	@Autowired
-	private LogAddon logAddon;
+	private LogFilter LogFilter;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -27,15 +28,14 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 	}
 	
 	@Override
-	public void afterCompletion(HttpServletRequest request,
-			HttpServletResponse response, Object handler, Exception ex)
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		try {
 			Log log = (Log)ThreadContext.getContext().get(ThreadContext.KEY_LOG_PREX);
 			Long costTime = System.currentTimeMillis() - log.getCreateTime();
 			log.setCostTime(costTime.intValue());
 			
-			this.logAddon.addLogRecvQueue(log);
+			this.LogFilter.addLogRecvQueue(log);
 		} catch (Exception e) {
 			
 		} finally{

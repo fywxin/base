@@ -38,5 +38,9 @@ public class Acolumn {
 	public void setCnName(String cnName) {
 		this.cnName = cnName;
 	}
+	@Override
+	public String toString() {
+		return "[attrName=" + attrName + ", cnName=" + cnName + "]";
+	}
 
 }

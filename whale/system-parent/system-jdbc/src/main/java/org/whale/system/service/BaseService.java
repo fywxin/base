@@ -6,7 +6,14 @@ import java.util.List;
 import org.whale.system.base.BaseDao;
 import org.whale.system.base.Page;
 
-public abstract class BaseService<T, PK extends Serializable> {
+/**
+ * service 基础模板类
+ * 注意事务
+ *
+ * @author 王金绍
+ * 2015年4月26日 下午3:49:57
+ */
+public abstract class BaseService<T extends Serializable, PK extends Serializable> {
 	
 	public void save(T t){
 		if(t == null)

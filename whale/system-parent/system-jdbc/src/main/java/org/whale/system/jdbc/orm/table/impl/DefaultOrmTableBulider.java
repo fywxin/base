@@ -34,7 +34,9 @@ import org.whale.system.jdbc.orm.entry.OrmValidate;
 import org.whale.system.jdbc.orm.event.OrmColumnGenEvent;
 import org.whale.system.jdbc.orm.event.OrmEventMuliter;
 import org.whale.system.jdbc.orm.event.OrmTableGenEvent;
+import org.whale.system.jdbc.orm.table.ColumnExtInfoReader;
 import org.whale.system.jdbc.orm.table.OrmTableBulider;
+import org.whale.system.jdbc.orm.table.TableExtInfoReader;
 import org.whale.system.jdbc.orm.table.UserParseColumnName;
 import org.whale.system.jdbc.util.DbKind;
 
@@ -57,8 +59,6 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	private HumpColumnNameParser humpColumnNameParser;
 	@Autowired
 	private SameColumnNameParser sameColumnNameParser;
-	@Autowired(required=false)
-	private List<UserParseColumnName> userColParsers;
 	@Resource(name="entryContext")
 	private EntryContext entryContext;
 	@Autowired
@@ -66,7 +66,15 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	@Autowired
 	private OrmEventMuliter omEventMuliter;
 	
-	private boolean noSortFlag = true;
+	//------------------------------------外部扩展实现-------------------------
+	@Autowired(required=false)
+	private List<UserParseColumnName> userColParsers;
+	@Autowired(required=false)
+	private List<TableExtInfoReader> tableExtInfoReaders;
+	@Autowired(required=false)
+	private List<ColumnExtInfoReader> columnExtInfoReaders;
+	
+	private boolean sort = true;
 	
 	
 	/**
@@ -94,6 +102,8 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		logger.info("ORM:转换 类clazz="+clazz+" Acolumn->OrmColumn 完成，ormCols="+cols);
 		this.reParseTable(ormTable); //设置idCol,pkCols
 		logger.info("ORM:提取 类clazz="+clazz+" ID字段完成 idColumn="+ormTable.getIdCol());
+		this.exeTableExtInfoReaders(ormTable);
+		logger.info("ORM:执行 类table="+ormTable.getIdCol()+" 扩张信息读取完成!"+ormTable);
 		return ormTable;
 	}
 	
@@ -257,6 +267,9 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		
 		//读取设置OrmValidate
 		this.setColumnValidate(ormColumn);
+		
+		//读取OrmColumn 扩展信息读取
+		this.extColumnExtInfoReaders(ormColumn);
 		
 		return ormColumn;
 	}
@@ -424,13 +437,12 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		//实体中提供数据库字段名
 		if(Strings.isNotBlank(column.name()))
 			return column.name();
+		
 		//开发人员定义的字段转换规则
-		if(this.getUserColParsers() != null && this.getUserColParsers().size() > 0){
-			for(UserParseColumnName parser : this.getUserColParsers()){
-				if(parser.match(entryName))
-					return parser.getDbColName(fieldName);
-			}
-		}
+		String userParseName = this.exeUserColParsers(entryName, fieldName);
+		if(Strings.isNotBlank(userParseName))
+			return userParseName;
+		
 		//默认驼峰字段转换规则
 		if(DbKind.isMysql()){
 			return this.sameColumnNameParser.getDbColName(fieldName);
@@ -492,23 +504,73 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	}
 	
 	/**
+	 * 执行开发人员定义的字段转换规则
 	 * 
-	 *功能说明: 第一次排序
-	 *创建人: 王金绍
-	 *创建时间:2013-4-11 上午11:39:09
-	 *@return List<UserParseColumnName>
-	 *
+	 * @param entryName
+	 * @param fieldName
+	 * @return
+	 * 2015年4月26日 上午9:17:32
 	 */
-	public List<UserParseColumnName> getUserColParsers(){
-		if(noSortFlag && userColParsers != null && userColParsers.size() > 0){
-			synchronized (this) {
-				if(noSortFlag){
-					Collections.sort(userColParsers, new OrderComparator());
-					noSortFlag = false;
+	public String exeUserColParsers(String entryName, String fieldName){
+		doSort();
+		if(this.userColParsers != null && this.userColParsers.size() > 0){
+			for(UserParseColumnName parser : this.userColParsers){
+				if(parser.match(entryName)){
+					return parser.getDbColName(fieldName);
 				}
 			}
 		}
-		return userColParsers;
+		return null;
+	}
+	
+	/**
+	 * 执行读取table扩展信息获取功能
+	 * 
+	 * 2015年4月26日 上午9:19:10
+	 */
+	public void exeTableExtInfoReaders(OrmTable ormTable) {
+		doSort();
+		if(this.tableExtInfoReaders != null && this.tableExtInfoReaders.size() > 0){
+			for(TableExtInfoReader tableExtInfoReader : this.tableExtInfoReaders){
+				if(tableExtInfoReader.match(ormTable))
+					tableExtInfoReader.readExtInfo(ormTable);
+			}
+		}
+	}
+
+	/**
+	 * 执行读取Column扩展信息读取功能
+	 * @param ormColumn
+	 * 2015年4月26日 上午9:22:15
+	 */
+	public void extColumnExtInfoReaders(OrmColumn ormColumn) {
+		doSort();
+		if(this.columnExtInfoReaders != null && this.columnExtInfoReaders.size() > 0){
+			for(ColumnExtInfoReader columnExtInfoReader : this.columnExtInfoReaders){
+				if(columnExtInfoReader.match(ormColumn))
+					columnExtInfoReader.readExtInfo(ormColumn);
+			}
+		}
+	}
+
+	/**
+	 * 排序
+	 * 
+	 * 2015年4月26日 上午9:12:44
+	 */
+	private void doSort(){
+		if(sort)
+			return ;
+		synchronized (this) {
+			if(!sort){
+				if(userColParsers != null)
+					Collections.sort(userColParsers, new OrderComparator());
+				if(tableExtInfoReaders != null)
+					Collections.sort(tableExtInfoReaders, new OrderComparator());
+				if(columnExtInfoReaders != null)
+					Collections.sort(columnExtInfoReaders, new OrderComparator());
+			}
+		}
 	}
 	
 }

@@ -1,5 +1,6 @@
-package org.whale.system.addon;
+package org.whale.system.filter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -10,87 +11,64 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.whale.system.base.BaseDao;
+import org.whale.system.base.Page;
 import org.whale.system.base.UserContext;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.dao.LogDao;
 import org.whale.system.domain.Log;
+import org.whale.system.jdbc.IOrmDao;
+import org.whale.system.jdbc.filter.BaseDaoFilterWarpper;
+import org.whale.system.jdbc.filter.impl.OrmExeContext;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 
 import com.alibaba.fastjson.JSON;
 
 /**
- * 日志处理插件
- * 
+ * 日志过滤器
+ *
  * @author 王金绍
- * 2014年9月17日-下午2:48:26
+ * 2015年4月26日 下午3:43:15
  */
-@SuppressWarnings("all")
 @Component
-public class LogAddon extends EmptyBaseDaoAddon implements InitializingBean{
+public class LogFilter<T extends Serializable,PK extends Serializable> extends BaseDaoFilterWarpper<T, PK> implements InitializingBean{
 	
-	private static final Logger logger = LoggerFactory.getLogger(LogAddon.class);
-	 // 队列
-    private static final BlockingQueue<Log> LOG_QUEUE = new LinkedBlockingDeque<Log>();
-    // 等待时长
-    private long defaultWaitTime = 20000;
-    // 线程休眠时长
-    private long defaultSleepTime = 10000;
-    // 网络异常发生后，等待多少时长进行重试,单位毫秒
-    private long defaultNetErrorTryTime = 1000;
-    // 记录当前网络异常发生时间
-    private long currentNetErrorTime = 0;
-    // 队列长度
-    private int defaultQueueSize = 50;
+	private static final Logger logger = LoggerFactory.getLogger(LogFilter.class);
+	
+	// 队列
+	private static final BlockingQueue<Log> LOG_QUEUE = new LinkedBlockingDeque<Log>();
+   	// 等待时长
+   	private long defaultWaitTime = 20000;
+   	// 线程休眠时长
+   	private long defaultSleepTime = 10000;
+   	// 网络异常发生后，等待多少时长进行重试,单位毫秒
+   	private long defaultNetErrorTryTime = 1000;
+   	// 记录当前网络异常发生时间
+   	private long currentNetErrorTime = 0;
+   	// 队列长度
+   	private int defaultQueueSize = 150;
 
-    private final Object notify = new Object();
+   	private final Object notify = new Object();
 
-    private boolean stopFlag = false;
-    
+   	private boolean stopFlag = false;
+   
 	@Autowired
-	private LogDao logDao;
-
-	@Override
-	public void afterSave(Object obj, BaseDao baseDao) {
-		this.saveLog("save", obj, baseDao);
-	}
-
-	@Override
-	public void afterUpdate(Object obj, BaseDao baseDao) {
-		this.saveLog("update", obj, baseDao);
-	}
-
-	@Override
-	public void afterDelete(Object id, BaseDao baseDao) {
-		this.saveLog("delete", id, baseDao);
-	}
-
-	@Override
-	public void afterSaveBatch(List<Object> objs, BaseDao baseDao) {
-		this.saveLog("saveBatch", objs, baseDao);
-	}
-
-	@Override
-	public void afterUpdateBatch(List<Object> objs, BaseDao baseDao) {
-		this.saveLog("updateBatch", objs, baseDao);
-	}
-
-	@Override
-	public void afterDeleteBatch(List<Object> objs, BaseDao baseDao) {
-		this.saveLog("deleteBatch", objs, baseDao);
-	}
+	private LogDao logDao;	
 	
-	private void saveLog(String opt, Object arg, BaseDao baseDao){
+	
+	private void saveLog(IOrmDao<T, PK> baseDao){
 		OrmTable ormTable = baseDao.getOrmTable();
 		if(ormTable.getEntityName().equals("Log"))
 			return ;
 		
+		OrmExeContext ormExeContext = (OrmExeContext)ThreadContext.getContext().get(ThreadContext.KEY_OPT_CONTEXT);
 		Log log = this.newLog();
 		log.setCnName(ormTable.getTableCnName());
 		log.setTableName(ormTable.getTableDbName());
-		log.setOpt(opt);
-		log.setArg(arg);
+		log.setOpt(ormExeContext.getMethodName());
+		log.setArg(ormExeContext.getArg());
+		log.setSqlStr(ormExeContext.getSql());
+		
 	}
 	
 	
@@ -148,6 +126,7 @@ public class LogAddon extends EmptyBaseDaoAddon implements InitializingBean{
         public void run() {
             int waitTime = 0;
             while (!stopFlag) {
+            	System.out.println(LOG_QUEUE.size()+" | "+defaultQueueSize+" | "+ waitTime+" | "+defaultWaitTime);
                 if (LOG_QUEUE.size() > defaultQueueSize || waitTime > defaultWaitTime) {
                     consumeRecvQueue(LOG_QUEUE, defaultQueueSize);
                     
@@ -285,8 +264,98 @@ public class LogAddon extends EmptyBaseDaoAddon implements InitializingBean{
 		}
 	}
 
+	
+
+	@Override
+	public void afterSave(T obj, IOrmDao<T, PK> baseDao) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterSave(List<T> objs, IOrmDao<T, PK> baseDao) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterUpdate(T obj, IOrmDao<T, PK> baseDao) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterDelete(PK id, IOrmDao<T, PK> baseDao) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterDelete(List<PK> ids, IOrmDao<T, PK> baseDao) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterDeleteBy(T obj, IOrmDao<T, PK> baseDao) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterGet(IOrmDao<T, PK> baseDao, T rs, PK id) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql,
+			Object... args) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterQueryAll(IOrmDao<T, PK> baseDao, List<T> rs) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, T t) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql,
+			Object... args) {
+		this.saveLog(baseDao);
+	}
+
+	@Override
+	public void afterQueryPage(IOrmDao<T, PK> baseDao, Page page) {
+		this.saveLog(baseDao);
+	}
+
 	@Override
 	public int getOrder() {
 		return 1000;
 	}
+
 }

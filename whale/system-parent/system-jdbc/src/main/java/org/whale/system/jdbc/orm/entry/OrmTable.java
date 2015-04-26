@@ -1,6 +1,7 @@
 package org.whale.system.jdbc.orm.entry;
 
 import java.util.List;
+import java.util.Map;
 
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.common.Atable;
@@ -28,6 +29,10 @@ public class OrmTable extends Atable {
 	private List<OrmColumn> ormCols;
 	/** 所有@Order字段 */
 	private List<OrmColumn> orderCols;
+	
+	//-----------------外部扩张对象注释信息读取保存---------------
+	
+	private Map<String, Object> extInfo;
 	
 	//----------------- 提高效率, 预先读取 ------------
 	/** */
@@ -197,8 +202,21 @@ public class OrmTable extends Atable {
 		this.sqlExecCols = sqlExecCols;
 	}
 
+	/**
+	 * 外部扩张信息缓存
+	 * @return
+	 * 2015年4月26日 上午8:28:21
+	 */
+	public Map<String, Object> getExtInfo() {
+		return extInfo;
+	}
+
+	public void setExtInfo(Map<String, Object> extInfo) {
+		this.extInfo = extInfo;
+	}
+
 	@Override
 	public String toString() {
-		return "OrmTable [" + tableDbName + ":"+ sequence + ", ormCols=" + ormCols + "]";
+		return "OrmTable [" + tableDbName + ":"+ sequence + ", ormCols=" + ormCols + ", extInfo=" + extInfo + "]";
 	}
 }

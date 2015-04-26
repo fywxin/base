@@ -1,31 +1,32 @@
-package org.whale.system.addon.impl;
+package org.whale.system.jdbc.filter.dll.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.whale.system.addon.EmptyBaseDaoAddon;
-import org.whale.system.base.BaseDao;
 import org.whale.system.common.exception.OrmException;
+import org.whale.system.jdbc.IOrmDao;
+import org.whale.system.jdbc.filter.dll.BaseDaoDllFilterWarpper;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.util.AnnotationUtil;
 
 /**
  * 解析@SQL 默认不启用
+ * 
  * @author 王金绍
  * 2014年9月17日-上午11:28:52
  */
-@SuppressWarnings("all")
-public class ExeSqlOnSaveAddon extends EmptyBaseDaoAddon{
+public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> extends BaseDaoDllFilterWarpper<T, PK> {
 	
 	@Autowired
 	private OrmContext ormContext;
-	
+
 	@Override
-	public void beforeSave(Object obj, BaseDao baseDao) {
+	public void beforeSave(T obj, IOrmDao<T, PK> baseDao) {
 		List<OrmColumn> cols = baseDao.getOrmTable().getSqlExecCols();
 		if(cols == null)
 			return ;
@@ -34,6 +35,30 @@ public class ExeSqlOnSaveAddon extends EmptyBaseDaoAddon{
 				this.execute(obj, baseDao, col);
 			}
 		}
+	}
+
+	@Override
+	public void beforeSave(List<T> objs, IOrmDao<T, PK> baseDao) {
+		List<OrmColumn> cols = baseDao.getOrmTable().getSqlExecCols();
+		if(cols == null)
+			return ;
+		for(T obj : objs){
+			for(OrmColumn col : cols){
+				if(col.getOrmColumnSql() != null && col.getOrmColumnSql().getIsPre() && !"".equals(col.getOrmColumnSql().getSql().trim())){
+					this.execute(obj, baseDao, col);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void beforeSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
+		this.beforeSaveBatch(objs, baseDao);
+	}
+
+	@Override
+	public int getOrder() {
+		return 90;
 	}
 	
 	/**
@@ -45,7 +70,7 @@ public class ExeSqlOnSaveAddon extends EmptyBaseDaoAddon{
 	 *@param col void
 	 *
 	 */
-	private void execute(Object obj, BaseDao baseDao, OrmColumn col){
+	private void execute(Object obj, IOrmDao<T, PK> baseDao, OrmColumn col){
 		//字段值不为空，且sql执行替换策略为col为空时替换
 		if(col.getOrmColumnSql().getReplaceWhenNull() && AnnotationUtil.getFieldValue(obj, col.getField()) != null)
 			return ;
@@ -75,11 +100,6 @@ public class ExeSqlOnSaveAddon extends EmptyBaseDaoAddon{
 			throw new OrmException("SQL 返回结果单条记录中不能有多个字段集");
 		//设值
 		AnnotationUtil.setColumnValue(obj, col, values.toArray()[0]);
-	}
-
-	@Override
-	public int getOrder() {
-		return 90;
 	}
 
 }

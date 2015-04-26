@@ -1,8 +1,13 @@
-package org.whale.system.base;
+package org.whale.system.jdbc;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.whale.system.base.Page;
+import org.whale.system.jdbc.orm.OrmContext;
+import org.whale.system.jdbc.orm.entry.OrmTable;
 
 /**
  * Dao 模板方法定义
@@ -10,7 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @author 王金绍
  * 2014年9月17日-上午10:37:39
  */
-public interface IBaseDao<T,PK> {
+public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 
 	/**
 	 * 保存实体
@@ -127,4 +132,13 @@ public interface IBaseDao<T,PK> {
 	 * @return
 	 */
 	JdbcTemplate getJdbcTemplate();
+	
+	
+	OrmTable getOrmTable();
+	
+	OrmContext getOrmContext();
+	
+	RowMapper<T> getRowMapper();
+	
+	void setRowMapper(RowMapper<T> rowMapper);
 }

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
-import org.whale.system.addon.LogAddon;
 import org.whale.system.common.exception.BaseException;
 import org.whale.system.common.exception.BusinessException;
 import org.whale.system.common.exception.OrmException;
@@ -16,13 +15,15 @@ import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.common.util.WebUtil;
 import org.whale.system.domain.Log;
+import org.whale.system.filter.LogFilter;
 
 public class WhaleLogExceptionResolver extends SimpleMappingExceptionResolver {
 
 private static final Logger logger = LoggerFactory.getLogger(WhaleLogExceptionResolver.class);
 	
+	@SuppressWarnings("all")
 	@Autowired
-	private LogAddon logAddon;
+	private LogFilter logFilter;
 
 	@Override
 	protected ModelAndView doResolveException(HttpServletRequest request,
@@ -33,7 +34,7 @@ private static final Logger logger = LoggerFactory.getLogger(WhaleLogExceptionRe
 		Log log = (Log)ThreadContext.getContext().get(ThreadContext.KEY_LOG_PREX);
 		
 		if(log == null){
-			log = this.logAddon.newLog();
+			log = this.logFilter.newLog();
 		}
 		
 		if(ex != null){

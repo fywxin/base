@@ -1,5 +1,7 @@
 package org.whale.system.jdbc.orm.entry;
 
+import java.util.Map;
+
 import org.whale.system.jdbc.common.Acolumn;
 
 
@@ -44,6 +46,10 @@ public class OrmColumn extends Acolumn {
 	
 	//-----------------------合法校验------------------------
 	private OrmValidate ormValidate;
+	
+	//-----------------外部扩张对象注释信息读取保存---------------
+	
+	private Map<String, Object> extInfo;
 	
 	
 	public OrmColumn(Acolumn acolumn){
@@ -140,7 +146,13 @@ public class OrmColumn extends Acolumn {
 	public void setOrmValidate(OrmValidate ormValidate) {
 		this.ormValidate = ormValidate;
 	}
-
+	public Map<String, Object> getExtInfo() {
+		return extInfo;
+	}
+	public void setExtInfo(Map<String, Object> extInfo) {
+		this.extInfo = extInfo;
+	}
+	
 	@Override
 	public String toString() {
 		return this.getAttrName();

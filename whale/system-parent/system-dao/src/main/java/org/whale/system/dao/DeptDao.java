@@ -50,6 +50,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
      * @return
      */
     final String getNextOrder_SQL = "select max(t.orderNo) from sys_dept t where t.pid = ?";
+    @SuppressWarnings("all")
     public Integer getNextOrder(Long pid){
     	int order = this.jdbcTemplate.queryForInt(getNextOrder_SQL, pid);
     	return order+1;
