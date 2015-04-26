@@ -3,8 +3,8 @@ package org.whale.system.service;
 import java.io.Serializable;
 import java.util.List;
 
-import org.whale.system.base.BaseDao;
 import org.whale.system.base.Page;
+import org.whale.system.jdbc.IOrmDao;
 
 /**
  * service 基础模板类
@@ -79,5 +79,5 @@ public abstract class BaseService<T extends Serializable, PK extends Serializabl
 		this.getDao().queryPage(page);
 	}
 	
-	public abstract BaseDao<T, PK> getDao();
+	public abstract IOrmDao<T, PK> getDao();
 }

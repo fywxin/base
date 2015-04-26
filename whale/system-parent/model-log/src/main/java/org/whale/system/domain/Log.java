@@ -5,6 +5,7 @@ import org.whale.system.jdbc.annotation.Column;
 import org.whale.system.jdbc.annotation.Id;
 import org.whale.system.jdbc.annotation.Table;
 
+//@MixOrm(cacheName="log", cacheTime=1000)
 @Table(value="sys_log", cnName="日志")
 public class Log extends BaseEntry{
 	

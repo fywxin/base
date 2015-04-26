@@ -83,18 +83,18 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<filter>
-		<filter-name>cacheSessionFilter</filter-name>
-		<filter-class>org.whale.ext.session.CacheSessionFilter</filter-class>
-		<init-param>
-			<param-name>ignoreUrlSuffix</param-name>
-			<param-value>html,jpg,png,gif,jpeg,js,css,swf</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>cacheSessionFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+<!-- 	<filter> -->
+<!-- 		<filter-name>cacheSessionFilter</filter-name> -->
+<!-- 		<filter-class>org.whale.ext.session.CacheSessionFilter</filter-class> -->
+<!-- 		<init-param> -->
+<!-- 			<param-name>ignoreUrlSuffix</param-name> -->
+<!-- 			<param-value>html,jpg,png,gif,jpeg,js,css,swf</param-value> -->
+<!-- 		</init-param> -->
+<!-- 	</filter> -->
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>cacheSessionFilter</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 	</filter-mapping> -->
 
 	<!-- Spring 刷新Introspector防止内存泄露 -->
 	<listener>

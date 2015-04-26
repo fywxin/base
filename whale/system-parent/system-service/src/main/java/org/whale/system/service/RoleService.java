@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.whale.system.base.BaseDao;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
@@ -14,6 +13,7 @@ import org.whale.system.dao.UserRoleDao;
 import org.whale.system.domain.Role;
 import org.whale.system.domain.RoleAuth;
 import org.whale.system.domain.UserRole;
+import org.whale.system.jdbc.IOrmDao;
 
 @Service
 public class RoleService extends BaseService<Role, Long> {
@@ -86,7 +86,7 @@ public class RoleService extends BaseService<Role, Long> {
 	}
 
 	@Override
-	public BaseDao<Role, Long> getDao() {
+	public IOrmDao<Role, Long> getDao() {
 		return roleDao;
 	}
 

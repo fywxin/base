@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.whale.system.base.BaseDao;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.DeptDao;
 import org.whale.system.domain.Dept;
+import org.whale.system.jdbc.IOrmDao;
 
 /**
  * 部门 管理
@@ -69,7 +69,7 @@ public class DeptService extends BaseService<Dept, Long> {
     }
 	
 	@Override
-	public BaseDao<Dept, Long> getDao() {
+	public IOrmDao<Dept, Long> getDao() {
 		return deptDao;
 	}
 

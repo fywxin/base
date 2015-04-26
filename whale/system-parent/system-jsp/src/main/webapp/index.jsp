@@ -123,7 +123,7 @@ $(document).ready(function(){
 		$("#userName").val($.cookie("userName"));
 		$("#encryptedPwd").val($.cookie("encryptedPwd"));
 		$("#autoLogin").attr('checked', 'checked');
-		login();
+		//login();
 		return ;
 	}
 </c:if>

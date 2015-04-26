@@ -9,7 +9,6 @@ import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.whale.system.base.BaseCrudEvent;
-import org.whale.system.base.BaseDao;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;
@@ -18,6 +17,7 @@ import org.whale.system.dao.UserDao;
 import org.whale.system.dao.UserRoleDao;
 import org.whale.system.domain.User;
 import org.whale.system.domain.UserRole;
+import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.service.event.UserEvent;
 
 @Service
@@ -141,7 +141,7 @@ public class UserService extends BaseService<User, Long> {
 	}
 
 	@Override
-	public BaseDao<User, Long> getDao() {
+	public IOrmDao<User, Long> getDao() {
 		return userDao;
 	}
 	
