@@ -400,7 +400,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 			ormTable.setIdCol(idCol);
 			//主键采用外部赋值策略
 			if(!idCol.getIdAuto()){
-				System.out.println("实体 ["+ormTable.getEntityName()+"] 主键采用外部赋值策略, 舍弃序列["+ormTable.getSequence()+"]");
+				logger.warn("实体 ["+ormTable.getEntityName()+"] 主键采用外部赋值策略, 舍弃序列["+ormTable.getSequence()+"]");
 				ormTable.setSequence(null);
 			}
 		}else{

@@ -117,7 +117,7 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
     	//记录当前线程使用的数据源，当数据源失去连接异常时，将此数据源移除
     	ReadWriteDataSourceDecision.get().setDataSourceName(readDataSourceNames.get(i));
     	
-    	System.out.println("使用线程："+readDataSourceNames.get(i));
+    	log.debug("使用线程："+readDataSourceNames.get(i));
     	return readDataSources.get(i);
     }
     

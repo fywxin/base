@@ -15,13 +15,10 @@ import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.UserDao;
 import org.whale.system.dao.UserRoleDao;
-import org.whale.system.domain.Role;
 import org.whale.system.domain.User;
 import org.whale.system.domain.UserRole;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.service.event.UserEvent;
-
-import com.alibaba.fastjson.JSON;
 
 @Service
 public class UserService extends BaseService<User, Long> {
@@ -125,9 +122,6 @@ public class UserService extends BaseService<User, Long> {
 	public void saveUserRole(Long userId, List<Long> roleIds){
 		if(userId == null)
 			throw new SysException("userId == null");
-		
-		List<Role> us = this.userRoleDao.queryRoleByUserId(userId);
-		System.out.println(JSON.toJSONString(us));
 		
 		UserRole ur = new UserRole();
 		ur.setUserId(userId);

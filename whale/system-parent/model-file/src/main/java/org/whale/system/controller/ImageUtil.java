@@ -47,9 +47,6 @@ public class ImageUtil {
 			int srcWidth = bi.getWidth(); // 源图宽度
 			int srcHeight = bi.getHeight(); // 源图高度
 
-			System.out.println("srcWidth= " + srcWidth + "\tsrcHeight= "
-					+ srcHeight);
-
 			if (srcWidth >= destWidth && srcHeight >= destHeight) {
 				// Image image = bi.getScaledInstance(finalWidth,
 				// finalHeight,Image.SCALE_DEFAULT);//获取缩放后的图片大小

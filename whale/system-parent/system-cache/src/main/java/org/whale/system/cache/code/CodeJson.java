@@ -67,7 +67,6 @@ public class CodeJson<M extends Serializable> extends AbstractCode<M> {
 	public M doDecode(Class<?> type, byte[] bytes) throws IOException  {
 		if(type == null)
 			return null;
-		System.out.println(new String(bytes));
 		return (M)JSON.parseObject(new String(bytes), type);
 	}
 	

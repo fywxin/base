@@ -154,9 +154,5 @@ public class TimeUtil {
 	public static Long countSecond(Long time){
 		return time / 1000;
 	}
-	
-	public static void main(String[] args) {
-		System.out.println(TimeUtil.getCurrentTime());
-		System.out.println(TimeUtil.formatTime(1383840000000L, "yyyy-MM-dd HH:mm:ss"));
-	}
+
 }

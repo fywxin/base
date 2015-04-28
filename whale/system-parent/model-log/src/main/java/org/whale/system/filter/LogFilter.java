@@ -131,7 +131,7 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
         public void run() {
             int waitTime = 0;
             while (!stopFlag) {
-            	System.out.println(LOG_QUEUE.size()+" | "+defaultQueueSize+" | "+ waitTime+" | "+defaultWaitTime);
+            	//System.out.println(LOG_QUEUE.size()+" | "+defaultQueueSize+" | "+ waitTime+" | "+defaultWaitTime);
                 if (LOG_QUEUE.size() > defaultQueueSize || waitTime > defaultWaitTime) {
                     consumeRecvQueue(LOG_QUEUE, defaultQueueSize);
                     
