@@ -214,5 +214,13 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 		
 	}
 
+	@Override
+	public void beforeQueryOther(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		
+	}
+
+	@Override
+	public void afterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args) {
+	}
 	
 }

@@ -241,5 +241,15 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
 		this.clear();
 	}
+	
+	@Override
+	public void beforeQueryOther(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryOther", sql, this.parse(args), baseDao));
+	}
+
+	@Override
+	public void afterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args) {
+		this.clear();
+	}
 
 }

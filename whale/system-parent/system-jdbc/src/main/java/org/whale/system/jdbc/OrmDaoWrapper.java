@@ -19,14 +19,12 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	@Autowired
 	private BaseDaoFilterService<T, PK> filter;
 
-
 	@Override
 	public void save(T t) {
 		filter.exeBeforeSave(t, this);
 		super.save(t);
 		filter.exeAfterSave(t, this);
 	}
-
 
 	@Override
 	public void save(List<T> list) {
@@ -35,14 +33,12 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterSave(list, this);
 	}
 
-
 	@Override
 	public void saveBatch(List<T> list) {
 		filter.exeBeforeSaveBatch(list, this);
 		super.saveBatch(list);
 		filter.exeAfterSaveBatch(list, this);
 	}
-
 
 	@Override
 	public void update(T t) {
@@ -51,14 +47,12 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterUpdate(t, this);
 	}
 
-
 	@Override
 	public void update(List<T> list) {
 		filter.exeBeforeUpdate(list, this);
 		super.update(list);
 		filter.exeAfterUpdate(list, this);
 	}
-
 
 	@Override
 	public void updateBatch(List<T> list) {
@@ -67,14 +61,12 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterUpdateBatch(list, this);
 	}
 
-
 	@Override
 	public void updateOnly(T t) {
 		filter.exeBeforeUpdate(t, this);
 		super.updateOnly(t);
 		filter.exeAfterUpdate(t, this);
 	}
-
 
 	@Override
 	public void delete(PK id) {
@@ -83,7 +75,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterDelete(id, this);
 	}
 
-
 	@Override
 	public void delete(List<PK> ids) {
 		filter.exeBeforeDelete(ids, this);
@@ -91,14 +82,12 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterDelete(ids, this);
 	}
 
-
 	@Override
 	public void deleteBy(T t) {
 		filter.exeBeforeDeleteBy(t, this);
 		super.deleteBy(t);
 		filter.exeAfterDeleteBy(t, this);
 	}
-
 
 	@Override
 	public T get(PK id) {
@@ -108,7 +97,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return t;
 	}
 
-
 	@Override
 	public T getObject(String sql) {
 		filter.exeBeforeGetObject(this, sql);
@@ -116,7 +104,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterGetObject(this, t, sql);
 		return t;
 	}
-
 
 	@Override
 	public T getObject(String sql, Object... args) {
@@ -126,7 +113,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return t;
 	}
 
-
 	@Override
 	public List<T> query(T t) {
 		filter.exeBeforeQuery(this, t);
@@ -134,7 +120,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterQuery(this, rs, t);
 		return rs;
 	}
-
 
 	@Override
 	public List<T> queryLike(T t) {
@@ -144,7 +129,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return rs;
 	}
 
-
 	@Override
 	public List<T> query(String sql) {
 		filter.exeBeforeQuery(this, sql);
@@ -152,7 +136,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterQuery(this, rs, sql);
 		return rs;
 	}
-
 
 	@Override
 	public List<T> query(String sql, Object... args) {
@@ -162,7 +145,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return rs;
 	}
 
-
 	@Override
 	public List<T> queryAll() {
 		filter.exeBeforeQueryAll(this);
@@ -171,23 +153,12 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return rs;
 	}
 
-
 	@Override
 	public void queryPage(Page page) {
 		filter.exeBeforeQueryPage(this, page);
 		super.queryPage(page);
 		filter.exeAfterQueryPage(this, page);
 	}
-
-
-	@Override
-	public Integer queryForInt(String sql) {
-		filter.exeBeforeQueryForNumber(this, sql);
-		Integer rs = super.queryForInt(sql);
-		filter.exeAfterQueryForNumber(this, rs, sql);
-		return rs;
-	}
-
 
 	@Override
 	public Integer queryForInt(String sql, Object... args) {
@@ -197,16 +168,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return rs;
 	}
 
-
-	@Override
-	public Long queryForLong(String sql) {
-		filter.exeBeforeQueryForNumber(this, sql);
-		Long rs = super.queryForLong(sql);
-		filter.exeAfterQueryForNumber(this, rs, sql);
-		return rs;
-	}
-
-
 	@Override
 	public Long queryForLong(String sql, Object... args) {
 		filter.exeBeforeQueryForNumber(this, sql, args);
@@ -214,16 +175,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterQueryForNumber(this, rs, sql, args);
 		return rs;
 	}
-
-
-	@Override
-	public List<Map<String, Object>> queryForList(String sql) {
-		filter.exeBeforeQueryForList(this, sql);
-		List<Map<String, Object>> rs = super.queryForList(sql);
-		filter.exeAfterQueryForList(this, rs, sql);
-		return rs;
-	}
-
 
 	@Override
 	public List<Map<String, Object>> queryForList(String sql, Object... args) {
@@ -233,21 +184,19 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return rs;
 	}
 
-
-	@Override
-	public Map<String, Object> queryForMap(String sql) {
-		filter.exeBeforeQueryForMap(this, sql);
-		Map<String, Object> rs = super.queryForMap(sql);
-		filter.exeAfterQueryForMap(this, rs, sql);
-		return rs;
-	}
-
-
 	@Override
 	public Map<String, Object> queryForMap(String sql, Object... args) {
 		filter.exeBeforeQueryForMap(this, sql, args);
 		Map<String, Object> rs = super.queryForMap(sql);
 		filter.exeAfterQueryForMap(this, rs, sql, args);
+		return rs;
+	}
+
+	@Override
+	public <E> List<E> queryOther(Class<E> clazz, String sql, Object... args) {
+		filter.exeBeforeQueryOther(this, sql, args);
+		List<E> rs = super.queryOther(clazz, sql, args);
+		filter.exeAfterQueryOther(this, rs, sql, args);
 		return rs;
 	}
 

@@ -33,7 +33,9 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 			.append("    AND ur.userId = ? ")
 			.append(" order by t.roleId ");
 		
-		return this.jdbcTemplate.query(strb.toString(), new Object[]{userId}, this.ormContext.getRowMapper(Role.class));
+		return this.queryOther(Role.class, strb.toString(), userId);
+		
+		//return this.jdbcTemplate.query(strb.toString(), new Object[]{userId}, this.ormContext.getRowMapper(Role.class));
 	}
 	
 	public List<User> queryUsersByRoleId(Long roleId){
@@ -44,7 +46,9 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 			.append("    AND ur.roleId = ? ")
 			.append(" order by t.userId ");
 		
-		return this.jdbcTemplate.query(strb.toString(), new Object[]{roleId}, this.ormContext.getRowMapper(User.class));
+		return this.queryOther(User.class, strb.toString(), roleId);
+		
+		//return this.jdbcTemplate.query(strb.toString(), new Object[]{roleId}, this.ormContext.getRowMapper(User.class));
 	}
 	
 	public List<User> queryUsersByRoleCode(String roleCode){
@@ -56,16 +60,27 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 			.append("    AND r.roleCode = ?")
 			.append(" order by t.userId ");
 		
-		return this.jdbcTemplate.query(strb.toString(), new Object[]{roleCode}, this.ormContext.getRowMapper(User.class));
+		return this.queryOther(User.class, strb.toString(), roleCode);
+		
+		//return this.jdbcTemplate.query(strb.toString(), new Object[]{roleCode}, this.ormContext.getRowMapper(User.class));
 	}
 	
 	public void deleteByRoleId(Long roleId){
-		String sql = "delete from "+this.getTableName()+" where roleId=?";
-		this.jdbcTemplate.update(sql, roleId);
+		UserRole ur = new UserRole();
+		ur.setRoleId(roleId);
+		
+		this.deleteBy(ur);
+		
+//		String sql = "delete from "+this.getTableName()+" where roleId=?";
+//		this.jdbcTemplate.update(sql, roleId);
 	}
 	
 	public void deleteByUserId(Long userId){
-		String sql = "delete from "+this.getTableName()+" where userId=?";
-		this.jdbcTemplate.update(sql, userId);
+		UserRole ur = new UserRole();
+		ur.setUserId(userId);
+		
+		this.deleteBy(ur);
+//		String sql = "delete from "+this.getTableName()+" where userId=?";
+//		this.jdbcTemplate.update(sql, userId);
 	}
 }

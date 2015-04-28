@@ -104,6 +104,12 @@ $(function(){
 							</td>
 						</tr>
 						<tr>
+							<td class="td-label">sql</td>
+							<td class="td-value" colspan="3">
+								<div style="height:120px;" class="textAreaDiv">${item.sqlStr}</div>
+							</td>
+						</tr>
+						<tr>
 							<td class="td-label">数据</td>
 							<td class="td-value" colspan="3">
 								<div style="height:300px;" class="textAreaDiv">${item.datas}</div>

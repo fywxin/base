@@ -331,4 +331,16 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 		}
 	}
 	
+	
+	public void exeBeforeQueryOther(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
+			filter.beforeQueryOther(baseDao, sql, args);
+		}
+	}
+	
+	public void exeAfterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args) {
+		for(int i=queryFilters.size()-1; i>=0; i--){
+			queryFilters.get(i).afterQueryOther(baseDao, rs, sql, args);
+		}
+	}
 }

@@ -49,6 +49,9 @@ public interface BaseDaoQueryFilter<T extends Serializable,PK extends Serializab
 	void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql, Object...args);
 	
 	
+	void beforeQueryOther(IOrmDao<T, PK> baseDao, String sql, Object... args);
+	
+	void afterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args);
 	
 	void beforeQueryPage(IOrmDao<T, PK> baseDao, Page page);
 	

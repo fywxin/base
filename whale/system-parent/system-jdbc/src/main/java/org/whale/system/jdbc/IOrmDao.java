@@ -129,28 +129,35 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	void queryPage(Page page);
 	
 	/**
+	 * 在T 的dao里面查询返回非T（Clazz）的结果
+	 * 
+	 * @param clazz 
+	 * @param sql
+	 * @param args
+	 * @return
+	 */
+	<E> List<E> queryOther(Class<E> clazz, String sql, Object... args);
+	
+	/**
 	 * 
 	 * @return
 	 */
 	JdbcTemplate getJdbcTemplate();
 	
-	//-----------------------------------转发JdbcTemplate 查询---------------------------------
 	
-	Integer queryForInt(String sql);
+	
+	//-----------------------------------转发JdbcTemplate 查询---------------------------------
 	
 	Integer queryForInt(String sql, Object... args);
 	
-	Long queryForLong(String sql);
-	
 	Long queryForLong(String sql, Object... args);
-	
-	List<Map<String, Object>> queryForList(String sql);
 	
 	List<Map<String, Object>> queryForList(String sql, Object... args);
 	
-	Map<String, Object> queryForMap(String sql);
-	
 	Map<String, Object> queryForMap(String sql, Object... args);
+	
+	
+	
 	
 	OrmTable getOrmTable();
 	

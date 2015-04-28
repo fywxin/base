@@ -19,9 +19,16 @@ public class LogDao extends BaseDao<Log, Long>{
 			.append("FROM sys_log t ")
 			.append("WHERE 1=1 ");
 		
-		if(Strings.isNotBlank(page.getParamStr("opt"))){
-			param.append("AND t.opt = ? ");
-			page.addArg(page.getParamStr("opt"));
+		String opt = null;
+		if(Strings.isNotBlank(opt = page.getParamStr("opt"))){
+			if("dll".equals(opt)){
+				param.append("AND (t.opt like 'save%' OR t.opt like 'update%' OR t.opt like 'delete%') ");
+			}else if("find".equals(opt)){
+				param.append("AND (t.opt like 'get%' OR t.opt like 'query%') ");
+			}else{
+				param.append("AND t.opt = ? ");
+				page.addArg(page.getParamStr("opt"));
+			}
 		}
 		
 		if(Strings.isNotBlank(page.getParamStr("cnName"))){
@@ -52,6 +59,11 @@ public class LogDao extends BaseDao<Log, Long>{
 		if(Strings.isNotBlank(page.getParamStr("endTime"))){
 			param.append("AND t.createTime<=? ");
 			page.addArg(TimeUtil.parseTime(page.getParamStr("endTime"), TimeUtil.COMMON_FORMAT).getTime());
+		}
+		
+		if(page.getParamInteger("rsType") != null){
+			param.append("AND t.rsType =? ");
+			page.addArg(page.getParamInteger("rsType"));
 		}
 	
 		page.setCountSql("SELECT count(1) FROM sys_log t where 1=1 "+param.toString());

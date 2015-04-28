@@ -48,6 +48,7 @@ public class LogController extends BaseController {
 		page.put("startTime", startTime);
 		page.put("endTime", endTime);
 		page.put("uri", log.getUri());
+		page.put("rsType", log.getRsType());
 		
 		this.logService.queryPage(page);
 		
