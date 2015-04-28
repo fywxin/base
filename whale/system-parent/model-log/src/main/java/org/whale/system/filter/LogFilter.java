@@ -26,7 +26,7 @@ import org.whale.system.jdbc.orm.entry.OrmTable;
 import com.alibaba.fastjson.JSON;
 
 /**
- * 日志过滤器
+ * 日志过滤收集器
  *
  * @author 王金绍
  * 2015年4月26日 下午3:43:15
@@ -52,6 +52,10 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
    	private final Object notify = new Object();
 
    	private boolean stopFlag = false;
+   	
+   	private boolean saveDllLog = true;
+   	
+   	private boolean saveFindLog = true;
    
 	@Autowired
 	private LogDao logDao;	
@@ -269,109 +273,151 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 
 	@Override
 	public void afterSave(T obj, IOrmDao<T, PK> baseDao) {
-		this.saveLog(baseDao);
+		if(this.saveDllLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterSave(List<T> objs, IOrmDao<T, PK> baseDao) {
-		this.saveLog(baseDao);
+		if(this.saveDllLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
-		this.saveLog(baseDao);
+		if(this.saveDllLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterUpdate(T obj, IOrmDao<T, PK> baseDao) {
-		this.saveLog(baseDao);
+		if(this.saveDllLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
-		this.saveLog(baseDao);
+		if(this.saveDllLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
-		this.saveLog(baseDao);
+		if(this.saveDllLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterDelete(PK id, IOrmDao<T, PK> baseDao) {
-		this.saveLog(baseDao);
+		if(this.saveDllLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterDelete(List<PK> ids, IOrmDao<T, PK> baseDao) {
-		this.saveLog(baseDao);
+		if(this.saveDllLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterDeleteBy(T obj, IOrmDao<T, PK> baseDao) {
-		this.saveLog(baseDao);
+		if(this.saveDllLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterGet(IOrmDao<T, PK> baseDao, T rs, PK id) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql,
 			Object... args) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterQueryAll(IOrmDao<T, PK> baseDao, List<T> rs) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, T t) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql,
 			Object... args) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterQueryPage(IOrmDao<T, PK> baseDao, Page page) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 	
 	@Override
 	public void afterQueryForNumber(IOrmDao<T, PK> baseDao, Number num, String sql, Object... args) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, String sql, Object... args) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
 	public void afterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args) {
-		this.saveLog(baseDao);
+		if(this.saveFindLog){
+			this.saveLog(baseDao);
+		}
 	}
 
 	@Override
@@ -379,4 +425,19 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 		return 1000;
 	}
 
+	public boolean isSaveDllLog() {
+		return saveDllLog;
+	}
+
+	public void setSaveDllLog(boolean saveDllLog) {
+		this.saveDllLog = saveDllLog;
+	}
+
+	public boolean isSaveFindLog() {
+		return saveFindLog;
+	}
+
+	public void setSaveFindLog(boolean saveFindLog) {
+		this.saveFindLog = saveFindLog;
+	}
 }
