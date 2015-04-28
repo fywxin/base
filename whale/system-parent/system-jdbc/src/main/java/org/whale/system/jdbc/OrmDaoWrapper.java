@@ -2,6 +2,7 @@ package org.whale.system.jdbc;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.whale.system.base.Page;
@@ -178,4 +179,78 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterQueryPage(this, page);
 	}
 
+
+	@Override
+	public Integer queryForInt(String sql) {
+		filter.exeBeforeQueryForNumber(this, sql);
+		Integer rs = super.queryForInt(sql);
+		filter.exeAfterQueryForNumber(this, rs, sql);
+		return rs;
+	}
+
+
+	@Override
+	public Integer queryForInt(String sql, Object... args) {
+		filter.exeBeforeQueryForNumber(this, sql, args);
+		Integer rs = super.queryForInt(sql);
+		filter.exeAfterQueryForNumber(this, rs, sql, args);
+		return rs;
+	}
+
+
+	@Override
+	public Long queryForLong(String sql) {
+		filter.exeBeforeQueryForNumber(this, sql);
+		Long rs = super.queryForLong(sql);
+		filter.exeAfterQueryForNumber(this, rs, sql);
+		return rs;
+	}
+
+
+	@Override
+	public Long queryForLong(String sql, Object... args) {
+		filter.exeBeforeQueryForNumber(this, sql, args);
+		Long rs = super.queryForLong(sql);
+		filter.exeAfterQueryForNumber(this, rs, sql, args);
+		return rs;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> queryForList(String sql) {
+		filter.exeBeforeQueryForList(this, sql);
+		List<Map<String, Object>> rs = super.queryForList(sql);
+		filter.exeAfterQueryForList(this, rs, sql);
+		return rs;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> queryForList(String sql, Object... args) {
+		filter.exeBeforeQueryForList(this, sql, args);
+		List<Map<String, Object>> rs = super.queryForList(sql);
+		filter.exeAfterQueryForList(this, rs, sql, args);
+		return rs;
+	}
+
+
+	@Override
+	public Map<String, Object> queryForMap(String sql) {
+		filter.exeBeforeQueryForMap(this, sql);
+		Map<String, Object> rs = super.queryForMap(sql);
+		filter.exeAfterQueryForMap(this, rs, sql);
+		return rs;
+	}
+
+
+	@Override
+	public Map<String, Object> queryForMap(String sql, Object... args) {
+		filter.exeBeforeQueryForMap(this, sql, args);
+		Map<String, Object> rs = super.queryForMap(sql);
+		filter.exeAfterQueryForMap(this, rs, sql, args);
+		return rs;
+	}
+
+	
+	
 }

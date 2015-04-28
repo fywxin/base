@@ -2,6 +2,7 @@ package org.whale.system.jdbc;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -133,6 +134,23 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 */
 	JdbcTemplate getJdbcTemplate();
 	
+	//-----------------------------------转发JdbcTemplate 查询---------------------------------
+	
+	Integer queryForInt(String sql);
+	
+	Integer queryForInt(String sql, Object... args);
+	
+	Long queryForLong(String sql);
+	
+	Long queryForLong(String sql, Object... args);
+	
+	List<Map<String, Object>> queryForList(String sql);
+	
+	List<Map<String, Object>> queryForList(String sql, Object... args);
+	
+	Map<String, Object> queryForMap(String sql);
+	
+	Map<String, Object> queryForMap(String sql, Object... args);
 	
 	OrmTable getOrmTable();
 	

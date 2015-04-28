@@ -35,7 +35,7 @@ public class UserDao extends BaseDao<User, Long> {
 			"and r.status = 1";
 	public List<Long> findAuthIds(Long userId){
 		
-		List<Map<String, Object>> list = this.jdbcTemplate.queryForList(findAuthIds_SQL, userId);
+		List<Map<String, Object>> list = this.queryForList(findAuthIds_SQL, userId);
 		if(list == null || list.size() < 1)
 			return null;
 		

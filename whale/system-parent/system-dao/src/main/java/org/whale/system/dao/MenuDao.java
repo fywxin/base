@@ -53,6 +53,6 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	@SuppressWarnings("all")
 	public Integer getCurOrder(Long parentId){
 		
-		return this.jdbcTemplate.queryForInt(getCurOrder_SQL, parentId);
+		return this.queryForInt(getCurOrder_SQL, parentId);
 	}
 }

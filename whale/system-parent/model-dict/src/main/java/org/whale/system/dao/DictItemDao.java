@@ -11,7 +11,7 @@ public class DictItemDao extends BaseDao<DictItem, Long> {
 	
 	public Integer getCurOrder(Long dictId){
 		String sql = "select max(orderNo) from "+this.getTableName()+" where dictId=?";
-		return this.jdbcTemplate.queryForInt(sql, dictId);
+		return this.queryForInt(sql, dictId);
 	}
 	
 	public DictItem getByDictIdAndItemCode(Long dictId, String itemCode){

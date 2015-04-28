@@ -517,4 +517,64 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		return this.ormContext;
 	}
 
+	@Override
+	@SuppressWarnings("all")
+	public Integer queryForInt(String sql) {
+		if(Strings.isBlank(sql))
+			return null;
+		return this.jdbcTemplate.queryForInt(sql);
+	}
+
+	@Override
+	@SuppressWarnings("all")
+	public Integer queryForInt(String sql, Object... args) {
+		if(Strings.isBlank(sql))
+			return null;
+		return this.jdbcTemplate.queryForInt(sql, args);
+	}
+
+	@Override
+	@SuppressWarnings("all")
+	public Long queryForLong(String sql) {
+		if(Strings.isBlank(sql))
+			return null;
+		return this.jdbcTemplate.queryForLong(sql);
+	}
+
+	@Override
+	@SuppressWarnings("all")
+	public Long queryForLong(String sql, Object... args) {
+		if(Strings.isBlank(sql))
+			return null;
+		return this.jdbcTemplate.queryForLong(sql, args);
+	}
+
+	@Override
+	public List<Map<String, Object>> queryForList(String sql) {
+		if(Strings.isBlank(sql))
+			return null;
+		return this.jdbcTemplate.queryForList(sql);
+	}
+
+	@Override
+	public List<Map<String, Object>> queryForList(String sql, Object... args) {
+		if(Strings.isBlank(sql))
+			return null;
+		return this.jdbcTemplate.queryForList(sql, args);
+	}
+
+	@Override
+	public Map<String, Object> queryForMap(String sql) {
+		if(Strings.isBlank(sql))
+			return null;
+		return this.jdbcTemplate.queryForMap(sql);
+	}
+
+	@Override
+	public Map<String, Object> queryForMap(String sql, Object... args) {
+		if(Strings.isBlank(sql))
+			return null;
+		return this.jdbcTemplate.queryForMap(sql, args);
+	}
+
 }

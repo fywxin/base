@@ -2,6 +2,7 @@ package org.whale.system.jdbc.filter.query;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.core.PriorityOrdered;
 import org.whale.system.base.Page;
@@ -52,5 +53,19 @@ public interface BaseDaoQueryFilter<T extends Serializable,PK extends Serializab
 	void beforeQueryPage(IOrmDao<T, PK> baseDao, Page page);
 	
 	void afterQueryPage(IOrmDao<T, PK> baseDao, Page page);
+	
+	
+	
+	void beforeQueryForNumber(IOrmDao<T, PK> baseDao, String sql, Object... args);
+	
+	void afterQueryForNumber(IOrmDao<T, PK> baseDao, Number num, String sql, Object... args);
+	
+	void beforeQueryForList(IOrmDao<T, PK> baseDao, String sql, Object... args);
+	
+	void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, String sql, Object... args);
+	
+	void beforeQueryForMap(IOrmDao<T, PK> baseDao, String sql, Object... args);
+	
+	void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args);
 
 }

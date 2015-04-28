@@ -2,6 +2,7 @@ package org.whale.system.jdbc.filter;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.whale.system.base.Page;
 import org.whale.system.jdbc.IOrmDao;
@@ -184,4 +185,34 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 		
 	}
 
+	@Override
+	public void beforeQueryForNumber(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		
+	}
+
+	@Override
+	public void afterQueryForNumber(IOrmDao<T, PK> baseDao, Number num, String sql, Object... args) {
+		
+	}
+
+	@Override
+	public void beforeQueryForList(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		
+	}
+
+	@Override
+	public void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, String sql, Object... args) {
+		
+	}
+
+	@Override
+	public void beforeQueryForMap(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+	}
+
+	@Override
+	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
+		
+	}
+
+	
 }

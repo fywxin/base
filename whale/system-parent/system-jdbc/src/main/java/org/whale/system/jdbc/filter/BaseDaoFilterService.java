@@ -3,6 +3,7 @@ package org.whale.system.jdbc.filter;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -289,6 +290,44 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 	public void exeAfterQueryPage(IOrmDao<T, PK> baseDao, Page page) {
 		for(int i=queryFilters.size()-1; i>=0; i--){
 			queryFilters.get(i).afterQueryPage(baseDao, page);
+		}
+	}
+	
+	//---------------------------------------JdbcTemplate native ---------------------------
+	
+	public void exeBeforeQueryForNumber(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
+			filter.beforeQueryForNumber(baseDao, sql, args);
+		}
+	}
+	
+	public void exeAfterQueryForNumber(IOrmDao<T, PK> baseDao, Number num, String sql, Object... args) {
+		for(int i=queryFilters.size()-1; i>=0; i--){
+			queryFilters.get(i).afterQueryForNumber(baseDao, num, sql, args);
+		}
+	}
+	
+	public void exeBeforeQueryForList(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
+			filter.beforeQueryForList(baseDao, sql, args);
+		}
+	}
+	
+	public void exeAfterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, String sql, Object... args) {
+		for(int i=queryFilters.size()-1; i>=0; i--){
+			queryFilters.get(i).afterQueryForList(baseDao, rs, sql, args);
+		}
+	}
+	
+	public void exeBeforeQueryForMap(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
+			filter.beforeQueryForMap(baseDao, sql, args);
+		}
+	}
+	
+	public void exeAfterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
+		for(int i=queryFilters.size()-1; i>=0; i--){
+			queryFilters.get(i).afterQueryForMap(baseDao, rs, sql, args);
 		}
 	}
 	

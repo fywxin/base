@@ -3,6 +3,7 @@ package org.whale.system.jdbc.filter.impl;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 import org.whale.system.base.Page;
@@ -200,11 +201,45 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 	}
 	
 	private List<Object> parse(Object... objs){
+		if(objs == null)
+			return null;
 		List<Object> list = new LinkedList<Object>();
 		for(Object obj : objs){
 			list.add(obj);
 		}
 		return list;
+	}
+
+	//-----------------------------------------------JdbcTemplate 自带---------------------------------------
+	
+	@Override
+	public void beforeQueryForNumber(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryForNumber", sql, this.parse(args), baseDao));
+	}
+
+	@Override
+	public void afterQueryForNumber(IOrmDao<T, PK> baseDao, Number num, String sql, Object... args) {
+		this.clear();
+	}
+
+	@Override
+	public void beforeQueryForList(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryForList", sql, this.parse(args), baseDao));
+	}
+
+	@Override
+	public void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, String sql, Object... args) {
+		this.clear();
+	}
+
+	@Override
+	public void beforeQueryForMap(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryForMap", sql, this.parse(args), baseDao));
+	}
+
+	@Override
+	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
+		this.clear();
 	}
 
 }
