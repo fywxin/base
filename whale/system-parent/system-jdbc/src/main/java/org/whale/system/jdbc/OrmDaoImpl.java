@@ -21,12 +21,15 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.whale.system.base.BaseDao;
 import org.whale.system.base.Page;
+import org.whale.system.common.exception.OrmException;
 import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
+import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 import org.whale.system.jdbc.orm.entry.OrmValue;
 import org.whale.system.jdbc.orm.value.ValueBulider;
+import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
 
 public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implements IOrmDao<T, PK> {
@@ -249,6 +252,19 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		List<T> list = (List<T>)this.jdbcTemplate.query(ormValues.getSql(), ormValues.getArgs(), this.rowMapper);
 		if(list == null || list.size() < 1) return null;
 		return list.get(0);
+	}
+	
+	/**
+	 * 按对象条件获取一条记录
+	 */
+	@Override
+	public T getObject(T t) {
+		OrmValue ormValues = this.valueBulider.getQuery(t);
+		if(ormValues == null) return null;
+		List<T> rs = (List<T>)this.jdbcTemplate.query(ormValues.getSql(), ormValues.getArgs(), this.rowMapper);
+		if(rs == null || rs.size() < 1)
+			return null;
+		return rs.get(0);
 	}
 	
 	/**
@@ -548,5 +564,24 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			return null;
 		return this.jdbcTemplate.query(sql, args, this.getOrmContext().getRowMapper(clazz));
 	}
+
+	@Override
+	public T newT() {
+		T t = null;
+		try {
+			t = this.clazz.newInstance();
+		} catch (Exception e) {
+			throw new OrmException("实体类"+ormTable.getClass()+"默认构造方法不能访问！");
+		}
+		List<OrmColumn> valCols = this.ormTable.getValueCols();
+		if(valCols != null && valCols.size() > 0){
+			for(OrmColumn col : valCols){
+				AnnotationUtil.setFieldValue(t, col.getField(), null);
+			}
+		}
+		return t;
+	}
+
+	
 
 }

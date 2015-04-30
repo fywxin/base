@@ -30,7 +30,7 @@ public class OrmTable extends Atable {
 	/** 所有@Order字段 */
 	private List<OrmColumn> orderCols;
 	
-	//-----------------外部扩张对象注释信息读取保存---------------
+	//-----------------用户自定义元注释 信息读取保存---------------
 	
 	private Map<String, Object> extInfo;
 	
@@ -49,6 +49,10 @@ public class OrmTable extends Atable {
 	private List<OrmColumn> sqlExecCols;
 	/**待校验检查字段集合 */
 	private List<OrmColumn> validateCols;
+	
+	/**存在默认值的字段集合，主要用于getObject(T t) 和 query(T t)的模糊查询，防止初始值污染查询条件 */
+	private List<OrmColumn> valueCols;
+	
 	
 	public OrmTable(){
 		super();
@@ -213,6 +217,14 @@ public class OrmTable extends Atable {
 
 	public void setExtInfo(Map<String, Object> extInfo) {
 		this.extInfo = extInfo;
+	}
+	
+	public List<OrmColumn> getValueCols() {
+		return valueCols;
+	}
+
+	public void setValueCols(List<OrmColumn> valueCols) {
+		this.valueCols = valueCols;
 	}
 
 	@Override

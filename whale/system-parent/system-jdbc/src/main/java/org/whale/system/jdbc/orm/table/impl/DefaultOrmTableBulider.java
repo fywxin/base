@@ -38,6 +38,7 @@ import org.whale.system.jdbc.orm.table.ColumnExtInfoReader;
 import org.whale.system.jdbc.orm.table.OrmTableBulider;
 import org.whale.system.jdbc.orm.table.TableExtInfoReader;
 import org.whale.system.jdbc.orm.table.UserParseColumnName;
+import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
 
 /**
@@ -420,6 +421,35 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		if(validateCols.size() > 0){
 			ormTable.setValidateCols(validateCols);
 		}
+		
+		//读取该类存在默认值的字段集合
+		this.readValCols(ormTable);
+	}
+	
+	/**
+	 * 获取初始值非空的字段
+	 * 2015-4-30 下午3:42:18
+	 * @param ormTable
+	 */
+	private void readValCols(OrmTable ormTable){
+		try {
+			Object obj = ormTable.getClazz().newInstance();
+			List<OrmColumn> hasValCols = new ArrayList<OrmColumn>();
+			
+			List<OrmColumn> cols = ormTable.getOrmCols();
+			Object rs = null;
+			for(OrmColumn col : cols){
+				rs = AnnotationUtil.getFieldValue(obj, col.getField());
+				if(rs != null){
+					hasValCols.add(col);
+				}
+			}
+			if(hasValCols.size() > 0){
+				ormTable.setValueCols(hasValCols);
+			}
+		} catch (Exception e) {
+			throw new OrmException("实体类"+ormTable.getClass()+"默认构造方法不能访问！", e);
+		} 
 	}
 	
 	/**

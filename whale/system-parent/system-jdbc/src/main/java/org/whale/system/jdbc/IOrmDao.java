@@ -17,6 +17,13 @@ import org.whale.system.jdbc.orm.entry.OrmTable;
  * 2014年9月17日-上午10:37:39
  */
 public interface IOrmDao<T extends Serializable,PK extends Serializable> {
+	
+	/**
+	 * 创建一个全部字段为空的对象
+	 * 
+	 * @return
+	 */
+	T newT();
 
 	/**
 	 * 保存实体
@@ -78,6 +85,13 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 * @return
 	 */
 	T get(PK id);
+	
+	/**
+	 * 按条件查询对象
+	 * @param t
+	 * @return
+	 */
+	T getObject(T t);
 	
 	/**
 	 * 按sql返回单个对象

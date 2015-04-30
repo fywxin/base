@@ -27,7 +27,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>javaee</groupId>
 			<artifactId>javaee-api</artifactId>

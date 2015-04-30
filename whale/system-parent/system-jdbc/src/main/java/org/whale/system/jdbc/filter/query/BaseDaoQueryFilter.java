@@ -22,6 +22,10 @@ public interface BaseDaoQueryFilter<T extends Serializable,PK extends Serializab
 	
 	void afterGet(IOrmDao<T, PK> baseDao, T rs, PK id);
 	
+	void beforeGetObject(IOrmDao<T, PK> baseDao, T t);
+	
+	void afterGetObject(IOrmDao<T, PK> baseDao, T rs, T t);
+	
 	void beforeGetObject(IOrmDao<T, PK> baseDao, String sql);
 	
 	void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql);

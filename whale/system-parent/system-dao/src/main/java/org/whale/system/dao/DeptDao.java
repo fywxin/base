@@ -15,10 +15,9 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 * @return
 	 */
     public Dept getByDeptName(String deptName) {
-    	StringBuilder strb = this.getSqlHead();
-    	strb.append("and t.deptName=?");
-    	
-    	return this.getObject(strb.toString(), deptName);
+    	Dept dept = this.newT();
+    	dept.setDeptName(deptName);
+    	return this.getObject(dept);
     }
     /**
 	 * 按 部门编码 获取 部门
@@ -26,10 +25,9 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 * @return
 	 */
     public Dept getByDeptCode(String deptCode) {
-    	StringBuilder strb = this.getSqlHead();
-    	strb.append("and t.deptCode=?");
-    	
-    	return this.getObject(strb.toString(), deptCode);
+    	Dept dept = this.newT();
+    	dept.setDeptCode(deptCode);
+    	return this.getObject(dept);
     }
     
     /**
@@ -38,10 +36,9 @@ public class DeptDao extends BaseDao<Dept, Long> {
      * @return
      */
     public List<Dept> getByPid(Long pid){
-    	StringBuilder strb = this.getSqlHead();
-    	strb.append("and t.pid=? order by t.orderNo");
-    	
-    	return this.query(strb.toString(), pid);
+    	Dept dept = this.newT();
+    	dept.setPid(pid);
+    	return this.query(dept);
     }
 	
     /**

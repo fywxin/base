@@ -124,6 +124,17 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 	public void afterGet(IOrmDao<T, PK> baseDao, T rs, PK id) {
 		this.clear();
 	}
+	
+	@Override
+	public void beforeGetObject(IOrmDao<T, PK> baseDao, T t) {
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("getObject", t, baseDao));
+	}
+
+	@Override
+	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, T t) {
+		this.clear();
+	}
+
 
 	@Override
 	public void beforeGetObject(IOrmDao<T, PK> baseDao, String sql) {
@@ -252,4 +263,5 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 		this.clear();
 	}
 
+	
 }

@@ -194,6 +194,19 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 			queryFilters.get(i).afterGet(baseDao, rs, id);
 		}
 	}
+	
+	public void exeBeforeGetObject(IOrmDao<T, PK> baseDao, T t) {
+		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
+			filter.beforeGetObject(baseDao, t);
+		}
+	}
+
+	
+	public void exeAfterGetObject(IOrmDao<T, PK> baseDao, T rs, T t) {
+		for(int i=queryFilters.size()-1; i>=0; i--){
+			queryFilters.get(i).afterGetObject(baseDao, rs, t);
+		}
+	}
 
 	
 	public void exeBeforeGetObject(IOrmDao<T, PK> baseDao, String sql) {

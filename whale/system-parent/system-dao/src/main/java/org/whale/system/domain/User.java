@@ -62,6 +62,7 @@ public class User extends BaseEntry {
 	@Column(cnName="备注")
 	private String remark;
 	
+	//TODO 按实体类模糊查询时，怎么过滤有初始值的字段
 	@Column(updateable=false,cnName="是否管理员")
 	private Boolean isAdmin = false;
 

@@ -12,17 +12,25 @@ import org.whale.system.domain.UserRole;
 public class UserRoleDao extends BaseDao<UserRole, Long> {
 
 	public List<UserRole> getByRoleId(Long roleId){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.roleId=?");
+		UserRole userRole = this.newT();
+		userRole.setRoleId(roleId);
+		return this.getByRoleId(roleId);
 		
-		return this.query(strb.toString(), roleId);
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.roleId=?");
+//		
+//		return this.query(strb.toString(), roleId);
 	}
 	
 	public List<UserRole> getByUserId(Long userId){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.userId=?");
+		UserRole userRole = this.newT();
+		userRole.setRoleId(userId);
+		return this.getByRoleId(userId);
 		
-		return this.query(strb.toString(), userId);
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.userId=?");
+//		
+//		return this.query(strb.toString(), userId);
 	}
 	
 	public List<Role> queryRoleByUserId(Long userId){
@@ -66,7 +74,7 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 	}
 	
 	public void deleteByRoleId(Long roleId){
-		UserRole ur = new UserRole();
+		UserRole ur = this.newT();
 		ur.setRoleId(roleId);
 		
 		this.deleteBy(ur);
@@ -76,7 +84,7 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 	}
 	
 	public void deleteByUserId(Long userId){
-		UserRole ur = new UserRole();
+		UserRole ur = this.newT();
 		ur.setUserId(userId);
 		
 		this.deleteBy(ur);

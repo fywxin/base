@@ -114,6 +114,16 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 	public void afterGet(IOrmDao<T, PK> baseDao, T rs, PK id) {
 		
 	}
+	
+	@Override
+	public void beforeGetObject(IOrmDao<T, PK> baseDao, T t) {
+		
+	}
+
+	@Override
+	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, T t) {
+		
+	}
 
 	@Override
 	public void beforeGetObject(IOrmDao<T, PK> baseDao, String sql) {

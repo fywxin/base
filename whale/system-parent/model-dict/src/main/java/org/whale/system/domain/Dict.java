@@ -13,7 +13,7 @@ import org.whale.system.jdbc.annotation.Validate;
 @Table(value="sys_dict", cnName="字典")
 public class Dict extends BaseEntry {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 232331L;
 
 	@Id
 	@Column(cnName="id")
@@ -37,7 +37,8 @@ public class Dict extends BaseEntry {
 	@Column(defaultValue=SysConstant.STATUS_NORMAL+"", cnName="状态")
 	private Integer status;
 	
-	private List<DictItem> items;
+	
+	private List<DictItem> items = null;
 	
 
 	public Long getDictId() {

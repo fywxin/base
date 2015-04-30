@@ -14,17 +14,24 @@ import org.whale.system.domain.User;
 public class UserDao extends BaseDao<User, Long> {
 	
 	public List<User> getByDeptId(Long deptId){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.deptId=? order by t.userId");
+		User user = this.newT();
+		user.setDeptId(deptId);
+		return this.query(user);
 		
-		return this.query(strb.toString(), deptId);
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.deptId=? order by t.userId");
+//		
+//		return this.query(strb.toString(), deptId);
 	}
 
 	public User getByUserName(String userName){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.userName=?");
-		
-		return this.getObject(strb.toString(), userName);
+		User user = this.newT();
+		user.setUserName(userName);
+		return this.getObject(user);
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.userName=?");
+//		
+//		return this.getObject(strb.toString(), userName);
 	}
 	
 	final String findAuthIds_SQL ="select ra.authId "+

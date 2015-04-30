@@ -10,17 +10,24 @@ import org.whale.system.domain.RoleAuth;
 public class RoleAuthDao extends BaseDao<RoleAuth, Long> {
 
 	public List<RoleAuth> getByRoleId(Long roleId){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.roleId=?");
-		
-		return this.query(strb.toString(), roleId);
+		RoleAuth roleAuth = this.newT();
+		roleAuth.setRoleId(roleId);
+		return this.query(roleAuth);
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.roleId=?");
+//		
+//		return this.query(strb.toString(), roleId);
 	}
 		
 	public List<RoleAuth> getByAuthId(Long authId){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.authId=?");
-		
-		return this.query(strb.toString(), authId);
+		RoleAuth roleAuth = this.newT();
+		roleAuth.setAuthId(authId);
+		return this.query(roleAuth);
+//		
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.authId=?");
+//		
+//		return this.query(strb.toString(), authId);
 	}
 	
 //	public void deleteByRoleId(Long roleId){

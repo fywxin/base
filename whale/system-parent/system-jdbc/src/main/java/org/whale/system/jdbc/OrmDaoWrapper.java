@@ -96,6 +96,14 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterGet(this, t, id);
 		return t;
 	}
+	
+	@Override
+	public T getObject(T t) {
+		filter.exeBeforeGetObject(this, t);
+		T rs= super.getObject(t);
+		filter.exeAfterGetObject(this, rs, t);
+		return rs;
+	}
 
 	@Override
 	public T getObject(String sql) {
@@ -163,7 +171,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	@Override
 	public Integer queryForInt(String sql, Object... args) {
 		filter.exeBeforeQueryForNumber(this, sql, args);
-		Integer rs = super.queryForInt(sql);
+		Integer rs = super.queryForInt(sql, args);
 		filter.exeAfterQueryForNumber(this, rs, sql, args);
 		return rs;
 	}

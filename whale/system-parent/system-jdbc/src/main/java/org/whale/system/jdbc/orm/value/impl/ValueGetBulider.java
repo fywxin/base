@@ -41,6 +41,8 @@ public class ValueGetBulider {
 		return this.getGet(id, ormSql);
 	}
 	
+	
+	
 	/**
 	 * 
 	 *功能说明: obj中值非空字段才作为查询条件，字符串类型采用like
@@ -62,13 +64,11 @@ public class ValueGetBulider {
 		List<OrmColumn> sCols = new ArrayList<OrmColumn>();
 		List<Object> objs = new ArrayList<Object>();
 		
-		StringBuilder returnStrb = new StringBuilder();
 		StringBuilder conditionStrb = new StringBuilder();
 		
 		//查询条件
 		Object val = null;
 		for(OrmColumn col : cols){
-			returnStrb.append(", t.").append(col.getSqlName());
 			if((val = AnnotationUtil.getFieldValue(obj, col.getField())) != null){
 				//字符串类型
 				if(likeQuery && java.sql.Types.VARCHAR == col.getType()){
@@ -85,13 +85,11 @@ public class ValueGetBulider {
 			}
 		}
 		
-		StringBuilder sql = new StringBuilder("select ");
-		sql.append(returnStrb.substring(1)).append(" from ")
-			.append(ormTable.getTableDbName()).append(" t where 1=1 ")
-			.append(conditionStrb.substring(1))
+		StringBuilder strb = new StringBuilder(ormTable.getSqlHeadPrefix());
+		strb.append(conditionStrb.substring(1))
 			.append(ormTable.getSqlOrderSuffix());
 		
-		ormValue.setSql(sql.toString());
+		ormValue.setSql(strb.toString());
 		ormValue.setFields(fields);
 		ormValue.setArgTypes(LangUtil.toArray(argTypes));
 		ormValue.setTable(ormTable);

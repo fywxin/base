@@ -21,31 +21,45 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	}
 	
 	public List<Menu> getByParentId(Long parentId){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.parentId=?");
-		
-		return this.query(strb.toString(), parentId);
+		Menu menu = this.newT();
+		menu.setParentId(parentId);
+		return this.query(menu);
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.parentId=?");
+//		
+//		return this.query(strb.toString(), parentId);
 	}
 	
 	public List<Menu> getMenuByType(Integer menuType){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.menuType=? order by t.parentId, t.orderNo");
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.menuType=? order by t.parentId, t.orderNo");
+//		return this.query(strb.toString(), menuType);
 		
-		return this.query(strb.toString(), menuType);
+		Menu menu = this.newT();
+		menu.setMenuType(menuType);
+		return this.query(menu);
 	}
 	
 	public List<Menu> getPublicMenus(){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.menuType=3 and t.isPublic=1");
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.menuType=3 and t.isPublic=1");
+//		return this.query(strb.toString());
 		
-		return this.query(strb.toString());
+		Menu menu = this.newT();
+		menu.setMenuType(3);
+		menu.setIsPublic(1);
+		return this.query(menu);
 	}
 	
 	public Menu getByMenuName(String menuName){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.menuName=?");
+		Menu menu = new Menu();
+		menu.setMenuName(menuName);
+		return this.getObject(menu);
 		
-		return this.getObject(strb.toString(), menuName);
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.menuName=?");
+//		
+//		return this.getObject(strb.toString(), menuName);
 	}
 	
 	

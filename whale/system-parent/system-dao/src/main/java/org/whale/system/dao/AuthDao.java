@@ -35,10 +35,14 @@ public class AuthDao extends BaseDao<Auth, Long> {
 	}
 
 	public List<Auth> getByMenuId(Long menuId){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.menuId= ?").append(menuId);
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.menuId= ?").append(menuId);
+//		return this.query(strb.toString(), menuId);
 		
-		return this.query(strb.toString(), menuId);
+		Auth auth = this.newT();
+		auth.setMenuId(menuId);
+		
+		return this.query(auth);
 	}
 	
 	public List<Auth> getByRoleId(Long roleId){
@@ -58,10 +62,15 @@ public class AuthDao extends BaseDao<Auth, Long> {
 	}
 	
 	public Auth getByAuthCode(String authCode){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.authCode=?");
+//		StringBuilder strb = this.getSqlHead();
+//		strb.append("and t.authCode=?");
+//		
+//		return this.getObject(strb.toString(), authCode);
 		
-		return this.getObject(strb.toString(), authCode);
+		Auth auth = new Auth();
+		auth.setAuthCode(authCode);
+		
+		return this.getObject(auth);
 	}
 	
 	/**
