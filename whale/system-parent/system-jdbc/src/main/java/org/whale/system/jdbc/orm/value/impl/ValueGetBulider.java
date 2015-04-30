@@ -84,14 +84,12 @@ public class ValueGetBulider {
 				sCols.add(col);
 			}
 		}
-		OrmColumn idCol = ormTable.getIdCol();
 		
 		StringBuilder sql = new StringBuilder("select ");
 		sql.append(returnStrb.substring(1)).append(" from ")
 			.append(ormTable.getTableDbName()).append(" t where 1=1 ")
 			.append(conditionStrb.substring(1))
-			.append(" order by t.")
-			.append(idCol.getSqlName());
+			.append(ormTable.getSqlOrderSuffix());
 		
 		ormValue.setSql(sql.toString());
 		ormValue.setFields(fields);
