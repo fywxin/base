@@ -138,11 +138,11 @@ public class MySqlAlterTableService extends AbstractAlterTableService {
 		
 		strb.append("\n) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 		
-		logger.info("ORM: 创建表格["+table.getTableDbName()+"] sql: \n"+strb.toString());
+		logger.info("ORM: 创建表格[{}] sql: \n{}", table.getTableDbName(), strb.toString());
 		
 		jdbcTemplate.update(strb.toString());
 		
-		logger.info("ORM: 创建表格["+table.getTableDbName()+"]完成!");
+		logger.info("ORM: 创建表格[{}]完成!", table.getTableDbName());
 	}
 	
 }

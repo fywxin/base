@@ -44,11 +44,11 @@ public class BootUtil implements ApplicationListener<ContextRefreshedEvent> {
 			context.put("fixInitServices", list);
 			Object rs = null;
 			
-			logger.info("触发初始化事件，待执行初始化对象列表："+list);
+			logger.info("触发初始化事件，待执行初始化对象列表：{}", list);
 			for(Bootable bootable : list){
 				rs = bootable.init(context);
 				context.put(bootable.getClass().getName(), rs);
-				logger.info("对象【"+bootable.getClass().getName()+"】初始化完成，返回值："+rs);
+				logger.info("对象[{}]初始化完成，返回值：{}", bootable.getClass().getName(), rs);
 			}
 			logger.info("完成初始化...");
 		}

@@ -56,10 +56,10 @@ public class MailUtil {
 	 */
 	public static void sendMail(Collection<String> to, String subject, String text, Collection<File> files, String personal) throws MessagingException{
 		if(to == null || to.size() < 1){
-			logger.error("主题: "+subject+ "收件人地址为空");
+			logger.error("主题: {} 收件人地址为空", subject);
 			throw new MessagingException("主题: ["+subject+ "] 收件人地址为空");
 		}
-		logger.info("开始发送邮件= 收件人:"+JSON.toJSONString(to)+", 主题: "+subject);
+		logger.info("开始发送邮件= 收件人:{}, 主题: {}", JSON.toJSONString(to), subject);
 		
         System.setProperty("mail.mime.encodefilename", "true");
 		MimeMessage mailMessage = getMailSender().createMimeMessage();
@@ -71,7 +71,7 @@ public class MailUtil {
 		try {
 			messageHelper.setFrom(getMailSender().getUsername(),personal);
 		} catch (UnsupportedEncodingException e1) {
-			logger.error("发件人邮件格式错误:"+getMailSender().getUsername());
+			logger.error("发件人邮件格式错误:{}", getMailSender().getUsername());
 			throw new MessagingException("发件人邮件格式错误:"+getMailSender().getUsername(), e1);
 		}
 		messageHelper.setSubject(subject);
@@ -81,7 +81,7 @@ public class MailUtil {
                 messageHelper.addAttachment(file.getName(), file);
     	}
         doSendMail(mailMessage);
-        logger.info("完成发送邮件= 收件人:"+JSON.toJSONString(to)+", 主题: "+subject);
+        logger.info("完成发送邮件= 收件人:{}, 主题: {}", JSON.toJSONString(to), subject);
 	}
 
 	
@@ -108,8 +108,8 @@ public class MailUtil {
             	retryMap.put(mailMessage, time);
             	retrySendMail();
             	try {
-					logger.warn("发送邮件["+mailMessage.getSubject()+"]第 ["+time+"] 次异常 "+getMailSender().getHost()+":"+getMailSender().getPort()
-							+" "+getMailSender().getUsername()+"/"+getMailSender().getPassword()+", 加入到重试队列中！");
+					logger.warn("发送邮件[{}]第 [{}] 次异常 {}:{} {}/{}, 加入到重试队列中！"
+							, mailMessage.getSubject(), time, getMailSender().getHost(), getMailSender().getPort(), getMailSender().getUsername(), getMailSender().getPassword());
 				} catch (MessagingException e1) {
 					logger.error("邮件 获取主题异常：",e1);
 				}
@@ -124,7 +124,7 @@ public class MailUtil {
 		if(retryMap.size() == 0){
 			logger.info("邮件都发送成功，无需再重试！");
 		}else{
-			logger.info("邮件共有 ["+retryMap.size()+"] 份需要重试，现在开始重试发送....");
+			logger.info("邮件共有 [{}] 份需要重试，现在开始重试发送....", retryMap.size());
 			while(retryMap.size() > 0){
 				for(MimeMessage mailMessage : retryMap.keySet()){
 					doSendMail(mailMessage);

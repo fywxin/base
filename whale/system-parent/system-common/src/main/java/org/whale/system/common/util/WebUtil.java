@@ -324,7 +324,7 @@ public class WebUtil {
     	URL urlObj ;
     	InputStream inputStream = null;
     	try{
-    		logger.info("抓取开始 url="+url+" \n header = " + header);
+    		logger.info("抓取开始 url={} \n header = {}", url, header);
             urlObj = new URL(url);
             inputStream = urlObj.openStream();
             int c;
@@ -334,7 +334,7 @@ public class WebUtil {
             }
             
             String text = new String(sb.toString().getBytes("ISO-8859-1"),"UTF-8");
-            logger.info("抓取完成  返回内容["+text+"] url="+url);
+            logger.info("抓取完成   url={}, 返回内容:\n{}", url, text);
             return text;
             
         }catch(Exception e){

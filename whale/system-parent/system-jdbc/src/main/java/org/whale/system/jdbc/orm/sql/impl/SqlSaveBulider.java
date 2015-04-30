@@ -74,7 +74,7 @@ public class SqlSaveBulider {
 		ormSql.setOpType(OrmSql.OPT_SAVE);
 		ormSql.setCols(cols);
 		
-		logger.info("ORM: clazz="+table.getClazz()+" 创建save sql语句：\n"+sql.toString());
+		logger.info("ORM: clazz={} 创建save sql语句：\n{}", table.getClazz(), sql.toString());
 		
 		return ormSql;
 	}
@@ -133,7 +133,7 @@ public class SqlSaveBulider {
 		ormSql.setOpType(OrmSql.OPT_SAVE_BATCH);
 		ormSql.setCols(sCols);
 		
-		logger.info("ORM: clazz="+table.getClazz()+" 创建batchSave sql语句：\n"+sql.toString());
+		logger.info("ORM: clazz={} 创建batchSave sql语句：\n{}", table.getClazz(), sql.toString());
 		
 		return ormSql;
 	}

@@ -58,7 +58,7 @@ public class HttpClientUtil {
 	 * @return
 	 */
 	public static String get(String url, Map<String, String> headers, String resCharset, Integer timeout) {
-		logger.debug("url: [{}] headers：[{}] resCharset: [{}]", new Object[]{url, headers, resCharset});
+		logger.debug("url: {} headers：{} resCharset: {}", url, headers, resCharset);
 		HttpGet httpGet = new HttpGet(url);
 
 		if (headers != null && !headers.isEmpty()) {
@@ -91,7 +91,7 @@ public class HttpClientUtil {
 	 * @return
 	 */
 	public static String post(String url, Map<String, String> headers, String postStr, String reqCharset, String resCharset, Integer timeOut) {
-		logger.info("url: [{}] headers：[{}] charset: [{}] postStr: [{}]", new Object[]{url, headers, postStr});
+		logger.info("url: {} headers：{} charset: {} postStr: {}", url, headers, postStr);
 		HttpPost httpPost = new HttpPost(url);
 
 		if (headers != null && !headers.isEmpty()) {
@@ -129,7 +129,7 @@ public class HttpClientUtil {
 	 * @return
 	 */
 	public static String post(String url, Map<String, String> params, Map<String, String> headers, String resCharset, Integer timeOut) {
-		logger.debug("url: [{}] params：[{}] headers：[{}] resCharset: [{}]", new Object[]{url, params, headers, resCharset});
+		logger.debug("url: {} params：{} headers：{} resCharset: {}", url, params, headers, resCharset);
 		HttpPost httpPost = new HttpPost(url);
 		
 		if(params != null && params.size() > 0) {
@@ -183,13 +183,13 @@ public class HttpClientUtil {
 					EntityUtils.consume(response.getEntity());
 				}
 				request.abort();
-				logger.warn("状态码错误！ url: ["+url+"] state: ["+statusLine.getStatusCode()+"] resp: ["+statusLine.getReasonPhrase()+"]" );
+				logger.warn("状态码错误！ url: {} state: {} resp: {}", url, statusLine.getStatusCode(), statusLine.getReasonPhrase());
 				throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
 			}else if(statusLine.getStatusCode() == HttpStatus.SC_OK){
 				HttpEntity httpEntity = response.getEntity();
 				String resStr = EntityUtils.toString(httpEntity, charset);
 				EntityUtils.consume(httpEntity);  
-				logger.debug("url: ["+url+"] 返回内容 : " + resStr);
+				logger.debug("url: {} 返回内容 :\n {}" ,url, resStr);
 				return resStr;
 			}
 		//http://www.blogjava.net/wangxinsh55/archive/2012/07/16/383210.html
@@ -202,7 +202,7 @@ public class HttpClientUtil {
 			request.abort();
 			throw new HttpClientException(e);
 		} 
-		logger.debug("url: [{}] 返回内容：空", url);
+		logger.debug("url: {} 返回内容：空", url);
 		return null;
 	}
 	

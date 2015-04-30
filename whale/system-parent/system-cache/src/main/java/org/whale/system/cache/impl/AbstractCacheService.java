@@ -25,19 +25,19 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 
 	@Override
 	public void put(String cacheName, String key, M value) {
-		logger.debug("put: {}_{} | {}",new Object[]{cacheName, key, JSON.toJSONString(value)});
+		logger.debug("put: {}_{} | {}",cacheName, key, JSON.toJSONString(value));
 		this.put(cacheName, key, value, null);
 	}
 
 	@Override
 	public void mput(String cacheName, Map<String, M> keyValues) {
-		logger.debug("mput: {}_ | {}",new Object[]{cacheName, JSON.toJSONString(keyValues)});
+		logger.debug("mput: {}_ | {}",cacheName, JSON.toJSONString(keyValues));
 		this.mput(cacheName, keyValues, null);
 	}
 
 	@Override
 	public void put(String cacheName, String key, M value, Integer seconds) {
-		logger.debug("put: {}_{} |{} - {}",new Object[]{cacheName, key, seconds, JSON.toJSONString(value)});
+		logger.debug("put: {}_{} |{} - {}",cacheName, key, seconds, JSON.toJSONString(value));
 		if(Strings.isBlank(key))
 			return ;
 		this.doPut(cacheName, key, value, seconds);
@@ -47,7 +47,7 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 
 	@Override
 	public void mput(String cacheName, Map<String, M> keyValues, Integer seconds) {
-		logger.debug("mput: {}_ |{} - {}",new Object[]{cacheName, seconds, JSON.toJSONString(keyValues)});
+		logger.debug("mput: {}_ |{} - {}",cacheName, seconds, JSON.toJSONString(keyValues));
 		if(keyValues == null || keyValues.size() < 1)
 			return ;
 		if(keyValues.size() == 1){
@@ -61,7 +61,7 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 
 	@Override
 	public M get(String cacheName, String key) {
-		logger.debug("get: {}_{}",new Object[]{cacheName, key});
+		logger.debug("get: {}_{}",cacheName, key);
 		if(Strings.isBlank(key))
 			return null;
 		return this.doGet(cacheName, key);
@@ -72,7 +72,7 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 	@Override
 	@SuppressWarnings("all")
 	public List<M> mget(String cacheName, List<String> keys) {
-		logger.debug("mget: {}_{}",new Object[]{cacheName, keys});
+		logger.debug("mget: {}_{}",cacheName, keys);
 		if(keys == null || keys.size() < 1)
 			return null;
 		if(keys.size() == 1)
@@ -84,7 +84,7 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 
 	@Override
 	public void del(String cacheName, String key) {
-		logger.debug("del: {}_{}",new Object[]{cacheName, key});
+		logger.debug("del: {}_{}",cacheName, key);
 		if(key == null)
 			return ;
 	}
@@ -93,7 +93,7 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 
 	@Override
 	public void mdel(String cacheName, List<String> keys) {
-		logger.debug("mdel: {}_{}",new Object[]{cacheName, keys});
+		logger.debug("mdel: {}_{}",cacheName, keys);
 		if(keys == null || keys.size() < 1)
 			return ;
 		if(keys.size() == 1){

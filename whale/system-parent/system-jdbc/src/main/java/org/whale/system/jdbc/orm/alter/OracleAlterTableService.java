@@ -73,7 +73,7 @@ public class OracleAlterTableService extends AbstractAlterTableService {
 		}
 		strb.deleteCharAt(strb.length()-1).append(")");
 		
-		logger.info("ORM: 创建表格["+table.getTableDbName()+"] sql: \n"+strb.toString());
+		logger.info("ORM: 创建表格[{}] sql: \n{}", table.getTableDbName(), strb.toString());
 		jdbcTemplate.update(strb.toString());
 	}
 	

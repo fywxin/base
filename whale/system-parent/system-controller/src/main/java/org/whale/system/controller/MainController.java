@@ -46,7 +46,7 @@ import com.alibaba.fastjson.JSON;
 @Controller
 public class MainController extends BaseController {
 	
-	private static final Logger log = LoggerFactory.getLogger(MainController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 	
 	@Autowired
 	private UserService userService;
@@ -72,51 +72,44 @@ public class MainController extends BaseController {
 	 */
 	@RequestMapping("/login")
 	public void doLogin(HttpServletRequest request, HttpServletResponse response, String userName, String password, String encryptedPwd){
+		logger.info("用户登录[{}/{}] ：ip[{}]",userName, password, WebUtil.getIp(request));
 		if(Strings.isBlank(userName)){
-			log.warn("用户["+userName+"/"+password+"]登录失败：用户名不能为空 ip["+WebUtil.getIp(request)+"]");
 			WebUtil.printFail(request, response, "用户名不能为空");
 			return ;
 		}
 		
 		if(Strings.isBlank(password) && Strings.isBlank(encryptedPwd)){
-			log.warn("用户["+userName+"/"+password+"]登录失败：密码不能为空 ip["+WebUtil.getIp(request)+"]");
 			WebUtil.printFail(request, response, "密码不能为空");
 			return ;
 		}
 		
 		String msg = null;
 		if((Strings.isNotBlank(password) || Strings.isBlank(encryptedPwd)) && SysConstant.LOGIC_TRUE.equals(dictCacheService.getItemValue(DictConstant.DICT_SYS_CONF, "VERITY_CODE_FLAG")) && (msg = this.checkVerify(request)) != null){
-			log.warn("用户["+userName+"/"+password+"]登录失败："+msg+" ip["+WebUtil.getIp(request)+"]");
 			WebUtil.printFail(request, response, msg);
 			return ;
 		}
 		
 		User user = this.userService.getByUserName(userName);
 		if(user == null || user.getStatus() == SysConstant.STATUS_DEL){
-			log.warn("用户["+userName+"/"+password+"]登录失败：用户名不存在 ip["+WebUtil.getIp(request)+"]");
 			WebUtil.printFail(request, response, "用户名不存在");
 			return ;
 		}
 		if(user.getStatus() != SysConstant.STATUS_NORMAL){
-			log.warn("用户["+userName+"/"+password+"]登录失败：用户已禁止登录，请联系管理员 ip["+WebUtil.getIp(request)+"]");
 			WebUtil.printFail(request, response, "用户已禁止登录，请联系管理员");
 			return ;
 		}
 		if(Strings.isBlank(password)){
 			if(SysConstant.LOGIC_TRUE.equals(DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "AUTO_LOGIN_FLAG"))){
 				if(!encryptedPwd.equals(user.getPassword())){
-					log.warn("用户["+userName+"/"+password+"]登录失败：自动登录密钥错误，请联系管理员 ip["+WebUtil.getIp(request)+"]");
 					WebUtil.printFail(request, response, "请登录");
 					return ;
 				}
 			}else{
-				log.warn("用户["+userName+"/"+password+"]登录失败：密码不能为空，请联系管理员 ip["+WebUtil.getIp(request)+"]");
 				WebUtil.printFail(request, response, "密码不能为空");
 				return ;
 			}
 		}else{
 			if(!this.userService.validPasswd(password, user.getPassword())){
-				log.warn("用户["+userName+"/"+password+"]登录失败：密码错误，请联系管理员 ip["+WebUtil.getIp(request)+"]");
 				WebUtil.printFail(request, response, "密码错误");
 				return ;
 			}
@@ -128,7 +121,6 @@ public class MainController extends BaseController {
 				if((sessions = MySessionContext.getSessionByUserId(user.getUserId())) != null && sessions.size() > 0) {
 					uc = (UserContext) sessions.get(0).getAttribute(SysConstant.USER_CONTEXT_KEY);
 					if(uc != null && !uc.getIp().equals(WebUtil.getIp(request))){
-						log.warn("用户["+userName+"/"+password+"]登录失败：帐号已经登录，请联系管理员 ip["+WebUtil.getIp(request)+"]");
 						WebUtil.printFail(request, response, "该帐号已于["+TimeUtil.formatTime(uc.getLoginTime(), TimeUtil.COMMON_FORMAT)+"] 在IP: ["+uc.getIp()+"] 登录，不允许重复登录!");
 						return ;
 					}else{
@@ -143,7 +135,7 @@ public class MainController extends BaseController {
 			}
 			this.bind(request, user);
 		} catch (Exception e) {
-			log.error("绑定用户上下文出现异常", e);
+			logger.error("绑定用户上下文出现异常", e);
 			this.clearUserContext(request);
 			WebUtil.printFail(request, response, "绑定用户出现异常，请联系管理员");
 			return ;
@@ -252,7 +244,7 @@ public class MainController extends BaseController {
 			}
 			WebUtil.printSuccess(request, response);
 		} catch (RuntimeException e) {
-			log.error("用户退出登入异常: "+e.getMessage(), e);
+			logger.error("用户退出登入异常: "+e.getMessage(), e);
 			WebUtil.printFail(request, response, "用户退出登入出现异常");
 		}
 	}

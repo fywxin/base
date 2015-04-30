@@ -116,7 +116,7 @@ public class JvmCacheService<M extends Serializable> extends AbstractCacheServic
 					if(removeKeys.size() > 0){
 						for(String key : removeKeys){
 							if(logger.isDebugEnabled()){
-								logger.debug("JVM CACHE: 清除过期缓存 key="+key+" value = "+cache.get(key));
+								logger.debug("JVM CACHE: 清除过期缓存 key={} value = {}",key, cache.get(key));
 							}
 							cache.remove(key);
 						}

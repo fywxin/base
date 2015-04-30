@@ -56,7 +56,7 @@ public class OrmContext extends EntryContext {
 	 *
 	 */
 	public OrmClass parse(Class<?> clazz){
-		logger.info("ORM: 类["+clazz.getName()+"] 开始解析...");
+		logger.info("ORM: 类[{}] 开始解析...", clazz.getName());
 		OrmClass ormClass = new OrmClass();
 					
 		OrmTable ormTable = this.ormTableBulider.parse(clazz);
@@ -78,13 +78,13 @@ public class OrmContext extends EntryContext {
 		
 		//添加RowMapper缓存对象
 		RowMapper<?> rowMapper = this.rowMapperBulider.getRowMapper(clazz, ormTable.getOrmCols());
-		logger.info("ORM: 类["+clazz.getName()+"] 解析RowMapper完成!");
+		logger.info("ORM: 类[{}] 解析RowMapper完成!", clazz.getName());
 		
 		ormClass.setOrmTable(ormTable);
 		ormClass.setOrmSqls(ormSqls);
 		ormClass.setRowMapper(rowMapper);
 		
-		logger.info("ORM: 解析完成 "+clazz.getName()+" : "+ ormClass);
+		logger.info("ORM: 解析完成 {} : {}", clazz.getName(),ormClass);
 		
 		return ormClass;
 	}
@@ -100,12 +100,12 @@ public class OrmContext extends EntryContext {
 		if(ormClass == null){
 			synchronized (lock) {
 				if(this.ormClassCache.get(clazz) == null){
-					logger.info("ORM: 缓存中查找不到 类["+clazz.getName()+"] 对应的OrmClass, 开始解析...");
+					logger.info("ORM: 缓存中查找不到 类[{}] 对应的OrmClass, 开始解析...", clazz.getName());
 					ormClass = this.parse(clazz);
 					if(ormClass != null){
 						this.ormClassCache.put(clazz, ormClass);
 					}else{
-						logger.warn("ORM: 解析类["+clazz.getName()+"] 返回 OrmClass = null");
+						logger.warn("ORM: 解析类[{}] 返回 OrmClass = null", clazz.getName());
 					}
 				}
 			}

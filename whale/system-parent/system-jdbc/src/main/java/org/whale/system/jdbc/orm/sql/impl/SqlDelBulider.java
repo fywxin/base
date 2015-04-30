@@ -39,7 +39,7 @@ public class SqlDelBulider {
 		ormSql.setTable(ormTable);
 		ormSql.setCols(sCols);
 		
-		logger.info("ORM: clazz="+ormTable.getClazz()+" 创建delete sql语句：\n"+strb.toString());
+		logger.info("ORM: clazz={} 创建delete sql语句：\n{}", ormTable.getClazz(), strb.toString());
 		
 		return ormSql;
 	}

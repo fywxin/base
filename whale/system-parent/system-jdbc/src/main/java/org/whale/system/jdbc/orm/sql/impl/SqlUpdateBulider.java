@@ -53,7 +53,7 @@ public class SqlUpdateBulider {
 		ormSql.setOpType(OrmSql.OPT_UPDATE);
 		ormSql.setCols(sCols);
 		
-		logger.info("ORM: clazz="+ormTable.getClazz()+" 创建update sql语句：\n"+sql.toString());
+		logger.info("ORM: clazz={} 创建update sql语句：\n{}", ormTable.getClazz(), sql.toString());
 		
 		return ormSql;
 	}

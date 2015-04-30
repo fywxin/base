@@ -160,7 +160,7 @@ public class ReadWriteDataSourceProcessor implements BeanPostProcessor {
             
         //TODO  不确定数据库断开连接时抛出的异常是什么
         }catch(DataAccessException e){
-        	e.printStackTrace();
+        	log.error("数据库断开连接", e);
         	readWriteDataSource.removeDataSource(ReadWriteDataSourceDecision.get().getDataSourceName());
         	throw e;
         }finally {

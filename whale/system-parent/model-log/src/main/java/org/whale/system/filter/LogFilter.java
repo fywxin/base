@@ -198,10 +198,10 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
     
     private void printLoseLogs(List<Log> logs, Throwable e){
         if(e == null){
-            logger.error("丢失推送日志 " + logs.size() + "条");
+            logger.error("丢失推送日志 {}条", logs.size());
         }
         else{
-            logger.error("丢失推送日志 " + logs.size() + "条", e);
+            logger.error("丢失推送日志 {}条{}", logs.size(), e);
         }
     }
 
@@ -261,11 +261,11 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	public void setStopFlag(boolean stopFlag) {
-		logger.warn("ORM:设置日志后台扫描线程状态为 "+stopFlag);
+		logger.warn("ORM:设置日志后台扫描线程状态为 {}", stopFlag);
 		this.stopFlag = stopFlag;
 		if(this.stopFlag){
 			UserContext uc = (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
-			logger.error("ORM:设置日志后台扫描线程被停止！userId = "+ uc.getUserId());
+			logger.error("ORM:设置日志后台扫描线程被停止！userId = {}", uc.getUserId());
 		}
 	}
 

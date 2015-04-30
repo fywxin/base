@@ -28,7 +28,7 @@ public class SpringContextHolder implements ApplicationContextAware{
 	@Override
 	public void setApplicationContext(ApplicationContext ctx)
 			throws BeansException {
-		logger.info("spring 容器注入对象  ApplicationContext="+ctx);
+		logger.info("spring 容器注入对象  ApplicationContext={}", ctx);
 		applicationContext = ctx;
 	}
 	

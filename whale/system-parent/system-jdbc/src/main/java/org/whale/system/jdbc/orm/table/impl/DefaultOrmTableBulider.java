@@ -94,16 +94,16 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 			this.entryContext.putTable(clazz, table);
 		}
 		OrmTable ormTable = new OrmTable(table); //设置类基本属性
-		logger.info("ORM:设置类clazz="+clazz+"基本属性完成, aCols="+ormTable.getCols());
+		logger.info("ORM:设置类clazz={}基本属性完成, aCols={}", clazz,ormTable.getCols());
 		this.fireAndParseTable(ormTable); //设置数据库，序列，拥有者
-		logger.info("ORM:设置类clazz="+clazz+"设置数据库，序列，拥有者完成, tableDbName="+ormTable.getTableDbName()+", tableCnName="+ormTable.getTableCnName());
+		logger.info("ORM:设置类clazz={}设置数据库，序列，拥有者完成, tableDbName={}, tableCnName={}", clazz, ormTable.getTableDbName(), ormTable.getTableCnName());
 		List<OrmColumn> cols = this.getColumns(ormTable); //获取所有@Column
 		ormTable.setOrmCols(cols); //设置字段
-		logger.info("ORM:转换 类clazz="+clazz+" Acolumn->OrmColumn 完成，ormCols="+cols);
+		logger.info("ORM:转换 类clazz={} Acolumn->OrmColumn 完成，ormCols={}", clazz, cols);
 		this.reParseTable(ormTable); //设置idCol,pkCols
-		logger.info("ORM:提取 类clazz="+clazz+" ID字段完成 idColumn="+ormTable.getIdCol());
+		logger.info("ORM:提取 类clazz={} ID字段完成 idColumn={}", clazz, ormTable.getIdCol());
 		this.exeTableExtInfoReaders(ormTable);
-		logger.info("ORM:执行 类table="+ormTable.getIdCol()+" 扩张信息读取完成!"+ormTable);
+		logger.info("ORM:执行 类table={} 扩展信息读取完成:{}",ormTable.getIdCol(), ormTable);
 		return ormTable;
 	}
 	
@@ -400,7 +400,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 			ormTable.setIdCol(idCol);
 			//主键采用外部赋值策略
 			if(!idCol.getIdAuto()){
-				logger.warn("实体 ["+ormTable.getEntityName()+"] 主键采用外部赋值策略, 舍弃序列["+ormTable.getSequence()+"]");
+				logger.warn("实体 [{}] 主键采用外部赋值策略, 舍弃序列[{}]",  ormTable.getEntityName(), ormTable.getSequence());
 				ormTable.setSequence(null);
 			}
 		}else{

@@ -152,7 +152,7 @@ public class LruCacheService<M extends Serializable> extends AbstractCacheServic
 					if(removeKeys.size() > 0){
 						for(String key : removeKeys){
 							if(logger.isDebugEnabled()){
-								logger.debug("LRU CACHE: 清除过期缓存 key="+key+" value = "+cache.get(key));
+								logger.debug("LRU CACHE: 清除过期缓存 key={} value = {}",key, cache.get(key));
 							}
 							cache.remove(key);
 						}

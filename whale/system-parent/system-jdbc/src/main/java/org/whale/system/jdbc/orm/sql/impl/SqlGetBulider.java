@@ -39,7 +39,7 @@ public class SqlGetBulider {
 		ormSql.setSql(strb.toString());
 		ormSql.setTable(ormTable);
 		
-		logger.info("ORM: clazz="+ormTable.getClazz()+" 创建get sql语句：\n"+strb.toString());
+		logger.info("ORM: clazz={} 创建get sql语句：\n{}", ormTable.getClazz(), strb.toString());
 		
 		return ormSql;
 	}
@@ -61,7 +61,7 @@ public class SqlGetBulider {
 		ormSql.setSql(strb.toString());
 		ormSql.setTable(ormTable);
 		
-		logger.info("ORM: clazz="+ormTable.getClazz()+" 创建getAll sql语句：\n"+strb.toString());
+		logger.info("ORM: clazz={} 创建getAll sql语句：\n{}", ormTable.getClazz(), strb.toString());
 		
 		return ormSql;
 	}

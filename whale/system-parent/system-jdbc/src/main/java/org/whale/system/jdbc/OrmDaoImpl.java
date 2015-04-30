@@ -342,9 +342,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			countSql = "select count(1) from ("+sql+") t_t";
 		}
 		
-		if(logger.isDebugEnabled()){
-			logger.debug("ORM: 开始总数查询: "+countSql+" \n参数："+params);
-		}
+		logger.debug("ORM: 开始总数查询: {}\n参数：{}", countSql, params);
 		
 		page.setTotal(this.jdbcTemplate.queryForLong(countSql,params.toArray()));
 		
@@ -358,9 +356,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			params.add(page.getPageNo() * page.getPageSize());
 		}
 		
-		if(logger.isDebugEnabled()){
-			logger.debug("ORM: 开始分页查询: "+sql+" \n参数："+params);
-		}
+		logger.debug("ORM: 开始分页查询: {} \n参数：{}", sql, params);
 		
 		page.setDatas(this.jdbcTemplate.queryForList(sql, params.toArray()));
 		
@@ -370,9 +366,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		page.getArgs().clear();
 		page.getParam().clear();
 		
-		if(logger.isDebugEnabled()){
-			logger.debug("ORM: 结束分页查询，返回: "+page.getDatas());
-		}
+		logger.debug("ORM: 结束分页查询，返回: {}", page.getDatas());
 	}
 	
 	/**

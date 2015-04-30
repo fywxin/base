@@ -53,6 +53,12 @@
 			<artifactId>libthrift</artifactId>
 			<version>0.9.1</version>
 			<scope>provided</scope>
+			<exclusions>
+		       <exclusion>
+		          <groupId>commons-logging</groupId>
+		          <artifactId>commons-logging</artifactId>
+		       </exclusion>
+		    </exclusions> 
 		</dependency>
 	</dependencies>
 </project>

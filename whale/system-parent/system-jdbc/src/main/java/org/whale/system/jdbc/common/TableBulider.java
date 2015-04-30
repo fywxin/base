@@ -30,7 +30,7 @@ public class TableBulider {
 		if(!(clazz.getSuperclass() instanceof Object)){
 			table.setParent(parse(clazz.getSuperclass()));
 		}
-		logger.info("ORM：通过反射获取clazz="+clazz+" 实体信息完成："+table);
+		logger.info("ORM：通过反射获取clazz={} 实体信息完成：{}", clazz, table);
 		return table;
 	}
 	

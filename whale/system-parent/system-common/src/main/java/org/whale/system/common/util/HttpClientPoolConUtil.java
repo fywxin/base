@@ -46,7 +46,7 @@ public class HttpClientPoolConUtil {
 
 		httpclient = new DefaultHttpClient(cm, httpParams);
 		httpclient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(retryCount, requestSentRetryEnabled));
-		logger.info("httpClient 启动设置成功： "+this);
+		logger.info("httpClient 启动设置成功： {}", this);
 	}
 
 	public void destroy() {

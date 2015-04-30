@@ -80,7 +80,7 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
         	readDataSources.add(e.getValue());
         	readDataSourceNames.add(e.getKey());
         }
-        log.debug("从读数据源"+readDataSourceCount+"个："+ readDataSourceMap.keySet());
+        log.debug("从读数据源{}个：{}", readDataSourceCount, readDataSourceMap.keySet());
 //        
 //        ResumeThread thread = new ResumeThread();
 //        thread.setName("从读数据源定时恢复线程");
@@ -127,11 +127,11 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
      * @param dataSourceName
      */
     public synchronized void removeDataSource(String dataSourceName){
-    	log.warn("开始移除数据源："+dataSourceName);
+    	log.warn("开始移除数据源：{}", dataSourceName);
     	
     	int index = readDataSourceNames.indexOf(dataSourceName);
     	if(index == -1){
-    		log.warn("移除数据源失败：查找不到数据源："+dataSourceName);
+    		log.warn("移除数据源失败：查找不到数据源：{}", dataSourceName);
     		return ;
     	}
     	//TODO 高并发情况下，可能存在不一致
@@ -146,7 +146,7 @@ public class ReadWriteDataSource extends AbstractDataSource implements Initializ
 			}
 		} catch (Exception e) {}
     	
-    	log.warn("成功移除数据源 ：" + dataSourceName+"\n当前可用数据源："+readDataSourceNames+"\n失去连接数据源："+lostConnectDataSoucreNames);
+    	log.warn("成功移除数据源 ：{}\n当前可用数据源：{}\n失去连接数据源：{}", dataSourceName, readDataSourceNames, lostConnectDataSoucreNames);
     }
     
     public void addDataSource(String name, DataSource dataSource){

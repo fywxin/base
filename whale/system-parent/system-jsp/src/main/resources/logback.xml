@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	http://logback.qos.ch/index.html
+	http://my.oschina.net/sunpr/blog/346399 
+	http://www.cnblogs.com/zcy_soft/p/3566208.html
+	http://blog.csdn.net/haidage/article/details/6794509 
+	http://blog.csdn.net/haidage/article/details/6794529
+-->
+<configuration>
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>.%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n
+			</Pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>TRACE</level>
+		</filter>
+	</appender>
+	<appender name="allLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>../logs/run.log</File>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="ormLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>../logs/orm.log</File>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="whaleLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>c://whale.log</File>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="minuteRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover every minute -->
+			<FileNamePattern>../logs/rest-demo-minute.%d{yyyy-MM-dd_HH-mm}.log
+			</FileNamePattern>
+			<!-- keep 30 minutes' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+
+<!--  根据固定窗口算法重命名文件的滚动策略 -->
+<!-- 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender"> -->
+<!-- 		<file>test.log</file> -->
+		
+<!-- 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy"> -->
+<!-- 			<fileNamePattern>tests.%i.log.zip</fileNamePattern> -->
+<!-- 			<minIndex>1</minIndex> -->
+<!-- 			<maxIndex>3</maxIndex> -->
+<!-- 		</rollingPolicy> -->
+
+<!-- 		<triggeringPolicy -->
+<!-- 			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"> -->
+<!-- 			<maxFileSize>5MB</maxFileSize> -->
+<!-- 		</triggeringPolicy> -->
+<!-- 		<encoder> -->
+<!-- 			<pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n -->
+<!-- 			</pattern> -->
+<!-- 		</encoder> -->
+<!-- 	</appender> -->
+
+
+	<!-- addtivity:是否向上级loger传递打印信息,可能照成重复打印 默认是true -->
+	<logger name="org.whale.system.jdbc" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="ormLog" />
+	</logger>
+	<logger name="org.whale" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="whaleLog" />
+	</logger>
+	<root>
+		<level value="WARN" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="allLog" />
+	</root>
+</configuration>
