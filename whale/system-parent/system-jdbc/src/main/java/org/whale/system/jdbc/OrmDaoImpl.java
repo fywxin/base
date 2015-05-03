@@ -1,6 +1,7 @@
 package org.whale.system.jdbc;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -62,9 +63,32 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @param t
 	 */
 	public void save(T t){
-		Object idVal = ReflectionUtil.getFieldValue(t, this.getOrmTable().getIdCol().getAttrName());
-		final OrmValue ormValue = this.valueBulider.getSave(t);
+		OrmValue ormValue = this.valueBulider.getSave(t);
+		this.doSave(ormValue, t);
+	}
+	
+	/**
+	 * 保存多个对象
+	 * @param list
+	 */
+	public void save(List<T> list){
+		if(list == null || list.size() < 1) 
+			return ;
 		
+		for(T t : list){
+			OrmValue ormValue = this.valueBulider.getSave(t);
+			this.doSave(ormValue, t);
+		}
+    }
+
+	/**
+	 * 对象保存
+	 * @param ormValue
+	 * @param t
+	 * @date 2015年5月3日 上午11:26:10
+	 */
+	private void doSave(final OrmValue ormValue, T t){
+		Object idVal = ReflectionUtil.getFieldValue(t, this.getOrmTable().getIdCol().getAttrName());
 		if(idVal == null && DbKind.isMysql()){
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			this.jdbcTemplate.update(new PreparedStatementCreator(){
@@ -82,47 +106,17 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				}
 				
 			}, keyHolder);
-			ReflectionUtil.setFieldValue(t, this.getOrmTable().getIdCol().getAttrName(), keyHolder.getKey().longValue());
+			Field idFile = this.getOrmTable().getIdCol().getField();
+			idFile.setAccessible(true);
+			try {
+				ReflectionUtil.writeField(idFile, t, keyHolder.getKey().longValue());
+			} catch (Exception e) {
+				logger.error("设置主键值异常", e);
+			}
 		}else{
 			this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
 		}
 	}
-	
-	/**
-	 * 保存多个对象
-	 * @param list
-	 */
-	public void save(List<T> list){
-		if(list == null || list.size() < 1) 
-			return ;
-		
-		for(T t : list){
-			Object idVal = ReflectionUtil.getFieldValue(t, this.getOrmTable().getIdCol().getAttrName());
-			final OrmValue ormValue = this.valueBulider.getSave(t);
-			if(idVal == null && DbKind.isMysql()){
-				KeyHolder keyHolder = new GeneratedKeyHolder();
-				this.jdbcTemplate.update(new PreparedStatementCreator(){
-
-					@Override
-					public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-						PreparedStatement ps = con.prepareStatement(ormValue.getSql(), Statement.RETURN_GENERATED_KEYS);
-						if(ormValue.getArgs() != null){
-							int i=1;
-							for(Object obj : ormValue.getArgs()){
-								ps.setObject(i++, obj);
-							}
-						}
-						return ps;
-					}
-					
-				}, keyHolder);
-				ReflectionUtil.setFieldValue(t, this.getOrmTable().getIdCol().getAttrName(), keyHolder.getKey().longValue());
-			}else{
-				this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
-			}
-		}
-    }
-
 	
 	/**
 	 * 批量保存对象，效率更高，不会返回主键
