@@ -348,26 +348,28 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			this.createPageSql(page);
 			sql = page.getSql();
 		}
-		if(Strings.isBlank(countSql)){
-			countSql = "select count(1) from ("+sql+") t_t";
+		
+		if(page.getTotal() == null || page.getTotal() < 0){
+			if(Strings.isBlank(countSql)){
+				countSql = "select count(1) from ("+sql+") t_t";
+			}
+			logger.debug("ORM: 开始总数查询: {}\n参数：{}", countSql, params);
+			page.setTotal(this.jdbcTemplate.queryForLong(countSql,params.toArray()));
 		}
 		
-		logger.debug("ORM: 开始总数查询: {}\n参数：{}", countSql, params);
-		
-		page.setTotal(this.jdbcTemplate.queryForLong(countSql,params.toArray()));
-		
-		if(DbKind.isMysql()){
-			sql = "SELECT t_t.* FROM ( "+sql+" ) t_t LIMIT ?, ?";
-			params.add((page.getPageNo()-1) * page.getPageSize());
-			params.add(page.getPageSize());
-		}else{
-			sql = "select * from (select row_.*, rownum rownum_ from ( "+sql+" ) row_ where rownum <=?) where rownum_>=?";
-			params.add((page.getPageNo()+1) * page.getPageSize());
-			params.add(page.getPageNo() * page.getPageSize());
+		if(page.isAutoPage()){
+			if(DbKind.isMysql()){
+				sql = "SELECT t_t.* FROM ( "+sql+" ) t_t LIMIT ?, ?";
+				params.add((page.getPageNo()-1) * page.getPageSize());
+				params.add(page.getPageSize());
+			}else{
+				sql = "select * from (select row_.*, rownum rownum_ from ( "+sql+" ) row_ where rownum <=?) where rownum_>=?";
+				params.add((page.getPageNo()+1) * page.getPageSize());
+				params.add(page.getPageNo() * page.getPageSize());
+			}
 		}
 		
 		logger.debug("ORM: 开始分页查询: {} \n参数：{}", sql, params);
-		
 		page.setDatas(this.jdbcTemplate.queryForList(sql, params.toArray()));
 		
 		//防止sql语句返回前台，导致安全问题

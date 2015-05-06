@@ -21,7 +21,7 @@ public class Page implements Serializable{
 	private int pageSize = 20;
 	
 	private int pageNo = 1;
-	
+	//total >0 ，则不执行sql总数查询，直接返回用户设置的total值, 有两个好处： 1. 减少总数sql查询， 2. 有限度防止被恶意翻页（如爬虫）
 	private long total;
 	//返回结果
 	private List<Map<String, Object>> datas;
@@ -37,7 +37,8 @@ public class Page implements Serializable{
 	private List<String> orderColumn = new LinkedList<String>();
 	//升降序
 	private List<Boolean> orderAsc = new LinkedList<Boolean>();
-
+	//是否自动分页, 由于增加一层嵌套，可能会影响sql执行效率
+	private boolean autoPage = true;
 	
 	/**
 	 * 添加参数
@@ -173,6 +174,12 @@ public class Page implements Serializable{
 	}
 	public List<Boolean> getOrderAsc() {
 		return orderAsc;
+	}
+	public boolean isAutoPage() {
+		return autoPage;
+	}
+	public void setAutoPage(boolean autoPage) {
+		this.autoPage = autoPage;
 	}
 	
 }
