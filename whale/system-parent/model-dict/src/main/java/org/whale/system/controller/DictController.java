@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.whale.system.auth.annotation.AdminAuth;
+import org.whale.system.auth.annotation.AuthAdmin;
 import org.whale.system.auth.annotation.Auth;
 import org.whale.system.base.BaseController;
 import org.whale.system.base.Page;
@@ -166,7 +166,7 @@ public class DictController extends BaseController {
 	 * 刷新字典缓存
 	 * @date 2015年2月11日 下午2:35:48
 	 */
-	@AdminAuth
+	@AuthAdmin
 	@RequestMapping("/doFlush")
 	public void doFlush(HttpServletRequest request, HttpServletResponse response){
 		this.dictCacheService.init(null);

@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.whale.system.base.UserContext;
-import org.whale.system.common.exception.ForbidVisitException;
 import org.whale.system.common.exception.NotLoginException;
 import org.whale.system.common.util.ThreadContext;
 
@@ -18,20 +17,17 @@ import org.whale.system.common.util.ThreadContext;
  */
 @Component
 @Aspect
-public class ControllerAdminAuthFilter {
+public class ControllerAuthLoginFilter {
 
-	@Pointcut("@annotation(org.whale.system.auth.annotation.AdminAuth)")
-	public void adminAuthAspect() {
+	@Pointcut("@annotation(org.whale.system.auth.annotation.AuthLogin)")
+	public void authLoginAspect() {
 	}
 	
-	@Before("adminAuthAspect()")
+	@Before("authLoginAspect()")
 	public void doBefore(JoinPoint joinPoint) {
 		UserContext uc = (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
 		if(uc == null){
 			throw new NotLoginException("用户未登录！");
-		}
-		if(!uc.isSuperAdmin()){
-			throw new ForbidVisitException("无权限访问");
 		}
 		
 	}

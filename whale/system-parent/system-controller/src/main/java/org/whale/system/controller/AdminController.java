@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.whale.system.auth.annotation.AdminAuth;
+import org.whale.system.auth.annotation.AuthAdmin;
 import org.whale.system.auth.cache.UserAuthCacheService;
 import org.whale.system.auth.scan.AuthBeanStore;
 import org.whale.system.base.BaseController;
@@ -36,21 +36,21 @@ public class AdminController extends BaseController{
 	@Autowired
 	private DictCacheService dictCacheService;
 	
-	@AdminAuth
+	@AuthAdmin
 	@RequestMapping("/goAdmin")
 	public ModelAndView goAdmin(HttpServletRequest request, HttpServletResponse response){
 		
 		return new ModelAndView("system/admin");
 	}
 	
-	@AdminAuth
+	@AuthAdmin
 	@RequestMapping("/doFlushDictCache")
 	public void doFlushDictCache(HttpServletRequest request, HttpServletResponse response){
 		this.dictCacheService.init(null);
 		WebUtil.printSuccess(request, response);
 	}
 	
-	@AdminAuth
+	@AuthAdmin
 	@RequestMapping("/doFlushAuthCache")
 	public void doFlushAuthCache(HttpServletRequest request, HttpServletResponse response){
 		this.userAuthCacheService.init(null);
@@ -76,7 +76,7 @@ public class AdminController extends BaseController{
 	 * @param request
 	 * @param response
 	 */
-	@AdminAuth
+	@AuthAdmin
 	@SuppressWarnings("all")
 	@RequestMapping("/goWhoAreOnline")
 	public ModelAndView goWhoAreOnline(HttpServletRequest request,HttpServletResponse response) {
@@ -85,7 +85,7 @@ public class AdminController extends BaseController{
 				.addObject("mySessionId", this.getUserContext(request).getSessionId());
 	}
 	
-	@AdminAuth
+	@AuthAdmin
 	@SuppressWarnings("all")
 	@RequestMapping("/doWhoAreOnline")
 	public void doWhoAreOnline(HttpServletRequest request,HttpServletResponse response) {
@@ -146,7 +146,7 @@ public class AdminController extends BaseController{
 	 * @param response
 	 * @param sessionId
 	 */
-	@AdminAuth
+	@AuthAdmin
 	@RequestMapping("/doForceLoginOut")
 	public void doForceLoginOut(HttpServletRequest request,HttpServletResponse response, String sessionId){
 		if(Strings.isBlank(sessionId)){
