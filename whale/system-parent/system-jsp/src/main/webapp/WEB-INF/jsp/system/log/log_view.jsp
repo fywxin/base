@@ -35,6 +35,19 @@ $(function(){
 					<col width="40%"/>
 					<tbody>
 						<tr>
+							<td class="td-label">应用</td>
+							<td class="td-value">${item.appId }</td>
+							<td class="td-label">处理结果</td>
+							<td class="td-value">
+								<c:if test="${item.rsType == 1 }"><span class='sgreen'>正常</span></c:if>
+								<c:if test="${item.rsType == 2 }"><span class='sred'>系统异常</span></c:if>
+								<c:if test="${item.rsType == 3 }"><span class='sorange'>OrmException</span></c:if>
+								<c:if test="${item.rsType == 4 }"><span class='sorange'>运行时异常</span></c:if>
+								<c:if test="${item.rsType == 5 }"><span class='sred'>业务异常</span></c:if>
+								<c:if test="${item.rsType == 0 }"><span class='sgray'>未知异常</span></c:if>
+							</td>
+						</tr>
+						<tr>
 							<td class="td-label">操作类型</td>
 							<td class="td-value">
 								<c:if test="${item.opt == 'save' }">新增</c:if>
@@ -92,27 +105,23 @@ $(function(){
 								${item.costTime}(ms)
 							</td>
 						</tr>
-						<tr>
-							<td class="td-label">处理结果</td>
-							<td class="td-value" colspan="3">
-								<c:if test="${item.rsType == 1 }"><span class='sgreen'>正常</span></c:if>
-								<c:if test="${item.rsType == 2 }"><span class='sred'>系统异常</span></c:if>
-								<c:if test="${item.rsType == 3 }"><span class='sorange'>OrmException</span></c:if>
-								<c:if test="${item.rsType == 4 }"><span class='sorange'>运行时异常</span></c:if>
-								<c:if test="${item.rsType == 5 }"><span class='sred'>业务异常</span></c:if>
-								<c:if test="${item.rsType == 0 }"><span class='sgray'>未知异常</span></c:if>
-							</td>
-						</tr>
+						
 						<tr>
 							<td class="td-label">sql</td>
 							<td class="td-value" colspan="3">
-								<div style="height:120px;" class="textAreaDiv">${item.sqlStr}</div>
+								<div style="height:80px;" class="textAreaDiv">${item.sqlStr}</div>
 							</td>
 						</tr>
 						<tr>
-							<td class="td-label">数据</td>
+							<td class="td-label">请求参数</td>
 							<td class="td-value" colspan="3">
-								<div style="height:300px;" class="textAreaDiv">${item.datas}</div>
+								<div style="height:120px;" class="textAreaDiv">${item.argStr}</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="td-label">处理结果</td>
+							<td class="td-value" colspan="3">
+								<div style="height:120px;" class="textAreaDiv">${item.rsStr}</div>
 							</td>
 						</tr>
 					</tbody>

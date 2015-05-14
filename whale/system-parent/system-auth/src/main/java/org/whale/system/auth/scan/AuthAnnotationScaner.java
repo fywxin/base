@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Controller;
-import org.whale.system.auth.annotation.Auth;
+import org.whale.system.annotation.auth.Auth;
 import org.whale.system.auth.domain.AuthBean;
 import org.whale.system.common.exception.AuthAnnotationException;
 import org.whale.system.common.util.AnnotationScanUtil;

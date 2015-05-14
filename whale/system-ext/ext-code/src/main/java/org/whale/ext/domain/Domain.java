@@ -3,12 +3,12 @@ package org.whale.ext.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.whale.system.annotation.jdbc.Column;
+import org.whale.system.annotation.jdbc.Id;
+import org.whale.system.annotation.jdbc.Table;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
 import org.whale.system.common.exception.SysException;
-import org.whale.system.jdbc.annotation.Column;
-import org.whale.system.jdbc.annotation.Id;
-import org.whale.system.jdbc.annotation.Table;
-import org.whale.system.jdbc.annotation.Validate;
 
 /**
  * 实体对象

@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.whale.system.auth.annotation.AuthAdmin;
+import org.whale.system.annotation.auth.AuthAdmin;
 import org.whale.system.auth.cache.UserAuthCacheService;
 import org.whale.system.auth.scan.AuthBeanStore;
 import org.whale.system.base.BaseController;

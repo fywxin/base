@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.common.util.Strings;
-import org.whale.system.jdbc.annotation.Validate;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 

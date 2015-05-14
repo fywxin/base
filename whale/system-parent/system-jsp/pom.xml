@@ -29,22 +29,22 @@
 		<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>ext-session</artifactId>
-			<version>1.0.0</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>ext-sms</artifactId>
-			<version>1.0.0</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>ext-code</artifactId>
-			<version>1.0.0</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>ext-read-write</artifactId>
-			<version>1.0.0</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -60,6 +60,7 @@
 			<artifactId>hessian</artifactId>
 			<version>4.0.7</version>
 		</dependency>
+		
   </dependencies>
   <build>
     <finalName>system-jsp</finalName>

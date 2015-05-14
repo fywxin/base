@@ -21,7 +21,7 @@ public class ControllerAuthFilter {
 	@Autowired
 	private IauthManager authManager;
 
-	@Pointcut("@annotation(org.whale.system.auth.annotation.Auth)")
+	@Pointcut("@annotation(org.whale.system.annotation.auth.Auth)")
 	public void authAspect() {
 	}
 

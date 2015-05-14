@@ -1,7 +1,7 @@
 package org.whale.system.jdbc.orm.event;
 
-import org.whale.system.jdbc.common.Acolumn;
-import org.whale.system.jdbc.common.Atable;
+import org.whale.system.common.reflect.Acolumn;
+import org.whale.system.common.reflect.Atable;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 
 public class OrmColumnGenEvent extends OrmEvent {

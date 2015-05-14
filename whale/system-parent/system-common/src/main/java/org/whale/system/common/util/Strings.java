@@ -41,6 +41,16 @@ public class Strings {
         return !Strings.isBlank(cs);
     }
 	
+	public static boolean isBlank(Object obj) {
+        if(obj == null)
+        	return true;
+        return isBlank(obj.toString());
+    }
+	
+	public static boolean isNotBlank(Object obj) {
+        return !isBlank(obj);
+    }
+	
 	/**
 	 * 首字母小写
 	 * @param str

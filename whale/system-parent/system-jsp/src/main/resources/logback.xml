@@ -97,6 +97,7 @@
 	</logger>
 	<logger name="org.whale" additivity="false">
 		<level value="debug" />
+		<appender-ref ref="consoleAppender" />
 		<appender-ref ref="whaleLog" />
 	</logger>
 	<root>

@@ -2,11 +2,11 @@ package org.whale.system.domain;
 
 import java.util.Date;
 
+import org.whale.system.annotation.jdbc.Column;
+import org.whale.system.annotation.jdbc.Id;
+import org.whale.system.annotation.jdbc.Table;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
-import org.whale.system.jdbc.annotation.Column;
-import org.whale.system.jdbc.annotation.Id;
-import org.whale.system.jdbc.annotation.Table;
-import org.whale.system.jdbc.annotation.Validate;
 
 
 @Table(value="sys_user", cnName="用户")

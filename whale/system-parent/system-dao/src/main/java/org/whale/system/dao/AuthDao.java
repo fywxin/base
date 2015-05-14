@@ -13,7 +13,7 @@ import org.whale.system.domain.Auth;
 public class AuthDao extends BaseDao<Auth, Long> {
 	
 	@Override
-	protected void createPageSql(Page page) {
+	public void createPageSql(Page page) {
 		StringBuilder strb = new StringBuilder();
 		strb.append(" FROM ").append(this.getOrmTable().getTableDbName()).append(" t")
 			.append(" WHERE 1=1 ");

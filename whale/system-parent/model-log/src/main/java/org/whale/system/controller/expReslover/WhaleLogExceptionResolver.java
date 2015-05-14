@@ -38,7 +38,7 @@ private static final Logger logger = LoggerFactory.getLogger(WhaleLogExceptionRe
 		}
 		
 		if(ex != null){
-			log.setDatas(getExceptionAllinfo(ex));
+			log.setRsStr(getExceptionAllinfo(ex));
 			if(ex instanceof BusinessException || ex.getCause() instanceof BusinessException){
 				log.setRsType(Log.RS_BusinessException);
 			}else if(ex instanceof OrmException || ex.getCause() instanceof OrmException){

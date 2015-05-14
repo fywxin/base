@@ -11,8 +11,8 @@ import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.common.util.Strings;
-import org.whale.system.jdbc.annotation.Validate;
 import org.whale.system.jdbc.orm.entry.OrmValidate;
 import org.whale.system.jdbc.util.AnnotationUtil;
 

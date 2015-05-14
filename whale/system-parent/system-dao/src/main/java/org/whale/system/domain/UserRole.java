@@ -1,9 +1,9 @@
 package org.whale.system.domain;
 
+import org.whale.system.annotation.jdbc.Column;
+import org.whale.system.annotation.jdbc.Id;
+import org.whale.system.annotation.jdbc.Table;
 import org.whale.system.base.BaseEntry;
-import org.whale.system.jdbc.annotation.Column;
-import org.whale.system.jdbc.annotation.Id;
-import org.whale.system.jdbc.annotation.Table;
 
 
 @Table(value="sys_user_role", cnName="用户角色")

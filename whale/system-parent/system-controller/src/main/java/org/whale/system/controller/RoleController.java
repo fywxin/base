@@ -62,7 +62,7 @@ public class RoleController extends BaseController {
 	 * @param roleCode
 	 * @return
 	 */
-	@org.whale.system.auth.annotation.Auth(code="ROLE_LIST",name="查询角色")
+	@org.whale.system.annotation.auth.Auth(code="ROLE_LIST",name="查询角色")
 	@RequestMapping("/goList")
 	public ModelAndView goList(HttpServletRequest request, HttpServletResponse response){
 
@@ -70,7 +70,7 @@ public class RoleController extends BaseController {
 	}
 	
 	
-	@org.whale.system.auth.annotation.Auth(code="ROLE_LIST",name="查询角色")
+	@org.whale.system.annotation.auth.Auth(code="ROLE_LIST",name="查询角色")
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, String roleName, String roleCode){
 		Page page = this.newPage(request);
@@ -89,7 +89,7 @@ public class RoleController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@org.whale.system.auth.annotation.Auth(code="ROLE_SAVE",name="新增角色")
+	@org.whale.system.annotation.auth.Auth(code="ROLE_SAVE",name="新增角色")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(HttpServletRequest request, HttpServletResponse response){
 		return new ModelAndView("system/role/role_save");
@@ -101,7 +101,7 @@ public class RoleController extends BaseController {
 	 * @param response
 	 * @param role
 	 */
-	@org.whale.system.auth.annotation.Auth(code="ROLE_SAVE",name="新增角色")
+	@org.whale.system.annotation.auth.Auth(code="ROLE_SAVE",name="新增角色")
 	@RequestMapping("/doSave")
 	public void doSave(HttpServletRequest request, HttpServletResponse response, Role role){	
 		if(role.getStatus() == null)
@@ -119,7 +119,7 @@ public class RoleController extends BaseController {
 	 * @param roleId
 	 * @return
 	 */
-	@org.whale.system.auth.annotation.Auth(code="ROLE_UPDATE",name="修改角色")
+	@org.whale.system.annotation.auth.Auth(code="ROLE_UPDATE",name="修改角色")
 	@RequestMapping("/goUpdate")
 	public ModelAndView goUpdate(HttpServletRequest request, HttpServletResponse response, Long roleId){
 		Role role = this.roleService.get(roleId);
@@ -132,7 +132,7 @@ public class RoleController extends BaseController {
 	 * @param response
 	 * @param role
 	 */
-	@org.whale.system.auth.annotation.Auth(code="ROLE_UPDATE",name="修改角色")
+	@org.whale.system.annotation.auth.Auth(code="ROLE_UPDATE",name="修改角色")
 	@RequestMapping("/doUpdate")
 	public void doUpdate(HttpServletRequest request, HttpServletResponse response, Role role){
 		Role oldRole = this.roleService.get(role.getRoleId());
@@ -149,7 +149,7 @@ public class RoleController extends BaseController {
 	}
 
 	
-	@org.whale.system.auth.annotation.Auth(code="ROLE_AUTH",name="分配权限")
+	@org.whale.system.annotation.auth.Auth(code="ROLE_AUTH",name="分配权限")
 	@RequestMapping("/goSetRoleAuth")
 	public ModelAndView goSetRoleAuth(HttpServletRequest request, HttpServletResponse response, Long roleId){
 		UserContext uc = this.getUserContext(request);
@@ -219,7 +219,7 @@ public class RoleController extends BaseController {
 				.addObject("allMenus", allMenus == null ? "[]" : JSON.toJSONString(allMenus));
 	}
 	
-	@org.whale.system.auth.annotation.Auth(code="ROLE_AUTH",name="分配权限")
+	@org.whale.system.annotation.auth.Auth(code="ROLE_AUTH",name="分配权限")
 	@RequestMapping("/doSetRoleAuth")
 	public void doSetRoleAuth(HttpServletRequest request, HttpServletResponse response, Long roleId, String authIdS){
 		if(roleId == null) {
@@ -246,7 +246,7 @@ public class RoleController extends BaseController {
 	 * @param response
 	 * @param roleId
 	 */
-	@org.whale.system.auth.annotation.Auth(code="ROLE_DEL",name="删除角色")
+	@org.whale.system.annotation.auth.Auth(code="ROLE_DEL",name="删除角色")
 	@RequestMapping("/doDelete")
 	public void doDelete(HttpServletRequest request, HttpServletResponse response, String ids){
 		List<Long> roleIds = LangUtil.splitIds(ids);
@@ -264,7 +264,7 @@ public class RoleController extends BaseController {
 		WebUtil.printSuccess(request, response);
 	}
 	
-	@org.whale.system.auth.annotation.Auth(code="ROLE_STATUS",name="启禁角色")
+	@org.whale.system.annotation.auth.Auth(code="ROLE_STATUS",name="启禁角色")
 	@RequestMapping("/doChangeState")
 	public void doChangeState(HttpServletRequest request, HttpServletResponse response, Long roleId, Integer status){
 		if(roleId == null || this.roleService.get(roleId) == null){

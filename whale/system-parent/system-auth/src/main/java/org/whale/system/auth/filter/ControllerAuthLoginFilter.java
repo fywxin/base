@@ -19,7 +19,7 @@ import org.whale.system.common.util.ThreadContext;
 @Aspect
 public class ControllerAuthLoginFilter {
 
-	@Pointcut("@annotation(org.whale.system.auth.annotation.AuthLogin)")
+	@Pointcut("@annotation(org.whale.system.annotation.auth.AuthLogin)")
 	public void authLoginAspect() {
 	}
 	

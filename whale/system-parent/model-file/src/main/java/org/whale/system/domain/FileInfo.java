@@ -4,10 +4,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.whale.system.jdbc.annotation.Column;
-import org.whale.system.jdbc.annotation.Id;
-import org.whale.system.jdbc.annotation.Table;
-import org.whale.system.jdbc.annotation.Validate;
+import org.whale.system.annotation.jdbc.Column;
+import org.whale.system.annotation.jdbc.Id;
+import org.whale.system.annotation.jdbc.Table;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
 import org.whale.system.common.util.Strings;
 import org.whale.system.domain.FileInfo;

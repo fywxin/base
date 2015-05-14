@@ -5,7 +5,7 @@
 <title>日志列表</title>
 <%@include file="/html/jsp/common.jsp"%>
 <script type="text/javascript">
-var rsStatus = {1:"正常",2:"<span class='sred'>系统异常</span>",3:"<span class='sorange'>OrmException</span>",4:"<span class='sorange'>运行时异常</span>",5:"<span class='sred'>业务异常</span>",6:"<span class='sgray'>未知异常</span>"};
+var rsStatus = {1:"<span class='sgreen'>正常</span>",2:"<span class='sred'>系统异常</span>",3:"<span class='sorange'>OrmException</span>",4:"<span class='sorange'>运行时异常</span>",5:"<span class='sred'>业务异常</span>",6:"<span class='sgray'>未知异常</span>"};
 var time = new Date();
 $(function (){
     $.grid({
@@ -54,6 +54,18 @@ function view(id){
 						<col  width="25%"/>
 					<tbody>
 						<tr>
+							<td class="td-label">处理结果</td>
+							<td class="td-value">
+								<select id="rsType" name="rsType" style="width: 165px;">
+									<option value="">--请选择--</option>
+									<option value="1">处理正常</option>
+									<option value="2">系统异常</option>
+									<option value="3">ORM异常</option>
+									<option value="4">运行时异常</option>
+									<option value="5">业务异常</option>
+									<option value="0">其他异常</option>
+								</select>
+							</td>
 							<td class="td-label">操作类型</td>
 							<td class="td-value">
 								<select id="opt" name="opt" style="width: 165px;">
@@ -84,7 +96,12 @@ function view(id){
 									</optgroup>
 								</select>
 							</td>
-							
+							<td class="td-label">所属应用</td>
+							<td class="td-value">
+								<input type="text" id="appId" name="appId" style="width:160px;" value="${item.appId}" />
+							</td>
+						</tr>
+						<tr>
 							<td class="td-label">表名称</td>
 							<td class="td-value">
 								<input type="text" id="tableName" name="tableName" style="width:160px;" value="${item.tableName}" />
@@ -93,31 +110,25 @@ function view(id){
 							<td class="td-value">
 								<input type="text" id="uri" name="uri" style="width:160px;" value="${item.uri}" />
 							</td>
-						</tr>
-						<tr>
 							<td class="td-label">操作人</td>
 							<td class="td-value">
 								<input type="text" id="userName" name="userName" style="width:160px;" value="${item.userName}" />
 							</td>
-							<td class="td-label">处理结果</td>
-							<td class="td-value">
-								<select id="rsType" name="rsType" style="width: 165px;">
-									<option value="">--请选择--</option>
-									<option value="1">处理正常</option>
-									<option value="2">系统异常</option>
-									<option value="3">ORM异常</option>
-									<option value="4">运行时异常</option>
-									<option value="5">业务异常</option>
-									<option value="0">其他异常</option>
-								</select>
-							</td>
+						</tr>
+						<tr>
+							<td class="td-label">方法耗时</td>
+							<td class="td-value">><input type="text" id="methodCostTime" name="methodCostTime" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:160px;" value="${item.userName}" /></td>
+						
+							<td class="td-label">调用耗时></td>
+							<td class="td-value">><input type="text" id="costTime" name="costTime" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:160px;" value="${item.userName}" /></td>
+						
 							<td class="td-label">操作时间</td>
 							<td class="td-value">
 								<input type="text" style="width:160px;" id="startTime" name="startTime" class="i-date" onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true,maxDate:'#F{$dp.$D(\'endTime\')}'})"  value="${startTime }"/>
 								至
 								<input type="text" style="width:160px;" id="endTime" name="endTime" class="i-date" onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true,minDate:'#F{$dp.$D(\'startTime\')}'})" value="${endTime }"/>
 							</td>
-						</tr>
+							</tr>
 					</tbody>
 				</table>
 			</form>

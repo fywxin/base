@@ -387,7 +387,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 子类可以覆盖此方法
 	 * @param page
 	 */
-	protected void createPageSql(Page page){
+	public void createPageSql(Page page){
 		StringBuilder strb = new StringBuilder();
 		if(page.getParam().size() > 0){
 			for(Map.Entry<String, Object> entry : page.getParam().entrySet()){

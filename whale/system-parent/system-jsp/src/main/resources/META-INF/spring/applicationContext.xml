@@ -107,14 +107,14 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />
 	</aop:config>
 	
-<!-- 	<bean id="jvmCacheService" class="org.whale.system.cache.impl.JvmCacheService"></bean> -->
+	<bean id="jvmCacheService" class="org.whale.system.cache.impl.JvmCacheService"></bean>
 	
 	<!-- 系统权限过滤 -->
 	<bean id="userAuthCacheService" class="org.whale.system.auth.cache.UserAuthCacheService"></bean>
 	<bean id="authManager" class="org.whale.system.auth.service.DefalutAuthManager"></bean>
 	<bean id="authBeanStore" class="org.whale.system.auth.scan.AuthBeanStore"></bean>
 	
-	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+	<!-- 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
 		<property name="maxTotal" value="${redis.pool.maxTotal}" />
 		<property name="maxIdle" value="${redis.pool.maxIdle}" />
 		<property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}" />
@@ -146,7 +146,7 @@
 			</map>
 		</property>
 	</bean>
-	
+	 -->
 	
 	
 <!-- 	<bean id="JavaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> -->
@@ -155,5 +155,7 @@
 <!-- 		<property name="username" value="${mail.username}"></property> -->
 <!-- 		<property name="password" value="${mail.password}"></property> -->
 <!-- 	</bean> -->
+
+	<import resource="classpath:/META-INF/spring/log.xml" />
 </beans>
 

@@ -6,22 +6,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.whale.system.base.Page;
 import org.whale.system.base.UserContext;
+import org.whale.system.common.util.LangUtil;
+import org.whale.system.common.util.PropertiesUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.ThreadContext;
-import org.whale.system.dao.LogDao;
 import org.whale.system.domain.Log;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.jdbc.filter.BaseDaoFilterWarpper;
 import org.whale.system.jdbc.filter.impl.OrmExeContext;
 import org.whale.system.jdbc.orm.entry.OrmTable;
+import org.whale.system.rpc.LogRpc;
 
 import com.alibaba.fastjson.JSON;
 
@@ -31,7 +32,6 @@ import com.alibaba.fastjson.JSON;
  * @author 王金绍
  * 2015年4月26日 下午3:43:15
  */
-@Component
 public class LogFilter<T extends Serializable,PK extends Serializable> extends BaseDaoFilterWarpper<T, PK> implements InitializingBean{
 	
 	private static final Logger logger = LoggerFactory.getLogger(LogFilter.class);
@@ -56,12 +56,19 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
    	private boolean saveDllLog = true;
    	
    	private boolean saveFindLog = true;
+   	//是否打印sql调用结果
+   	private boolean printRsStr = true;
    
-	@Autowired
-	private LogDao logDao;	
+	private LogRpc logRpc;
+	
+	private String appId = null;
+	
+	private int pId = LangUtil.getPid();
+	
+	private AtomicLong seq = new AtomicLong(0);
 	
 	
-	private void saveLog(IOrmDao<T, PK> baseDao){
+	private void saveLog(IOrmDao<T, PK> baseDao, Object rs){
 		OrmTable ormTable = baseDao.getOrmTable();
 		if(ormTable.getEntityName().equals("Log"))
 			return ;
@@ -73,14 +80,23 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 		log.setOpt(ormExeContext.getMethodName());
 		log.setArg(ormExeContext.getArg());
 		log.setSqlStr(ormExeContext.getSql());
-		
+		log.setRs(rs);
 	}
 	
 	
 	public Log newLog(){
-		Log log = new Log();
 		int order = 1;
+		
+		Log log = new Log();
 		Long time = System.currentTimeMillis();
+		long seqNum = seq.getAndIncrement();
+		if(seqNum == Long.MAX_VALUE){
+			seq.set(0L);
+		}
+		//时间戳+机器ID+PID+计数器
+		String id= time + pId+ this.getAppId()  + seqNum;
+		log.setId(id);
+		log.setAppId(this.getAppId());
 		
 		Long createTime = ThreadContext.getContext().getLong(ThreadContext.KEY_LOG_CREATE_TIME);
 		if(createTime == null){
@@ -125,7 +141,12 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 	
 
-    class ConsumeLogThread extends Thread {
+    public void setLogRpc(LogRpc logRpc) {
+		this.logRpc = logRpc;
+	}
+
+
+	class ConsumeLogThread extends Thread {
 
         @Override
         public void run() {
@@ -171,11 +192,17 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
                 
                 if(interval == 0 || interval >= defaultNetErrorTryTime){
                 	for(Log log : logs){
-                		if(Strings.isBlank(log.getDatas())){
-                			log.setDatas(JSON.toJSONString(log.getArg()));
+                		if(Strings.isBlank(log.getArgStr())){
+                			log.setArgStr(JSON.toJSONString(log.getArg()));
                 		}
+                		if(printRsStr && Strings.isBlank(log.getRsStr())){
+                			log.setRsStr(JSON.toJSONString(log.getRs()));
+                		}
+                		log.setArg(null);
+                		log.setRs(null);
                 	}
-                    this.logDao.saveBatch(logs);
+                	
+                    this.logRpc.save(logs);
                     if(logger.isDebugEnabled()){
                         logger.debug("保存日志成功， 具体日志信息: {}", logs);
                     }
@@ -274,77 +301,77 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	@Override
 	public void afterSave(T obj, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, null);
 		}
 	}
 
 	@Override
 	public void afterSave(List<T> objs, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, null);
 		}
 	}
 
 	@Override
 	public void afterSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, null);
 		}
 	}
 
 	@Override
 	public void afterUpdate(T obj, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, null);
 		}
 	}
 
 	@Override
 	public void afterUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, null);
 		}
 	}
 
 	@Override
 	public void afterUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, null);
 		}
 	}
 
 	@Override
 	public void afterDelete(PK id, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, null);
 		}
 	}
 
 	@Override
 	public void afterDelete(List<PK> ids, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, null);
 		}
 	}
 
 	@Override
 	public void afterDeleteBy(T obj, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, null);
 		}
 	}
 
 	@Override
 	public void afterGet(IOrmDao<T, PK> baseDao, T rs, PK id) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, rs);
 		}
 	}
 
 	@Override
 	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, rs);
 		}
 	}
 
@@ -352,28 +379,28 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql,
 			Object... args) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, rs);
 		}
 	}
 
 	@Override
 	public void afterQueryAll(IOrmDao<T, PK> baseDao, List<T> rs) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, rs);
 		}
 	}
 
 	@Override
 	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, T t) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, rs);
 		}
 	}
 
 	@Override
 	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, rs);
 		}
 	}
 
@@ -381,42 +408,42 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql,
 			Object... args) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, rs);
 		}
 	}
 
 	@Override
 	public void afterQueryPage(IOrmDao<T, PK> baseDao, Page page) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, page.getDatas());
 		}
 	}
 	
 	@Override
 	public void afterQueryForNumber(IOrmDao<T, PK> baseDao, Number num, String sql, Object... args) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, num.longValue());
 		}
 	}
 
 	@Override
 	public void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, String sql, Object... args) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, rs);
 		}
 	}
 
 	@Override
 	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, rs);
 		}
 	}
 
 	@Override
 	public void afterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao);
+			this.saveLog(baseDao, rs);
 		}
 	}
 
@@ -440,4 +467,29 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	public void setSaveFindLog(boolean saveFindLog) {
 		this.saveFindLog = saveFindLog;
 	}
+
+
+	public String getAppId() {
+		if(appId == null){
+			appId = PropertiesUtil.getValue("appId", "unknown");
+		}
+		return appId;
+	}
+
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+
+	public boolean isPrintRsStr() {
+		return printRsStr;
+	}
+
+
+	public void setPrintRsStr(boolean printRsStr) {
+		this.printRsStr = printRsStr;
+	}
+	
+	
 }

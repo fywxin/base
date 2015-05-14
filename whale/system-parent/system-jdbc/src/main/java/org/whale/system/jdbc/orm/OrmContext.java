@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import org.whale.system.common.exception.OrmException;
-import org.whale.system.jdbc.common.EntryContext;
+import org.whale.system.common.reflect.EntryContext;
 import org.whale.system.jdbc.orm.entry.OrmClass;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmSql;

@@ -54,7 +54,7 @@ public class UserDao extends BaseDao<User, Long> {
 	}
 
 	@Override
-	protected void createPageSql(Page page) {
+	public void createPageSql(Page page) {
 		StringBuilder strb = new StringBuilder();
 		strb.append(" FROM ").append(getOrmTable().getTableDbName()).append(" t WHERE t.isAdmin=0 ");
 		if(Strings.isNotBlank(page.getParamStr("userName"))){

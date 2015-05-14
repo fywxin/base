@@ -2,13 +2,13 @@ package org.whale.system.domain;
 
 import java.util.List;
 
+import org.whale.system.annotation.jdbc.Column;
+import org.whale.system.annotation.jdbc.Id;
+import org.whale.system.annotation.jdbc.Order;
+import org.whale.system.annotation.jdbc.Table;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
 import org.whale.system.common.constant.SysConstant;
-import org.whale.system.jdbc.annotation.Column;
-import org.whale.system.jdbc.annotation.Id;
-import org.whale.system.jdbc.annotation.Order;
-import org.whale.system.jdbc.annotation.Table;
-import org.whale.system.jdbc.annotation.Validate;
 
 @Table(value="sys_dict", cnName="字典")
 public class Dict extends BaseEntry {

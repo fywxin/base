@@ -37,7 +37,7 @@ public class AuthController extends BaseController {
 	@Autowired
 	private DictCacheService dictCacheService;
 	
-	@org.whale.system.auth.annotation.Auth(code="AUTH_LIST",name="查询权限")
+	@org.whale.system.annotation.auth.Auth(code="AUTH_LIST",name="查询权限")
 	@RequestMapping("/goTree")
 	public ModelAndView goTree(HttpServletRequest request, HttpServletResponse response, Long clkId){
 		
@@ -64,7 +64,7 @@ public class AuthController extends BaseController {
 	 * @param authCode
 	 * @return
 	 */
-	@org.whale.system.auth.annotation.Auth(code="AUTH_LIST",name="查询权限")
+	@org.whale.system.annotation.auth.Auth(code="AUTH_LIST",name="查询权限")
 	@RequestMapping("/goList")
 	public ModelAndView goList(HttpServletRequest request, HttpServletResponse response, Long menuId){
 		
@@ -81,7 +81,7 @@ public class AuthController extends BaseController {
 	 * @param authCode
 	 * @return
 	 */
-	@org.whale.system.auth.annotation.Auth(code="AUTH_LIST",name="查询权限")
+	@org.whale.system.annotation.auth.Auth(code="AUTH_LIST",name="查询权限")
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, String authName, String authCode, Long menuId){
 		Page page = this.newPage(request);
@@ -117,7 +117,7 @@ public class AuthController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@org.whale.system.auth.annotation.Auth(code="AUTH_SAVE",name="新增权限")
+	@org.whale.system.annotation.auth.Auth(code="AUTH_SAVE",name="新增权限")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(HttpServletRequest request, HttpServletResponse response, Long menuId){
 		Menu menu = this.menuService.get(menuId);
@@ -137,7 +137,7 @@ public class AuthController extends BaseController {
 	 * @param response
 	 * @param auth
 	 */
-	@org.whale.system.auth.annotation.Auth(code="AUTH_SAVE",name="新增权限")
+	@org.whale.system.annotation.auth.Auth(code="AUTH_SAVE",name="新增权限")
 	@RequestMapping("/doSave")
 	public void doSave(HttpServletRequest request, HttpServletResponse response, Auth auth){		
 		Menu menu = this.menuService.get(auth.getMenuId());
@@ -162,7 +162,7 @@ public class AuthController extends BaseController {
 	 * @param authId
 	 * @return
 	 */
-	@org.whale.system.auth.annotation.Auth(code="AUTH_UPDATE",name="修改权限")
+	@org.whale.system.annotation.auth.Auth(code="AUTH_UPDATE",name="修改权限")
 	@RequestMapping("/goUpdate")
 	public ModelAndView goUpdate(HttpServletRequest request, HttpServletResponse response, Long authId){
 		Auth auth = this.authService.get(authId);
@@ -177,7 +177,7 @@ public class AuthController extends BaseController {
 	 * @param response
 	 * @param auth
 	 */
-	@org.whale.system.auth.annotation.Auth(code="AUTH_UPDATE",name="修改权限")
+	@org.whale.system.annotation.auth.Auth(code="AUTH_UPDATE",name="修改权限")
 	@RequestMapping("/doUpdate")
 	public void doUpdate(HttpServletRequest request, HttpServletResponse response, Auth auth){
 		Menu menu = this.menuService.get(auth.getMenuId());
@@ -201,7 +201,7 @@ public class AuthController extends BaseController {
 	 * @param response
 	 * @param authId
 	 */
-	@org.whale.system.auth.annotation.Auth(code="AUTH_DEL",name="删除权限")
+	@org.whale.system.annotation.auth.Auth(code="AUTH_DEL",name="删除权限")
 	@RequestMapping("/doDelete")
 	public void doDelete(HttpServletRequest request, HttpServletResponse response, String ids){
 		List<Long> authIds = LangUtil.splitIds(ids);

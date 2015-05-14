@@ -1,5 +1,7 @@
 package org.whale.system.common.util;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -537,4 +539,18 @@ public final class LangUtil {
     	return strb.toString();
     }
 	
+    /**
+     * 获取当前进程Id
+     * @return
+     * @date 2015年5月13日 下午1:47:57
+     */
+    public static int getPid() {  
+        RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();  
+        String name = runtime.getName(); // format: "pid@hostname"  
+        try {  
+            return Integer.parseInt(name.substring(0, name.indexOf('@')));  
+        } catch (Exception e) {  
+            return -1;  
+        }  
+    }  
 }

@@ -8,7 +8,7 @@ import org.whale.system.common.util.TimeUtil;
 import org.whale.system.domain.Log;
 
 @Repository
-public class LogDao extends BaseDao<Log, Long>{
+public class LogDao extends BaseDao<Log, String>{
 
 	@Override
 	public void queryPage(Page page) {
@@ -64,6 +64,19 @@ public class LogDao extends BaseDao<Log, Long>{
 		if(page.getParamInteger("rsType") != null){
 			param.append("AND t.rsType =? ");
 			page.addArg(page.getParamInteger("rsType"));
+		}
+		if(Strings.isNotBlank(page.getParamStr("appId"))){
+			param.append("AND t.appId like ? ");
+			page.addArg("%"+page.getParamStr("appId").trim()+"%");
+		}
+		
+		if(page.getParamInteger("methodCostTime") != null){
+			param.append("AND t.methodCostTime >= ? ");
+			page.addArg(page.getParamInteger("methodCostTime"));
+		}
+		if(page.getParamInteger("costTime") != null){
+			param.append("AND t.costTime >= ? ");
+			page.addArg(page.getParamInteger("costTime"));
 		}
 	
 		page.setCountSql("SELECT count(1) FROM sys_log t where 1=1 "+param.toString());

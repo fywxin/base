@@ -143,6 +143,13 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	void queryPage(Page page);
 	
 	/**
+	 * 创建分页查询
+	 * @param page
+	 * @date 2015年5月14日 下午3:37:47
+	 */
+	void createPageSql(Page page);
+	
+	/**
 	 * 在T 的dao里面查询返回非T（Clazz）的结果
 	 * 
 	 * @param clazz 

@@ -3,8 +3,8 @@ package org.whale.system.jdbc.orm.entry;
 import java.util.List;
 import java.util.Map;
 
+import org.whale.system.common.reflect.Atable;
 import org.whale.system.common.util.Strings;
-import org.whale.system.jdbc.common.Atable;
 
 
 /**

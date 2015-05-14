@@ -19,6 +19,7 @@
 		
 		<module>model-dict</module>
 		<module>model-file</module>
+		<module>model-log-api</module>
 		<module>model-log</module>
 	</modules>
 

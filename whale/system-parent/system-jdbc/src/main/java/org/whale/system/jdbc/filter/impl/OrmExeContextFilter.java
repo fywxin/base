@@ -1,6 +1,7 @@
 package org.whale.system.jdbc.filter.impl;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -198,7 +199,12 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 
 	@Override
 	public void beforeQueryPage(IOrmDao<T, PK> baseDao, Page page) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryPage", page.getSql(), page, baseDao));
+		Map<String, Object> param = new HashMap<String, Object>(page.getParam().size() * 2);
+		param.putAll(page.getParam());
+		if(page.getSql() == null){
+			baseDao.createPageSql(page);
+		}
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryPage", page.getSql(), param, baseDao));
 	}
 
 	@Override
