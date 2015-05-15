@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,6 +30,8 @@ public class RowMapperBulider {
 	@Autowired
 	private DefaultLobHandler lobHandler;
 	
+	private Map<Class<?>, RowMapper<?>> map = new HashMap<Class<?>, RowMapper<?>>();
+	
 	/**
 	 * 生产RowMapper
 	 * 
@@ -36,8 +40,8 @@ public class RowMapperBulider {
 	 * @return
 	 */
 	@SuppressWarnings("all")
-	public RowMapper<?> getRowMapper(final Class<?> clazz, final List<OrmColumn> list){
-		return new RowMapper() {
+	public RowMapper<?> bulidRowMapper(final Class<?> clazz, final List<OrmColumn> list){
+		RowMapper<?> rowMapper = new RowMapper() {
 			@Override
 			public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Object obj = null;
@@ -138,6 +142,12 @@ public class RowMapperBulider {
 			}
 		};
 		
+		map.put(clazz, rowMapper);
+		return rowMapper;
 	}
 	
+	
+	public RowMapper<?> getRowMapper(final Class<?> clazz){
+		return this.getRowMapper(clazz);
+	}
 }

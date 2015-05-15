@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @author 王金绍
  * 2014年9月6日-下午1:48:33
  */
-@Component
+
 public class TableBulider {
 	
 	private static Logger logger = LoggerFactory.getLogger(TableBulider.class);

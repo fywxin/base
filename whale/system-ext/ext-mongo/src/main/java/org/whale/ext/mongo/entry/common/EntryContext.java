@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @author 王金绍
  * 2014年9月6日-下午1:45:02
  */
-@Component("entryContext")
+
 public class EntryContext {
 
 	private Map<Class<?>, Atable> cache = new HashMap<Class<?>, Atable>();
