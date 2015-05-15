@@ -15,7 +15,7 @@ public class AuthDao extends BaseDao<Auth, Long> {
 	@Override
 	public void createPageSql(Page page) {
 		StringBuilder strb = new StringBuilder();
-		strb.append(" FROM ").append(this.getOrmTable().getTableDbName()).append(" t")
+		strb.append(" FROM sys_auth t")
 			.append(" WHERE 1=1 ");
 		if(Strings.isNotBlank(page.getParamStr("menuIds"))){
 			strb.append(" AND t.menuId in(").append(page.getParam("menuIds")).append(")");
@@ -47,7 +47,7 @@ public class AuthDao extends BaseDao<Auth, Long> {
 	
 	public List<Auth> getByRoleId(Long roleId){
 		StringBuilder strb = new StringBuilder();
-		strb.append("SELECT a.* FROM sys_role_auth ra, ").append(this.getTableName()).append(" a ")
+		strb.append("SELECT a.* FROM sys_role_auth ra, sys_auth a ")
 			.append("WHERE ra.roleId = ? ")
 			.append("AND a.authId = ra.authId");
 		

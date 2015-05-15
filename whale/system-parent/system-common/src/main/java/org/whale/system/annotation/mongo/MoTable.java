@@ -1,4 +1,4 @@
-package org.whale.ext.mongo.annotation;
+package org.whale.system.annotation.mongo;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

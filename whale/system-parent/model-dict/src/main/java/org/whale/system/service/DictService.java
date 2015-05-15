@@ -2,13 +2,13 @@ package org.whale.system.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.whale.system.base.IbaseDao;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.DictDao;
 import org.whale.system.dao.DictItemDao;
 import org.whale.system.domain.Dict;
 import org.whale.system.domain.DictItem;
-import org.whale.system.jdbc.IOrmDao;
 
 @Service
 public class DictService extends BaseService<Dict, Long> {
@@ -36,7 +36,7 @@ public class DictService extends BaseService<Dict, Long> {
 	}
 	
 	@Override
-	public IOrmDao<Dict, Long> getDao() {
+	public IbaseDao<Dict, Long> getDao() {
 		return dictDao;
 	}
 	

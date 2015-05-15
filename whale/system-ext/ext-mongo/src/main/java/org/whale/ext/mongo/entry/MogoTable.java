@@ -1,8 +1,9 @@
-package org.whale.ext.mongo.entry.mogo;
+package org.whale.ext.mongo.entry;
 
 import java.util.List;
 
-import org.whale.ext.mongo.entry.common.Atable;
+import org.whale.system.common.reflect.Atable;
+
 
 public class MogoTable {
 

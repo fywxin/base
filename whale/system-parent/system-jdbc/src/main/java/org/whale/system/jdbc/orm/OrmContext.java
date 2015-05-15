@@ -77,7 +77,7 @@ public class OrmContext extends EntryContext {
 		ormSqls.add(getAll);
 		
 		//添加RowMapper缓存对象
-		RowMapper<?> rowMapper = this.rowMapperBulider.getRowMapper(clazz, ormTable.getOrmCols());
+		RowMapper<?> rowMapper = this.rowMapperBulider.bulidRowMapper(clazz, ormTable.getOrmCols());
 		logger.info("ORM: 类[{}] 解析RowMapper完成!", clazz.getName());
 		
 		ormClass.setOrmTable(ormTable);

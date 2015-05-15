@@ -56,7 +56,7 @@ public class UserDao extends BaseDao<User, Long> {
 	@Override
 	public void createPageSql(Page page) {
 		StringBuilder strb = new StringBuilder();
-		strb.append(" FROM ").append(getOrmTable().getTableDbName()).append(" t WHERE t.isAdmin=0 ");
+		strb.append(" FROM sys_user t WHERE t.isAdmin=0 ");
 		if(Strings.isNotBlank(page.getParamStr("userName"))){
 			strb.append(" AND t.userName like ?");
 			page.addArg("%"+page.getParamStr("userName")+"%");

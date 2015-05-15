@@ -36,8 +36,12 @@ public class LogRpcService implements LogRpc,InitializingBean {
 	
 
 	@Override
-	public void queryPage(Page page) {
+	public Page queryLogPage(Page page) {
 		this.logDao.queryPage(page);
+		Page page2 = new Page();
+		page2.setTotal(page.getTotal());
+		page2.setDatas(page.getDatas());
+		return page2;
 	}
 
 	@Override

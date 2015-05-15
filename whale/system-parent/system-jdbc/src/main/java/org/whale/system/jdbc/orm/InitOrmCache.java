@@ -12,6 +12,7 @@ import org.whale.system.common.constant.OrderNumConstant;
 import org.whale.system.common.util.Bootable;
 import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.base.BaseDao;
+import org.whale.system.jdbc.OrmDaoOnFilter;
 import org.whale.system.jdbc.orm.alter.DbInfoFetcher;
 import org.whale.system.jdbc.orm.entry.OrmClass;
 
@@ -56,6 +57,10 @@ public class InitOrmCache implements Bootable {
 				// 根据反射获取子类dao对应的orm实体对象
 				method = dao.getClass().getMethod("getClazz");
 				clazz = (Class<?>) method.invoke(dao);
+				
+				OrmDaoOnFilter ormDao = new OrmDaoOnFilter();
+				ormDao.setClazz(clazz);
+				dao.setNativeBaseDao(ormDao);
 				
 				logger.info("ORM：初始化类["+clazz.getName()+"]配置信息...");
 				OrmClass ormclass = ormContext.getOrmClass(clazz);

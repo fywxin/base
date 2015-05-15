@@ -9,7 +9,7 @@ public interface LogRpc {
 	
 	void save(List<Log> logs);
 	
-	void queryPage(Page page);
+	Page queryLogPage(Page page);
 	
 	Log get(String objId);
 }

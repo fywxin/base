@@ -19,6 +19,11 @@
   </properties>
 
   <dependencies>
+  		<dependency>
+			<groupId>org.whale</groupId>
+			<artifactId>model-log-api</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
     	<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>system-jdbc</artifactId>
@@ -49,11 +54,6 @@
 				<artifactId>slf4j-api</artifactId>
 			</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.whale</groupId>
-			<artifactId>model-log-api</artifactId>
-			<version>${project.parent.version}</version>
 		</dependency>
   </dependencies>
 </project>

@@ -10,7 +10,7 @@ import org.whale.system.domain.DictItem;
 public class DictItemDao extends BaseDao<DictItem, Long> {
 	
 	public Integer getCurOrder(Long dictId){
-		String sql = "select max(orderNo) from "+this.getTableName()+" where dictId=?";
+		String sql = "select max(orderNo) from sys_dict_item where dictId=?";
 		return this.queryForInt(sql, dictId);
 	}
 	

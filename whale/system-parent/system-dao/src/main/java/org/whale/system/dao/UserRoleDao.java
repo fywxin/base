@@ -7,6 +7,7 @@ import org.whale.system.base.BaseDao;
 import org.whale.system.domain.Role;
 import org.whale.system.domain.User;
 import org.whale.system.domain.UserRole;
+import org.whale.system.jdbc.IOrmDao;
 
 @Repository
 public class UserRoleDao extends BaseDao<UserRole, Long> {
@@ -34,8 +35,9 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 	}
 	
 	public List<Role> queryRoleByUserId(Long userId){
+		IOrmDao ormDao = (IOrmDao)(this.getNativeBaseDao());
 		StringBuilder strb = new StringBuilder();
-		strb.append("SELECT ").append(this.ormContext.getOrmTable(Role.class).getSqlColPrexs()).append(" ")
+		strb.append("SELECT ").append(ormDao.getOrmContext().getOrmTable(Role.class).getSqlColPrexs()).append(" ")
 			.append("FROM sys_role t, sys_user_role ur ")
 			.append("WHERE t.roleId = ur.roleId ")
 			.append("    AND ur.userId = ? ")
@@ -47,8 +49,9 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 	}
 	
 	public List<User> queryUsersByRoleId(Long roleId){
+		IOrmDao ormDao = (IOrmDao)(this.getNativeBaseDao());
 		StringBuilder strb = new StringBuilder();
-		strb.append("SELECT ").append(this.ormContext.getOrmTable(User.class).getSqlColPrexs()).append(" ")
+		strb.append("SELECT ").append(ormDao.getOrmContext().getOrmTable(User.class).getSqlColPrexs()).append(" ")
 			.append("FROM sys_user t, sys_user_role ur ")
 			.append("WHERE t.userId = ur.userId ")
 			.append("    AND ur.roleId = ? ")
@@ -60,8 +63,9 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 	}
 	
 	public List<User> queryUsersByRoleCode(String roleCode){
+		IOrmDao ormDao = (IOrmDao)(this.getNativeBaseDao());
 		StringBuilder strb = new StringBuilder();
-		strb.append("SELECT ").append(this.ormContext.getOrmTable(User.class).getSqlColPrexs()).append(" ")
+		strb.append("SELECT ").append(ormDao.getOrmContext().getOrmTable(User.class).getSqlColPrexs()).append(" ")
 			.append("FROM sys_user t, sys_user_role ur, sys_role r ")
 			.append("WHERE t.userId = ur.userId ")
 			.append("    AND ur.roleId = r.roleId ")

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.bson.conversions.Bson;
-import org.whale.ext.mongo.entry.mogo.MogoTable;
+import org.whale.ext.mongo.entry.MogoTable;
 
 public class MoDaoImpl<T extends Serializable> implements IMoDao<T> {
 	

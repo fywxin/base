@@ -8,8 +8,8 @@ public class LogServiceAdapter {
 	
 	private LogRpc logRpc;
 
-	public void queryPage(Page page) {
-		this.logRpc.queryPage(page);
+	public Page queryLogPage(Page page) {
+		return this.logRpc.queryLogPage(page);
 	}
 
 	public Log get(String objId) {

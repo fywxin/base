@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Service;
 import org.whale.system.base.BaseCrudEvent;
+import org.whale.system.base.IbaseDao;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.DictDao;
 import org.whale.system.dao.DictItemDao;
 import org.whale.system.domain.DictItem;
-import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.service.event.DictItemEvent;
 
 @Service
@@ -72,7 +72,7 @@ public class DictItemService extends BaseService<DictItem, Long> {
 	}
 
 	@Override
-	public IOrmDao<DictItem, Long> getDao() {
+	public IbaseDao<DictItem, Long> getDao() {
 		return dictItemDao;
 	}
 	

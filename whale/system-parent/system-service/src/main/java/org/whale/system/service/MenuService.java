@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.whale.system.base.IbaseDao;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.AuthDao;
 import org.whale.system.dao.MenuDao;
 import org.whale.system.domain.Auth;
 import org.whale.system.domain.Menu;
-import org.whale.system.jdbc.IOrmDao;
 
 @Component
 public class MenuService extends BaseService<Menu, Long> {
@@ -78,7 +78,7 @@ public class MenuService extends BaseService<Menu, Long> {
 	}
 
 	@Override
-	public IOrmDao<Menu, Long> getDao() {
+	public IbaseDao<Menu, Long> getDao() {
 		return menuDao;
 	}
 

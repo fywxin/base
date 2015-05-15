@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.whale.system.base.Page;
+import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.jdbc.filter.BaseDaoFilterService;
 
 /**
@@ -14,10 +15,9 @@ import org.whale.system.jdbc.filter.BaseDaoFilterService;
  * @author 王金绍
  * 2015年4月26日 下午3:44:43
  */
-public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> extends OrmDaoImpl<T, PK> {
+public class OrmDaoOnFilter<T extends Serializable,PK extends Serializable> extends OrmDaoImpl<T, PK> {
 
-	@Autowired
-	private BaseDaoFilterService<T, PK> filter;
+	private BaseDaoFilterService<T, PK> filter = SpringContextHolder.getBean(BaseDaoFilterService.class);
 
 	@Override
 	public void save(T t) {

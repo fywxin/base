@@ -13,7 +13,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -24,6 +23,7 @@ import org.whale.system.base.BaseDao;
 import org.whale.system.base.Page;
 import org.whale.system.common.exception.OrmException;
 import org.whale.system.common.util.ReflectionUtil;
+import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
@@ -41,20 +41,15 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	private Class<T> clazz;
 	//rowMapper 转换器
 	private RowMapper<T> rowMapper;
-	@Autowired
-	protected JdbcTemplate jdbcTemplate;
-	@Autowired
-	protected ValueBulider valueBulider;
+	
+	protected JdbcTemplate jdbcTemplate = SpringContextHolder.getBean(JdbcTemplate.class);
+	
+	protected ValueBulider valueBulider = SpringContextHolder.getBean(ValueBulider.class);
 	
 	//该类Dao 插件上下文
-	@Autowired
-	protected OrmContext ormContext;
+	protected OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
 	//T 对应的表信息
 	private OrmTable ormTable;
-	
-	public OrmDaoImpl(){
-		clazz = ReflectionUtil.getSuperClassGenricType(getClass());
-	}
 	
 	/**
 	 * 保存实体对象
@@ -576,6 +571,10 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			}
 		}
 		return t;
+	}
+
+	public void setClazz(Class<T> clazz) {
+		this.clazz = clazz;
 	}
 
 	

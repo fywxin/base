@@ -53,9 +53,9 @@ public class LogController extends BaseController {
 		page.put("methodCostTime", log.getMethodCostTime());
 		page.put("costTime", log.getCostTime());
 		
-		this.LogServiceAdapter.queryPage(page);
+		Page page2 = this.LogServiceAdapter.queryLogPage(page);
 		
-		WebUtil.print(request, response, page);
+		WebUtil.print(request, response, page2);
 //		return new ModelAndView("system/log/log_list")
 //			.addObject("item", log)
 //			.addObject("startTime", startTime)

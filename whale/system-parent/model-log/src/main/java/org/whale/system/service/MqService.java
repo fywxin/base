@@ -64,8 +64,9 @@ public class MqService implements LogRpc{
 	}
 
 	@Override
-	public void queryPage(Page page) {
-		this.logRpc.queryPage(page);
+	public Page queryLogPage(Page page) {
+		this.logRpc.queryLogPage(page);
+		return page;
 	}
 
 }
