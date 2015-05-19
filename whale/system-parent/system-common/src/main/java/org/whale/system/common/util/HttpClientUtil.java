@@ -36,7 +36,7 @@ import org.whale.system.common.exception.HttpClientIOException;
  */
 public class HttpClientUtil {
 	
-	private static final Logger logger = LoggerFactory.getLogger("httpClient");
+	private static final Logger logger = LoggerFactory.getLogger("PoolHttpClient");
 	// 客户端 
 	private static HttpClient httpClient;
 	
@@ -49,6 +49,10 @@ public class HttpClientUtil {
 		return get(url, headers, "UTF-8", null);
 	}
 	
+	public static String get(String url, Map<String, String> headers, String resCharset, Integer timeout){
+		return get(url, headers, "UTF-8", null, timeout);
+	}
+	
 	/**
 	 * 
 	 * @param url 
@@ -57,7 +61,7 @@ public class HttpClientUtil {
 	 * @param timeout 超时时间
 	 * @return
 	 */
-	public static String get(String url, Map<String, String> headers, String resCharset, Integer timeout) {
+	public static String get(String url, Map<String, String> headers, String resCharset, Integer contimeout, Integer readtimeout) {
 		logger.debug("url: {} headers：{} resCharset: {}", url, headers, resCharset);
 		HttpGet httpGet = new HttpGet(url);
 
@@ -66,7 +70,7 @@ public class HttpClientUtil {
 				httpGet.setHeader(entry.getKey(), entry.getValue());
 			}
 		}
-		return doExecute(httpGet, url, resCharset, timeout);
+		return doExecute(httpGet, url, resCharset, contimeout, readtimeout);
 	}
 	
 	
@@ -80,6 +84,11 @@ public class HttpClientUtil {
 		return post(url, headers, postStr, reqCharset, resCharset, null);
 	}
 	
+	public static String post(String url, Map<String, String> headers, String postStr, String reqCharset, String resCharset, Integer timeout) {
+		
+		return post(url, headers, postStr, reqCharset, resCharset, null, timeout);
+	}
+	
 	/**
 	 * 
 	 * @param url
@@ -90,7 +99,7 @@ public class HttpClientUtil {
 	 * @param timeOut 超时时间
 	 * @return
 	 */
-	public static String post(String url, Map<String, String> headers, String postStr, String reqCharset, String resCharset, Integer timeOut) {
+	public static String post(String url, Map<String, String> headers, String postStr, String reqCharset, String resCharset, Integer contimeout, Integer readtimeout) {
 		logger.info("url: {} headers：{} charset: {} postStr: {}", url, headers, postStr);
 		HttpPost httpPost = new HttpPost(url);
 
@@ -106,7 +115,7 @@ public class HttpClientUtil {
 				throw new HttpClientException(e);
 			}
 		}
-		return doExecute(httpPost, url, resCharset, timeOut);
+		return doExecute(httpPost, url, resCharset, contimeout, readtimeout);
 	}
 	
 	public static String post(String url, Map<String, String> params, Map<String, String> headers){
@@ -119,6 +128,11 @@ public class HttpClientUtil {
 		return post(url, params, headers, resCharset, null);
 	}
 	
+	public static String post(String url, Map<String, String> params, Map<String, String> headers, String resCharset, Integer timeout) {
+		
+		return post(url, params, headers, resCharset, null, timeout);
+	}
+	
 	/**
 	 * post 请求 
 	 * @param url 地址
@@ -128,7 +142,7 @@ public class HttpClientUtil {
 	 * @param timeOut 超时时间
 	 * @return
 	 */
-	public static String post(String url, Map<String, String> params, Map<String, String> headers, String resCharset, Integer timeOut) {
+	public static String post(String url, Map<String, String> params, Map<String, String> headers, String resCharset, Integer contimeout, Integer readtimeout) {
 		logger.debug("url: {} params：{} headers：{} resCharset: {}", url, params, headers, resCharset);
 		HttpPost httpPost = new HttpPost(url);
 		
@@ -152,7 +166,7 @@ public class HttpClientUtil {
 			}
 		}
 		
-		return doExecute(httpPost, url, resCharset, timeOut);
+		return doExecute(httpPost, url, resCharset, contimeout, readtimeout);
 	}
 	
 	/**
@@ -164,14 +178,19 @@ public class HttpClientUtil {
 	 * @param timeOut
 	 * @return
 	 */
-	private static String doExecute(HttpUriRequest request, String url, String charset, Integer timeOut){
+	private static String doExecute(HttpUriRequest request, String url, String charset, Integer conTimeout, Integer readTimeout){
 		try {
-			if(timeOut != null && timeOut > 0){
+			if(conTimeout != null || readTimeout != null){
 				HttpParams httpParams = getHttpClient().getParams();
-				httpParams.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, timeOut);
-				httpParams.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, timeOut);
+				if(conTimeout != null && conTimeout > 0){
+					httpParams.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,  conTimeout);
+				}
+				if(readTimeout != null && readTimeout > 0){
+					httpParams.setIntParameter(CoreConnectionPNames.SO_TIMEOUT,  readTimeout);
+				}
 				request.setParams(httpParams);
 			}
+			
 			
 			HttpResponse response = getHttpClient().execute(request);
 			if(response == null)

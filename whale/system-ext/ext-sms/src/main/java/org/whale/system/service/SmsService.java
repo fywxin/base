@@ -16,10 +16,10 @@ import org.whale.system.base.Page;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.exception.SmsException;
 import org.whale.system.common.util.Bootable;
+import org.whale.system.common.util.SimpleHttpClient;
 import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.TimeUtil;
-import org.whale.system.common.util.WebUtil;
 import org.whale.system.dao.SmsDao;
 import org.whale.system.domain.Sms;
 
@@ -124,7 +124,7 @@ public class SmsService implements Bootable{
 			logger.error("接收短信回复失败：内容编码异常 url="+url, e);
 			throw new SmsException("接收短信回复失败：内容编码异常 url="+url, e);
 		}
-		return WebUtil.simpleHttpGet(url, null);		
+		return SimpleHttpClient.get(url);		
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public class SmsService implements Bootable{
 			logger.error("短信帐号余额查询失败：内容编码异常 url="+url, e);
 			throw new SmsException("短信帐号余额查询失败：内容编码异常 url="+url, e);
 		}
-		return WebUtil.simpleHttpGet(url, null);
+		return SimpleHttpClient.get(url);
 	}
 	
 	/**
@@ -263,7 +263,7 @@ public class SmsService implements Bootable{
 			logger.info("短信发送 接口调用开始： URL="+url);
 			sms.setCurRetryTime((sms.getCurRetryTime() == null ? 0 : sms.getCurRetryTime())+1);
 			
-			String rs = WebUtil.simpleHttpGet(url, null);
+			String rs = SimpleHttpClient.get(url);	
 			logger.info("短信发送 接口调用完成：rs="+rs+" URL="+url);
 			
 			sms.setRecTime(new Date());

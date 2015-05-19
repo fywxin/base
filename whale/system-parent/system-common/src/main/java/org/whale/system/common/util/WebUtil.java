@@ -6,16 +6,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.whale.system.common.exception.SysException;
 
 import com.alibaba.fastjson.JSON;
 
@@ -319,37 +315,6 @@ public class WebUtil {
 			}
 		}
 	}
-	
-	public static String simpleHttpGet(String url, Map<String, Object> header){
-    	URL urlObj ;
-    	InputStream inputStream = null;
-    	try{
-    		logger.info("抓取开始 url={} \n header = {}", url, header);
-            urlObj = new URL(url);
-            inputStream = urlObj.openStream();
-            int c;
-            StringBuilder sb = new StringBuilder();
-            while((c=inputStream.read())!=-1){
-                sb.append((char)c);
-            }
-            
-            String text = new String(sb.toString().getBytes("ISO-8859-1"),"UTF-8");
-            logger.info("抓取完成   url={}, 返回内容:\n{}", url, text);
-            return text;
-            
-        }catch(Exception e){
-        	logger.error("抓取页面url="+url+"出现异常",e);
-        	throw new SysException("抓取页面url="+url+"出现异常："+e.getMessage(),e);
-        }finally{
-            if(inputStream != null){
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    logger.error("关闭抓取流出现异常",e);
-                }
-            }
-        }
-    }
 	
 	static class Result{
 		
