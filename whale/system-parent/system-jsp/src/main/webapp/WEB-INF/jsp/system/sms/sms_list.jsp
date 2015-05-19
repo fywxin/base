@@ -73,6 +73,7 @@ function view(id){
 							<td class="td-label">短信类型</td>
 							<td class="td-value">
 								<input type="text" id="smsType" name="smsType" style="width:160px;" value="${item.smsType}" />
+								<button id="queryBut" type="button" class="btn-query">查询</button>
 							</td>
 						</tr>
 					</tbody>

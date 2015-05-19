@@ -102,7 +102,9 @@ function setStatus(id,name,type){
 							<td class="td-label">用户名</td>
 							<td class="td-value"><input type="text" id="userName" name="userName" style="width:160px;" value="${userName }" /></td>
 							<td class="td-label">姓名</td>
-							<td class="td-value"><input type="text" id="realName" name="realName" style="width:160px;"  value="${realName }" />							
+							<td class="td-value">
+								<input type="text" id="realName" name="realName" style="width:160px;"  value="${realName }" />	
+								<button id="queryBut" type="button" class="btn-query">查询</button>				
 							</td>
 						</tr>
 					</tbody>

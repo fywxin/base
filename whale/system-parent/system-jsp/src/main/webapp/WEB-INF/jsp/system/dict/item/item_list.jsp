@@ -84,7 +84,10 @@ function setStatus(id,name,type){
 							<td class="td-label">元素名称</td>
 							<td class="td-value"><input type="text" id="itemName" name="itemName" style="width:160px;" value="${itemName }" /></td>
 							<td class="td-label">元素编码</td>
-							<td class="td-value"><input type="text" id="itemCode" name="itemCode" style="width:160px;" value="${itemCode }" /></td>
+							<td class="td-value">
+								<input type="text" id="itemCode" name="itemCode" style="width:160px;" value="${itemCode }" />
+								<button id="queryBut" type="button" class="btn-query">查询</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>

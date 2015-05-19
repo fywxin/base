@@ -60,7 +60,10 @@ function del(dictId){
 							<td class="td-label">字典名称</td>
 							<td class="td-value"><input type="text" id="dictName" name="dictName" style="width:160px;" value="${dictName }" /></td>
 							<td class="td-label">字典编码</td>
-							<td class="td-value"><input type="text" id="dictCode" name="dictCode" style="width:160px;" value="${dictCode }" /></td>
+							<td class="td-value">
+							<input type="text" id="dictCode" name="dictCode" style="width:160px;" value="${dictCode }" />
+							<button id="queryBut" type="button" class="btn-query">查询</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>

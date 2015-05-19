@@ -9554,7 +9554,7 @@
                     p.newPage = nv;
                     break;
             }
-            if (p.newPage == p.page) return false;
+            //if (p.newPage == p.page) return false;  wjs
             if (p.newPage == 1)
             {
                 $(".l-bar-btnfirst span", g.toolbar).addClass("l-disabled");
@@ -11624,9 +11624,11 @@
                 g.loadData(p.dataAction != "local" ? p.where : false);
             });
             //工具条 - 切换当前页事件
-            $('span.pcontrol :text', g.toolbar).blur(function (e)
+            $('span.pcontrol :text', g.toolbar).keydown(function (e) //wjs
             {
-                g.changePage('input');
+                if(e.keyCode==13){
+					g.changePage('input');
+				}
             });
             $("div.l-bar-button", g.toolbar).hover(function ()
             {

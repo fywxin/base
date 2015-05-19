@@ -101,20 +101,7 @@ function view(id){
 								<input type="text" id="appId" name="appId" style="width:160px;" value="${item.appId}" />
 							</td>
 						</tr>
-						<tr>
-							<td class="td-label">表名称</td>
-							<td class="td-value">
-								<input type="text" id="tableName" name="tableName" style="width:160px;" value="${item.tableName}" />
-							</td>
-							<td class="td-label">uri</td>
-							<td class="td-value">
-								<input type="text" id="uri" name="uri" style="width:160px;" value="${item.uri}" />
-							</td>
-							<td class="td-label">操作人</td>
-							<td class="td-value">
-								<input type="text" id="userName" name="userName" style="width:160px;" value="${item.userName}" />
-							</td>
-						</tr>
+						
 						<tr>
 							<td class="td-label">方法耗时</td>
 							<td class="td-value">><input type="text" id="methodCostTime" name="methodCostTime" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:160px;" value="${item.userName}" /></td>
@@ -128,7 +115,22 @@ function view(id){
 								至
 								<input type="text" style="width:160px;" id="endTime" name="endTime" class="i-date" onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true,minDate:'#F{$dp.$D(\'startTime\')}'})" value="${endTime }"/>
 							</td>
-							</tr>
+						</tr>
+						<tr>
+							<td class="td-label">表名称</td>
+							<td class="td-value">
+								<input type="text" id="tableName" name="tableName" style="width:160px;" value="${item.tableName}" />
+							</td>
+							<td class="td-label">uri</td>
+							<td class="td-value">
+								<input type="text" id="uri" name="uri" style="width:160px;" value="${item.uri}" />
+							</td>
+							<td class="td-label">操作人</td>
+							<td class="td-value">
+								<input type="text" id="userName" name="userName" style="width:160px;" value="${item.userName}" />
+								<button id="queryBut" type="button" class="btn-query">查询</button>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</form>

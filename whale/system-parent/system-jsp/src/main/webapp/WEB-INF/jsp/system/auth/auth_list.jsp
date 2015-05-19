@@ -59,7 +59,10 @@ function del(id){
 							<td class="td-value"><input type="text" id="authName" name="authName" style="width:160px;" value="${authName }" /></td>
 					
 							<td class="td-label">权限编码</td>
-							<td class="td-value"><input type="text" id="authCode" name="authCode" style="width:160px;" value="${authCode }" /></td>
+							<td class="td-value">
+								<input type="text" id="authCode" name="authCode" style="width:160px;" value="${authCode }" />
+								<button id="queryBut" type="button" class="btn-query">查询</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>

@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>创智财富业务运营管理平台</title>
+<title>基础开发平台</title>
 <link type="text/css" rel="stylesheet" href="${resource}/css/login.css" />
 <script src="${resource}/tool/jquery.js" type="text/javascript"></script>
 <script src="${resource}/tool/cookie.js" type="text/javascript"></script>

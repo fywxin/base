@@ -62,6 +62,11 @@ var waitObj = null;
 							window[id].loadData();
 						}
 			});
+			
+			$("#queryBut").click(function(a){
+					window[id].loadData();
+			});
+			
 		    $("#pageloading").hide();
 		},
 		

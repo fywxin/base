@@ -14,7 +14,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 	
 <!-- 	保存到本地数据库 -->
-<!-- 	<bean id="mqService" class="org.whale.system.service.LogService"></bean> -->
+	<bean id="mqService" class="org.whale.system.service.LogService"></bean>
 	
 	<bean id="logFilter" class="org.whale.system.filter.LogFilter">
 		<property name="logRpc" ref="mqService"></property>
@@ -25,6 +25,6 @@
 	</bean>
 	
 	<!-- 日志打入到zbus消息队列 -->
-	<import resource="classpath:/META-INF/spring/zbus.xml" />
+<!-- 	<import resource="classpath:/META-INF/spring/zbus.xml" /> -->
 </beans>
 

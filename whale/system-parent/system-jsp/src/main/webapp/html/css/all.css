@@ -1,3 +1,5 @@
+button.btn-query{margin-left:15px; padding: 3px 20px;border:1px solid #4a9dd4; background-color:#7fc1ed; color:#fff;cursor: pointer;}
+
 div.edit-form{position:relative;  width:100%; overflow:hidden; margin: 2px 2px 0px 2px;}
 
 div.edit-form table{ border-collapse:collapse; table-layout:fixed; width:100%;border:0px;margin-bottom:2px; }

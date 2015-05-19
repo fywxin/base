@@ -349,7 +349,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			sql = page.getSql();
 		}
 		
-		if(page.getTotal() == null || page.getTotal() < 0){
+		if(page.getTotal() == null || page.getTotal() < 1){
 			if(Strings.isBlank(countSql)){
 				countSql = "select count(1) from ("+sql+") t_t";
 			}
