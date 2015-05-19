@@ -61,9 +61,14 @@ public class LogDao extends BaseDao<Log, String>{
 			page.addArg(TimeUtil.parseTime(page.getParamStr("endTime"), TimeUtil.COMMON_FORMAT).getTime());
 		}
 		
-		if(page.getParamInteger("rsType") != null){
-			param.append("AND t.rsType =? ");
-			page.addArg(page.getParamInteger("rsType"));
+		Integer rsType = page.getParamInteger("rsType");
+		if(rsType != null){
+			if(rsType == 11){
+				param.append("AND t.rsType != 1 ");
+			}else{
+				param.append("AND t.rsType =? ");
+				page.addArg(page.getParamInteger("rsType"));
+			}
 		}
 		if(Strings.isNotBlank(page.getParamStr("appId"))){
 			param.append("AND t.appId like ? ");

@@ -90,8 +90,14 @@ public class LogDao {
 			pattern = Pattern.compile(page.getParamStr("userName"), Pattern.CASE_INSENSITIVE);  
 			param.put("userName", pattern);
 		}
-		if(page.getParamInteger("rsType") != null){
-			param.put("rsType", page.getParamInteger("rsType"));
+		
+		Integer rsType = page.getParamInteger("rsType");
+		if(rsType != null){
+			if(rsType == 11){
+				param.put("rsType", new Document("$ne", 1));
+			}else{
+				param.put("rsType", rsType);
+			}
 		}
 		if(Strings.isNotBlank(page.getParamStr("startTime"))){
 			long stime = TimeUtil.parseTime(page.getParamStr("startTime"), TimeUtil.COMMON_FORMAT).getTime();

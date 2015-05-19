@@ -5,7 +5,7 @@
 <title>日志列表</title>
 <%@include file="/html/jsp/common.jsp"%>
 <script type="text/javascript">
-var rsStatus = {1:"<span class='sgreen'>正常</span>",2:"<span class='sred'>系统异常</span>",3:"<span class='sorange'>OrmException</span>",4:"<span class='sorange'>运行时异常</span>",5:"<span class='sred'>业务异常</span>",6:"<span class='sgray'>未知异常</span>"};
+var rsStatus = {1:"<span class='sgreen'>成功</span>",2:"<span class='sred'>系统异常</span>",3:"<span class='sorange'>OrmException</span>",4:"<span class='sorange'>运行时异常</span>",5:"<span class='sred'>业务异常</span>",6:"<span class='sgray'>未知异常</span>"};
 var time = new Date();
 $(function (){
     $.grid({
@@ -58,12 +58,15 @@ function view(id){
 							<td class="td-value">
 								<select id="rsType" name="rsType" style="width: 165px;">
 									<option value="">--请选择--</option>
-									<option value="1">处理正常</option>
-									<option value="2">系统异常</option>
-									<option value="3">ORM异常</option>
-									<option value="4">运行时异常</option>
-									<option value="5">业务异常</option>
-									<option value="0">其他异常</option>
+									<option value="1">处理成功</option>
+									<option value="11">返回异常</option>
+									<optgroup label="异常">
+										<option value="2">系统异常</option>
+										<option value="3">ORM异常</option>
+										<option value="4">运行时异常</option>
+										<option value="5">业务异常</option>
+										<option value="0">其他异常</option>
+									</optgroup>
 								</select>
 							</td>
 							<td class="td-label">操作类型</td>
