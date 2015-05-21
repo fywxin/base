@@ -141,6 +141,7 @@ public class JvmCacheService<M extends Serializable> extends AbstractCacheServic
 			
 			while(true){
 				try {
+					long time = System.currentTimeMillis();
 					CacheEntry val = null;
 					for(Map.Entry<String, CacheEntry> entry : cache.entrySet()){
 						if(entry.getValue().isOutOfDate()){
@@ -155,8 +156,10 @@ public class JvmCacheService<M extends Serializable> extends AbstractCacheServic
 					if(num.get() < maxCacheNum){
 						lostRec.set(0);
 					}
-					
-					Thread.sleep(CACHE_SCAN_INTERVAL);
+					long remaini = CACHE_SCAN_INTERVAL - (System.currentTimeMillis() - time);
+					if(remaini > 0){
+						Thread.sleep(remaini);
+					}
 				} catch (Exception e) {
 					logger.error("JVM CACHE: 清除过期缓存出现异常：", e);
 				}
