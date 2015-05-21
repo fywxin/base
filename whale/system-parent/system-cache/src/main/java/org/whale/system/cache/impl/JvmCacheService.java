@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,15 @@ public class JvmCacheService<M extends Serializable> extends AbstractCacheServic
 	
 	private static final Long CACHE_SCAN_INTERVAL = PropertiesUtil.getValueInt("cache.jvm.exp.interval", 10) * 1000L;
 	
+	//cache 内保存的最大记录数
+	private static final Long maxCacheNum = PropertiesUtil.getValueLong("cache.jvm.maxCacheNum", 393216L);
+	
+	//当前缓存记录数，由于 ConcurrentHashMap 的size方法会锁定整个表，所以退而取其次
+	private AtomicLong num = new AtomicLong(0);
+	
+	//丢失的更新记录累积
+	private AtomicInteger lostRec = new AtomicInteger(0);
+	
 	public JvmCacheService() {
 		Thread thread = new JvmCacheExpScanThread();
 		thread.setName("JVM Cache缓存过期扫描线程");
@@ -31,16 +42,26 @@ public class JvmCacheService<M extends Serializable> extends AbstractCacheServic
 	
 	@Override
 	public void doPut(String cacheName, String key, M value, Integer seconds) {
-		this.cache.put(this.getKey(cacheName, key), new CacheEntry(value, seconds));
+		if(num.getAndIncrement() > maxCacheNum){
+			logger.warn("JVM CACHE: 当前缓存数量超过：{}， 丢弃 {} 条新记录" , lostRec.incrementAndGet());
+			num.decrementAndGet();
+		}else{
+			this.cache.put(this.getKey(cacheName, key), new CacheEntry(value, seconds));
+		}
 	}
 
 	@Override
 	public void mdoPut(String cacheName, Map<String, M> keyValues, Integer seconds) {
-		Map<String, CacheEntry> map = new HashMap<String, CacheEntry>(keyValues.size() * 2);
-		for(Map.Entry<String, M> entry : keyValues.entrySet()){
-			map.put(this.getKey(cacheName, entry.getKey()), new CacheEntry(entry.getValue(), seconds));
+		if(num.addAndGet(keyValues.size()) > maxCacheNum){
+			logger.warn("JVM CACHE: 当前缓存数量超过：{}， 丢弃 {} 条新记录" , lostRec.addAndGet(keyValues.size()));
+			num.addAndGet(-keyValues.size());
+		}else{
+			Map<String, CacheEntry> map = new HashMap<String, CacheEntry>(keyValues.size() * 2);
+			for(Map.Entry<String, M> entry : keyValues.entrySet()){
+				map.put(this.getKey(cacheName, entry.getKey()), new CacheEntry(entry.getValue(), seconds));
+			}
+			this.cache.putAll(map);
 		}
-		this.cache.putAll(map);
 	}
 
 	@Override
@@ -64,13 +85,20 @@ public class JvmCacheService<M extends Serializable> extends AbstractCacheServic
 
 	@Override
 	public void doDel(String cacheName, String key) {
-		this.cache.remove(this.getKey(cacheName, key));
+		CacheEntry entry = this.cache.remove(this.getKey(cacheName, key));
+		if(entry != null){
+			num.decrementAndGet();
+		}	
 	}
 
 	@Override
 	public void mdoDel(String cacheName, List<String> keys) {
+		CacheEntry entry = null;
 		for(String key : keys){
-			this.doDel(cacheName, key);
+			entry = this.cache.remove(this.getKey(cacheName, key));
+			if(entry != null){
+				num.decrementAndGet();
+			}
 		}
 	}
 	
@@ -92,6 +120,7 @@ public class JvmCacheService<M extends Serializable> extends AbstractCacheServic
 		for(String key : keys){
 			if(key.startsWith(cacheName+"_")){
 				this.cache.remove(key);
+				num.decrementAndGet();
 			}
 		}
 	}
@@ -120,6 +149,13 @@ public class JvmCacheService<M extends Serializable> extends AbstractCacheServic
 							}
 							cache.remove(key);
 						}
+						
+						long n = num.addAndGet(new Long(removeKeys.size()));
+						logger.info("当前缓存记录数：{}", n);
+						if(num.getAndIncrement() < maxCacheNum){
+							lostRec.set(0);
+						}
+						
 						removeKeys.clear();
 					}
 					
