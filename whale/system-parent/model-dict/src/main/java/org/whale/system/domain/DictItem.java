@@ -33,6 +33,9 @@ public class DictItem extends BaseEntry{
 	@Column(cnName="元素值")
 	private String itemVal;
 	
+	@Column(cnName="元素值扩展")
+	private String itemValExt;
+	
 	@Column(cnName="备注")
 	private String remark;
 	
@@ -105,6 +108,14 @@ public class DictItem extends BaseEntry{
 
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
+	}
+	
+	public String getItemValExt() {
+		return itemValExt;
+	}
+
+	public void setItemValExt(String itemValExt) {
+		this.itemValExt = itemValExt;
 	}
 
 	@Override

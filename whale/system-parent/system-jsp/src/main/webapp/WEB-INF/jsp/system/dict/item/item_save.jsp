@@ -43,6 +43,9 @@ $(function() {
 			"itemVal": {
 				maxlength: 1024
 			},
+			"itemValExt": {
+				maxlength: 1024
+			},
 			"orderNo": {
 				maxlength: 5
 			},
@@ -85,6 +88,12 @@ $(function() {
 							<td class="td-label" >排列顺序</td>
 							<td class="td-value">
 								<input type="text" style="width:160px;" id="orderNo" name="orderNo" value="${nextNum }" maxlength="5" onkeyup="value=value.replace(/[^\d]/g,'')" title="最多5个字"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="td-label" >元素扩展值</td>
+							<td class="td-value" colspan="3">
+								<textarea id="itemValExt" name="itemValExt" rows="5" title="最多只能输入1000个字"></textarea>
 							</td>
 						</tr>
 						<tr>

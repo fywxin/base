@@ -255,6 +255,38 @@ public class DictCacheService implements Bootable{
 	}
 	
 	/**
+	 * 根据字典编码或元素编码获取字典元素值
+	 * @param dictCode
+	 * @param itemCode
+	 * @return
+	 */
+	public String getItemValueExt(String dictCode, String itemCode) {
+		DictItem dictItem = getByDictCodeAndItemCode(dictCode, itemCode);
+		if (dictItem == null)
+			return null;
+		String value = dictItem.getItemValExt();
+		if (Strings.isBlank(value)) {
+			logger.warn("缓存中字典编码 [" + dictCode + "] 字典元素编码 [" + itemCode
+					+ "] 的字典元素的扩展文本值为空");
+		}
+		return value;
+	}
+	
+	/**
+	 * 根据字典编码或元素编码获取字典元素值
+	 * @param dictCode
+	 * @param itemCode
+	 * @param defVal
+	 * @return
+	 */
+	public String getItemValueExt(String dictCode, String itemCode, String defVal) {
+		String value = getItemValueExt(dictCode, itemCode);
+		if(Strings.isBlank(value))
+			value = defVal;
+		return value;
+	}
+	
+	/**
 	 * 获取Integer值
 	 * @param dictCode
 	 * @param itemCode

@@ -48,6 +48,12 @@ function update(){
 							<td class="td-value">${item.orderNo }</td>
 						</tr>
 						<tr>
+							<td class="td-label" >元素扩展值</td>
+							<td class="td-value" colspan="3">
+								<div style="height:30px;" class="textAreaDiv">${item.itemValExt }</div>
+							</td>
+						</tr>
+						<tr>
 							<td class="td-label" >备注</td>
 							<td class="td-value" colspan="3">
 								<div style="height:40px;" class="textAreaDiv">${item.remark }</div>
