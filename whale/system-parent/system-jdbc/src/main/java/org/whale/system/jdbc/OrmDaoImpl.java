@@ -569,7 +569,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		} catch (Exception e) {
 			throw new OrmException("实体类"+ormTable.getClass()+"默认构造方法不能访问！");
 		}
-		List<OrmColumn> valCols = this.ormTable.getValueCols();
+		List<OrmColumn> valCols = this.getOrmTable().getValueCols();
 		if(valCols != null && valCols.size() > 0){
 			for(OrmColumn col : valCols){
 				AnnotationUtil.setFieldValue(t, col.getField(), null);
