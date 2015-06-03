@@ -351,7 +351,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		
 		if(page.getTotal() == null || page.getTotal() < 1){
 			if(Strings.isBlank(countSql)){
-				countSql = "select count(1) from ("+sql+") t_t";
+				countSql = "select count(1) "+sql.substring(sql.indexOf("from"));
 			}
 			logger.debug("ORM: 开始总数查询: {}\n参数：{}", countSql, params);
 			page.setTotal(this.jdbcTemplate.queryForLong(countSql,params.toArray()));
@@ -359,7 +359,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		
 		if(page.isAutoPage()){
 			if(DbKind.isMysql()){
-				sql = "SELECT t_t.* FROM ( "+sql+" ) t_t LIMIT ?, ?";
+				sql += " LIMIT ?, ?";
 				params.add((page.getPageNo()-1) * page.getPageSize());
 				params.add(page.getPageSize());
 			}else{

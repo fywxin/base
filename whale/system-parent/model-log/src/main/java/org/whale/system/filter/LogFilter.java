@@ -2,6 +2,7 @@ package org.whale.system.filter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -48,23 +49,25 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
    	private long currentNetErrorTime = 0;
    	// 队列长度
    	private int defaultQueueSize = 150;
-
+   	//队列锁通知对象
    	private final Object notify = new Object();
-
+   	//不记录日志数据
    	private boolean stopFlag = false;
-   	
+   	//保存增删改操作日志
    	private boolean saveDllLog = true;
-   	
+   	//保存查询日志
    	private boolean saveFindLog = true;
    	//是否打印sql调用结果
    	private boolean printRsStr = true;
-   
+   	//只保存异常记录，只针对存储到mysql关系型数据库时，可以开启此开关
+   	private boolean onlyException = false;
+   	//接口保存日志
 	private LogRpc logRpc;
-	
+	//本项目的appId，应用日志统一存储时，用于区分属于不同的应用
 	private String appId = null;
-	
+	//项目进程id，用于防止id重复
 	private int pId = LangUtil.getPid();
-	
+	//自增序列
 	private AtomicLong seq = new AtomicLong(0);
 	
 	
@@ -191,18 +194,37 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
                 }
                 
                 if(interval == 0 || interval >= defaultNetErrorTryTime){
-                	for(Log log : logs){
-                		if(Strings.isBlank(log.getArgStr())){
-                			log.setArgStr(JSON.toJSONString(log.getArg()));
-                		}
-                		if(printRsStr && Strings.isBlank(log.getRsStr())){
-                			log.setRsStr(JSON.toJSONString(log.getRs()));
-                		}
-                		log.setArg(null);
-                		log.setRs(null);
-                	}
                 	
-                    this.logRpc.save(logs);
+                	List<Log> expLogs = new LinkedList<Log>();
+                	for(Log log : logs){
+                		if(this.onlyException){ //只保存异常日志，扔掉非异常日志对象
+                			if(log.getRsType() != 1){
+                				if(Strings.isBlank(log.getArgStr())){
+    	                			log.setArgStr(JSON.toJSONString(log.getArg()));
+    	                		}
+    	                		if(printRsStr && Strings.isBlank(log.getRsStr())){
+    	                			log.setRsStr(JSON.toJSONString(log.getRs()));
+    	                		}
+    	                		log.setArg(null);
+    	                		log.setRs(null);
+    	                		expLogs.add(log);
+                			}
+                		}else{//保存所有日志
+                			if(Strings.isBlank(log.getArgStr())){
+	                			log.setArgStr(JSON.toJSONString(log.getArg()));
+	                		}
+	                		if(printRsStr && Strings.isBlank(log.getRsStr())){
+	                			log.setRsStr(JSON.toJSONString(log.getRs()));
+	                		}
+	                		log.setArg(null);
+	                		log.setRs(null);
+                		}
+                	}
+                	if(this.onlyException){
+                		this.logRpc.save(expLogs);
+                	}else{
+                		this.logRpc.save(logs);
+                	}
                     if(logger.isDebugEnabled()){
                         logger.debug("保存日志成功， 具体日志信息: {}", logs);
                     }
