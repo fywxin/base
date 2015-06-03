@@ -87,7 +87,7 @@ public class CodeEngine {
 				}
 			}
 		}
-		File file = new File(dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_FTL_PATH));
+		File file = new File(dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_FTL_PATH, "E:\\github\\platform\\base\\whale\\system-ext\\ext-code\\src\\main\\resources\\templates"));
 		cfg.setDirectoryForTemplateLoading(file);
 		return cfg;
 	}

@@ -7,22 +7,19 @@ import java.util.Date;
 	</#if>
 </#list>
 
-import org.whale.system.base.BaseEntry;
-import org.whale.system.jdbc.annotation.Column;
-import org.whale.system.jdbc.annotation.Id;
-import org.whale.system.jdbc.annotation.Table;
+import org.whale.system.annotation.jdbc.Column;
+import org.whale.system.annotation.jdbc.Id;
+import org.whale.system.annotation.jdbc.Table;
+import org.whale.system.annotation.jdbc.Validate;
 <#list domain.attrs as attr >
 	<#if !attr.isId>
 	<#if attr.orderNum gt 0>
-import org.whale.system.jdbc.annotation.Order;
+import org.whale.system.annotation.jdbc.Order;
 		<#break>
 	</#if>
 	</#if>
 </#list>
-
-<#if domain.pkgName != "system">
-import org.whale.system.domain.BaseEntry;
-</#if>
+import org.whale.system.base.BaseEntry;
 
 /**
  * ${domain.cnName}
@@ -44,7 +41,8 @@ public class ${domain.name} extends BaseEntry {
 	<#if attr.orderNum gt 0>
 	@Order(index=${attr.orderNum})
 	</#if>
-  	@Column(cnName="${attr.cnName}", name="${attr.sqlName}"<#if !attr.nullAble>, nullable=${attr.nullAble?c}</#if><#if attr.uniqueAble>, unique=${attr.uniqueAble?c}</#if><#if !attr.updateAble>, updateable=${attr.updateAble?c}</#if>)
+	<#if !attr.nullAble>@Validate(required=true)</#if>
+  	@Column(cnName="${attr.cnName}", name="${attr.sqlName}"<#if attr.uniqueAble>, unique=${attr.uniqueAble?c}</#if><#if !attr.updateAble>, updateable=${attr.updateAble?c}</#if>)
 	private ${attr.type} ${attr.name};
 	
 	</#if>

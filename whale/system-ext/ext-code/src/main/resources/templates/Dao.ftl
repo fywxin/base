@@ -6,9 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import org.whale.system.base.BaseDao;
 import org.whale.${domain.pkgName!"system"}.domain.${domain.name};
-<#if domain.pkgName != "system">
-import org.whale.system.dao.BaseDao;
-</#if>
 
 @Repository
 public class ${domain.name}Dao extends BaseDao<${domain.name}, Long> {

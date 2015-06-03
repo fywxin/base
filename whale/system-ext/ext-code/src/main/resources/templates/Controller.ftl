@@ -66,14 +66,6 @@ public class ${domain.name}Controller extends BaseController {
 	
 		this.${domain.name?uncap_first}Service.save(${domain.name?uncap_first});
 		WebUtil.printSuccess(request, response);
-tpServletResponse response, ${domain.idAttr.type} ${domain.idAttr.name}){
-		${domain.name} ${domain.name?uncap_first} = this.${domain.name?uncap_first}Service.get(${domain.idAttr.name});
-		if(${domain.name?uncap_first} == null){
-			throw new SysException("查找不到 ${domain.cnName} id="+${domain.idAttr.name});
-		}
-		
-		return new ModelAndView("${domain.pkgName!"system"}/${domain.name?uncap_first}/${domain.name?uncap_first}_update")
-				.addObject("item", ${domain.name?uncap_first});
 	}
 	
 	@RequestMapping("/goUpdate")

@@ -1,10 +1,10 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" style="overflow:hidden;">
+<!DOCTYPE html>
+<html>
 <head>
     <title>${domain.cnName} 树</title>
-    <%@include file="/html/jsp/common.jsp" %>
+<%@include file="/html/jsp/parent.jsp" %>
+<%@include file="/html/jsp/ztree.jsp" %>
 <script type="text/javascript">
 	var zTree;
 
@@ -12,8 +12,7 @@
 		view: {
 			dblClickExpand: false,
 			showLine: true,
-			selectedMulti: false,
-			expandSpeed: ($.browser.msie && parseInt($.browser.version)<=6)?"":"fast"
+			selectedMulti: false
 		},
 		
 		data: {

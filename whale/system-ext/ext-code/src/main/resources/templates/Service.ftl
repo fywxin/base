@@ -9,12 +9,9 @@ import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
 
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.BaseService;
+import org.whale.system.service.BaseService;
 import org.whale.${domain.pkgName!"system"}.dao.${domain.name}Dao;
 import org.whale.${domain.pkgName!"system"}.domain.${domain.name};
-<#if domain.pkgName != "system">
-import org.whale.system.service.BaseService;
-</#if>
 
 /**
  * ${domain.cnName} 管理
