@@ -68,6 +68,9 @@ public class CombineCacheService<M extends Serializable> extends AbstractCacheSe
 		M m = levelFirstCache.get(cacheName, key);
 		if(m == null){
 			m =levelSecondCache.get(cacheName, key);
+			if(m != null){
+				levelFirstCache.put(cacheName, key, m);
+			}
 		}
 		return m;
 	}
@@ -80,6 +83,9 @@ public class CombineCacheService<M extends Serializable> extends AbstractCacheSe
 			m = levelFirstCache.get(cacheName, key);
 			if(m == null){
 				m =levelSecondCache.get(cacheName, key);
+				if(m != null){
+					levelFirstCache.put(cacheName, key, m);
+				}
 			}
 			rs.add(m);
 		}

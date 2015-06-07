@@ -61,6 +61,7 @@ public class InitOrmCache implements Bootable {
 				OrmClass ormclass = ormContext.getOrmClass(clazz);
 				dao.setRowMapper(ormclass.getRowMapper());
 				
+				
 				this.dbInfoFetcher.alertTable(clazz);
 				
 				logger.info("ORM：初始化类["+clazz.getName()+"]配置信息完成!");
