@@ -19,9 +19,9 @@
 
   <dependencies>
   		<dependency>
-  <groupId>io.netty</groupId>
-  <artifactId>netty-all</artifactId>
-  <version>4.1.0.Beta3</version>
-</dependency>
+		  <groupId>org.whale</groupId>
+		  <artifactId>system-common</artifactId>
+		  <version>${project.parent.version}</version>
+		</dependency>
   </dependencies>
 </project>
