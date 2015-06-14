@@ -32,6 +32,7 @@ import org.whale.system.jdbc.orm.entry.OrmValue;
 import org.whale.system.jdbc.orm.value.ValueBulider;
 import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
+import org.whale.system.jdbc.util.OrmUtil;
 
 public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implements IOrmDao<T, PK> {
 
@@ -345,7 +346,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		List<Object> params = page.getArgs();
 		
 		if(Strings.isBlank(sql)){
-			this.createPageSql(page);
+			OrmUtil._createPageSql(this, page);
 			sql = page.getSql();
 		}
 		
@@ -353,7 +354,6 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			if(Strings.isBlank(countSql)){
 				countSql = "select count(1) "+sql.substring(sql.indexOf("from"));
 			}
-			logger.debug("ORM: 开始总数查询: {}\n参数：{}", countSql, params);
 			page.setTotal(this.jdbcTemplate.queryForLong(countSql,params.toArray()));
 		}
 		
@@ -369,7 +369,6 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			}
 		}
 		
-		logger.debug("ORM: 开始分页查询: {} \n参数：{}", sql, params);
 		page.setDatas(this.jdbcTemplate.queryForList(sql, params.toArray()));
 		
 		//防止sql语句返回前台，导致安全问题
@@ -377,58 +376,8 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		page.setSql(null);
 		page.getArgs().clear();
 		page.getParam().clear();
-		
-		logger.debug("ORM: 结束分页查询，返回: {}", page.getDatas());
 	}
 	
-	/**
-	 * 创建分页sql语句，默认单表简单查询
-	 * 
-	 * 子类可以覆盖此方法
-	 * @param page
-	 */
-	public void createPageSql(Page page){
-		StringBuilder strb = new StringBuilder();
-		if(page.getParam().size() > 0){
-			for(Map.Entry<String, Object> entry : page.getParam().entrySet()){
-				if(entry.getValue() != null){
-					if((entry.getValue() instanceof String)){
-						if(Strings.isNotBlank(entry.getValue().toString())){
-							strb.append(" AND t.").append(entry.getKey()).append(" like ? ");
-							page.addArg("%"+entry.getValue().toString().trim()+"%");;
-						}
-					}else{
-						strb.append(" AND t.").append(entry.getKey()).append(" = ? ");
-						page.addArg(entry.getValue());;
-					}
-				}
-			}
-		}
-		
-		OrmTable ormTable = getOrmTable();
-		page.setCountSql("SELECT count(1) FROM " + ormTable.getTableDbName() +" t WHERE 1=1 "+strb.toString());
-		
-		if(page.getOrderColumn().size() < 1){
-			strb.append(getOrmTable().getSqlOrderSuffix());
-		}else{
-			for(int i=0; i<page.getOrderColumn().size(); i++){
-				strb.append(" ORDER BY t.").append(page.getOrderColumn().get(i)).append(page.getOrderAsc().get(i).booleanValue() ? " asc" : " desc");
-				if(i != page.getOrderColumn().size()-1){
-					strb.append(",");
-				}
-			}
-		}
-		
-		page.setSql(this.getSqlHead().append(strb.toString()).toString());
-	}
-	
-	/**
-	 * 返回当前实体查找sql的前半部分
-	 * @return
-	 */
-	public StringBuilder getSqlHead(){
-		return new StringBuilder(getOrmTable().getSqlHeadPrefix());
-	}
 	
 	/**
 	 * 获取当前实体的数据库表名
@@ -497,8 +446,6 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	public Class<T> getClazz() {
 		return clazz;
 	}
-	
-	
 	
 	public void setOrmContext(OrmContext ormContext) {
 		this.ormContext = ormContext;
@@ -577,7 +524,24 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		}
 		return t;
 	}
-
 	
-
+	/**
+	 * 取得当前对象的select t.* from db t where 1=1 
+	 * 
+	 * @return
+	 * 2015年6月14日 上午7:57:01
+	 */
+	public String  sqlHead(){
+		return getOrmTable().getSqlHeadPrefix();
+	}
+	
+	/**
+	 * 取得当前对象的 order by t.x
+	 * 
+	 * @return
+	 * 2015年6月14日 上午7:57:01
+	 */
+	public String sqlOrder(){
+		return this.getOrmTable().getSqlOrderSuffix();
+	}
 }

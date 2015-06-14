@@ -33,44 +33,22 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 //		return this.query(strb.toString(), userId);
 	}
 	
+	final String queryRoleByUserId_SQL = "SELECT t.* FROM sys_role t, sys_user_role ur WHERE t.roleId = ur.roleId  AND ur.userId = ?  order by t.roleId";
 	public List<Role> queryRoleByUserId(Long userId){
-		StringBuilder strb = new StringBuilder();
-		strb.append("SELECT ").append(this.ormContext.getOrmTable(Role.class).getSqlColPrexs()).append(" ")
-			.append("FROM sys_role t, sys_user_role ur ")
-			.append("WHERE t.roleId = ur.roleId ")
-			.append("    AND ur.userId = ? ")
-			.append(" order by t.roleId ");
 		
-		return this.queryOther(Role.class, strb.toString(), userId);
-		
-		//return this.jdbcTemplate.query(strb.toString(), new Object[]{userId}, this.ormContext.getRowMapper(Role.class));
+		return this.queryOther(Role.class, queryRoleByUserId_SQL, userId);
 	}
 	
+	final String queryUsersByRoleId_SQL = "SELECT t.* FROM sys_user t, sys_user_role ur WHERE t.userId = ur.userId AND ur.roleId = ?  order by t.userId";
 	public List<User> queryUsersByRoleId(Long roleId){
-		StringBuilder strb = new StringBuilder();
-		strb.append("SELECT ").append(this.ormContext.getOrmTable(User.class).getSqlColPrexs()).append(" ")
-			.append("FROM sys_user t, sys_user_role ur ")
-			.append("WHERE t.userId = ur.userId ")
-			.append("    AND ur.roleId = ? ")
-			.append(" order by t.userId ");
 		
-		return this.queryOther(User.class, strb.toString(), roleId);
-		
-		//return this.jdbcTemplate.query(strb.toString(), new Object[]{roleId}, this.ormContext.getRowMapper(User.class));
+		return this.queryOther(User.class, queryUsersByRoleId_SQL, roleId);
 	}
 	
+	final String queryUsersByRoleCode_SQL = "SELECT t.* FROM sys_user t, sys_user_role ur, sys_role r WHERE t.userId = ur.userId  AND ur.roleId = r.roleId AND r.roleCode = ? order by t.userId";
 	public List<User> queryUsersByRoleCode(String roleCode){
-		StringBuilder strb = new StringBuilder();
-		strb.append("SELECT ").append(this.ormContext.getOrmTable(User.class).getSqlColPrexs()).append(" ")
-			.append("FROM sys_user t, sys_user_role ur, sys_role r ")
-			.append("WHERE t.userId = ur.userId ")
-			.append("    AND ur.roleId = r.roleId ")
-			.append("    AND r.roleCode = ?")
-			.append(" order by t.userId ");
 		
-		return this.queryOther(User.class, strb.toString(), roleCode);
-		
-		//return this.jdbcTemplate.query(strb.toString(), new Object[]{roleCode}, this.ormContext.getRowMapper(User.class));
+		return this.queryOther(User.class, queryUsersByRoleCode_SQL, roleCode);
 	}
 	
 	public void deleteByRoleId(Long roleId){

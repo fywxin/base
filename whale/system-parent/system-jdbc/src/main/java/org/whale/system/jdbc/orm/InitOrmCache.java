@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import org.whale.system.common.constant.OrderNumConstant;
 import org.whale.system.common.util.Bootable;
@@ -49,18 +50,21 @@ public class InitOrmCache implements Bootable {
 		List<BaseDao> daos = SpringContextHolder.getAutowiredClasses(BaseDao.class);
 		
 		
-		Method method = null;
+		Method getClazz = null;
+		Method setRowMapper = null;
 		Class<?> clazz = null;
 		for (BaseDao dao : daos) {
 			try {
 				// 根据反射获取子类dao对应的orm实体对象
-				method = dao.getClass().getMethod("getClazz");
-				clazz = (Class<?>) method.invoke(dao);
+				getClazz = dao.getClass().getMethod("getClazz");
+				setRowMapper = dao.getClass().getMethod("setRowMapper", RowMapper.class);
+				clazz = (Class<?>) getClazz.invoke(dao);
 				
 				logger.info("ORM：初始化类["+clazz.getName()+"]配置信息...");
 				OrmClass ormclass = ormContext.getOrmClass(clazz);
-				dao.setRowMapper(ormclass.getRowMapper());
 				
+				//使用反射设置RowMapper，优化IOrmDao接口
+				setRowMapper.invoke(dao, ormclass.getRowMapper());
 				
 				this.dbInfoFetcher.alertTable(clazz);
 				

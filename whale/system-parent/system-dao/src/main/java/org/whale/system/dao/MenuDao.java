@@ -14,10 +14,9 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	 * @return
 	 */
 	public List<Menu> getDirMenus(){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.menuType != 3 order by t.parentId, t.orderNo");
+		String sql = this.sqlHead()+"and t.menuType != 3"+this.sqlOrder();
 		
-		return this.query(strb.toString());
+		return this.query(sql);
 	}
 	
 	public List<Menu> getByParentId(Long parentId){

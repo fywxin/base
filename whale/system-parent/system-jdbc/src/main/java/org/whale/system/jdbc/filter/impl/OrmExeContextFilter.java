@@ -11,6 +11,7 @@ import org.whale.system.base.Page;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.jdbc.filter.BaseDaoFilterWarpper;
+import org.whale.system.jdbc.util.OrmUtil;
 
 /**
  * ORM容器上下文获取截取器
@@ -202,7 +203,7 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 		Map<String, Object> param = new HashMap<String, Object>(page.getParam().size() * 2);
 		param.putAll(page.getParam());
 		if(page.getSql() == null){
-			baseDao.createPageSql(page);
+			OrmUtil._createPageSql(baseDao, page);
 		}
 		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryPage", page.getSql(), param, baseDao));
 	}

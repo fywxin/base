@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Page;
-import org.whale.system.common.util.Strings;
 import org.whale.system.domain.User;
 
 @Repository
@@ -51,27 +49,6 @@ public class UserDao extends BaseDao<User, Long> {
 			rs.add(Long.parseLong(map.get("authId").toString()));
 		}
 		return rs;
-	}
-
-	@Override
-	public void createPageSql(Page page) {
-		StringBuilder strb = new StringBuilder();
-		strb.append(" FROM ").append(getOrmTable().getTableDbName()).append(" t WHERE t.isAdmin=0 ");
-		if(Strings.isNotBlank(page.getParamStr("userName"))){
-			strb.append(" AND t.userName like ?");
-			page.addArg("%"+page.getParamStr("userName")+"%");
-		}
-		if(Strings.isNotBlank(page.getParamStr("realName"))){
-			strb.append(" AND t.realName like ?");
-			page.addArg("%"+page.getParamStr("realName")+"%");
-		}
-		if(page.getParamInteger("deptId") != null){
-			strb.append(" AND t.deptId=?");
-			page.addArg(page.getParamInteger("deptId"));
-		}
-		
-		page.setCountSql("SELECT count(1) "+strb.toString());
-		page.setSql("SELECT t.*, (select d.deptName from sys_dept d where d.id = t.deptId) as deptName "+strb.toString()+" ORDER BY t.userId");
 	}
 	
 	

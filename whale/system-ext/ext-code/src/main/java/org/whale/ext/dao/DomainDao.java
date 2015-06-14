@@ -7,16 +7,16 @@ import org.whale.system.base.BaseDao;
 public class DomainDao extends BaseDao<Domain, Long> {
 
 	public Domain getByName(String name){
-		StringBuilder strb = this.getSqlHead();
-		strb.append(" AND t.name = ?");
+		Domain t = this.newT();
+		t.setName(name);
 		
-		return this.getObject(strb.toString(), name);
+		return this.getObject(t);
 	}
 	
 	public Domain getByClazzName(String clazzName){
-		StringBuilder strb = this.getSqlHead();
-		strb.append(" AND t.clazzName = ?");
+		Domain t = this.newT();
+		t.setClazzName(clazzName);
 		
-		return this.getObject(strb.toString(), clazzName);
+		return this.getObject(t);
 	}
 }

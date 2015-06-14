@@ -15,15 +15,13 @@ public class SmsDao extends BaseDao<Sms, Long> {
 	 * @return
 	 */
 	public List<Sms> queryWaitSendSmss(Integer size){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("	AND t.status = ? ")
-			.append(" ORDER BY t.sendRealTime desc, t.createTime desc");
+		String sql = this.sqlHead()+"AND t.status = ? "+this.sqlOrder();
 		
 		if(size != null && size > 0){
-			strb.append(" LIMIT 0, ").append(size);
+			sql+=" LIMIT 0, "+size;
 		}
 		
-		return this.query(strb.toString(), Sms.STATUS_SEND_WAITing);
+		return this.query(sql, Sms.STATUS_SEND_WAITing);
 	}
 	
 }

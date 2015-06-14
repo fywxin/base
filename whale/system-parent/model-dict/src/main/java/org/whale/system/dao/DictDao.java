@@ -9,8 +9,9 @@ import org.whale.system.domain.Dict;
 public class DictDao extends BaseDao<Dict, Long> {
 
 	public Dict getByDictCode(String dictCode){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.dictCode=?");
-		return this.getObject(strb.toString(), dictCode);
+		Dict dict = this.newT();
+		dict.setDictCode(dictCode);
+		
+		return this.getObject(dict);
 	}
 }

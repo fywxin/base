@@ -4,69 +4,33 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Page;
 import org.whale.system.common.util.LangUtil;
-import org.whale.system.common.util.Strings;
 import org.whale.system.domain.Auth;
 
 @Repository
 public class AuthDao extends BaseDao<Auth, Long> {
 	
-	@Override
-	public void createPageSql(Page page) {
-		StringBuilder strb = new StringBuilder();
-		strb.append(" FROM ").append(this.getOrmTable().getTableDbName()).append(" t")
-			.append(" WHERE 1=1 ");
-		if(Strings.isNotBlank(page.getParamStr("menuIds"))){
-			strb.append(" AND t.menuId in(").append(page.getParam("menuIds")).append(")");
-		}
-		if(Strings.isNotBlank(page.getParamStr("authName"))){
-			strb.append(" AND t.authName like ?");
-			page.addArg("%"+page.getParamStr("authName").trim()+"%");
-		}
-		if(Strings.isNotBlank(page.getParamStr("authCode"))){
-			strb.append(" AND t.authCode like ?");
-			page.addArg("%"+page.getParamStr("authCode").trim()+"%");
-		}
-		
-		page.setCountSql("SELECT count(1) "+strb.toString());
-		page.setSql("SELECT t.*,(select m.menuName from sys_menu m where m.menuId = t.menuId) as menuName "+strb.toString()+" ORDER BY t.authId");
-		
-	}
 
 	public List<Auth> getByMenuId(Long menuId){
-//		StringBuilder strb = this.getSqlHead();
-//		strb.append("and t.menuId= ?").append(menuId);
-//		return this.query(strb.toString(), menuId);
-		
 		Auth auth = this.newT();
 		auth.setMenuId(menuId);
 		
 		return this.query(auth);
 	}
 	
+	String getByRoleId_SQL = "SELECT a.* FROM sys_role_auth ra, sys_auth a WHERE ra.roleId = ? AND a.authId = ra.authId ";
 	public List<Auth> getByRoleId(Long roleId){
-		StringBuilder strb = new StringBuilder();
-		strb.append("SELECT a.* FROM sys_role_auth ra, ").append(this.getTableName()).append(" a ")
-			.append("WHERE ra.roleId = ? ")
-			.append("AND a.authId = ra.authId");
 		
-		return this.query(strb.toString(), roleId);
+		return this.query(getByRoleId_SQL, roleId);
 	}
 	
 	public List<Auth> getByAuthIds(List<Long> authIds){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.authId in(").append(LangUtil.joinIds(authIds)).append(")");
+		String sql = this.sqlHead()+"and t.authId in("+LangUtil.joinIds(authIds)+")"+this.sqlOrder();
 		
-		return this.query(strb.toString());
+		return this.query(sql);
 	}
 	
 	public Auth getByAuthCode(String authCode){
-//		StringBuilder strb = this.getSqlHead();
-//		strb.append("and t.authCode=?");
-//		
-//		return this.getObject(strb.toString(), authCode);
-		
 		Auth auth = new Auth();
 		auth.setAuthCode(authCode);
 		

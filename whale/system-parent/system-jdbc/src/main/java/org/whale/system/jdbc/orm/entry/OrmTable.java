@@ -40,7 +40,7 @@ public class OrmTable extends Atable {
 	/** @Order 对应sql的Order排序尾巴 */
 	private String sqlOrderSuffixStr;
 	/** @Order 对应sql的Select 字段集合头部 */
-	private String sqlHeadPrefixStr;
+	private StringBuilder sqlHeadPrefixStr;
 //	/**非空检查字段集合 */
 //	private List<OrmColumn> notNullCheckCols;
 	/**唯一性检查字段集合 */
@@ -67,14 +67,15 @@ public class OrmTable extends Atable {
 		this.setSuperClazz(table.getSuperClazz());
 	}
 	
-	public String getSqlColPrexs(){
+	
+	private String getSqlColPrexs(){
 		if(Strings.isBlank(sqlColPrexs)){
 			this.sqlColPrexs = this.getSqlColPrexs("t");
 		}
 		return sqlColPrexs;
 	}
 	
-	public String getSqlColPrexs(String as){
+	private String getSqlColPrexs(String as){
 		if(Strings.isBlank(as)){
 			as = "t";
 		}
@@ -108,15 +109,21 @@ public class OrmTable extends Atable {
 		return sqlOrderSuffixStr;
 	}
 	
+	/**
+	 * 取得当前对象的select t.* from db t where 1=1 
+	 * 
+	 * @return
+	 * 2015年6月14日 上午7:57:01
+	 */
 	public String getSqlHeadPrefix(){
 		if(sqlHeadPrefixStr == null){
 			StringBuilder strb = new StringBuilder();
 			strb.append("SELECT ").append(getSqlColPrexs()).append(" ")
 				.append("FROM ").append(this.getTableDbName()).append(" t ")
 				.append("WHERE 1=1 ");
-			sqlHeadPrefixStr = strb.toString();
+			sqlHeadPrefixStr = strb;
 		}
-		return sqlHeadPrefixStr;
+		return sqlHeadPrefixStr.toString();
 	}
 	
 	/**

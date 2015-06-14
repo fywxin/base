@@ -10,9 +10,9 @@ import org.whale.system.base.BaseDao;
 public class AttrDao extends BaseDao<Attr, Long> {
 	
 	public List<Attr> getByDomainId(Long domainId){
-		StringBuilder strb = this.getSqlHead();
-		strb.append(" AND t.domainId = ? ORDER BY t.inOrder");
+		Attr attr = this.newT();
+		attr.setDomainId(domainId);
 		
-		return this.query(strb.toString(), domainId);
+		return this.query(attr);
 	}
 }

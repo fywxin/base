@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.whale.system.base.Page;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.AuthDao;
 import org.whale.system.dao.RoleAuthDao;
@@ -72,6 +73,29 @@ public class AuthService extends BaseService<Auth, Long> {
 		return this.authDao.getByUserId(userId);
 	}
 	
+	
+
+	@Override
+	public void queryPage(Page page) {
+		StringBuilder strb = new StringBuilder();
+		strb.append(" FROM sys_auth t WHERE 1=1 ");
+		if(Strings.isNotBlank(page.getParamStr("menuIds"))){
+			strb.append(" AND t.menuId in(").append(page.getParam("menuIds")).append(")");
+		}
+		if(Strings.isNotBlank(page.getParamStr("authName"))){
+			strb.append(" AND t.authName like ?");
+			page.addArg("%"+page.getParamStr("authName").trim()+"%");
+		}
+		if(Strings.isNotBlank(page.getParamStr("authCode"))){
+			strb.append(" AND t.authCode like ?");
+			page.addArg("%"+page.getParamStr("authCode").trim()+"%");
+		}
+		
+		page.setCountSql("SELECT count(1) "+strb.toString());
+		page.setSql("SELECT t.*,(select m.menuName from sys_menu m where m.menuId = t.menuId) as menuName "+strb.toString()+" ORDER BY t.authId");
+	
+		this.roleAuthDao.queryPage(page);
+	}
 
 	@Override
 	public IOrmDao<Auth, Long> getDao() {

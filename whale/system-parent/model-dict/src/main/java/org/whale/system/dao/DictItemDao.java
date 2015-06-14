@@ -10,21 +10,20 @@ import org.whale.system.domain.DictItem;
 public class DictItemDao extends BaseDao<DictItem, Long> {
 	
 	public Integer getCurOrder(Long dictId){
-		String sql = "select max(orderNo) from "+this.getTableName()+" where dictId=?";
+		String sql = "select max(orderNo) from sys_dict_item where dictId=?";
 		return this.queryForInt(sql, dictId);
 	}
 	
 	public DictItem getByDictIdAndItemCode(Long dictId, String itemCode){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.dictId = ? ")
-			.append("and t.itemCode=?");
+		DictItem item = this.newT();
+		item.setDictId(dictId);
+		item.setItemCode(itemCode);
 		
-		return this.getObject(strb.toString(), dictId, itemCode);
+		return this.getObject(item);
 	}
 	
 	public List<DictItem> getByDictId(Long dictId){
-		StringBuilder strb = this.getSqlHead();
-		strb.append("and t.dictId = ?");
-		return this.query(strb.toString(), dictId);
+		String sql = this.sqlHead() + " and t.dictId = ? " + this.sqlOrder();
+		return this.query(sql, dictId);
 	}
 }
