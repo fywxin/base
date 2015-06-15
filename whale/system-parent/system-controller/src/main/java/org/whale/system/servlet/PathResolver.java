@@ -6,7 +6,6 @@ import javax.servlet.ServletContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 import org.whale.system.common.util.Strings;
-import org.whale.system.common.util.WebUtil;
 
 
 /**
@@ -28,9 +27,6 @@ public class PathResolver implements ServletContextAware {
 		
 		this.servletContext.setAttribute("ctx", getServletContext().getContextPath());
 		this.servletContext.setAttribute("resource", resourceRoot);
-		
-		String path = this.servletContext.getRealPath("index.jsp");
-		WebUtil.setWebPath(path.replaceAll("index.jsp", ""));
 	}
 	
 	@Override

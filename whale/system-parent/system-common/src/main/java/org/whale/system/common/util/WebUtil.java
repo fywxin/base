@@ -29,8 +29,6 @@ public class WebUtil {
 	private static final String DEFAULT_SUCCESS_MSG = "操作成功";
 	private static final String DEFAULT_FAIL_MSG = "操作失败";
 	
-	private static String WEB_PATH;
-	
 	public static Integer getInt(HttpServletRequest request, String key, Integer defVal){
 		String obj = request.getParameter(key);
 		if(obj == null || "".equals(obj.trim()))
@@ -55,13 +53,6 @@ public class WebUtil {
 		}
 	}
 	
-	public static String getWebPath(){
-		return WEB_PATH;
-	}
-	
-	public static void setWebPath(String path){
-		WEB_PATH = path;
-	}
 	
 	/**
 	 * 判断是否是ajax请求	
