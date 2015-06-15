@@ -32,7 +32,7 @@ public class RpcContext {
 	
 	private HttpInvoke nextInvoke;
 	
-	private HttpInvokeRouter httpInvokeRouter;
+	private HttpInvokeFactory httpInvokeRouter;
 
 	public MethodInvocation getInvocation() {
 		return invocation;
@@ -122,11 +122,11 @@ public class RpcContext {
 		this.nextInvoke = nextInvoke;
 	}
 
-	public HttpInvokeRouter getHttpInvokeRouter() {
+	public HttpInvokeFactory getHttpInvokeRouter() {
 		return httpInvokeRouter;
 	}
 
-	public void setHttpInvokeRouter(HttpInvokeRouter httpInvokeRouter) {
+	public void setHttpInvokeRouter(HttpInvokeFactory httpInvokeRouter) {
 		this.httpInvokeRouter = httpInvokeRouter;
 	}
 	

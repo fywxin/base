@@ -7,10 +7,10 @@
 		<artifactId>system-parent</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>inf-client</artifactId>
+	<artifactId>inf-api-test</artifactId>
 	<packaging>jar</packaging>
 
-	<name>inf-client</name>
+	<name>inf-api-test</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -18,10 +18,6 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.whale</groupId>
-			<artifactId>system-common</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
+
 	</dependencies>
 </project>

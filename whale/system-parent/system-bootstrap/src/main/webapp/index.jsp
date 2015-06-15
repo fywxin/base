@@ -65,8 +65,9 @@ $(document).ready(function(){
 </head>
 <div class="container">
   <div class="loginBox row">
-  		<h2 class="text-center">后台登录</h2>
+  		<div class="col-sm-12 col-md-12" >后台登录</div>
 		<form id="wyccn" name="wyccn" action="http://jx.5idf.com" method="post" class="form-horizontal">
+		
 		  <div class="form-group has-success">
 		    <label for="nick_name" class="col-sm-2 col-md-2 control-label">用户名</label>
 		    <div class="col-sm-10 col-md-10">

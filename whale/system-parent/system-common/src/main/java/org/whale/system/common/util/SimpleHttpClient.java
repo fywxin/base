@@ -262,7 +262,7 @@ public class SimpleHttpClient {
 				String inputLine;
 				
 				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
+					response.append(inputLine).append("\n");
 				}
 			}finally{
 				ips.close();

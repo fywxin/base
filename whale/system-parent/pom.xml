@@ -16,6 +16,7 @@
 		<module>system-service</module>
 		<module>system-controller</module>
 		<module>system-jsp</module>
+		<module>system-bootstrap</module>
 		
 		<module>model-dict</module>
 		<module>model-file</module>

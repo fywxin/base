@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.remoting.support.UrlBasedRemoteAccessor;
 import org.whale.inf.client.chain.impl.RootHttpInvoke;
 
-public class HttpInvokeRouter extends UrlBasedRemoteAccessor implements MethodInterceptor, FactoryBean{
+public class HttpInvokeFactory extends UrlBasedRemoteAccessor implements MethodInterceptor, FactoryBean{
 	
 	private Object proxyObject = null;
 	
