@@ -25,7 +25,7 @@ public class AuthDao extends BaseDao<Auth, Long> {
 	}
 	
 	public List<Auth> getByAuthIds(List<Long> authIds){
-		String sql = this.sqlHead()+"and t.authId in("+LangUtil.joinIds(authIds)+")"+this.sqlOrder();
+		String sql = this.sqlHead()+" where t.authId in("+LangUtil.joinIds(authIds)+")"+this.sqlOrder();
 		
 		return this.query(sql);
 	}

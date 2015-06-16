@@ -15,7 +15,7 @@ public class SmsDao extends BaseDao<Sms, Long> {
 	 * @return
 	 */
 	public List<Sms> queryWaitSendSmss(Integer size){
-		String sql = this.sqlHead()+"AND t.status = ? "+this.sqlOrder();
+		String sql = this.sqlHead()+"where t.status = ? "+this.sqlOrder();
 		
 		if(size != null && size > 0){
 			sql+=" LIMIT 0, "+size;

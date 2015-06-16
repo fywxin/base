@@ -119,8 +119,7 @@ public class OrmTable extends Atable {
 		if(sqlHeadPrefixStr == null){
 			StringBuilder strb = new StringBuilder();
 			strb.append("SELECT ").append(getSqlColPrexs()).append(" ")
-				.append("FROM ").append(this.getTableDbName()).append(" t ")
-				.append("WHERE 1=1 ");
+				.append("FROM ").append(this.getTableDbName()).append(" t ");
 			sqlHeadPrefixStr = strb;
 		}
 		return sqlHeadPrefixStr.toString();

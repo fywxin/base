@@ -86,7 +86,8 @@ public class ValueGetBulider {
 		}
 		
 		StringBuilder strb = new StringBuilder(ormTable.getSqlHeadPrefix());
-		strb.append(conditionStrb.substring(1))
+		strb.append(" where 1=1 ")
+			.append(conditionStrb.substring(1))
 			.append(ormTable.getSqlOrderSuffix());
 		
 		ormValue.setSql(strb.toString());

@@ -314,9 +314,10 @@ public class SimpleHttpClient {
 		for (Entry<String, String> entry : commonHeaders.entrySet()) {
 			con.setRequestProperty(entry.getKey(), entry.getValue());
 		}
-		
-		for (Entry<String, String> entry : headers.entrySet()) {
-			con.setRequestProperty(entry.getKey(), entry.getValue());
+		if(headers != null){
+			for (Entry<String, String> entry : headers.entrySet()) {
+				con.setRequestProperty(entry.getKey(), entry.getValue());
+			}
 		}
 			
 		return con;

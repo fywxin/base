@@ -526,12 +526,12 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	}
 	
 	/**
-	 * 取得当前对象的select t.* from db t where 1=1 
+	 * 取得当前对象的select t.* from db t
 	 * 
 	 * @return
 	 * 2015年6月14日 上午7:57:01
 	 */
-	public String  sqlHead(){
+	public String sqlHead(){
 		return getOrmTable().getSqlHeadPrefix();
 	}
 	

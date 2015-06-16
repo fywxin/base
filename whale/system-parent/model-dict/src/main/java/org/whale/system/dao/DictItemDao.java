@@ -23,7 +23,7 @@ public class DictItemDao extends BaseDao<DictItem, Long> {
 	}
 	
 	public List<DictItem> getByDictId(Long dictId){
-		String sql = this.sqlHead() + " and t.dictId = ? " + this.sqlOrder();
+		String sql = this.sqlHead() + " where t.dictId = ? " + this.sqlOrder();
 		return this.query(sql, dictId);
 	}
 }

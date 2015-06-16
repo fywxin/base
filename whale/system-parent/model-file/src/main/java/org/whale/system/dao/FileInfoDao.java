@@ -13,7 +13,7 @@ public class FileInfoDao extends BaseDao<FileInfo, Long> {
 	 * @return
 	 */
     public FileInfo getByRealFileName(String realFileName) {
-    	return this.getObject(this.sqlHead()+"and t.realFileName=?", realFileName);
+    	return this.getObject(this.sqlHead()+" where t.realFileName=?", realFileName);
     }
     
     /**
@@ -23,7 +23,7 @@ public class FileInfoDao extends BaseDao<FileInfo, Long> {
      */
     public FileInfo getByUrlPath(String urlPath) {
     	
-    	return this.getObject(this.sqlHead()+"and t.urlPath=?", urlPath);
+    	return this.getObject(this.sqlHead()+" where t.urlPath=?", urlPath);
     }
     
 }

@@ -17,7 +17,7 @@ public class OrmUtil {
 	 */
 	@SuppressWarnings("all")
 	public static void _createPageSql(IOrmDao ormDao, Page page){
-		StringBuilder strb = new StringBuilder();
+		StringBuilder strb = new StringBuilder(" where 1=1 ");
 		if(page.getParam().size() > 0){
 			for(Map.Entry<String, Object> entry : page.getParam().entrySet()){
 				if(entry.getValue() != null){
