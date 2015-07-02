@@ -156,7 +156,7 @@ public class SimpleHttpClient {
 	 * @return
 	 */
 	public static String post(String url, Map<String, String> headers, Map<String, Object> params, String charset) {
-		return post(url, headers, params, charset);
+		return post(url, headers, params, charset, null);
 	}
 	
 	/**
