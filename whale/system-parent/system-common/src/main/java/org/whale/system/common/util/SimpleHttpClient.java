@@ -6,9 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,8 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.whale.system.common.exception.HttpClientException;
 import org.whale.system.common.exception.HttpClientIOException;
-
-import com.alibaba.fastjson.JSON;
 
 /**
  * 基于JDK的HTTP 请求
@@ -182,8 +182,28 @@ public class SimpleHttpClient {
 	 * @return
 	 */
 	public static String post(String url, Map<String, String> headers, Map<String, Object> params, String charset, Integer timeout) {
+		String bodyStr = null;
 		
-		return post(url, headers, JSON.toJSONString(params), timeout, charset);
+		headers.put("content-type", "application/x-www-form-urlencoded");
+		
+		if(params != null && params.size() > 0){
+			StringBuilder strb = new StringBuilder();
+			for(Entry<String, Object> entry : params.entrySet()){
+				if(entry.getValue() != null){
+					if(strb.length()>0){
+						strb.append("&");
+					}
+					try{
+						strb.append(URLEncoder.encode(entry.getKey(), charset)).append("=").append(URLEncoder.encode(entry.getValue().toString(), charset));
+					}catch(UnsupportedEncodingException e){
+						throw new HttpClientIOException(e);
+					}
+				}
+			}
+			bodyStr = strb.toString();
+		}
+		
+		return post(url, headers, bodyStr, timeout, charset);
 	}
 	
 	/**
@@ -249,6 +269,7 @@ public class SimpleHttpClient {
 				try{
 					OutputStreamWriter writer = new OutputStreamWriter(ops, reqCharset);
 					writer.write(body);
+					writer.flush();
 				}finally{
 					ops.close();
 				}
