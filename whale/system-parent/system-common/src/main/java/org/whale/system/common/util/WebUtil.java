@@ -187,6 +187,7 @@ public class WebUtil {
 	public static void doPrint(HttpServletRequest request, HttpServletResponse response, String str){
 		setDisableCacheHeader(response);
 		response.setHeader("Content-type", JSON_TYPE);  
+		response.setContentType("text/xml;charset=utf-8");
 		
 		PrintWriter out = null;
 		try {
