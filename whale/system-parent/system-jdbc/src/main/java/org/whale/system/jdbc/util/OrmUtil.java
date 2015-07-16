@@ -35,7 +35,7 @@ public class OrmUtil {
 		}
 		
 		OrmTable ormTable = ormDao.getOrmTable();
-		page.setCountSql("SELECT count(1) FROM " + ormTable.getTableDbName() +" t WHERE 1=1 "+strb.toString());
+		page.setCountSql("SELECT count(1) FROM " + ormTable.getTableDbName() +" t "+strb.toString());
 		
 		if(page.getOrderColumn().size() < 1){
 			strb.append(ormTable.getSqlOrderSuffix());
