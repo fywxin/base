@@ -23,6 +23,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.whale.system.base.BaseDao;
 import org.whale.system.base.Page;
 import org.whale.system.common.exception.OrmException;
+import org.whale.system.common.exception.StaleObjectStateException;
 import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
@@ -146,7 +147,12 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		if(ormValues == null) 
 			return ;
 		
-		this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
+		int col = this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
+		//乐观锁， 锁已过期，更新记录数为0，抛出异常
+		if(this.getOrmTable().getOptimisticLockCol() != null && col == 0){
+			throw new StaleObjectStateException("乐观锁，当前版本 ["+AnnotationUtil.getFieldValue(t, this.getOrmTable().getOptimisticLockCol().getField())+"] 已过期，更新失败！");
+		}
+		
 	}
 	
 	/**
@@ -181,7 +187,13 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		if(ormValues == null) 
 			return ;
 		
-		this.batch(ormValues);
+		//乐观锁， 锁已过期，更新记录数为!=1，抛出异常
+		int[] rs = this.batch(ormValues);
+		for(int i : rs){
+			if(i != 1){
+				throw new StaleObjectStateException("乐观锁，批量更新失败！");
+			}
+		}
 	}
 	
 	/**
@@ -193,7 +205,12 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		if(ormValues == null) 
 			return ;
 		
-		this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
+		int col = this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
+		
+		//乐观锁， 锁已过期，更新记录数为0，抛出异常
+		if(this.getOrmTable().getOptimisticLockCol() != null && col == 0){
+			throw new StaleObjectStateException("乐观锁，当前版本 ["+AnnotationUtil.getFieldValue(t, this.getOrmTable().getOptimisticLockCol().getField())+"] 已过期，更新失败！");
+		}
 	}
 	
 	/**

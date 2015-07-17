@@ -26,13 +26,17 @@ public class SqlUpdateBulider {
 		List<Field> fields = new ArrayList<Field>(cols.size());
 		List<OrmColumn> sCols = new ArrayList<OrmColumn>(cols.size());
 		
-		
 		StringBuilder sql = new StringBuilder("UPDATE ");
 		sql.append(ormTable.getTableDbName()).append(" t SET ");
 		
 		for(OrmColumn col : cols){
 			if(col.getIsId() || !col.getUpdateAble()) 
 				continue;
+			//乐观锁 t.version = t.version+1
+			if(col.getIsOptimisticLock()){
+				sql.append(" t.").append(col.getSqlName()).append("=(t.").append(col.getSqlName()).append("+1),");
+				continue;
+			}
 			sql.append(" t.").append(col.getSqlName()).append("=?,");
 			argTypes.add(col.getType());
 			fields.add(col.getField());
@@ -45,6 +49,15 @@ public class SqlUpdateBulider {
 		argTypes.add(idCol.getType());
 		fields.add(idCol.getField());
 		sCols.add(idCol);
+		
+		//乐观锁  AND t.version = ?
+		OrmColumn optimisticLockCol = ormTable.getOptimisticLockCol();
+		if(optimisticLockCol != null){
+			sql.append(" AND t.").append(optimisticLockCol.getSqlName()).append("=?");
+			argTypes.add(optimisticLockCol.getType());
+			fields.add(optimisticLockCol.getField());
+			sCols.add(optimisticLockCol);
+		}
 		
 		ormSql.setSql(sql.toString());
 		ormSql.setFields(fields);

@@ -25,10 +25,12 @@ public class OrmTable extends Atable {
 	private String tableSchemaOwner;
 	/** 主键字段 */
 	private OrmColumn idCol;
-	/** 所有@Column字段 */
+	/** 所有 @Column 字段 */
 	private List<OrmColumn> ormCols;
-	/** 所有@Order字段 */
+	/** 所有 @Order 字段 */
 	private List<OrmColumn> orderCols;
+	/** @OptimisticLock 乐观锁字段 */
+	private OrmColumn optimisticLockCol;
 	
 	//-----------------用户自定义元注释 信息读取保存---------------
 	
@@ -188,6 +190,14 @@ public class OrmTable extends Atable {
 //		this.notNullCheckCols = notNullCheckCols;
 //	}
 	
+	public OrmColumn getOptimisticLockCol() {
+		return optimisticLockCol;
+	}
+
+	public void setOptimisticLockCol(OrmColumn optimisticLockCol) {
+		this.optimisticLockCol = optimisticLockCol;
+	}
+
 	public List<OrmColumn> getUniqueCheckCols() {
 		return uniqueCheckCols;
 	}

@@ -35,6 +35,8 @@ public class OrmColumn extends Acolumn {
 	private boolean updateAble;
 	//默认值
 	private String defaultValue = null;
+	/**是否为 @OptimisticLock 乐观锁字段 */
+	private boolean isOptimisticLock;
 	
 	//-----------------------排序字段--------------------------
 	
@@ -152,7 +154,14 @@ public class OrmColumn extends Acolumn {
 	public void setExtInfo(Map<String, Object> extInfo) {
 		this.extInfo = extInfo;
 	}
-	
+	public boolean getIsOptimisticLock() {
+		return isOptimisticLock;
+	}
+	public void setIsOptimisticLock(boolean isOptimisticLock) {
+		this.isOptimisticLock = isOptimisticLock;
+	}
+
+
 	@Override
 	public String toString() {
 		return this.getAttrName();

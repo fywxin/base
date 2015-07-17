@@ -23,6 +23,7 @@ public class ValueSaveBulider {
 	public OrmValue getSave(Object obj, OrmSql ormSql) {
 		OrmValue ormValues = new OrmValue(ormSql);
 		OrmTable ormTable = ormSql.getTable();
+		
 		//如果有Id字段，获取Id字段自增序列值，并设置到实体中
 		OrmColumn idCol = ormTable.getIdCol();
 		if(idCol != null){
@@ -40,6 +41,15 @@ public class ValueSaveBulider {
 					throw new OrmException("主键值不能为空");
 			}
 		}
+		
+		//乐观锁字段，入库时为null，则默认设置为1
+		OrmColumn optimisticLockCol = ormTable.getIdCol();
+		if(optimisticLockCol != null){
+			if(AnnotationUtil.getFieldValue(obj, optimisticLockCol.getField()) == null){
+				AnnotationUtil.setFieldValue(obj, optimisticLockCol.getField(), 1);
+			}
+		}
+		
 		List<Object> args = this.getValues(obj, ormSql.getCols());
 		ormValues.setArgs(args.toArray());
 		return ormValues;
@@ -107,7 +117,13 @@ public class ValueSaveBulider {
 			val = AnnotationUtil.getFieldValue(obj, col.getField());
 //			if(!col.getNullAble() && val == null) 
 //				throw new OrmException("对象 ["+obj.getClass().getName()+"] 中字段 ["+col.getAttrName()+"] 值不能为空");
-
+			
+			//乐观锁字段，入库时为null，则默认设置为1
+			if(col.getIsOptimisticLock() && val == null){
+				val = 1;
+				AnnotationUtil.setFieldValue(obj, col.getField(), 1);
+			}
+			
 			args.add(val);
 		}
 		return args;

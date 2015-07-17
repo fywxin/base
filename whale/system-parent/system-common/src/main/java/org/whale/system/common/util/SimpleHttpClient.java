@@ -22,6 +22,7 @@ import javax.net.ssl.SSLContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.exception.HttpClientException;
 import org.whale.system.common.exception.HttpClientIOException;
 
@@ -133,7 +134,7 @@ public class SimpleHttpClient {
 	 * @return
 	 */
 	public static String post(String url, Map<String, Object> params){
-		return post(url, null, params, "UTF-8");
+		return post(url, null, params, null, null, null, null);
 	}
 	
 	/**
@@ -144,7 +145,7 @@ public class SimpleHttpClient {
 	 * @return
 	 */
 	public static String post(String url, Map<String, String> headers, Map<String, Object> params){
-		return post(url, headers, params, "UTF-8");
+		return post(url, headers, params, null, null, null, null);
 	}
 	
 	/**
@@ -156,7 +157,7 @@ public class SimpleHttpClient {
 	 * @return
 	 */
 	public static String post(String url, Map<String, String> headers, Map<String, Object> params, String charset) {
-		return post(url, headers, params, charset, null);
+		return post(url, headers, params, null, null, charset, charset);
 	}
 	
 	/**
@@ -169,7 +170,7 @@ public class SimpleHttpClient {
 	 */
 	public static String post(String url, Map<String, String> headers, Map<String, Object> params, Integer timeout) {
 		
-		return post(url, headers, params, "UTF-8", timeout);
+		return post(url, headers, params, timeout, timeout, null, null);
 	}
 	
 	/**
@@ -181,10 +182,22 @@ public class SimpleHttpClient {
 	 * @param timeout 超时时间
 	 * @return
 	 */
-	public static String post(String url, Map<String, String> headers, Map<String, Object> params, String charset, Integer timeout) {
+	public static String post(String url, Map<String, String> headers, Map<String, Object> params, Integer conTimeout, Integer readTimeout, String reqCharset, String resCharset) {
+		if(Strings.isBlank(reqCharset)){
+			reqCharset = SysConstant.UTF_8; 
+		}
+		if(Strings.isBlank(resCharset)){
+			resCharset = SysConstant.UTF_8; 
+		}
+		
 		String bodyStr = null;
 		
-		headers.put("content-type", "application/x-www-form-urlencoded");
+		if(headers == null){
+			headers = new HashMap<String, String>();
+		}
+		if(!headers.containsKey("content-type") && !headers.containsKey("Content-Type")){
+			headers.put("content-type", "application/x-www-form-urlencoded");
+		}
 		
 		if(params != null && params.size() > 0){
 			StringBuilder strb = new StringBuilder();
@@ -194,7 +207,7 @@ public class SimpleHttpClient {
 						strb.append("&");
 					}
 					try{
-						strb.append(URLEncoder.encode(entry.getKey(), charset)).append("=").append(URLEncoder.encode(entry.getValue().toString(), charset));
+						strb.append(URLEncoder.encode(entry.getKey(), reqCharset)).append("=").append(URLEncoder.encode(entry.getValue().toString(), reqCharset));
 					}catch(UnsupportedEncodingException e){
 						throw new HttpClientIOException(e);
 					}
@@ -203,7 +216,7 @@ public class SimpleHttpClient {
 			bodyStr = strb.toString();
 		}
 		
-		return post(url, headers, bodyStr, timeout, charset);
+		return getThis().doExecute(url, "POST", headers, bodyStr, conTimeout, readTimeout, reqCharset, resCharset);
 	}
 	
 	/**
@@ -214,7 +227,7 @@ public class SimpleHttpClient {
 	 * @return
 	 */
 	public static String post(String url, String postStr){
-		return post(url, null, postStr, "UTF-8");
+		return post(url, null, postStr, null, null, null, null);
 	}
 	
 	/**
@@ -225,23 +238,29 @@ public class SimpleHttpClient {
 	 * @return
 	 */
 	public static String post(String url, Map<String, String> headers, String postStr){
-		return post(url, headers, postStr, "UTF-8");
+		return post(url, headers, postStr, null, null, null, null);
 	}
 	
 	public static String post(String url, Map<String, String> headers, String postStr, String charset) {
-		return post(url, headers, postStr, null, charset);
+		return post(url, headers, postStr, null, null, charset, charset);
 	}
 	
 	public static String post(String url, Map<String, String> headers, String postStr, Integer timeout) {
-		return post(url, headers, postStr, timeout, "UTF-8");
+		return post(url, headers, postStr, timeout, timeout, null, null);
 	}
 	
 	public static String post(String url, Map<String, String> headers, String postStr, Integer timeout, String charset) {
-		return post(url, headers, postStr, null, timeout, charset, charset);
+		return post(url, headers, postStr, timeout, timeout, charset, charset);
 	}
 	
 	
 	public static String post(String url, Map<String, String> headers, String postStr, Integer conTimeout, Integer readTimeout, String reqCharset, String resCharset) {
+		if(Strings.isBlank(reqCharset)){
+			reqCharset = SysConstant.UTF_8; 
+		}
+		if(Strings.isBlank(resCharset)){
+			resCharset = SysConstant.UTF_8; 
+		}
 		return getThis().doExecute(url, "POST", headers, postStr, conTimeout, readTimeout, reqCharset, resCharset);
 	}
 	
@@ -258,7 +277,8 @@ public class SimpleHttpClient {
 	 * @return
 	 */
 	private String doExecute(String url, String method, Map<String, String> header, String body, Integer contimeout, Integer readtimeout, String reqCharset, String resCharset){
-		logger.debug("url:{}, method:{}, header: {}, contimeout: {}, readtimeout: {}, reqCharset:{}, resCharset: {} \nbody:{}", url, method, header, contimeout, readtimeout, reqCharset, resCharset, body);
+		logger.debug("url:{}, method:{}, contimeout: {}, readtimeout: {}, reqCharset:{}, resCharset: {} \nheader: {}, \nbody:{}", url, method, contimeout, readtimeout, reqCharset, resCharset, header, body);
+		
 		long start = System.currentTimeMillis();
 		try {
 			HttpURLConnection con = prepareConnection(new URL(url), method, header, contimeout, readtimeout);
@@ -307,7 +327,7 @@ public class SimpleHttpClient {
 			throw new HttpClientIOException(e);
 		}
 	}
-	
+
 	
 	public HttpURLConnection prepareConnection(URL url, String method, Map<String, String> headers, Integer contimeout, Integer readtimeout)throws IOException {
 		HttpURLConnection con = (HttpURLConnection)url.openConnection(connectionProxy);
@@ -343,6 +363,62 @@ public class SimpleHttpClient {
 			
 		return con;
 	}
+	
+	
+//	
+//	private byte[] doExecute(String url, String method, Map<String, String> header, byte[] body, Integer contimeout, Integer readtimeout){
+//		logger.debug("url:{}, method:{}, contimeout: {}, readtimeout: {}, reqCharset:{}, resCharset: {} \nheader: {}, \nbody:{}", url, method, contimeout, readtimeout, reqCharset, resCharset, header, body);
+//		long start = System.currentTimeMillis();
+//		try {
+//			HttpURLConnection con = prepareConnection(new URL(url), method, header, contimeout, readtimeout);
+//			con.connect();
+//			
+//			if("POST".equals(method) && body != null && body.length > 0){
+//				OutputStream ops = con.getOutputStream();
+//				try{
+//					ops.write(body);
+//					ops.flush();
+//				}finally{
+//					ops.close();
+//				}
+//			}
+//			int resCode = con.getResponseCode();
+//			
+//			InputStream ips = con.getInputStream();
+//			int b;
+//			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//			try{
+//				while((b = ips.read()) != -1){
+//					bos.write(b);
+//				}
+//				bos.flush();
+//				byte[] rs = bos.toByteArray();
+//				
+//			}finally{
+//				bos.close();
+//				ips.close();
+//			}
+	
+	//需要解码出http header  和 body的 byte[]
+//			String resStr = response.toString();
+//			long costTime = System.currentTimeMillis()-start;
+//			
+//			if(resCode > 300){
+//				logger.warn("HTTP返回状态码错误。 url: {}, state: {}, costTime:{}, resp: {}", url, resCode, costTime, resStr);
+//				throw new HttpClientException("返回状态码["+resCode+"] 错误: "+resStr);
+//			}
+//			
+//			if(slowTime != null && costTime > slowTime){
+//				logger.warn("url:{}, 耗时[{}], 返回 :\n {}",url, costTime, resStr);
+//			}else{
+//				logger.debug("url:{}, 耗时[{}], 返回:\n {}" ,url, costTime, resStr);
+//			}
+//			return resStr;
+//		} catch (Exception e) {
+//			logger.error("HTTP调用异常", e);
+//			throw new HttpClientIOException(e);
+//		}
+//	}
 
 	public int getConnectionTimeout() {
 		return connectionTimeout;

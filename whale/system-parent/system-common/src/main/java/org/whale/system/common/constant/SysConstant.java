@@ -55,4 +55,6 @@ public final class SysConstant {
 	
 	/**是否正在刷新权限 */
 	public static final Boolean isRefreshAuth = false;
+	
+	public static final String UTF_8 = "UTF-8";
 }

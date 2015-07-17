@@ -16,6 +16,7 @@ import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Component;
 import org.whale.system.annotation.jdbc.Column;
 import org.whale.system.annotation.jdbc.Id;
+import org.whale.system.annotation.jdbc.OptimisticLock;
 import org.whale.system.annotation.jdbc.Order;
 import org.whale.system.annotation.jdbc.Sql;
 import org.whale.system.annotation.jdbc.Table;
@@ -250,7 +251,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		ormColumn.setUnique(column.unique());
 //		ormColumn.setNullAble(column.nullable());
 		ormColumn.setUpdateAble(column.updateable());
-		ormColumn.setDefaultValue(column.defaultValue());
+		ormColumn.setDefaultValue("".equals(column.defaultValue()) ? null : column.defaultValue());
 		
 		//字段附加SQL定义
 		Sql sql = acolumn.getField().getAnnotation(Sql.class);
@@ -271,6 +272,27 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		
 		//读取OrmColumn 扩展信息读取
 		this.extColumnExtInfoReaders(ormColumn);
+		
+		//是否为乐观锁字段信息读取
+		OptimisticLock optimisticLock = acolumn.getField().getAnnotation(OptimisticLock.class);
+		if(optimisticLock != null){
+			Type type = acolumn.getAttrType();
+			String t = type.toString();
+			if(t.equals("class java.lang.Long") || t.equals("class java.lang.Integer")){
+				try{
+					Object obj = table.getClazz().newInstance();
+					
+					if(AnnotationUtil.getFieldValue(obj, acolumn.getField()) != null){
+						throw new OrmException(table.getEntityName() +" 乐观锁 "+ormColumn.getAttrName()+" 字段类型定义初始值必须为null");
+					}
+					ormColumn.setIsOptimisticLock(true);
+				} catch(Exception e) {
+					throw new OrmException("实体类"+table.getClass()+"默认构造方法不能访问！", e);
+				} 
+			}else{
+				throw new OrmException(table.getEntityName() +" 乐观锁 "+ormColumn.getAttrName()+" 字段类型必须为包装类型 Long 或 Integer");
+			}
+		}
 		
 		return ormColumn;
 	}
@@ -340,6 +362,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明: 设置 ormTable 中的 idCol 和 pkCols
+	 *			检查乐观锁字段是否超过1个
 	 *创建人: 王金绍
 	 *创建时间:2013-3-19 下午1:59:36
 	 *@param ormTable void
@@ -363,6 +386,14 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 			//排序字段
 			if(col.getOrmOrder() != null){
 				orderCols.add(col);
+			}
+			//乐观锁字段 检测设置
+			if(col.getIsOptimisticLock()){
+				if(ormTable.getOptimisticLockCol() != null){
+					throw new OrmException("实体 ["+ormTable.getEntityName()+"] 存在多个@OptimisticLock 乐观锁字段");
+				}else{
+					ormTable.setOptimisticLockCol(col);
+				}
 			}
 			
 			if(col.getIsId()){

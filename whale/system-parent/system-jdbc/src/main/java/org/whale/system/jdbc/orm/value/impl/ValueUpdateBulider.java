@@ -26,6 +26,12 @@ public class ValueUpdateBulider {
 		if(AnnotationUtil.getFieldValue(obj, idCol.getField()) == null)
 			throw new OrmException("对象 ["+obj.getClass().getName()+"] 中主键字段 ["+idCol.getAttrName()+"] 值不能为空");
 		
+		//验证乐观锁字段值不能为空
+		OrmColumn optimisticLockCol = ormTable.getOptimisticLockCol();
+		if(optimisticLockCol != null && AnnotationUtil.getFieldValue(obj, optimisticLockCol.getField()) == null){
+			throw new OrmException("对象 ["+obj.getClass().getName()+"] 中乐观锁字段 ["+optimisticLockCol.getAttrName()+"] 值不能为空");
+		}
+		
 		//只获取需要更新字段的值， updateable
 		ormValues.setArgs(AnnotationUtil.getFieldValues(obj, ormSql.getFields()).toArray());
 		
@@ -42,6 +48,11 @@ public class ValueUpdateBulider {
 			OrmColumn idCol = ormTable.getIdCol();
 			if(AnnotationUtil.getFieldValue(obj, idCol.getField()) == null)
 				throw new OrmException("对象 ["+obj.getClass().getName()+"] 中主键字段 ["+idCol.getAttrName()+"] 值不能为空");
+			//乐观锁 字段值不能为空
+			OrmColumn optimisticLockCol = ormTable.getOptimisticLockCol();
+			if(optimisticLockCol != null && AnnotationUtil.getFieldValue(obj, optimisticLockCol.getField()) == null){
+				throw new OrmException("对象 ["+obj.getClass().getName()+"] 中乐观锁字段 ["+optimisticLockCol.getAttrName()+"] 值不能为空");
+			}
 			batchArgs.add(AnnotationUtil.getFieldValues(obj, ormSql.getFields()).toArray());
 		}
 		
@@ -64,8 +75,19 @@ public class ValueUpdateBulider {
 		//待更新字段
 		Object val = null;
 		for(OrmColumn col : cols){
-			if(col.getIsId() || !col.getUpdateAble() ||(val = AnnotationUtil.getFieldValue(obj, col.getField())) == null) 
+			if(col.getIsId() || !col.getUpdateAble() ||(val = AnnotationUtil.getFieldValue(obj, col.getField())) == null) {
+				//乐观锁 字段值不能为空
+				if(col.getIsOptimisticLock()){
+					throw new OrmException("对象 ["+obj.getClass().getName()+"] 中乐观锁字段 ["+col.getAttrName()+"] 值不能为空");
+				}
 				continue;
+			}
+			//乐观锁 t.version = t.version+1， 版本+1
+			if(col.getIsOptimisticLock()){
+				sql.append(" t.").append(col.getSqlName()).append("=(t.").append(col.getSqlName()).append("+1),");
+				continue;
+			}
+				
 			sql.append(" t.").append(col.getSqlName()).append("=?,");
 			argTypes.add(col.getType());
 			fields.add(col.getField());
@@ -87,6 +109,19 @@ public class ValueUpdateBulider {
 		if(val == null)
 			throw new OrmException("对象 ["+obj.getClass().getName()+"] 中主键字段 ["+idCol.getAttrName()+"] 值不能为空");
 		objs.add(val);
+		
+		//乐观锁  AND t.version = ?
+		OrmColumn optimisticLockCol = ormTable.getOptimisticLockCol();
+		if(optimisticLockCol != null){
+			sql.append(" AND t.").append(optimisticLockCol.getSqlName()).append("=?");
+			argTypes.add(optimisticLockCol.getType());
+			fields.add(optimisticLockCol.getField());
+			sCols.add(optimisticLockCol);
+			val = AnnotationUtil.getFieldValue(obj, optimisticLockCol.getField());
+			if(val == null)
+				throw new OrmException("对象 ["+obj.getClass().getName()+"] 中乐观锁字段 ["+idCol.getAttrName()+"] 值不能为空");
+			objs.add(val);
+		}
 		
 		ormValue.setSql(sql.toString());
 		ormValue.setFields(fields);
