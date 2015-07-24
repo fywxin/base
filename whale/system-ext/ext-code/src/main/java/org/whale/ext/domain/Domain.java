@@ -8,7 +8,6 @@ import org.whale.system.annotation.jdbc.Id;
 import org.whale.system.annotation.jdbc.Table;
 import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
-import org.whale.system.common.exception.SysException;
 
 /**
  * 实体对象
@@ -26,29 +25,25 @@ public class Domain extends BaseEntry{
 	private Long id;
 	
 	@Validate(required=true)
-	@Column(cnName="实体名", unique=true)
-	private String name;
+	@Column(cnName="实体名")
+	private String domainName;
 	
 	@Validate(required=true)
-	@Column(cnName="中文名", unique=true)
-	private String cnName;
+	@Column(cnName="中文名")
+	private String domainCnName;
 	
 	@Validate(required=true)
 	@Column(cnName="数据库", unique=true)
-	private String dbName;
+	private String domainSqlName;
 	
-	@Validate(required=true)
-	@Column(cnName="类名", unique=true)
-	private String clazzName;
-	
-	@Column(cnName="是否树")
-	private boolean isTree;
-	
-	@Column(cnName="包名称")
+	@Column(cnName="基础包路径")
 	private String pkgName;
 	
-	@Column(cnName="表单列数")
-	private int formColNum;
+	//模板类型
+	private Integer ftlType;
+	
+	//代码路径
+	private String codePath;
 	
 	//主键
 	private Attr idAttr;
@@ -60,56 +55,41 @@ public class Domain extends BaseEntry{
 	private List<Attr> formAttrs = new ArrayList<Attr>();
 	
 	private List<Attr> queryAttrs = new ArrayList<Attr>();
-	
-	
-	
-	
+
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public String getDomainName() {
+		return domainName;
 	}
 
-	public String getName() {
-		return name;
+	public void setDomainName(String domainName) {
+		this.domainName = domainName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getDomainCnName() {
+		return domainCnName;
 	}
 
-	public String getCnName() {
-		return cnName;
+	public void setDomainCnName(String domainCnName) {
+		this.domainCnName = domainCnName;
 	}
 
-	public void setCnName(String cnName) {
-		this.cnName = cnName;
+	public String getDomainSqlName() {
+		return domainSqlName;
 	}
 
-	public String getDbName() {
-		return dbName;
+	public void setDomainSqlName(String domainSqlName) {
+		this.domainSqlName = domainSqlName;
 	}
 
-	public void setDbName(String dbName) {
-		this.dbName = dbName;
+	public String getPkgName() {
+		return pkgName;
 	}
 
-	public boolean getIsTree() {
-		return isTree;
-	}
-
-	public void setIsTree(boolean isTree) {
-		this.isTree = isTree;
-	}
-
-	public int getFormColNum() {
-		return formColNum;
-	}
-
-	public void setFormColNum(int formColNum) {
-		this.formColNum = formColNum;
+	public void setPkgName(String pkgName) {
+		this.pkgName = pkgName;
 	}
 
 	public Attr getIdAttr() {
@@ -126,27 +106,6 @@ public class Domain extends BaseEntry{
 
 	public void setAttrs(List<Attr> attrs) {
 		this.attrs = attrs;
-		if(attrs != null && attrs.size() > 0){
-			this.queryAttrs.clear();
-			this.listAttrs.clear();
-			this.formAttrs.clear();
-			for(Attr attr : attrs){
-				if(attr.getIsId()) {
-					this.idAttr = attr;
-				}
-				if(attr.getInQuery()){
-					this.queryAttrs.add(attr);
-				}
-				if(attr.getInList()){
-					this.listAttrs.add(attr);
-				}
-				if(attr.getInForm()){
-					this.formAttrs.add(attr);
-				}
-			}
-		}else{
-			throw new SysException("字段集合为空");
-		}
 	}
 
 	public List<Attr> getListAttrs() {
@@ -173,20 +132,25 @@ public class Domain extends BaseEntry{
 		this.queryAttrs = queryAttrs;
 	}
 
-	public String getClazzName() {
-		return clazzName;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setClazzName(String clazzName) {
-		this.clazzName = clazzName;
+	public Integer getFtlType() {
+		return ftlType;
 	}
 
-	public String getPkgName() {
-		return pkgName;
+	public void setFtlType(Integer ftlType) {
+		this.ftlType = ftlType;
 	}
 
-	public void setPkgName(String pkgName) {
-		this.pkgName = pkgName;
+	public String getCodePath() {
+		return codePath;
 	}
+
+	public void setCodePath(String codePath) {
+		this.codePath = codePath;
+	}
+
 	
 }

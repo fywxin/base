@@ -119,7 +119,7 @@ public class ValueDelBulider {
 		//待更新字段
 		Object val = null;
 		for(OrmColumn col : cols){
-			if(col.getIsId() ||(val = AnnotationUtil.getFieldValue(obj, col.getField())) == null) 
+			if(col.getIsId() ||(val = AnnotationUtil.getFieldValue(obj, col.getField())) == null || val.equals(col.getValue())) 
 				continue;
 			sql.append(" AND ").append(col.getSqlName()).append("=?");
 			argTypes.add(col.getType());
@@ -128,7 +128,7 @@ public class ValueDelBulider {
 			objs.add(val);
 		}
 		if(objs.size() < 1){
-			throw new OrmException("查找按条件删除的字段");
+			throw new OrmException("无按条件删除字段");
 		}
 		
 		ormValue.setSql(sql.toString());

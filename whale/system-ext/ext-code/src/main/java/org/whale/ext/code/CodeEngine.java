@@ -31,10 +31,10 @@ public class CodeEngine {
 			domain.setPkgName(dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_PACKAGE));
 		}
 		
-		this.doCreateJava(domain, "Domain", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_DOMAIN_PATH, "c:"+File.separator+"code")+File.separator+domain.getName()+".java");
-		this.doCreateJava(domain, "Dao", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_DAO_PATH, "c:"+File.separator+"code")+File.separator+domain.getName()+"Dao.java");
-		this.doCreateJava(domain, "Service", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_SERVICE_PATH, "c:"+File.separator+"code")+File.separator+domain.getName()+"Service.java");
-		this.doCreateJava(domain, "Controller", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_CONTROLLER_PATH, "c:"+File.separator+"code")+File.separator+domain.getName()+"Controller.java");
+		this.doCreateJava(domain, "Domain", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_DOMAIN_PATH, "c:"+File.separator+"code")+File.separator+domain.getDomainName()+".java");
+		this.doCreateJava(domain, "Dao", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_DAO_PATH, "c:"+File.separator+"code")+File.separator+domain.getDomainName()+"Dao.java");
+		this.doCreateJava(domain, "Service", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_SERVICE_PATH, "c:"+File.separator+"code")+File.separator+domain.getDomainName()+"Service.java");
+		this.doCreateJava(domain, "Controller", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_CONTROLLER_PATH, "c:"+File.separator+"code")+File.separator+domain.getDomainName()+"Controller.java");
 		this.doCreateJsp(domain, "tree");
 		this.doCreateJsp(domain, "list");
 		this.doCreateJsp(domain, "save");
@@ -48,7 +48,7 @@ public class CodeEngine {
 	
 	private void doCreateJsp(Domain domain, String ftlName) throws IOException, TemplateException{
 		String codeDir = dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_JSP_PATH, "c:"+File.separator+"code"+File.separator+"jsp");
-		String toFile = codeDir+"//"+Strings.capitalize(domain.getName())+"_"+ftlName+".jsp";
+		String toFile = codeDir+"//"+Strings.capitalize(domain.getDomainName())+"_"+ftlName+".jsp";
 		this.doCreateCode(domain, ftlName, toFile);
 	}
 	

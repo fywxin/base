@@ -11,9 +11,9 @@ public abstract class AbstractHttpInvoke implements HttpInvoke {
 		this.httpInvoke = httpInvoke;
 	}
 
-	public void invokeNext(RpcContext context){
+	public void invokeNext(RpcContext rpcContext){
 		if(httpInvoke != null){
-			httpInvoke.invoke(context);
+			httpInvoke.invoke(rpcContext);
 		}
 	}
 }

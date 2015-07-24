@@ -38,6 +38,9 @@ public class OrmColumn extends Acolumn {
 	/**是否为 @OptimisticLock 乐观锁字段 */
 	private boolean isOptimisticLock;
 	
+	//字段定义的默认值
+	private Object value;
+	
 	//-----------------------排序字段--------------------------
 	
 	private OrmOrder ormOrder = null;
@@ -159,6 +162,12 @@ public class OrmColumn extends Acolumn {
 	}
 	public void setIsOptimisticLock(boolean isOptimisticLock) {
 		this.isOptimisticLock = isOptimisticLock;
+	}
+	public Object getValue() {
+		return value;
+	}
+	public void setValue(Object value) {
+		this.value = value;
 	}
 
 

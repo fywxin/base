@@ -187,7 +187,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	@Override
 	public List<Map<String, Object>> queryForList(String sql, Object... args) {
 		filter.exeBeforeQueryForList(this, sql, args);
-		List<Map<String, Object>> rs = super.queryForList(sql);
+		List<Map<String, Object>> rs = super.queryForList(sql, args);
 		filter.exeAfterQueryForList(this, rs, sql, args);
 		return rs;
 	}

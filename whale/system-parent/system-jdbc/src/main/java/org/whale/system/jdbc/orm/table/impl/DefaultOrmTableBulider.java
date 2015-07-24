@@ -473,6 +473,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 				rs = AnnotationUtil.getFieldValue(obj, col.getField());
 				if(rs != null){
 					hasValCols.add(col);
+					col.setValue(rs);//获取其默认值
 				}
 			}
 			if(hasValCols.size() > 0){

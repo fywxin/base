@@ -1,6 +1,7 @@
 package org.whale.ext.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class DomainService extends BaseService<Domain, Long> {
 		if(attrs != null && attrs.size() > 0){
 			for(Attr attr : attrs){
 				attr.setDomainId(domain.getId());
-				attr.setId(null);
+				attr.setAttrId(null);
 				if(Strings.isBlank(attr.getSqlName())){
 					attr.setSqlName(attr.getName());
 				}
@@ -65,28 +66,41 @@ public class DomainService extends BaseService<Domain, Long> {
 		Domain domain = this.domainDao.get(id);
 		if(domain == null)
 			return null;
-		List<Attr> attrs = this.attrDao.getByDomainId(id);
+		List<Attr> attrs = this.attrDao.queryByDomainId(id);
 		domain.setAttrs(attrs);
 		
 		return domain;
 	}
 	
-	public Domain getByName(String name){
-		if(Strings.isBlank(name))
+	public Domain getBySqlName(String dbName){
+		if(Strings.isBlank(dbName))
 			return null;
-		return this.domainDao.getByName(name.trim());
-	}
-	
-	public Domain getByClazzName(String clazzName){
-		if(Strings.isBlank(clazzName))
-			return null;
-		Domain domain = this.domainDao.getByClazzName(clazzName.trim());
+		Domain domain = this.domainDao.getBySqlName(dbName.trim());
 		if(domain == null)
 			return null;
-		List<Attr> attrs = this.attrDao.getByDomainId(domain.getId());
+		List<Attr> attrs = this.attrDao.queryByDomainId(domain.getId());
 		domain.setAttrs(attrs);
 		
 		return domain;
+	}
+	
+	/**
+	 * 获取数据库所有表
+	 * @return
+	 */
+	public List<Map<String, Object>> queryAllTable(){
+		return this.domainDao.queryAllTable();
+	}
+	
+	/**
+	 * 根据表名获取其所有的字段列表
+	 * @param table
+	 * @return
+	 */
+	public List<Map<String, Object>> queryColsByTable(String table){
+		if(Strings.isBlank(table))
+			return null;
+		return this.attrDao.queryColsByTable(table);
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.remoting.support.UrlBasedRemoteAccessor;
 import org.whale.inf.client.chain.impl.RootHttpInvoke;
 
-public class HttpInvokeFactory extends UrlBasedRemoteAccessor implements MethodInterceptor, FactoryBean{
+public class HttpInvokeFactory extends UrlBasedRemoteAccessor implements MethodInterceptor, FactoryBean<Object>{
 	
 	private Object proxyObject = null;
 	
@@ -17,6 +17,8 @@ public class HttpInvokeFactory extends UrlBasedRemoteAccessor implements MethodI
 	private Integer readTimeOut;
 	
 	private String version;
+	
+	private boolean post = true;
 	
 	@Autowired
 	private RootHttpInvoke rootHttpInvoke;
@@ -39,12 +41,18 @@ public class HttpInvokeFactory extends UrlBasedRemoteAccessor implements MethodI
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
 		RpcContext rpcContext = new RpcContext();
-		rpcContext.setInvocation(invocation);
+		rpcContext.setProxyObject(this.getObject());
+		rpcContext.setMethod(invocation.getMethod());
+		rpcContext.setArgs(invocation.getArguments());
+		rpcContext.setParamTypes(invocation.getMethod().getParameterTypes());
+		rpcContext.setServiceUrl(this.getServiceUrl());
 		rpcContext.setVersion(version);
-		rpcContext.setHttpInvokeRouter(this);
+		rpcContext.setConTimeOut(conTimeOut);
+		rpcContext.setReadTimeOut(readTimeOut);
+		rpcContext.setHttpInvokeFactory(this);
         
 		rootHttpInvoke.invoke(rpcContext);
-		return null;
+		return rpcContext.getRs();
 	}
 	
 	@SuppressWarnings("all")
@@ -84,6 +92,14 @@ public class HttpInvokeFactory extends UrlBasedRemoteAccessor implements MethodI
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public boolean getPost() {
+		return post;
+	}
+
+	public void setPost(boolean post) {
+		this.post = post;
 	}
 
 	

@@ -51,4 +51,56 @@ public class OrmUtil {
 		page.setSql(ormTable.getSqlHeadPrefix()+strb.toString());
 	}
 
+	
+	/**
+	 * 
+	 *功能说明: 将驼峰原则的字符串转成ORCALE数据库大写形式"_" 分隔的字符串
+	 *创建人: 王金绍
+	 *创建时间:2013-3-14 下午5:50:39
+	 *@param str
+	 *@return String
+	 *
+	 */
+	public static String dump2SqlStyle(String str){
+		if(Strings.isBlank(str)) return null;
+		str = str.trim();
+		char[] chars = str.toCharArray();
+		StringBuilder strb = new StringBuilder();
+		strb.append(Character.toUpperCase(chars[0]));
+		
+		for(int i=1; i<chars.length; i++){
+			if(chars[i] == ' ') continue;
+			if(Character.isUpperCase(chars[i])){
+				strb.append("_").append(Character.toUpperCase(chars[i]));
+			}else{
+				strb.append(Character.toUpperCase(chars[i]));
+			}
+		}
+		return strb.toString();
+	}
+	
+	/**
+	 * 将数据库大写_ 转为驼峰原则
+	 * @param str
+	 * @return
+	 */
+	public static String sql2DumpStyle(String str){
+		if(Strings.isBlank(str)) return null;
+		str = str.trim();
+		char[] chars = str.toCharArray();
+		StringBuilder strb = new StringBuilder();
+		strb.append(Character.toLowerCase(chars[0]));
+		
+		for(int i=1; i<chars.length; i++){
+			if(chars[i] == ' ') continue;
+			if(chars[i] == '_'){
+				i++;
+				strb.append(Character.toUpperCase(chars[i]));
+			}else{
+				strb.append(chars[i]);
+			}
+		}
+		return strb.toString();
+	}
+	
 }

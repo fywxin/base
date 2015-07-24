@@ -1,8 +1,8 @@
 package org.whale.system.jdbc.orm.table.impl;
 
 import org.springframework.stereotype.Component;
-import org.whale.system.common.util.LangUtil;
 import org.whale.system.jdbc.orm.table.ParseColumnName;
+import org.whale.system.jdbc.util.OrmUtil;
 
 
 /**
@@ -16,7 +16,7 @@ public class HumpColumnNameParser implements ParseColumnName {
 
 	@Override
 	public String getDbColName(String columnAttr) {
-		return LangUtil.dump2SqlStyle(columnAttr);
+		return OrmUtil.dump2SqlStyle(columnAttr);
 	}
 
 }

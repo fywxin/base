@@ -20,12 +20,16 @@ public class Attr extends BaseEntry{
 	private static final long serialVersionUID = -324398431L;
 
 	@Id
-	@Column(cnName="id")
-	private Long id;
+	@Column(cnName="attrId")
+	private Long attrId;
 	
 	@Validate(required=true)
 	@Column(cnName="所属实体Id")
 	private Long domainId;
+	
+	@Validate(required=true)
+	@Column(cnName="列名")
+	private String sqlName;
 	
 	@Validate(required=true)
 	@Column(cnName="字段名")
@@ -35,233 +39,237 @@ public class Attr extends BaseEntry{
 	@Column(cnName="中文名")
 	private String cnName;
 	
-	@Validate(required=true)
-	@Column(cnName="数据库名")
-	private String sqlName;
-	
-	@Column(cnName="默认值")
-	private String defVal;
+	@Column(cnName="数据库类型")
+	private String dbType;
 	
 	//1.String 2.Long  3.Integer 4.Float 5.Double  6.Short 7.Byte 8.Char 9.Boolean 10. Date
 	@Column(cnName="字段类型")
 	private String type = "String";
-
-	@Column(cnName="数据库类型")
-	private int dbType = 5;
-	
-	@Column(cnName="宽度")
-	private int width;
-	
-	@Column(cnName="精确度")
-	private int preci;
 	
 	@Column(cnName="是否ID")
-	private boolean isId = false;
+	private Boolean isId = false;
 	
 	@Column(cnName="是否可空")
-	private boolean nullAble = true;
+	private Boolean isNull = true;
 	
 	@Column(cnName="是否可更新")
-	private boolean updateAble = true;
+	private Boolean isEdit = true;
 	
 	@Column(cnName="是否唯一")
-	private boolean uniqueAble = false;
+	private Boolean isUnique = false;
 	
 	@Column(cnName="是否列表展示")
-	private boolean inList = true;
+	private Boolean inList = true;
 	
 	@Column(cnName="是否表单展示")
-	private boolean inForm = true;
+	private Boolean inForm = true;
 	
 	@Column(cnName="是否查询条件")
-	private boolean inQuery = false;
+	private Boolean inQuery = false;
+	
+	@Column(cnName="查询匹配方式")
+	private String queryType;
+	
+	@Column(cnName="表单类型")
+	private String formType;
+	
+	@Column(cnName="所属字典")
+	private String dictName;
+	
+	@Column(cnName="最大长度")
+	private Integer maxLength;
 	
 	@Column(cnName="排序")
-	private int inOrder;
+	private Integer inOrder;
+
 	
-	@Column(cnName="默认查询@order")
-	private int orderNum = 0;
-
-	public Long getId() {
-		return id;
+	public Long getAttrId() {
+		return attrId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+
+	public void setAttrId(Long attrId) {
+		this.attrId = attrId;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCnName() {
-		return cnName;
-	}
-
-	public void setCnName(String cnName) {
-		this.cnName = cnName;
-	}
-
-	public String getSqlName() {
-		return sqlName;
-	}
-
-	public void setSqlName(String sqlName) {
-		this.sqlName = sqlName;
-	}
-
-	public String getDefVal() {
-		return defVal;
-	}
-
-	public void setDefVal(String defVal) {
-		this.defVal = defVal;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public int getDbType() {
-		return dbType;
-	}
-
-	public void setDbType(int dbType) {
-		this.dbType = dbType;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getPreci() {
-		return preci;
-	}
-
-	public void setPreci(int preci) {
-		this.preci = preci;
-	}
-
-	public boolean getIsId() {
-		return isId;
-	}
-
-	public void setIsId(boolean isId) {
-		this.isId = isId;
-	}
-
-	public boolean getNullAble() {
-		return nullAble;
-	}
-
-	public void setNullAble(boolean nullAble) {
-		this.nullAble = nullAble;
-	}
-
-	public boolean getUpdateAble() {
-		return updateAble;
-	}
-
-	public void setUpdateAble(boolean updateAble) {
-		this.updateAble = updateAble;
-	}
-
-	public boolean getUniqueAble() {
-		return uniqueAble;
-	}
-
-	public void setUniqueAble(boolean uniqueAble) {
-		this.uniqueAble = uniqueAble;
-	}
-
-	public boolean getInList() {
-		return inList;
-	}
-
-	public void setInList(boolean inList) {
-		this.inList = inList;
-	}
-
-	public boolean getInForm() {
-		return inForm;
-	}
-
-	public void setInForm(boolean inForm) {
-		this.inForm = inForm;
-	}
-
-	public boolean getInQuery() {
-		return inQuery;
-	}
-
-	public void setInQuery(boolean inQuery) {
-		this.inQuery = inQuery;
-	}
-
-	public int getInOrder() {
-		return inOrder;
-	}
-
-	public void setInOrder(int inOrder) {
-		this.inOrder = inOrder;
-	}
 
 	public Long getDomainId() {
 		return domainId;
 	}
 
+
 	public void setDomainId(Long domainId) {
 		this.domainId = domainId;
 	}
-	
-	public int getOrderNum() {
-		return orderNum;
+
+
+	public String getSqlName() {
+		return sqlName;
 	}
 
-	public void setOrderNum(int orderNum) {
-		this.orderNum = orderNum;
+
+	public void setSqlName(String sqlName) {
+		this.sqlName = sqlName;
 	}
 
-	//1.String 2.Long  3.Integer 4.Float 5.Double  6.Short 7.Byte 8.Char 9.Boolean 10. Date
-	public static String parseType(Type type){
-		String t = type.toString();
-		if(t.equals("class java.lang.Long") || t.equals("long")){
-			return "Long";
-		}
-		if(t.equals("class java.lang.Integer") || t.equals("int")){
-			return "Integer";
-		}
-		if(t.equals("class java.lang.Short") || t.equals("short")){
-			return "Short";
-		}
-		if(t.equals("class java.lang.Byte") || t.equals("byte")){
-			return "Byte";
-		}
-		if(t.equals("class java.lang.Double") || t.equals("double")){
-			return "Double";
-		}
-		if(t.equals("class java.lang.Float") || t.equals("float")){
-			return "Float";
-		}
-		if(t.equals("class java.lang.Boolean") || t.equals("boolean")){
-			return "Boolean";
-		}
-		if(t.equals("class java.util.Date")){
-			return "Date";
-		}
-		return "String";
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public String getCnName() {
+		return cnName;
+	}
+
+
+	public void setCnName(String cnName) {
+		this.cnName = cnName;
+	}
+
+
+	public String getDbType() {
+		return dbType;
+	}
+
+
+	public void setDbType(String dbType) {
+		this.dbType = dbType;
+	}
+
+
+	public String getType() {
+		return type;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+	public Boolean getIsId() {
+		return isId;
+	}
+
+
+	public void setIsId(Boolean isId) {
+		this.isId = isId;
+	}
+
+
+	public Boolean getIsNull() {
+		return isNull;
+	}
+
+
+	public void setIsNull(Boolean isNull) {
+		this.isNull = isNull;
+	}
+
+
+	public Boolean getIsEdit() {
+		return isEdit;
+	}
+
+
+	public void setIsEdit(Boolean isEdit) {
+		this.isEdit = isEdit;
+	}
+
+
+	public Boolean getIsUnique() {
+		return isUnique;
+	}
+
+
+	public void setIsUnique(Boolean isUnique) {
+		this.isUnique = isUnique;
+	}
+
+
+	public Boolean getInList() {
+		return inList;
+	}
+
+
+	public void setInList(Boolean inList) {
+		this.inList = inList;
+	}
+
+
+	public Boolean getInForm() {
+		return inForm;
+	}
+
+
+	public void setInForm(Boolean inForm) {
+		this.inForm = inForm;
+	}
+
+
+	public Boolean getInQuery() {
+		return inQuery;
+	}
+
+
+	public void setInQuery(Boolean inQuery) {
+		this.inQuery = inQuery;
+	}
+
+
+	public String getQueryType() {
+		return queryType;
+	}
+
+
+	public void setQueryType(String queryType) {
+		this.queryType = queryType;
+	}
+
+
+	public String getFormType() {
+		return formType;
+	}
+
+
+	public void setFormType(String formType) {
+		this.formType = formType;
+	}
+
+
+	public String getDictName() {
+		return dictName;
+	}
+
+
+	public void setDictName(String dictName) {
+		this.dictName = dictName;
+	}
+
+
+	public Integer getInOrder() {
+		return inOrder;
+	}
+
+
+	public void setInOrder(Integer inOrder) {
+		this.inOrder = inOrder;
+	}
+
+
+	public Integer getMaxLength() {
+		return maxLength;
+	}
+
+
+	public void setMaxLength(Integer maxLength) {
+		this.maxLength = maxLength;
 	}
 	
 }

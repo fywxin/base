@@ -1,46 +1,45 @@
 package org.whale.inf.client;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.aopalliance.intercept.MethodInvocation;
 import org.whale.inf.client.chain.HttpInvoke;
 
-
 public class RpcContext {
-
-	//
-	private MethodInvocation invocation;
+	
 	//代理接口对象
 	private Object proxyObject;
 	
-	private Object rs;
+	private Method method;
 	
-	private String hostUrl;
+	private Class<?>[] paramTypes;
 	
-	private String serviceUri;
-	
-	private Integer conTimeOut;
+	private String version;
+
+    private Object[] args;
+    
+    private String argsStr;
+    
+    private String serviceUrl;
+    
+    private Integer conTimeOut;
 	
 	private Integer readTimeOut;
 	
 	private Integer retry;
 	
-	private String version;
-	
 	private Map<String, Object> attachment = new HashMap<String, Object>();
+	
+	private Object rs;
 	
 	private HttpInvoke nextInvoke;
 	
-	private HttpInvokeFactory httpInvokeRouter;
-
-	public MethodInvocation getInvocation() {
-		return invocation;
-	}
-
-	public void setInvocation(MethodInvocation invocation) {
-		this.invocation = invocation;
-	}
+	private HttpInvokeFactory httpInvokeFactory;
+	
+	private boolean post;
+	
+	private Map<String, Object> header = new HashMap<String, Object>();
 
 	public Object getProxyObject() {
 		return proxyObject;
@@ -58,20 +57,13 @@ public class RpcContext {
 		this.rs = rs;
 	}
 
-	public String getHostUrl() {
-		return hostUrl;
+	
+	public String getServiceUrl() {
+		return serviceUrl;
 	}
 
-	public void setHostUrl(String hostUrl) {
-		this.hostUrl = hostUrl;
-	}
-
-	public String getServiceUri() {
-		return serviceUri;
-	}
-
-	public void setServiceUri(String serviceUri) {
-		this.serviceUri = serviceUri;
+	public void setServiceUrl(String serviceUrl) {
+		this.serviceUrl = serviceUrl;
 	}
 
 	public Integer getConTimeOut() {
@@ -122,13 +114,52 @@ public class RpcContext {
 		this.nextInvoke = nextInvoke;
 	}
 
-	public HttpInvokeFactory getHttpInvokeRouter() {
-		return httpInvokeRouter;
+	public HttpInvokeFactory getHttpInvokeFactory() {
+		return httpInvokeFactory;
 	}
 
-	public void setHttpInvokeRouter(HttpInvokeFactory httpInvokeRouter) {
-		this.httpInvokeRouter = httpInvokeRouter;
+	public void setHttpInvokeFactory(HttpInvokeFactory httpInvokeFactory) {
+		this.httpInvokeFactory = httpInvokeFactory;
 	}
-	
+
+	public Class<?>[] getParamTypes() {
+		return paramTypes;
+	}
+
+	public void setParamTypes(Class<?>[] paramTypes) {
+		this.paramTypes = paramTypes;
+	}
+
+	public Object[] getArgs() {
+		return args;
+	}
+
+	public void setArgs(Object[] args) {
+		this.args = args;
+	}
+
+	public Method getMethod() {
+		return method;
+	}
+
+	public void setMethod(Method method) {
+		this.method = method;
+	}
+
+	public String getArgsStr() {
+		return argsStr;
+	}
+
+	public void setArgsStr(String argsStr) {
+		this.argsStr = argsStr;
+	}
+
+	public boolean getPost() {
+		return post;
+	}
+
+	public void setPost(boolean post) {
+		this.post = post;
+	}
 	
 }

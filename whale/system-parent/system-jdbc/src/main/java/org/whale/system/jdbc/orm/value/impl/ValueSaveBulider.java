@@ -43,10 +43,14 @@ public class ValueSaveBulider {
 		}
 		
 		//乐观锁字段，入库时为null，则默认设置为1
-		OrmColumn optimisticLockCol = ormTable.getIdCol();
+		OrmColumn optimisticLockCol = ormTable.getOptimisticLockCol();
 		if(optimisticLockCol != null){
 			if(AnnotationUtil.getFieldValue(obj, optimisticLockCol.getField()) == null){
-				AnnotationUtil.setFieldValue(obj, optimisticLockCol.getField(), 1);
+				if(optimisticLockCol.getField().getType().toString().toLowerCase().indexOf("long") != -1){
+					AnnotationUtil.setFieldValue(obj, optimisticLockCol.getField(), 1L);
+				}else{
+					AnnotationUtil.setFieldValue(obj, optimisticLockCol.getField(), 1);
+				}
 			}
 		}
 		
