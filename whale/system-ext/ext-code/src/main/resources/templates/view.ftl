@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>查看 ${domain.cnName}</title>
+	<title>查看 ${domain.domainCnName}</title>
 <%@include file="/html/jsp/common.jsp" %>
 <script type="text/javascript">
 var toolBar = null;

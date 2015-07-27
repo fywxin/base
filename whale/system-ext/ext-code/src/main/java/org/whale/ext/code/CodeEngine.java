@@ -7,11 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.whale.ext.domain.Domain;
-import org.whale.system.cache.service.DictCacheService;
-import org.whale.system.common.constant.DictConstant;
 import org.whale.system.common.util.Strings;
 
 import freemarker.template.Configuration;
@@ -23,32 +20,42 @@ import freemarker.template.TemplateException;
 public class CodeEngine {
 	
 	private Configuration cfg;
-	@Autowired
-	private DictCacheService dictCacheService;
 
 	public void createCode(Domain domain) throws IOException, TemplateException{
-		if(Strings.isBlank(domain.getPkgName())){
-			domain.setPkgName(dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_PACKAGE));
+		if(domain.getFtlType() == 3){
+			this.doCreateJava(domain, "Domain", domain.getCodePath()+File.separator+domain.getDomainName()+".java");
+			this.doCreateJava(domain, "Dao", domain.getCodePath()+File.separator+domain.getDomainName()+"Dao.java");
+			
+			return ;
+		}else if(domain.getFtlType() == 4){
+			this.doCreateJava(domain, "Domain", domain.getCodePath()+File.separator+domain.getDomainName()+".java");
+			this.doCreateJava(domain, "Dao", domain.getCodePath()+File.separator+domain.getDomainName()+"Dao.java");
+			this.doCreateJava(domain, "Service", domain.getCodePath()+File.separator+domain.getDomainName()+"Service.java");
+			this.doCreateJava(domain, "Controller", domain.getCodePath()+File.separator+domain.getDomainName()+"Controller.java");
+			
+			return ;
+		}else if(domain.getFtlType() == 5){
+			domain.setIsTree(true);
+		}else if(domain.getFtlType() == 6){
+			domain.setIsTree(true);
 		}
-		
-		this.doCreateJava(domain, "Domain", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_DOMAIN_PATH, "c:"+File.separator+"code")+File.separator+domain.getDomainName()+".java");
-		this.doCreateJava(domain, "Dao", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_DAO_PATH, "c:"+File.separator+"code")+File.separator+domain.getDomainName()+"Dao.java");
-		this.doCreateJava(domain, "Service", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_SERVICE_PATH, "c:"+File.separator+"code")+File.separator+domain.getDomainName()+"Service.java");
-		this.doCreateJava(domain, "Controller", dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_CONTROLLER_PATH, "c:"+File.separator+"code")+File.separator+domain.getDomainName()+"Controller.java");
-		this.doCreateJsp(domain, "tree");
-		this.doCreateJsp(domain, "list");
-		this.doCreateJsp(domain, "save");
-		this.doCreateJsp(domain, "update");
-		this.doCreateJsp(domain, "view");
+		this.doCreateJava(domain, "Domain", domain.getCodePath()+File.separator+domain.getDomainName()+".java");
+		this.doCreateJava(domain, "Dao", domain.getCodePath()+File.separator+domain.getDomainName()+"Dao.java");
+		this.doCreateJava(domain, "Service", domain.getCodePath()+File.separator+domain.getDomainName()+"Service.java");
+		this.doCreateJava(domain, "Controller", domain.getCodePath()+File.separator+domain.getDomainName()+"Controller.java");
+		this.doCreateJsp(domain, "tree", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_tree.jsp");
+		this.doCreateJsp(domain, "list", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_list.jsp");
+		this.doCreateJsp(domain, "save", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_save.jsp");
+		this.doCreateJsp(domain, "update", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_update.jsp");
+		this.doCreateJsp(domain, "view", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_view.jsp");
 	}
+	
 	
 	private void doCreateJava(Domain domain, String ftlName, String toFile) throws IOException, TemplateException{
 		this.doCreateCode(domain, ftlName, toFile);
 	}
 	
-	private void doCreateJsp(Domain domain, String ftlName) throws IOException, TemplateException{
-		String codeDir = dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_CODE_JSP_PATH, "c:"+File.separator+"code"+File.separator+"jsp");
-		String toFile = codeDir+"//"+Strings.capitalize(domain.getDomainName())+"_"+ftlName+".jsp";
+	private void doCreateJsp(Domain domain, String ftlName, String toFile) throws IOException, TemplateException{
 		this.doCreateCode(domain, ftlName, toFile);
 	}
 	
@@ -87,10 +94,12 @@ public class CodeEngine {
 				}
 			}
 		}
-		File file = new File(dictCacheService.getItemValue(DictConstant.DICT_CODE, DictConstant.DICT_ITEM_FTL_PATH, "E:\\github\\platform\\base\\whale\\system-ext\\ext-code\\src\\main\\resources\\templates"));
+		File file = new File(getFltPath());
 		cfg.setDirectoryForTemplateLoading(file);
 		return cfg;
 	}
 	
-	
+	public String getFltPath(){
+		return this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()+File.separator+"templates"+File.separator;
+	}
 }

@@ -1,4 +1,4 @@
-package org.whale.${domain.pkgName!"system"}.domain;
+package ${domain.pkgName!"org.whale.system"}.domain;
 
 <#list domain.attrs as attr>
     <#if attr.type == "Date">
@@ -11,25 +11,16 @@ import org.whale.system.annotation.jdbc.Column;
 import org.whale.system.annotation.jdbc.Id;
 import org.whale.system.annotation.jdbc.Table;
 import org.whale.system.annotation.jdbc.Validate;
-<#list domain.attrs as attr >
-	<#if !attr.isId>
-	<#if attr.orderNum gt 0>
-import org.whale.system.annotation.jdbc.Order;
-		<#break>
-	</#if>
-	</#if>
-</#list>
 import org.whale.system.base.BaseEntry;
 
 /**
- * ${domain.cnName}
+ * ${domain.domainCnName}
  *
  * @author 王金绍
  * @Date ${.now?date}
  */
-@Table(value="${domain.dbName}", cnName="${domain.cnName}")
-public class ${domain.name} extends BaseEntry {
-
+@Table(value="${domain.domainSqlName}", cnName="${domain.domainCnName}")
+public class ${domain.domainName} extends BaseEntry {
 	private static final long serialVersionUID = -${.now?long?c}l;
 	
 	@Id
@@ -38,13 +29,16 @@ public class ${domain.name} extends BaseEntry {
 	
 <#list domain.attrs as attr >
 	<#if !attr.isId>
-	<#if attr.orderNum gt 0>
-	@Order(index=${attr.orderNum})
-	</#if>
-	<#if !attr.nullAble>@Validate(required=true)</#if>
-  	@Column(cnName="${attr.cnName}", name="${attr.sqlName}"<#if attr.uniqueAble>, unique=${attr.uniqueAble?c}</#if><#if !attr.updateAble>, updateable=${attr.updateAble?c}</#if>)
+	<#if !attr.isNull>@Validate(required=true)
+  	@Column(cnName="${attr.cnName}", name="${attr.sqlName}"<#if attr.isUnique>, unique=${attr.isUnique?c}</#if><#if !attr.isEdit>, updateable=${attr.isEdit?c}</#if>)
 	private ${attr.type} ${attr.name};
 	
+	</#if>
+<#if attr.isNull>
+@Column(cnName="${attr.cnName}", name="${attr.sqlName}"<#if attr.isUnique>, unique=${attr.isUnique?c}</#if><#if !attr.isEdit>, updateable=${attr.isEdit?c}</#if>)
+	private ${attr.type} ${attr.name};
+	
+	</#if>
 	</#if>
 </#list>
 	

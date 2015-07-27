@@ -1,6 +1,8 @@
 package org.whale.ext.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -74,7 +76,6 @@ public class CodeController extends BaseController {
 			domain.setDomainSqlName(tableName);
 			domain.setDomainCnName(table.get("comments") == null ? "" : table.get("comments").toString());
 			domain.setDomainName(OrmUtil.sql2DumpStyle(tableName));
-			domain.setPkgName("");
 			domain.setAttrs(attrs);
 			
 			Attr attr = null;
@@ -86,7 +87,7 @@ public class CodeController extends BaseController {
 					String dbType = col.get("jdbcType").toString().toLowerCase();
 					attr.setDbType(dbType);
 					attr.setIsNull("1".equals(col.get("isNull").toString()));
-					attr.setMaxLength(col.get("maxLength") == null || "".equals(col.get("maxLength").toString()) ? null : Integer.parseInt(col.get("maxLength").toString()));
+					attr.setMaxLength(col.get("maxLength") == null || "".equals(col.get("maxLength").toString()) ? 0 : Integer.parseInt(col.get("maxLength").toString()));
 					attr.setInOrder(col.get("sort") == null ? 0 : Integer.parseInt(col.get("sort").toString()));
 					
 					attr.setName(OrmUtil.sql2DumpStyle(attr.getSqlName()));
@@ -116,6 +117,13 @@ public class CodeController extends BaseController {
 			}
 		}
 		
+		if(Strings.isBlank(domain.getCodePath())){
+			domain.setCodePath("c://genCode");
+		}
+		if(Strings.isBlank(domain.getPkgName())){
+			domain.setPkgName("org.whale.system");
+		}
+		
 		return new ModelAndView("system/code/code_list")
 				.addObject("domain", domain)
 				.addObject("tables", tables);
@@ -133,6 +141,10 @@ public class CodeController extends BaseController {
 			String isId, String isNull, String isEdit, String isUnique,String inList, String inForm,String inQuery, 
 			String queryType, String formType, String dictName, String maxLength, String inOrder, boolean gen){
 
+		if(Strings.isBlank(domain.getPkgName())){
+			domain.setPkgName("c://genCode");
+		}
+		
 		try{
 			String[] sqlNames = sqlName.split(",");
 			String[] names = name.split(",");
@@ -177,8 +189,27 @@ public class CodeController extends BaseController {
 				attr.setMaxLength((maxLengths.length <= i || Strings.isBlank(maxLengths[i])) ? null : Integer.parseInt(maxLengths[i]));
 				attr.setInOrder((inOrders.length <= i || Strings.isBlank(inOrders[i])) ? null : Integer.parseInt(inOrders[i]));
 				attrs.add(attr);
+				
+				if(attr.getIsId()){
+					if(domain.getIdAttr() == null){
+						domain.setIdAttr(attr);
+					}else{
+						WebUtil.printFail(request, response, "只能只有一个id字段");
+						return ;
+					}
+				}
+				
 			}
+			Collections.sort(attrs, new Comparator<Attr>(){
+				@Override
+				public int compare(Attr o1, Attr o2) {
+					return o1.getInOrder() - o2.getInOrder();
+				}
+			});
+			
 			domain.setAttrs(attrs);
+			
+			
 			if(domain.getId() == null){
 				this.domainService.save(domain);
 			}else{
@@ -202,4 +233,16 @@ public class CodeController extends BaseController {
 		this.domainService.delete(id);
 		WebUtil.printSuccess(request, response);
 	}
+	
+//	private String getProjectPath(){
+//		try {
+//			File file = new DefaultResourceLoader().getResource("").getFile();
+//			if(file != null){
+//				return file.getAbsolutePath();
+//			}
+//		} catch (IOException e) {
+//			throw new BaseException(e);
+//		}
+//		return null;
+//	}
 }

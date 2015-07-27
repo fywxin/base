@@ -17,14 +17,42 @@
 
 <script language="javascript">
 function save(){
+	doSave(false);
+}
+
+function code(){
+	doSave(true);
+}
+
+function doSave(gen){
+	if(!$("#dataForm").valid()) {return false;}
+	var pass = true;
+	$("input[name='domainName']").each(function(index){
+	    if ($.trim($(this).val()) == "") {
+	        $(this)[0].focus();
+	        pass = false;
+	    }
+	});
+	
+	$("input[name='cnName']").each(function(index){
+	    if ($.trim($(this).val()) == "") {
+	        $(this)[0].focus();
+	        pass = false;
+	    }
+	});
+	
+	if(!pass){
+		return false;
+	}
+	
 	$("input[type='checkbox']").each(function(){
-	    if (!$(this).attr("checked")) {
+	    if (!$(this).is(':checked')) {
 	        $(this).val(0).attr("checked","checked"); 
 	    }
 	});
 	
 	$.ajax({
-		url:'${ctx}/code/doSave?gen=false',
+		url:'${ctx}/code/doSave?gen='+gen,
 		type: 'post',
 		dataType: 'json',
 		data: $("#dataForm").serialize(),
@@ -69,6 +97,31 @@ function del(){
 	    }
 	 });
 }
+
+$(function() {
+	$("#dataForm").validate({
+		rules: {
+			"domainName": {
+				validIllegalChar: true,
+				required: true
+			},
+			"domainCnName": {
+				required: true
+			},
+			"pkgName":{
+				required: true
+			}
+		}
+	});
+	
+	$("input[type='checkbox']").change(function(){
+	    if ($(this).is(':checked')) {
+	        $(this).attr("checked", "checked"); 
+	    }else{
+	    	$(this).removeAttr("checked"); 
+	    }
+	});
+});
 </script>
 </head>
 <body style="overflow-x: hidden;">
@@ -93,17 +146,17 @@ function del(){
 		                	</c:forEach>
 		                </select>
 					</td>
-					<td class="td-label">实体名</td>
+					<td class="td-label"><span class="required">*</span>实体名</td>
 					<td class="td-value"><input type="text" id="domainName" name="domainName" style="width:160px;"  value="${domain.domainName }" /></td>
-					<td class="td-label">中文名</td>
+					<td class="td-label"><span class="required">*</span>中文名</td>
 					<td class="td-value"><input type="text" id="domainCnName" name="domainCnName" style="width:160px;" value="${domain.domainCnName }" /></td>
 				</tr>
 				<tr>
-					<td class="td-label">基础包路径</td>
+					<td class="td-label"><span class="required">*</span>基础包路径</td>
 					<td class="td-value"><input type="text" id="pkgName" name="pkgName" style="width:200px;" value="${domain.pkgName }" /></td>
-					<td class="td-label">代码路径</td>
+					<td class="td-label">生产代码路径</td>
 					<td class="td-value">
-						<input type="text" name="codePath" id="codePath" style="width:200px;" value="${codePath }" />
+						<input type="text" name="codePath" id="codePath" style="width:200px;" value="${domain.codePath }" />
 					</td>
 					<td class="td-label">模板分类</td>
 					<td class="td-value">
@@ -145,7 +198,7 @@ function del(){
 				</tr>
 			</thead>
 			<tbody>
-			<c:forEach items="${domain.attrs }" var="attr" varStatus="index">
+			<c:forEach items="${domain.attrs }" var="attr" varStatus="index_item">
 				<tr>
 					<td>
 						${attr.sqlName }
@@ -170,51 +223,51 @@ function del(){
 					</td>
 					<td><input type="text" name="maxLength" value="${attr.maxLength }" style="width:60px;" title="[${attr.sqlName }]最大长度"/></td>
 					<td>
-						<input type="checkbox" name="isId" value="1" title="[${attr.sqlName }]是否主键"/>
+						<input type="checkbox" name="isId" value="1" <c:if test="${attr.isId || (index_item.index == 0)}">checked</c:if> title="[${attr.sqlName }]是否主键" />
 					</td>
 					<td>
-						<input type="checkbox" name="isEdit" value="1" checked="checked" title="[${attr.sqlName }]是否可编辑" />
+						<input type="checkbox" name="isEdit" value="1" <c:if test="${attr.isEdit}"> checked </c:if> title="[${attr.sqlName }]是否可编辑" />
 					</td>
 					<td>
-						<input type="checkbox" name="isNull" value="1" <c:if test="${attr.isNull}">checked="checked"</c:if> title="[${attr.sqlName }]是否可空" />
+						<input type="checkbox" name="isNull" value="1" <c:if test="${attr.isNull}">checked</c:if> title="[${attr.sqlName }]是否可空" />
 					</td>
 					<td>
-						<input type="checkbox" name="isUnique" value="1" title="[${attr.sqlName }]是否唯一"/>
+						<input type="checkbox" name="isUnique" value="1" <c:if test="${attr.isUnique}">checked</c:if> title="[${attr.sqlName }]是否唯一"/>
 					</td>
 					<td>
-						<input type="checkbox" name="inList" value="1" title="[${attr.sqlName }]列表显示"/>
+						<input type="checkbox" name="inList" value="1" <c:if test="${attr.inList}">checked</c:if> title="[${attr.sqlName }]列表显示"/>
 					</td>
 					<td>
-						<input type="checkbox" name="inQuery" value="1" title="[${attr.sqlName }]列表查询条件显示"/>
+						<input type="checkbox" name="inQuery" value="1" <c:if test="${attr.inQuery}">checked</c:if> title="[${attr.sqlName }]列表查询条件显示"/>
 					</td>
 					<td>
 						<select name="queryType" >
-							<option value="=" >=</option>
-							<option value="like" >Like</option>
-                       		<option value="!=" >!=</option>
-                            <option value=">" >&gt;</option>
-                            <option value=">=" >&gt;=</option>
-                            <option value="&lt;" >&lt;</option>
-                            <option value="&lt;=" >&lt;=</option>
-                            <option value="between" >Between</option>
-                            <option value="left_like" >Left Like</option>
-                            <option value="right_like" >Right Like</option>
+							<option value="=" <c:if test="${attr.queryType == '=' }">selected="selected"</c:if> >=</option>
+							<option value="like" <c:if test="${attr.queryType == 'like' }">selected="selected"</c:if> >Like</option>
+                       		<option value="!=" <c:if test="${attr.queryType == '!=' }">selected="selected"</c:if> >!=</option>
+                            <option value=">" <c:if test="${attr.queryType == '>' }">selected="selected"</c:if> >&gt;</option>
+                            <option value=">=" <c:if test="${attr.queryType == '>=' }">selected="selected"</c:if> >&gt;=</option>
+                            <option value="<" <c:if test="${attr.queryType == '<' }">selected="selected"</c:if> >&lt;</option>
+                            <option value="<=" <c:if test="${attr.queryType == '<=' }">selected="selected"</c:if> >&lt;=</option>
+                            <option value="between" <c:if test="${attr.queryType == 'between' }">selected="selected"</c:if> >Between</option>
+                            <option value="left_like" <c:if test="${attr.queryType == 'left_like' }">selected="selected"</c:if> >Left Like</option>
+                            <option value="right_like" <c:if test="${attr.queryType == 'right_like' }">selected="selected"</c:if> >Right Like</option>
                           </select>
 					</td>
 					<td>
-						<input type="checkbox" name="inForm" value="1" checked="checked" title="[${attr.sqlName }]列表表单显示"/>
+						<input type="checkbox" name="inForm" value="1" <c:if test="${attr.inForm}">checked</c:if> title="[${attr.sqlName }]表单显示"/>
 					</td>
 					<td>
 						<select name="formType">
-                        	<option value="input">单行文本</option>
-	                        <option value="textarea" >多行文本</option>
-	                        <option value="select" >下拉选项</option>
-                            <option value="radiobox" >单选按钮</option>
-                            <option value="checkbox" >复选框</option>
-                            <option value="date" <c:if test="${item.type == 'Date' }">selected="selected"</c:if> >日期选择</option> 
-                            <option value="dict" <c:if test="${!empty item.dictName }">selected="selected"</c:if> >字典</option> 
-                            <option value="file" >文件上传选择</option>
-                            <option value="image" >图片上传选择</option>            
+                        	<option value="input" <c:if test="${attr.formType == 'input'}">selected="selected"</c:if> >单行文本</option>
+	                        <option value="textarea" <c:if test="${attr.formType == 'textarea'}">selected="selected"</c:if> >多行文本</option>
+	                        <option value="select" <c:if test="${attr.formType == 'select'}">selected="selected"</c:if> >下拉选项</option>
+                            <option value="radiobox" <c:if test="${attr.formType == 'radiobox'}">selected="selected"</c:if> >单选按钮</option>
+                            <option value="checkbox" <c:if test="${attr.formType == 'checkbox'}">selected="selected"</c:if> >复选框</option>
+                            <option value="date" <c:if test="${item.type == 'Date' || attr.formType == 'date' }">selected="selected"</c:if> >日期选择</option> 
+                            <option value="dict" <c:if test="${!empty item.dictName || attr.formType == 'dict' }">selected="selected"</c:if> >字典</option> 
+                            <option value="file" <c:if test="${attr.formType == 'file'}">selected="selected"</c:if> >文件上传选择</option>
+                            <option value="image" <c:if test="${attr.formType == 'image'}">selected="selected"</c:if> >图片上传选择</option>            
                         </select>
 					</td>
 					<td><input type="text" name="dictName" value="${attr.dictName }" value="" style="width:140px;"/></td>

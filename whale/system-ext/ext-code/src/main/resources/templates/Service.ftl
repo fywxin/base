@@ -1,4 +1,4 @@
-package org.whale.${domain.pkgName!"system"}.service;
+package ${domain.pkgName!"org.whale.system"}.service;
 
 import java.util.List;
 
@@ -10,29 +10,29 @@ import org.whale.system.common.util.Strings;
 
 import org.whale.system.base.BaseDao;
 import org.whale.system.service.BaseService;
-import org.whale.${domain.pkgName!"system"}.dao.${domain.name}Dao;
-import org.whale.${domain.pkgName!"system"}.domain.${domain.name};
+import ${domain.pkgName!"org.whale.system"}.dao.${domain.domainName}Dao;
+import ${domain.pkgName!"org.whale.system"}.domain.${domain.domainName};
 
 /**
- * ${domain.cnName} 管理
+ * ${domain.domainCnName}管理
  *
  * @author 王金绍
  * ${.now}
  */
 @Service
-public class ${domain.name}Service extends BaseService<${domain.name}, Long> {
+public class ${domain.domainName}Service extends BaseService<${domain.domainName}, Long> {
 
 	@Autowired
-	private ${domain.name}Dao ${domain.name?uncap_first}Dao;
+	private ${domain.domainName}Dao ${domain.domainName?uncap_first}Dao;
 	
 <#list domain.attrs as attr>
-    <#if !attr.isId && attr.uniqueAble>
+    <#if !attr.isId && attr.isUnique>
     /**
-	 * 按 ${attr.cnName} 获取 ${domain.cnName}
+	 * 按 ${attr.cnName} 获取 ${domain.domainCnName}
 	 * @param ${attr.name} ${attr.cnName}
 	 * @return
 	 */
-    public ${domain.name} getBy${attr.name?cap_first }(${attr.type} ${attr.name}) {
+    public ${domain.domainName} getBy${attr.name?cap_first }(${attr.type} ${attr.name}) {
     	<#if attr.type == "String">
     	if(Strings.isBlank(${attr.name})){
     		return null;
@@ -43,14 +43,14 @@ public class ${domain.name}Service extends BaseService<${domain.name}, Long> {
     	}
     	</#if>
     	
-    	return this.${domain.name?uncap_first}Dao.getBy${attr.name?cap_first }(${attr.name});
+    	return this.${domain.domainName?uncap_first}Dao.getBy${attr.name?cap_first }(${attr.name});
     }
     </#if>
 </#list>
 	
 	@Override
-	public BaseDao<${domain.name}, Long> getDao() {
-		return ${domain.name?uncap_first}Dao;
+	public BaseDao<${domain.domainName}, Long> getDao() {
+		return ${domain.domainName?uncap_first}Dao;
 	}
 
 }

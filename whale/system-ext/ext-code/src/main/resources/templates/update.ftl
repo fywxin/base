@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>更新 ${domain.cnName}</title>
+	<title>更新 ${domain.domainCnName}</title>
 <%@include file="/html/jsp/common.jsp" %>
 <script type="text/javascript">
 var toolBar = null;
@@ -10,7 +10,7 @@ $(function(){
 	toolBar = $("#toolbar").ligerToolBar({ items: [
 	    {id: 'saveBut', text: '保存', icon:'save', click: 
 	    	function(){
-	    		$.save({'url': '${"$"+"{ctx}"}/${domain.name?uncap_first}/doUpdate'}); 
+	    		$.save({'url': '${"$"+"{ctx}"}/${domain.domainName?uncap_first}/doUpdate'}); 
 	    	}
 	    },
 	    { line:true },

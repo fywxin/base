@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>${domain.cnName} 树</title>
+    <title>${domain.domainCnName}树</title>
 <%@include file="/html/jsp/parent.jsp" %>
 <%@include file="/html/jsp/ztree.jsp" %>
 <script type="text/javascript">
@@ -60,9 +60,9 @@
 	
 	function clickTree(treeNode){
 		if(treeNode.menuType == 3){
-			$("#listFrame").attr("src", "${"$"+"{ctx}"}/${domain.name?uncap_first}/goView?${domain.idAttr.name}="+treeNode.${domain.idAttr.name});
+			$("#listFrame").attr("src", "${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goView?${domain.idAttr.name}="+treeNode.${domain.idAttr.name});
 		}else{
-			$("#listFrame").attr("src", "${"$"+"{ctx}"}/${domain.name?uncap_first}/goList?pid="+treeNode.${domain.idAttr.name});
+			$("#listFrame").attr("src", "${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goList?pid="+treeNode.${domain.idAttr.name});
 		}
 	}
 	

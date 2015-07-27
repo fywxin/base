@@ -37,13 +37,15 @@ public class Domain extends BaseEntry{
 	private String domainSqlName;
 	
 	@Column(cnName="基础包路径")
-	private String pkgName;
+	private String pkgName = "org.whale.system";
 	
 	//模板类型
 	private Integer ftlType;
 	
 	//代码路径
 	private String codePath;
+	
+	private Boolean isTree = false;
 	
 	//主键
 	private Attr idAttr;
@@ -150,6 +152,14 @@ public class Domain extends BaseEntry{
 
 	public void setCodePath(String codePath) {
 		this.codePath = codePath;
+	}
+
+	public boolean getIsTree() {
+		return isTree;
+	}
+
+	public void setIsTree(boolean isTree) {
+		this.isTree = isTree;
 	}
 
 	

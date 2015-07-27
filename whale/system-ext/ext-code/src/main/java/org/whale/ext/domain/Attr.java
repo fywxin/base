@@ -1,9 +1,8 @@
 package org.whale.ext.domain;
 
-import java.lang.reflect.Type;
-
 import org.whale.system.annotation.jdbc.Column;
 import org.whale.system.annotation.jdbc.Id;
+import org.whale.system.annotation.jdbc.Order;
 import org.whale.system.annotation.jdbc.Table;
 import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
@@ -77,8 +76,9 @@ public class Attr extends BaseEntry{
 	private String dictName;
 	
 	@Column(cnName="最大长度")
-	private Integer maxLength;
+	private Integer maxLength=0;
 	
+	@Order
 	@Column(cnName="排序")
 	private Integer inOrder;
 

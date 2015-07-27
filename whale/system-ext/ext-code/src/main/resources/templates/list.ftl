@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>${domain.cnName}列表</title>
+	<title>${domain.domainCnName}列表</title>
 <%@include file="/html/jsp/common.jsp" %>
 <script type="text/javascript">
 <#list domain.attrs as attr>
@@ -15,12 +15,12 @@ var time = new Date();
 </#list>
 $(function(){
 	$.grid({
-    	url :'${"$"+"{ctx}"}/${domain.name?uncap_first}/doList',
+    	url :'${"$"+"{ctx}"}/${domain.domainName?uncap_first}/doList',
     	uid : "roleId",
     	toolbar: {items: [
-<tag:auth authCode="${domain.name?upper_case}_SAVE">
-           		{text: '新增${domain.cnName}', icon: 'add', click: function(){
-           				$.openWin({url: "'${"$"+"{ctx}"}/${domain.name?uncap_first}/goSave","title":'新增${domain.cnName}'});
+<tag:auth authCode="${domain.domainName?upper_case}_SAVE">
+           		{text: '新增${domain.domainCnName}', icon: 'add', click: function(){
+           				$.openWin({url: "'${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goSave","title":'新增${domain.domainCnName}'});
            			} 
 				}
 </tag:auth>
@@ -29,13 +29,13 @@ $(function(){
         columns: [
 				{display: '操作', name: 'opt', width: 70, frozen: true, render: function (row){
 					var strArr = [];
-<tag:auth authCode="${domain.name?upper_case}_UPDATE">
+<tag:auth authCode="${domain.domainName?upper_case}_UPDATE">
       	        	strArr.push("<a href='#' class='r15' onclick='update(\""+row.${domain.idAttr.name}+"\");'>修改</a>");
 </tag:auth>
-<tag:auth authCode="${domain.name?upper_case}_DEL">     	        		
+<tag:auth authCode="${domain.domainName?upper_case}_DEL">     	        		
       	        	strArr.push("<a href='#' class='r15' onclick='del(\""+row.${domain.idAttr.name}+"\");'>删除</a>");
 </tag:auth>
-<tag:auth authCode="${domain.name?upper_case}_VIEW">   				
+<tag:auth authCode="${domain.domainName?upper_case}_VIEW">   				
 					strArr.push("<a href='#' onclick='view(\""+row.${domain.idAttr.name}+"\");'>查看</a>");
 </tag:auth>
 					return strArr.join("");
@@ -60,15 +60,15 @@ $(function(){
 });
 
 function update(id){
-	$.openWin({url: "${"$"+"{ctx}"}/${domain.name?uncap_first}/goUpdate?id="+id, title:"修改${domain.cnName}"});
+	$.openWin({url: "${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goUpdate?id="+id, title:"修改${domain.domainCnName}"});
 }
 
 function del(id){
-	$.del({url:"${"$"+"{ctx}"}/${domain.name?uncap_first}/doDel", datas:{ids: id}});
+	$.del({url:"${"$"+"{ctx}"}/${domain.domainName?uncap_first}/doDel", datas:{ids: id}});
 }
 
 function view(id){
-	$.openWin({url: "${"$"+"{ctx}"}/sms/goView?id="+id, title:"查看${domain.cnName}"});
+	$.openWin({url: "${"$"+"{ctx}"}/sms/goView?id="+id, title:"查看${domain.domainCnName}"});
 }
 
 </script>
