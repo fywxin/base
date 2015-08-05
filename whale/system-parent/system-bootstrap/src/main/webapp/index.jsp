@@ -30,7 +30,7 @@
 	</head>
 
 	<body class="no-skin">
-		<div id="navbar" class="navbar navbar-default">
+		<div id="navbar" class="navbar navbar-default navbar-fixed-top">
 			<script type="text/javascript">
 				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
 			</script>
@@ -358,10 +358,8 @@
 				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
 			</script>
 
-			<div id="sidebar" class="sidebar                  responsive">
-				<script type="text/javascript">
-					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
-				</script>
+			<div id="sidebar" class="sidebar responsive sidebar-fixed">
+				
 
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
@@ -394,6 +392,8 @@
 				</div><!-- /.sidebar-shortcuts -->
 
 				<ul class="nav nav-list">
+				
+				
 					<li class="active">
 						<a href="index.html">
 							<i class="menu-icon fa fa-tachometer"></i>
@@ -908,12 +908,12 @@
 									</div>
 									
 									<div class="ace-settings-item">
-										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" checked="checked" />
 										<label class="lbl" for="ace-settings-navbar">固定导航条</label>
 									</div>
 
 									<div class="ace-settings-item">
-										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" checked="checked" />
 										<label class="lbl" for="ace-settings-sidebar"> 固定滑动条</label>
 									</div>
 

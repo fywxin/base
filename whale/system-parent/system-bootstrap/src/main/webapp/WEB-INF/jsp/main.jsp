@@ -4,119 +4,131 @@
 <%@page import="org.whale.system.common.constant.SysConstant"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>控制台 - Bootstrap后台管理系统模版Ace下载</title>
-		<meta name="keywords" content="Bootstrap模版,Bootstrap模版下载,Bootstrap教程,Bootstrap中文" />
-		<meta name="description" content="站长素材提供Bootstrap模版,Bootstrap教程,Bootstrap中文翻译等相关Bootstrap插件下载" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link href="${resource}/ace/assets/css/bootstrap.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="${resource}/ace/assets/css/font-awesome.min.css" />
-		<!--[if IE 7]>
-		  <link rel="stylesheet" href="${resource}/ace/assets/css/font-awesome-ie7.min.css" />
-		<![endif]-->
-		<link rel="stylesheet" href="${resource}/ace/assets/css/ace.min.css" />
-		<link rel="stylesheet" href="${resource}/ace/assets/css/ace-rtl.min.css" />
-		<link rel="stylesheet" href="${resource}/ace/assets/css/ace-skins.min.css" />
-		<!--[if lte IE 8]>
-		  <link rel="stylesheet" href="${resource}/ace/assets/css/ace-ie.min.css" />
+		<title>后台管理系统</title>
+		<meta name="description" content="overview &amp; stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="stylesheet" href="${html}/ace/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="${html}/ace/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+		<link rel="stylesheet" href="${html}/ace/css/ace-part2.min.css" class="ace-main-stylesheet" />
+		<link rel="stylesheet" href="${html}/ace/css/ace-ie.min.css" />
 		<![endif]-->
 
-		<script src="${resource}/ace/assets/js/ace-extra.min.js"></script>
-		<!--[if lt IE 9]>
-		<script src="${resource}/ace/assets/js/html5shiv.js"></script>
-		<script src="${resource}/ace/assets/js/respond.min.js"></script>
+		<script src="${html}/ace/js/ace-extra.min.js"></script>
+		<!--[if lte IE 8]>
+		<script src="${html}/ace/js/html5shiv.min.js"></script>
+		<script src="${html}/ace/js/respond.min.js"></script>
 		<![endif]-->
 	</head>
 
-	<body>
-		<div class="navbar navbar-default" id="navbar">
+	<body class="no-skin">
+		<div id="navbar" class="navbar navbar-default navbar-fixed-top">
 			<script type="text/javascript">
 				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
 			</script>
 
 			<div class="navbar-container" id="navbar-container">
+				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+					<span class="sr-only">Toggle sidebar</span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+				</button>
+
 				<div class="navbar-header pull-left">
 					<a href="#" class="navbar-brand">
 						<small>
-							<i class="icon-leaf"></i>
-							ACE后台管理系统
+							<i class="fa fa-leaf"></i>
+							后台管理系统
 						</small>
 					</a>
 				</div>
 
-				<div class="navbar-header pull-right" role="navigation">
+				<div class="navbar-buttons navbar-header pull-right" role="navigation">
 					<ul class="nav ace-nav">
 						<li class="grey">
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-								<i class="icon-tasks"></i>
+								<i class="ace-icon fa fa-tasks"></i>
 								<span class="badge badge-grey">4</span>
 							</a>
 
-							<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
 								<li class="dropdown-header">
-									<i class="icon-ok"></i>
-									还有4个任务完成
+									<i class="ace-icon fa fa-check"></i>
+									4 Tasks to complete
 								</li>
 
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">软件更新</span>
-											<span class="pull-right">65%</span>
-										</div>
+								<li class="dropdown-content">
+									<ul class="dropdown-menu dropdown-navbar">
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<span class="pull-left">Software Update</span>
+													<span class="pull-right">65%</span>
+												</div>
 
-										<div class="progress progress-mini ">
-											<div style="width:65%" class="progress-bar "></div>
-										</div>
-									</a>
+												<div class="progress progress-mini">
+													<div style="width:65%" class="progress-bar"></div>
+												</div>
+											</a>
+										</li>
+
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<span class="pull-left">Hardware Upgrade</span>
+													<span class="pull-right">35%</span>
+												</div>
+
+												<div class="progress progress-mini">
+													<div style="width:35%" class="progress-bar progress-bar-danger"></div>
+												</div>
+											</a>
+										</li>
+
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<span class="pull-left">Unit Testing</span>
+													<span class="pull-right">15%</span>
+												</div>
+
+												<div class="progress progress-mini">
+													<div style="width:15%" class="progress-bar progress-bar-warning"></div>
+												</div>
+											</a>
+										</li>
+
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<span class="pull-left">Bug Fixes</span>
+													<span class="pull-right">90%</span>
+												</div>
+
+												<div class="progress progress-mini progress-striped active">
+													<div style="width:90%" class="progress-bar progress-bar-success"></div>
+												</div>
+											</a>
+										</li>
+									</ul>
 								</li>
 
-								<li>
+								<li class="dropdown-footer">
 									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">硬件更新</span>
-											<span class="pull-right">35%</span>
-										</div>
-
-										<div class="progress progress-mini ">
-											<div style="width:35%" class="progress-bar progress-bar-danger"></div>
-										</div>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">单元测试</span>
-											<span class="pull-right">15%</span>
-										</div>
-
-										<div class="progress progress-mini ">
-											<div style="width:15%" class="progress-bar progress-bar-warning"></div>
-										</div>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">错误修复</span>
-											<span class="pull-right">90%</span>
-										</div>
-
-										<div class="progress progress-mini progress-striped active">
-											<div style="width:90%" class="progress-bar progress-bar-success"></div>
-										</div>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										查看任务详情
-										<i class="icon-arrow-right"></i>
+										See tasks with details
+										<i class="ace-icon fa fa-arrow-right"></i>
 									</a>
 								</li>
 							</ul>
@@ -124,63 +136,67 @@
 
 						<li class="purple">
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-								<i class="icon-bell-alt icon-animated-bell"></i>
+								<i class="ace-icon fa fa-bell icon-animated-bell"></i>
 								<span class="badge badge-important">8</span>
 							</a>
 
-							<ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
+							<ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
 								<li class="dropdown-header">
-									<i class="icon-warning-sign"></i>
-									8条通知
+									<i class="ace-icon fa fa-exclamation-triangle"></i>
+									8 Notifications
 								</li>
 
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">
-												<i class="btn btn-xs no-hover btn-pink icon-comment"></i>
-												新闻评论
-											</span>
-											<span class="pull-right badge badge-info">+12</span>
-										</div>
-									</a>
+								<li class="dropdown-content">
+									<ul class="dropdown-menu dropdown-navbar navbar-pink">
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<span class="pull-left">
+														<i class="btn btn-xs no-hover btn-pink fa fa-comment"></i>
+														New Comments
+													</span>
+													<span class="pull-right badge badge-info">+12</span>
+												</div>
+											</a>
+										</li>
+
+										<li>
+											<a href="#">
+												<i class="btn btn-xs btn-primary fa fa-user"></i>
+												Bob just signed up as an editor ...
+											</a>
+										</li>
+
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<span class="pull-left">
+														<i class="btn btn-xs no-hover btn-success fa fa-shopping-cart"></i>
+														New Orders
+													</span>
+													<span class="pull-right badge badge-success">+8</span>
+												</div>
+											</a>
+										</li>
+
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<span class="pull-left">
+														<i class="btn btn-xs no-hover btn-info fa fa-twitter"></i>
+														Followers
+													</span>
+													<span class="pull-right badge badge-info">+11</span>
+												</div>
+											</a>
+										</li>
+									</ul>
 								</li>
 
-								<li>
+								<li class="dropdown-footer">
 									<a href="#">
-										<i class="btn btn-xs btn-primary icon-user"></i>
-										切换为编辑登录..
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">
-												<i class="btn btn-xs no-hover btn-success icon-shopping-cart"></i>
-												新订单
-											</span>
-											<span class="pull-right badge badge-success">+8</span>
-										</div>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<div class="clearfix">
-											<span class="pull-left">
-												<i class="btn btn-xs no-hover btn-info icon-twitter"></i>
-												粉丝
-											</span>
-											<span class="pull-right badge badge-info">+11</span>
-										</div>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										查看所有通知
-										<i class="icon-arrow-right"></i>
+										See all notifications
+										<i class="ace-icon fa fa-arrow-right"></i>
 									</a>
 								</li>
 							</ul>
@@ -188,71 +204,109 @@
 
 						<li class="green">
 							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-								<i class="icon-envelope icon-animated-vertical"></i>
+								<i class="ace-icon fa fa-envelope icon-animated-vertical"></i>
 								<span class="badge badge-success">5</span>
 							</a>
 
-							<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
 								<li class="dropdown-header">
-									<i class="icon-envelope-alt"></i>
-									5条消息
+									<i class="ace-icon fa fa-envelope-o"></i>
+									5 Messages
 								</li>
 
-								<li>
-									<a href="#">
-										<img src="${resource}/ace/assets/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
-										<span class="msg-body">
-											<span class="msg-title">
-												<span class="blue">Alex:</span>
-												不知道写啥 ...
-											</span>
+								<li class="dropdown-content">
+									<ul class="dropdown-menu dropdown-navbar">
+										<li>
+											<a href="#" class="clearfix">
+												<img src="${html}/ace/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
+												<span class="msg-body">
+													<span class="msg-title">
+														<span class="blue">Alex:</span>
+														Ciao sociis natoque penatibus et auctor ...
+													</span>
 
-											<span class="msg-time">
-												<i class="icon-time"></i>
-												<span>1分钟以前</span>
-											</span>
-										</span>
-									</a>
+													<span class="msg-time">
+														<i class="ace-icon fa fa-clock-o"></i>
+														<span>a moment ago</span>
+													</span>
+												</span>
+											</a>
+										</li>
+
+										<li>
+											<a href="#" class="clearfix">
+												<img src="${html}/ace/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
+												<span class="msg-body">
+													<span class="msg-title">
+														<span class="blue">Susan:</span>
+														Vestibulum id ligula porta felis euismod ...
+													</span>
+
+													<span class="msg-time">
+														<i class="ace-icon fa fa-clock-o"></i>
+														<span>20 minutes ago</span>
+													</span>
+												</span>
+											</a>
+										</li>
+
+										<li>
+											<a href="#" class="clearfix">
+												<img src="${html}/ace/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
+												<span class="msg-body">
+													<span class="msg-title">
+														<span class="blue">Bob:</span>
+														Nullam quis risus eget urna mollis ornare ...
+													</span>
+
+													<span class="msg-time">
+														<i class="ace-icon fa fa-clock-o"></i>
+														<span>3:15 pm</span>
+													</span>
+												</span>
+											</a>
+										</li>
+
+										<li>
+											<a href="#" class="clearfix">
+												<img src="${html}/ace/avatars/avatar2.png" class="msg-photo" alt="Kate's Avatar" />
+												<span class="msg-body">
+													<span class="msg-title">
+														<span class="blue">Kate:</span>
+														Ciao sociis natoque eget urna mollis ornare ...
+													</span>
+
+													<span class="msg-time">
+														<i class="ace-icon fa fa-clock-o"></i>
+														<span>1:33 pm</span>
+													</span>
+												</span>
+											</a>
+										</li>
+
+										<li>
+											<a href="#" class="clearfix">
+												<img src="${html}/ace/avatars/avatar5.png" class="msg-photo" alt="Fred's Avatar" />
+												<span class="msg-body">
+													<span class="msg-title">
+														<span class="blue">Fred:</span>
+														Vestibulum id penatibus et auctor  ...
+													</span>
+
+													<span class="msg-time">
+														<i class="ace-icon fa fa-clock-o"></i>
+														<span>10:09 am</span>
+													</span>
+												</span>
+											</a>
+										</li>
+									</ul>
 								</li>
 
-								<li>
-									<a href="#">
-										<img src="${resource}/ace/assets/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
-										<span class="msg-body">
-											<span class="msg-title">
-												<span class="blue">Susan:</span>
-												不知道翻译...
-											</span>
-
-											<span class="msg-time">
-												<i class="icon-time"></i>
-												<span>20分钟以前</span>
-											</span>
-										</span>
-									</a>
-								</li>
-
-								<li>
-									<a href="#">
-										<img src="${resource}/ace/assets/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
-										<span class="msg-body">
-											<span class="msg-title">
-												<span class="blue">Bob:</span>
-												到底是不是英文 ...
-											</span>
-
-											<span class="msg-time">
-												<i class="icon-time"></i>
-												<span>下午3:15</span>
-											</span>
-										</span>
-									</a>
-								</li>
-
-								<li>
+								<li class="dropdown-footer">
 									<a href="inbox.html">
-										查看所有消息
-										<i class="icon-arrow-right"></i>
+										See all messages
+										<i class="ace-icon fa fa-arrow-right"></i>
 									</a>
 								</li>
 							</ul>
@@ -260,26 +314,26 @@
 
 						<li class="light-blue">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-								<img class="nav-user-photo" src="${resource}/ace/assets/avatars/user.jpg" alt="Jason's Photo" />
+								<img class="nav-user-photo" src="${html}/ace/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
-									<small>欢迎光临,</small>
+									<small>欢迎,</small>
 									Jason
 								</span>
 
-								<i class="icon-caret-down"></i>
+								<i class="ace-icon fa fa-caret-down"></i>
 							</a>
 
-							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
 									<a href="#">
-										<i class="icon-cog"></i>
+										<i class="ace-icon fa fa-cog"></i>
 										设置
 									</a>
 								</li>
 
 								<li>
-									<a href="#">
-										<i class="icon-user"></i>
+									<a href="profile.html">
+										<i class="ace-icon fa fa-user"></i>
 										个人资料
 									</a>
 								</li>
@@ -288,15 +342,15 @@
 
 								<li>
 									<a href="#">
-										<i class="icon-off"></i>
+										<i class="ace-icon fa fa-power-off"></i>
 										退出
 									</a>
 								</li>
 							</ul>
 						</li>
-					</ul><!-- /.ace-nav -->
-				</div><!-- /.navbar-header -->
-			</div><!-- /.container -->
+					</ul>
+				</div>
+			</div><!-- /.navbar-container -->
 		</div>
 
 		<div class="main-container" id="main-container">
@@ -304,355 +358,54 @@
 				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
 			</script>
 
-			<div class="main-container-inner">
-				<a class="menu-toggler" id="menu-toggler" href="#">
-					<span class="menu-text"></span>
-				</a>
+			<div id="sidebar" class="sidebar responsive sidebar-fixed">
+				
 
-				<div class="sidebar" id="sidebar">
-					<script type="text/javascript">
-						try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
-					</script>
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+						<button class="btn btn-success">
+							<i class="ace-icon fa fa-signal"></i>
+						</button>
 
-					<div class="sidebar-shortcuts" id="sidebar-shortcuts">
-						<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-							<button class="btn btn-success">
-								<i class="icon-signal"></i>
-							</button>
+						<button class="btn btn-info">
+							<i class="ace-icon fa fa-pencil"></i>
+						</button>
 
-							<button class="btn btn-info">
-								<i class="icon-pencil"></i>
-							</button>
+						<button class="btn btn-warning">
+							<i class="ace-icon fa fa-users"></i>
+						</button>
 
-							<button class="btn btn-warning">
-								<i class="icon-group"></i>
-							</button>
-
-							<button class="btn btn-danger">
-								<i class="icon-cogs"></i>
-							</button>
-						</div>
-
-						<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-							<span class="btn btn-success"></span>
-
-							<span class="btn btn-info"></span>
-
-							<span class="btn btn-warning"></span>
-
-							<span class="btn btn-danger"></span>
-						</div>
-					</div><!-- #sidebar-shortcuts -->
-
-					<ul class="nav nav-list">
-						<li class="active">
-							<a href="index.html">
-								<i class="icon-dashboard"></i>
-								<span class="menu-text"> 控制台 </span>
-							</a>
-						</li>
-
-						<li>
-							<a href="typography.html">
-								<i class="icon-text-width"></i>
-								<span class="menu-text"> 文字排版 </span>
-							</a>
-						</li>
-
-						<li>
-							<a href="#" class="dropdown-toggle">
-								<i class="icon-desktop"></i>
-								<span class="menu-text"> UI 组件 </span>
-
-								<b class="arrow icon-angle-down"></b>
-							</a>
-
-							<ul class="submenu">
-								<li>
-									<a href="elements.html">
-										<i class="icon-double-angle-right"></i>
-										组件
-									</a>
-								</li>
-
-								<li>
-									<a href="buttons.html">
-										<i class="icon-double-angle-right"></i>
-										按钮 &amp; 图表
-									</a>
-								</li>
-
-								<li>
-									<a href="treeview.html">
-										<i class="icon-double-angle-right"></i>
-										树菜单
-									</a>
-								</li>
-
-								<li>
-									<a href="jquery-ui.html">
-										<i class="icon-double-angle-right"></i>
-										jQuery UI
-									</a>
-								</li>
-
-								<li>
-									<a href="nestable-list.html">
-										<i class="icon-double-angle-right"></i>
-										可拖拽列表
-									</a>
-								</li>
-
-								<li>
-									<a href="#" class="dropdown-toggle">
-										<i class="icon-double-angle-right"></i>
-
-										三级菜单
-										<b class="arrow icon-angle-down"></b>
-									</a>
-
-									<ul class="submenu">
-										<li>
-											<a href="#">
-												<i class="icon-leaf"></i>
-												第一级
-											</a>
-										</li>
-
-										<li>
-											<a href="#" class="dropdown-toggle">
-												<i class="icon-pencil"></i>
-
-												第四级
-												<b class="arrow icon-angle-down"></b>
-											</a>
-
-											<ul class="submenu">
-												<li>
-													<a href="#">
-														<i class="icon-plus"></i>
-														添加产品
-													</a>
-												</li>
-
-												<li>
-													<a href="#">
-														<i class="icon-eye-open"></i>
-														查看商品
-													</a>
-												</li>
-											</ul>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-
-						<li>
-							<a href="#" class="dropdown-toggle">
-								<i class="icon-list"></i>
-								<span class="menu-text"> 表格 </span>
-
-								<b class="arrow icon-angle-down"></b>
-							</a>
-
-							<ul class="submenu">
-								<li>
-									<a href="tables.html">
-										<i class="icon-double-angle-right"></i>
-										简单 &amp; 动态
-									</a>
-								</li>
-
-								<li>
-									<a href="jqgrid.html">
-										<i class="icon-double-angle-right"></i>
-										jqGrid plugin
-									</a>
-								</li>
-							</ul>
-						</li>
-
-						<li>
-							<a href="#" class="dropdown-toggle">
-								<i class="icon-edit"></i>
-								<span class="menu-text"> 表单 </span>
-
-								<b class="arrow icon-angle-down"></b>
-							</a>
-
-							<ul class="submenu">
-								<li>
-									<a href="form-elements.html">
-										<i class="icon-double-angle-right"></i>
-										表单组件
-									</a>
-								</li>
-
-								<li>
-									<a href="form-wizard.html">
-										<i class="icon-double-angle-right"></i>
-										向导提示 &amp; 验证
-									</a>
-								</li>
-
-								<li>
-									<a href="wysiwyg.html">
-										<i class="icon-double-angle-right"></i>
-										编辑器
-									</a>
-								</li>
-
-								<li>
-									<a href="dropzone.html">
-										<i class="icon-double-angle-right"></i>
-										文件上传
-									</a>
-								</li>
-							</ul>
-						</li>
-
-						<li>
-							<a href="widgets.html">
-								<i class="icon-list-alt"></i>
-								<span class="menu-text"> 插件 </span>
-							</a>
-						</li>
-
-						<li>
-							<a href="calendar.html">
-								<i class="icon-calendar"></i>
-
-								<span class="menu-text">
-									日历
-									<span class="badge badge-transparent tooltip-error" title="2&nbsp;Important&nbsp;Events">
-										<i class="icon-warning-sign red bigger-130"></i>
-									</span>
-								</span>
-							</a>
-						</li>
-
-						<li>
-							<a href="gallery.html">
-								<i class="icon-picture"></i>
-								<span class="menu-text"> 相册 </span>
-							</a>
-						</li>
-
-						<li>
-							<a href="#" class="dropdown-toggle">
-								<i class="icon-tag"></i>
-								<span class="menu-text"> 更多页面 </span>
-
-								<b class="arrow icon-angle-down"></b>
-							</a>
-
-							<ul class="submenu">
-								<li>
-									<a href="profile.html">
-										<i class="icon-double-angle-right"></i>
-										用户信息
-									</a>
-								</li>
-
-								<li>
-									<a href="inbox.html">
-										<i class="icon-double-angle-right"></i>
-										收件箱
-									</a>
-								</li>
-
-								<li>
-									<a href="pricing.html">
-										<i class="icon-double-angle-right"></i>
-										售价单
-									</a>
-								</li>
-
-								<li>
-									<a href="invoice.html">
-										<i class="icon-double-angle-right"></i>
-										购物车
-									</a>
-								</li>
-
-								<li>
-									<a href="timeline.html">
-										<i class="icon-double-angle-right"></i>
-										时间轴
-									</a>
-								</li>
-
-								<li>
-									<a href="login.html">
-										<i class="icon-double-angle-right"></i>
-										登录 &amp; 注册
-									</a>
-								</li>
-							</ul>
-						</li>
-
-						<li>
-							<a href="#" class="dropdown-toggle">
-								<i class="icon-file-alt"></i>
-
-								<span class="menu-text">
-									其他页面
-									<span class="badge badge-primary ">5</span>
-								</span>
-
-								<b class="arrow icon-angle-down"></b>
-							</a>
-
-							<ul class="submenu">
-								<li>
-									<a href="faq.html">
-										<i class="icon-double-angle-right"></i>
-										帮助
-									</a>
-								</li>
-
-								<li>
-									<a href="error-404.html">
-										<i class="icon-double-angle-right"></i>
-										404错误页面
-									</a>
-								</li>
-
-								<li>
-									<a href="error-500.html">
-										<i class="icon-double-angle-right"></i>
-										500错误页面
-									</a>
-								</li>
-
-								<li>
-									<a href="grid.html">
-										<i class="icon-double-angle-right"></i>
-										网格
-									</a>
-								</li>
-
-								<li>
-									<a href="blank.html">
-										<i class="icon-double-angle-right"></i>
-										空白页面
-									</a>
-								</li>
-							</ul>
-						</li>
-					</ul><!-- /.nav-list -->
-
-					<div class="sidebar-collapse" id="sidebar-collapse">
-						<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+						<button class="btn btn-danger">
+							<i class="ace-icon fa fa-cogs"></i>
+						</button>
 					</div>
 
-					<script type="text/javascript">
-						try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
-					</script>
+					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+						<span class="btn btn-success"></span>
+
+						<span class="btn btn-info"></span>
+
+						<span class="btn btn-warning"></span>
+
+						<span class="btn btn-danger"></span>
+					</div>
+				</div><!-- /.sidebar-shortcuts -->
+
+				<ul class="nav nav-list">
+				${menus }
+				</ul>
+
+				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+					<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
 				</div>
 
-				<div class="main-content">
+				<script type="text/javascript">
+					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+				</script>
+			</div>
+
+			<div class="main-content">
+				<div class="main-content-inner">
 					<div class="breadcrumbs" id="breadcrumbs">
 						<script type="text/javascript">
 							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
@@ -660,29 +413,88 @@
 
 						<ul class="breadcrumb">
 							<li>
-								<i class="icon-home home-icon"></i>
+								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">首页</a>
 							</li>
-							<li class="active">控制台</li>
-						</ul><!-- .breadcrumb -->
+							<li class="active">个人门户</li>
+						</ul><!-- /.breadcrumb -->
 
-						<div class="nav-search" id="nav-search">
-							<form class="form-search">
-								<span class="input-icon">
-									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
-									<i class="icon-search nav-search-icon"></i>
-								</span>
-							</form>
-						</div><!-- #nav-search -->
+						<div class="ace-settings-container" id="ace-settings-container" style="top:0px;">
+							<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+								<i class="ace-icon fa fa-cog bigger-130"></i>
+							</div>
+
+							<div class="ace-settings-box clearfix" id="ace-settings-box">
+								<div class="pull-left width-50">
+									<div class="ace-settings-item">
+										<div class="pull-left">
+											<select id="skin-colorpicker" class="hide">
+												<option data-skin="no-skin" value="#438EB9">#438EB9</option>
+												<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+												<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+												<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+											</select>
+										</div>
+										<span>&nbsp; 选择皮肤</span>
+									</div>
+									
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" checked="checked" />
+										<label class="lbl" for="ace-settings-navbar">固定导航条</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" checked="checked" />
+										<label class="lbl" for="ace-settings-sidebar"> 固定滑动条</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
+										<label class="lbl" for="ace-settings-breadcrumbs"> 固定面包屑</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
+										<label class="lbl" for="ace-settings-rtl"> 切换到左边</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
+										<label class="lbl" for="ace-settings-add-container">
+											切换到窄屏
+										</label>
+									</div>
+								</div><!-- /.pull-left -->
+
+								<div class="pull-left width-50">
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" />
+										<label class="lbl" for="ace-settings-hover"> 滑动条悬浮</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" />
+										<label class="lbl" for="ace-settings-compact"> 滑动条压缩</label>
+									</div>
+
+									<div class="ace-settings-item">
+										<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" />
+										<label class="lbl" for="ace-settings-highlight"> 滑动条凸显</label>
+									</div>
+								</div><!-- /.pull-left -->
+							</div><!-- /.ace-settings-box -->
+						</div><!-- /.ace-settings-container -->
 					</div>
 
 					<div class="page-content">
+						
+
 						<div class="page-header">
 							<h1>
-								控制台
+								Dashboard
 								<small>
-									<i class="icon-double-angle-right"></i>
-									 查看
+									<i class="ace-icon fa fa-angle-double-right"></i>
+									overview &amp; stats
 								</small>
 							</h1>
 						</div><!-- /.page-header -->
@@ -690,94 +502,94 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-
 								<div class="alert alert-block alert-success">
 									<button type="button" class="close" data-dismiss="alert">
-										<i class="icon-remove"></i>
+										<i class="ace-icon fa fa-times"></i>
 									</button>
 
-									<i class="icon-ok green"></i>
+									<i class="ace-icon fa fa-check green"></i>
 
-									欢迎使用
+									Welcome to
 									<strong class="green">
-										Ace后台管理系统
-										<small>(v1.2)</small>
-									</strong>
-									,轻量级好用的后台管理系统模版.	
+										Ace
+										<small>(v1.3.3)</small>
+									</strong>,
+	the lightweight, feature-rich and easy to use admin template.
 								</div>
 
 								<div class="row">
 									<div class="space-6"></div>
 
 									<div class="col-sm-7 infobox-container">
-										<div class="infobox infobox-green  ">
+										<div class="infobox infobox-green">
 											<div class="infobox-icon">
-												<i class="icon-comments"></i>
+												<i class="ace-icon fa fa-comments"></i>
 											</div>
 
 											<div class="infobox-data">
 												<span class="infobox-data-number">32</span>
-												<div class="infobox-content">2个评论</div>
+												<div class="infobox-content">comments + 2 reviews</div>
 											</div>
+
 											<div class="stat stat-success">8%</div>
 										</div>
 
-										<div class="infobox infobox-blue  ">
+										<div class="infobox infobox-blue">
 											<div class="infobox-icon">
-												<i class="icon-twitter"></i>
+												<i class="ace-icon fa fa-twitter"></i>
 											</div>
 
 											<div class="infobox-data">
 												<span class="infobox-data-number">11</span>
-												<div class="infobox-content">新粉丝</div>
+												<div class="infobox-content">new followers</div>
 											</div>
 
 											<div class="badge badge-success">
 												+32%
-												<i class="icon-arrow-up"></i>
+												<i class="ace-icon fa fa-arrow-up"></i>
 											</div>
 										</div>
 
-										<div class="infobox infobox-pink  ">
+										<div class="infobox infobox-pink">
 											<div class="infobox-icon">
-												<i class="icon-shopping-cart"></i>
+												<i class="ace-icon fa fa-shopping-cart"></i>
 											</div>
 
 											<div class="infobox-data">
 												<span class="infobox-data-number">8</span>
-												<div class="infobox-content">新订单</div>
+												<div class="infobox-content">new orders</div>
 											</div>
 											<div class="stat stat-important">4%</div>
 										</div>
 
-										<div class="infobox infobox-red  ">
+										<div class="infobox infobox-red">
 											<div class="infobox-icon">
-												<i class="icon-beaker"></i>
+												<i class="ace-icon fa fa-flask"></i>
 											</div>
 
 											<div class="infobox-data">
 												<span class="infobox-data-number">7</span>
-												<div class="infobox-content">调查</div>
+												<div class="infobox-content">experiments</div>
 											</div>
 										</div>
 
-										<div class="infobox infobox-orange2  ">
+										<div class="infobox infobox-orange2">
 											<div class="infobox-chart">
 												<span class="sparkline" data-values="196,128,202,177,154,94,100,170,224"></span>
 											</div>
 
 											<div class="infobox-data">
 												<span class="infobox-data-number">6,251</span>
-												<div class="infobox-content">页面查看次数</div>
+												<div class="infobox-content">pageviews</div>
 											</div>
 
 											<div class="badge badge-success">
 												7.2%
-												<i class="icon-arrow-up"></i>
+												<i class="ace-icon fa fa-arrow-up"></i>
 											</div>
 										</div>
 
-										<div class="infobox infobox-blue2  ">
+										<div class="infobox infobox-blue2">
 											<div class="infobox-progress">
 												<div class="easy-pie-chart percentage" data-percent="42" data-size="46">
 													<span class="percent">42</span>%
@@ -785,11 +597,11 @@
 											</div>
 
 											<div class="infobox-data">
-												<span class="infobox-text">交易使用</span>
+												<span class="infobox-text">traffic used</span>
 
 												<div class="infobox-content">
 													<span class="bigger-110">~</span>
-													剩余58GB
+													58GB remaining
 												</div>
 											</div>
 										</div>
@@ -804,8 +616,8 @@
 											</div>
 
 											<div class="infobox-data">
-												<div class="infobox-content">任务</div>
-												<div class="infobox-content">完成</div>
+												<div class="infobox-content">Task</div>
+												<div class="infobox-content">Completion</div>
 											</div>
 										</div>
 
@@ -815,68 +627,70 @@
 											</div>
 
 											<div class="infobox-data">
-												<div class="infobox-content">获得</div>
+												<div class="infobox-content">Earnings</div>
 												<div class="infobox-content">$32,000</div>
 											</div>
 										</div>
 
 										<div class="infobox infobox-grey infobox-small infobox-dark">
 											<div class="infobox-icon">
-												<i class="icon-download-alt"></i>
+												<i class="ace-icon fa fa-download"></i>
 											</div>
 
 											<div class="infobox-data">
-												<div class="infobox-content">下载次数</div>
+												<div class="infobox-content">Downloads</div>
 												<div class="infobox-content">1,205</div>
 											</div>
 										</div>
 									</div>
 
-									<div class="vspace-sm"></div>
+									<div class="vspace-12-sm"></div>
 
 									<div class="col-sm-5">
 										<div class="widget-box">
 											<div class="widget-header widget-header-flat widget-header-small">
-												<h5>
-													<i class="icon-signal"></i>
-													访问来源
+												<h5 class="widget-title">
+													<i class="ace-icon fa fa-signal"></i>
+													Traffic Sources
 												</h5>
 
 												<div class="widget-toolbar no-border">
-													<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
-														本周
-														<i class="icon-angle-down icon-on-right bigger-110"></i>
-													</button>
+													<div class="inline dropdown-hover">
+														<button class="btn btn-minier btn-primary">
+															This Week
+															<i class="ace-icon fa fa-angle-down icon-on-right bigger-110"></i>
+														</button>
 
-													<ul class="dropdown-menu pull-right dropdown-125 dropdown-lighter dropdown-caret">
-														<li class="active">
-															<a href="#" class="blue">
-																<i class="icon-caret-right bigger-110">&nbsp;</i>
-																本周
-															</a>
-														</li>
+														<ul class="dropdown-menu dropdown-menu-right dropdown-125 dropdown-lighter dropdown-close dropdown-caret">
+															<li class="active">
+																<a href="#" class="blue">
+																	<i class="ace-icon fa fa-caret-right bigger-110">&nbsp;</i>
+																	This Week
+																</a>
+															</li>
 
-														<li>
-															<a href="#">
-																<i class="icon-caret-right bigger-110 invisible">&nbsp;</i>
-																上周
-															</a>
-														</li>
+															<li>
+																<a href="#">
+																	<i class="ace-icon fa fa-caret-right bigger-110 invisible">&nbsp;</i>
+																	Last Week
+																</a>
+															</li>
 
-														<li>
-															<a href="#">
-																<i class="icon-caret-right bigger-110 invisible">&nbsp;</i>
-																本月
-															</a>
-														</li>
+															<li>
+																<a href="#">
+																	<i class="ace-icon fa fa-caret-right bigger-110 invisible">&nbsp;</i>
+																	This Month
+																</a>
+															</li>
 
-														<li>
-															<a href="#">
-																<i class="icon-caret-right bigger-110 invisible">&nbsp;</i>
-																上月
-															</a>
-														</li>
-													</ul>
+															<li>
+																<a href="#">
+																	<i class="ace-icon fa fa-caret-right bigger-110 invisible">&nbsp;</i>
+																	Last Month
+																</a>
+															</li>
+														</ul>
+													</div>
 												</div>
 											</div>
 
@@ -889,7 +703,7 @@
 													<div class="clearfix">
 														<div class="grid3">
 															<span class="grey">
-																<i class="icon-facebook-sign icon-2x blue"></i>
+																<i class="ace-icon fa fa-facebook-square fa-2x blue"></i>
 																&nbsp; likes
 															</span>
 															<h4 class="bigger pull-right">1,255</h4>
@@ -897,7 +711,7 @@
 
 														<div class="grid3">
 															<span class="grey">
-																<i class="icon-twitter-sign icon-2x purple"></i>
+																<i class="ace-icon fa fa-twitter-square fa-2x purple"></i>
 																&nbsp; tweets
 															</span>
 															<h4 class="bigger pull-right">941</h4>
@@ -905,17 +719,17 @@
 
 														<div class="grid3">
 															<span class="grey">
-																<i class="icon-pinterest-sign icon-2x red"></i>
+																<i class="ace-icon fa fa-pinterest-square fa-2x red"></i>
 																&nbsp; pins
 															</span>
 															<h4 class="bigger pull-right">1,050</h4>
 														</div>
 													</div>
-												</div><!-- /widget-main -->
-											</div><!-- /widget-body -->
-										</div><!-- /widget-box -->
-									</div><!-- /span -->
-								</div><!-- /row -->
+												</div><!-- /.widget-main -->
+											</div><!-- /.widget-body -->
+										</div><!-- /.widget-box -->
+									</div><!-- /.col -->
+								</div><!-- /.row -->
 
 								<div class="hr hr32 hr-dotted"></div>
 
@@ -923,14 +737,14 @@
 									<div class="col-sm-5">
 										<div class="widget-box transparent">
 											<div class="widget-header widget-header-flat">
-												<h4 class="lighter">
-													<i class="icon-star orange"></i>
-													热门域名
+												<h4 class="widget-title lighter">
+													<i class="ace-icon fa fa-star orange"></i>
+													Popular Domains
 												</h4>
 
 												<div class="widget-toolbar">
 													<a href="#" data-action="collapse">
-														<i class="icon-chevron-up"></i>
+														<i class="ace-icon fa fa-chevron-up"></i>
 													</a>
 												</div>
 											</div>
@@ -941,18 +755,15 @@
 														<thead class="thin-border-bottom">
 															<tr>
 																<th>
-																	<i class="icon-caret-right blue"></i>
-																	名称
+																	<i class="ace-icon fa fa-caret-right blue"></i>name
 																</th>
 
 																<th>
-																	<i class="icon-caret-right blue"></i>
-																	价格
+																	<i class="ace-icon fa fa-caret-right blue"></i>price
 																</th>
 
 																<th class="hidden-480">
-																	<i class="icon-caret-right blue"></i>
-																	状态
+																	<i class="ace-icon fa fa-caret-right blue"></i>status
 																</th>
 															</tr>
 														</thead>
@@ -969,7 +780,7 @@
 																</td>
 
 																<td class="hidden-480">
-																	<span class="label label-info arrowed-right arrowed-in">销售中</span>
+																	<span class="label label-info arrowed-right arrowed-in">on sale</span>
 																</td>
 															</tr>
 
@@ -977,14 +788,11 @@
 																<td>online.com</td>
 
 																<td>
-																	<small>
-																		<s class="red"></s>
-																	</small>
-																	<b class="green">$16.45</b>
+																	<b class="blue">$16.45</b>
 																</td>
 
 																<td class="hidden-480">
-																	<span class="label label-success arrowed-in arrowed-in-right">可用</span>
+																	<span class="label label-success arrowed-in arrowed-in-right">approved</span>
 																</td>
 															</tr>
 
@@ -992,14 +800,11 @@
 																<td>newnet.com</td>
 
 																<td>
-																	<small>
-																		<s class="red"></s>
-																	</small>
-																	<b class="green">$15.00</b>
+																	<b class="blue">$15.00</b>
 																</td>
 
 																<td class="hidden-480">
-																	<span class="label label-danger arrowed">待定</span>
+																	<span class="label label-danger arrowed">pending</span>
 																</td>
 															</tr>
 
@@ -1015,7 +820,7 @@
 
 																<td class="hidden-480">
 																	<span class="label arrowed">
-																		<s>无货</s>
+																		<s>out of stock</s>
 																	</span>
 																</td>
 															</tr>
@@ -1024,34 +829,31 @@
 																<td>domain.com</td>
 
 																<td>
-																	<small>
-																		<s class="red"></s>
-																	</small>
-																	<b class="green">$12.00</b>
+																	<b class="blue">$12.00</b>
 																</td>
 
 																<td class="hidden-480">
-																	<span class="label label-warning arrowed arrowed-right">售完</span>
+																	<span class="label label-warning arrowed arrowed-right">SOLD</span>
 																</td>
 															</tr>
 														</tbody>
 													</table>
-												</div><!-- /widget-main -->
-											</div><!-- /widget-body -->
-										</div><!-- /widget-box -->
-									</div>
+												</div><!-- /.widget-main -->
+											</div><!-- /.widget-body -->
+										</div><!-- /.widget-box -->
+									</div><!-- /.col -->
 
 									<div class="col-sm-7">
 										<div class="widget-box transparent">
 											<div class="widget-header widget-header-flat">
-												<h4 class="lighter">
-													<i class="icon-signal"></i>
-													销售统计
+												<h4 class="widget-title lighter">
+													<i class="ace-icon fa fa-signal"></i>
+													Sale Stats
 												</h4>
 
 												<div class="widget-toolbar">
 													<a href="#" data-action="collapse">
-														<i class="icon-chevron-up"></i>
+														<i class="ace-icon fa fa-chevron-up"></i>
 													</a>
 												</div>
 											</div>
@@ -1059,11 +861,11 @@
 											<div class="widget-body">
 												<div class="widget-main padding-4">
 													<div id="sales-charts"></div>
-												</div><!-- /widget-main -->
-											</div><!-- /widget-body -->
-										</div><!-- /widget-box -->
-									</div>
-								</div>
+												</div><!-- /.widget-main -->
+											</div><!-- /.widget-body -->
+										</div><!-- /.widget-box -->
+									</div><!-- /.col -->
+								</div><!-- /.row -->
 
 								<div class="hr hr32 hr-dotted"></div>
 
@@ -1071,23 +873,22 @@
 									<div class="col-sm-6">
 										<div class="widget-box transparent" id="recent-box">
 											<div class="widget-header">
-												<h4 class="lighter smaller">
-													<i class="icon-rss orange"></i>
-													最近
+												<h4 class="widget-title lighter smaller">
+													<i class="ace-icon fa fa-rss orange"></i>RECENT
 												</h4>
 
 												<div class="widget-toolbar no-border">
 													<ul class="nav nav-tabs" id="recent-tab">
 														<li class="active">
-															<a data-toggle="tab" href="#task-tab">任务</a>
+															<a data-toggle="tab" href="#task-tab">Tasks</a>
 														</li>
 
 														<li>
-															<a data-toggle="tab" href="#member-tab">会员</a>
+															<a data-toggle="tab" href="#member-tab">Members</a>
 														</li>
 
 														<li>
-															<a data-toggle="tab" href="#comment-tab">评论</a>
+															<a data-toggle="tab" href="#comment-tab">Comments</a>
 														</li>
 													</ul>
 												</div>
@@ -1095,18 +896,18 @@
 
 											<div class="widget-body">
 												<div class="widget-main padding-4">
-													<div class="tab-content padding-8 overflow-visible">
+													<div class="tab-content padding-8">
 														<div id="task-tab" class="tab-pane active">
 															<h4 class="smaller lighter green">
-																<i class="icon-list"></i>
-																可拖拽排序列表
+																<i class="ace-icon fa fa-list"></i>
+																Sortable Lists
 															</h4>
 
 															<ul id="tasks" class="item-list">
 																<li class="item-orange clearfix">
 																	<label class="inline">
 																		<input type="checkbox" class="ace" />
-																		<span class="lbl"> 问答</span>
+																		<span class="lbl"> Answering customer questions</span>
 																	</label>
 
 																	<div class="pull-right easy-pie-chart percentage" data-size="30" data-color="#ECCB71" data-percent="42">
@@ -1117,24 +918,24 @@
 																<li class="item-red clearfix">
 																	<label class="inline">
 																		<input type="checkbox" class="ace" />
-																		<span class="lbl"> BUG修复</span>
+																		<span class="lbl"> Fixing bugs</span>
 																	</label>
 
 																	<div class="pull-right action-buttons">
 																		<a href="#" class="blue">
-																			<i class="icon-pencil bigger-130"></i>
+																			<i class="ace-icon fa fa-pencil bigger-130"></i>
 																		</a>
 
 																		<span class="vbar"></span>
 
 																		<a href="#" class="red">
-																			<i class="icon-trash bigger-130"></i>
+																			<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																		</a>
 
 																		<span class="vbar"></span>
 
 																		<a href="#" class="green">
-																			<i class="icon-flag bigger-130"></i>
+																			<i class="ace-icon fa fa-flag bigger-130"></i>
 																		</a>
 																	</div>
 																</li>
@@ -1142,19 +943,19 @@
 																<li class="item-default clearfix">
 																	<label class="inline">
 																		<input type="checkbox" class="ace" />
-																		<span class="lbl">添加新的特征</span>
+																		<span class="lbl"> Adding new features</span>
 																	</label>
 
 																	<div class="inline pull-right position-relative dropdown-hover">
 																		<button class="btn btn-minier bigger btn-primary">
-																			<i class="icon-cog icon-only bigger-120"></i>
+																			<i class="ace-icon fa fa-cog icon-only bigger-120"></i>
 																		</button>
 
-																		<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-caret dropdown-close pull-right">
+																		<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-caret dropdown-close dropdown-menu-right">
 																			<li>
 																				<a href="#" class="tooltip-success" data-rel="tooltip" title="Mark&nbsp;as&nbsp;done">
 																					<span class="green">
-																						<i class="icon-ok bigger-110"></i>
+																						<i class="ace-icon fa fa-check bigger-110"></i>
 																					</span>
 																				</a>
 																			</li>
@@ -1162,7 +963,7 @@
 																			<li>
 																				<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
 																					<span class="red">
-																						<i class="icon-trash bigger-110"></i>
+																						<i class="ace-icon fa fa-trash-o bigger-110"></i>
 																					</span>
 																				</a>
 																			</li>
@@ -1173,28 +974,28 @@
 																<li class="item-blue clearfix">
 																	<label class="inline">
 																		<input type="checkbox" class="ace" />
-																		<span class="lbl"> 更新模版脚本</span>
+																		<span class="lbl"> Upgrading scripts used in template</span>
 																	</label>
 																</li>
 
 																<li class="item-grey clearfix">
 																	<label class="inline">
 																		<input type="checkbox" class="ace" />
-																		<span class="lbl"> 添加新皮肤</span>
+																		<span class="lbl"> Adding new skins</span>
 																	</label>
 																</li>
 
 																<li class="item-green clearfix">
 																	<label class="inline">
 																		<input type="checkbox" class="ace" />
-																		<span class="lbl"> 升级服务端</span>
+																		<span class="lbl"> Updating server software up</span>
 																	</label>
 																</li>
 
 																<li class="item-pink clearfix">
 																	<label class="inline">
 																		<input type="checkbox" class="ace" />
-																		<span class="lbl"> 清理垃圾</span>
+																		<span class="lbl"> Cleaning up</span>
 																	</label>
 																</li>
 															</ul>
@@ -1204,7 +1005,7 @@
 															<div class="clearfix">
 																<div class="itemdiv memberdiv">
 																	<div class="user">
-																		<img alt="Bob Doe's avatar" src="${resource}/ace/assets/avatars/user.jpg" />
+																		<img alt="Bob Doe's avatar" src="${html}/ace/avatars/user.jpg" />
 																	</div>
 
 																	<div class="body">
@@ -1213,7 +1014,7 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="green">20 min</span>
 																		</div>
 
@@ -1221,15 +1022,15 @@
 																			<span class="label label-warning label-sm">pending</span>
 
 																			<div class="inline position-relative">
-																				<button class="btn btn-minier bigger btn-yellow btn-no-border dropdown-toggle" data-toggle="dropdown">
-																					<i class="icon-angle-down icon-only bigger-120"></i>
+																				<button class="btn btn-minier btn-yellow btn-no-border dropdown-toggle" data-toggle="dropdown" data-position="auto">
+																					<i class="ace-icon fa fa-angle-down icon-only bigger-120"></i>
 																				</button>
 
-																				<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+																				<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 																					<li>
 																						<a href="#" class="tooltip-success" data-rel="tooltip" title="Approve">
 																							<span class="green">
-																								<i class="icon-ok bigger-110"></i>
+																								<i class="ace-icon fa fa-check bigger-110"></i>
 																							</span>
 																						</a>
 																					</li>
@@ -1237,7 +1038,7 @@
 																					<li>
 																						<a href="#" class="tooltip-warning" data-rel="tooltip" title="Reject">
 																							<span class="orange">
-																								<i class="icon-remove bigger-110"></i>
+																								<i class="ace-icon fa fa-times bigger-110"></i>
 																							</span>
 																						</a>
 																					</li>
@@ -1245,7 +1046,7 @@
 																					<li>
 																						<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
 																							<span class="red">
-																								<i class="icon-trash bigger-110"></i>
+																								<i class="ace-icon fa fa-trash-o bigger-110"></i>
 																							</span>
 																						</a>
 																					</li>
@@ -1257,7 +1058,7 @@
 
 																<div class="itemdiv memberdiv">
 																	<div class="user">
-																		<img alt="Joe Doe's avatar" src="${resource}/ace/assets/avatars/avatar2.png" />
+																		<img alt="Joe Doe's avatar" src="${html}/ace/avatars/avatar2.png" />
 																	</div>
 
 																	<div class="body">
@@ -1266,7 +1067,7 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="green">1 hour</span>
 																		</div>
 
@@ -1274,15 +1075,15 @@
 																			<span class="label label-warning label-sm">pending</span>
 
 																			<div class="inline position-relative">
-																				<button class="btn btn-minier bigger btn-yellow btn-no-border dropdown-toggle" data-toggle="dropdown">
-																					<i class="icon-angle-down icon-only bigger-120"></i>
+																				<button class="btn btn-minier btn-yellow btn-no-border dropdown-toggle" data-toggle="dropdown" data-position="auto">
+																					<i class="ace-icon fa fa-angle-down icon-only bigger-120"></i>
 																				</button>
 
-																				<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+																				<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 																					<li>
 																						<a href="#" class="tooltip-success" data-rel="tooltip" title="Approve">
 																							<span class="green">
-																								<i class="icon-ok bigger-110"></i>
+																								<i class="ace-icon fa fa-check bigger-110"></i>
 																							</span>
 																						</a>
 																					</li>
@@ -1290,7 +1091,7 @@
 																					<li>
 																						<a href="#" class="tooltip-warning" data-rel="tooltip" title="Reject">
 																							<span class="orange">
-																								<i class="icon-remove bigger-110"></i>
+																								<i class="ace-icon fa fa-times bigger-110"></i>
 																							</span>
 																						</a>
 																					</li>
@@ -1298,7 +1099,7 @@
 																					<li>
 																						<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
 																							<span class="red">
-																								<i class="icon-trash bigger-110"></i>
+																								<i class="ace-icon fa fa-trash-o bigger-110"></i>
 																							</span>
 																						</a>
 																					</li>
@@ -1310,7 +1111,7 @@
 
 																<div class="itemdiv memberdiv">
 																	<div class="user">
-																		<img alt="Jim Doe's avatar" src="${resource}/ace/assets/avatars/avatar.png" />
+																		<img alt="Jim Doe's avatar" src="${html}/ace/avatars/avatar.png" />
 																	</div>
 
 																	<div class="body">
@@ -1319,7 +1120,7 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="green">2 hour</span>
 																		</div>
 
@@ -1327,15 +1128,15 @@
 																			<span class="label label-warning label-sm">pending</span>
 
 																			<div class="inline position-relative">
-																				<button class="btn btn-minier bigger btn-yellow btn-no-border dropdown-toggle" data-toggle="dropdown">
-																					<i class="icon-angle-down icon-only bigger-120"></i>
+																				<button class="btn btn-minier btn-yellow btn-no-border dropdown-toggle" data-toggle="dropdown" data-position="auto">
+																					<i class="ace-icon fa fa-angle-down icon-only bigger-120"></i>
 																				</button>
 
-																				<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+																				<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 																					<li>
 																						<a href="#" class="tooltip-success" data-rel="tooltip" title="Approve">
 																							<span class="green">
-																								<i class="icon-ok bigger-110"></i>
+																								<i class="ace-icon fa fa-check bigger-110"></i>
 																							</span>
 																						</a>
 																					</li>
@@ -1343,7 +1144,7 @@
 																					<li>
 																						<a href="#" class="tooltip-warning" data-rel="tooltip" title="Reject">
 																							<span class="orange">
-																								<i class="icon-remove bigger-110"></i>
+																								<i class="ace-icon fa fa-times bigger-110"></i>
 																							</span>
 																						</a>
 																					</li>
@@ -1351,7 +1152,7 @@
 																					<li>
 																						<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
 																							<span class="red">
-																								<i class="icon-trash bigger-110"></i>
+																								<i class="ace-icon fa fa-trash-o bigger-110"></i>
 																							</span>
 																						</a>
 																					</li>
@@ -1363,7 +1164,7 @@
 
 																<div class="itemdiv memberdiv">
 																	<div class="user">
-																		<img alt="Alex Doe's avatar" src="${resource}/ace/assets/avatars/avatar5.png" />
+																		<img alt="Alex Doe's avatar" src="${html}/ace/avatars/avatar5.png" />
 																	</div>
 
 																	<div class="body">
@@ -1372,7 +1173,7 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="green">3 hour</span>
 																		</div>
 
@@ -1384,7 +1185,7 @@
 
 																<div class="itemdiv memberdiv">
 																	<div class="user">
-																		<img alt="Bob Doe's avatar" src="${resource}/ace/assets/avatars/avatar2.png" />
+																		<img alt="Bob Doe's avatar" src="${html}/ace/avatars/avatar2.png" />
 																	</div>
 
 																	<div class="body">
@@ -1393,7 +1194,7 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="green">6 hour</span>
 																		</div>
 
@@ -1405,7 +1206,7 @@
 
 																<div class="itemdiv memberdiv">
 																	<div class="user">
-																		<img alt="Susan's avatar" src="${resource}/ace/assets/avatars/avatar3.png" />
+																		<img alt="Susan's avatar" src="${html}/ace/avatars/avatar3.png" />
 																	</div>
 
 																	<div class="body">
@@ -1414,7 +1215,7 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="green">yesterday</span>
 																		</div>
 
@@ -1426,7 +1227,7 @@
 
 																<div class="itemdiv memberdiv">
 																	<div class="user">
-																		<img alt="Phil Doe's avatar" src="${resource}/ace/assets/avatars/avatar4.png" />
+																		<img alt="Phil Doe's avatar" src="${html}/ace/avatars/avatar4.png" />
 																	</div>
 
 																	<div class="body">
@@ -1435,7 +1236,7 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="green">2 days ago</span>
 																		</div>
 
@@ -1447,7 +1248,7 @@
 
 																<div class="itemdiv memberdiv">
 																	<div class="user">
-																		<img alt="Alexa Doe's avatar" src="${resource}/ace/assets/avatars/avatar1.png" />
+																		<img alt="Alexa Doe's avatar" src="${html}/ace/avatars/avatar1.png" />
 																	</div>
 
 																	<div class="body">
@@ -1456,8 +1257,8 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
-																			<span class="green">3天以前</span>
+																			<i class="ace-icon fa fa-clock-o"></i>
+																			<span class="green">3 days ago</span>
 																		</div>
 
 																		<div>
@@ -1467,24 +1268,26 @@
 																</div>
 															</div>
 
+															<div class="space-4"></div>
+
 															<div class="center">
-																<i class="icon-group icon-2x green"></i>
+																<i class="ace-icon fa fa-users fa-2x green middle"></i>
 
 																&nbsp;
-																<a href="#">
-																	查看所有会员 &nbsp;
-																	<i class="icon-arrow-right"></i>
+																<a href="#" class="btn btn-sm btn-white btn-info">
+																	See all members &nbsp;
+																	<i class="ace-icon fa fa-arrow-right"></i>
 																</a>
 															</div>
 
 															<div class="hr hr-double hr8"></div>
-														</div><!-- member-tab -->
+														</div><!-- /.#member-tab -->
 
 														<div id="comment-tab" class="tab-pane">
 															<div class="comments">
 																<div class="itemdiv commentdiv">
 																	<div class="user">
-																		<img alt="Bob Doe's Avatar" src="${resource}/ace/assets/avatars/avatar.png" />
+																		<img alt="Bob Doe's Avatar" src="${html}/ace/avatars/avatar.png" />
 																	</div>
 
 																	<div class="body">
@@ -1493,12 +1296,12 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="green">6 min</span>
 																		</div>
 
 																		<div class="text">
-																			<i class="icon-quote-left"></i>
+																			<i class="ace-icon fa fa-quote-left"></i>
 																			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis &hellip;
 																		</div>
 																	</div>
@@ -1506,14 +1309,14 @@
 																	<div class="tools">
 																		<div class="inline position-relative">
 																			<button class="btn btn-minier bigger btn-yellow dropdown-toggle" data-toggle="dropdown">
-																				<i class="icon-angle-down icon-only bigger-120"></i>
+																				<i class="ace-icon fa fa-angle-down icon-only bigger-120"></i>
 																			</button>
 
-																			<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+																			<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 																				<li>
 																					<a href="#" class="tooltip-success" data-rel="tooltip" title="Approve">
 																						<span class="green">
-																							<i class="icon-ok bigger-110"></i>
+																							<i class="ace-icon fa fa-check bigger-110"></i>
 																						</span>
 																					</a>
 																				</li>
@@ -1521,7 +1324,7 @@
 																				<li>
 																					<a href="#" class="tooltip-warning" data-rel="tooltip" title="Reject">
 																						<span class="orange">
-																							<i class="icon-remove bigger-110"></i>
+																							<i class="ace-icon fa fa-times bigger-110"></i>
 																						</span>
 																					</a>
 																				</li>
@@ -1529,7 +1332,7 @@
 																				<li>
 																					<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
 																						<span class="red">
-																							<i class="icon-trash bigger-110"></i>
+																							<i class="ace-icon fa fa-trash-o bigger-110"></i>
 																						</span>
 																					</a>
 																				</li>
@@ -1540,7 +1343,7 @@
 
 																<div class="itemdiv commentdiv">
 																	<div class="user">
-																		<img alt="Jennifer's Avatar" src="${resource}/ace/assets/avatars/avatar1.png" />
+																		<img alt="Jennifer's Avatar" src="${html}/ace/avatars/avatar1.png" />
 																	</div>
 
 																	<div class="body">
@@ -1549,12 +1352,12 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="blue">15 min</span>
 																		</div>
 
 																		<div class="text">
-																			<i class="icon-quote-left"></i>
+																			<i class="ace-icon fa fa-quote-left"></i>
 																			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis &hellip;
 																		</div>
 																	</div>
@@ -1562,11 +1365,11 @@
 																	<div class="tools">
 																		<div class="action-buttons bigger-125">
 																			<a href="#">
-																				<i class="icon-pencil blue"></i>
+																				<i class="ace-icon fa fa-pencil blue"></i>
 																			</a>
 
 																			<a href="#">
-																				<i class="icon-trash red"></i>
+																				<i class="ace-icon fa fa-trash-o red"></i>
 																			</a>
 																		</div>
 																	</div>
@@ -1574,7 +1377,7 @@
 
 																<div class="itemdiv commentdiv">
 																	<div class="user">
-																		<img alt="Joe's Avatar" src="${resource}/ace/assets/avatars/avatar2.png" />
+																		<img alt="Joe's Avatar" src="${html}/ace/avatars/avatar2.png" />
 																	</div>
 
 																	<div class="body">
@@ -1583,12 +1386,12 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="orange">22 min</span>
 																		</div>
 
 																		<div class="text">
-																			<i class="icon-quote-left"></i>
+																			<i class="ace-icon fa fa-quote-left"></i>
 																			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis &hellip;
 																		</div>
 																	</div>
@@ -1596,11 +1399,11 @@
 																	<div class="tools">
 																		<div class="action-buttons bigger-125">
 																			<a href="#">
-																				<i class="icon-pencil blue"></i>
+																				<i class="ace-icon fa fa-pencil blue"></i>
 																			</a>
 
 																			<a href="#">
-																				<i class="icon-trash red"></i>
+																				<i class="ace-icon fa fa-trash-o red"></i>
 																			</a>
 																		</div>
 																	</div>
@@ -1608,7 +1411,7 @@
 
 																<div class="itemdiv commentdiv">
 																	<div class="user">
-																		<img alt="Rita's Avatar" src="${resource}/ace/assets/avatars/avatar3.png" />
+																		<img alt="Rita's Avatar" src="${html}/ace/avatars/avatar3.png" />
 																	</div>
 
 																	<div class="body">
@@ -1617,12 +1420,12 @@
 																		</div>
 
 																		<div class="time">
-																			<i class="icon-time"></i>
+																			<i class="ace-icon fa fa-clock-o"></i>
 																			<span class="red">50 min</span>
 																		</div>
 
 																		<div class="text">
-																			<i class="icon-quote-left"></i>
+																			<i class="ace-icon fa fa-quote-left"></i>
 																			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis &hellip;
 																		</div>
 																	</div>
@@ -1630,11 +1433,11 @@
 																	<div class="tools">
 																		<div class="action-buttons bigger-125">
 																			<a href="#">
-																				<i class="icon-pencil blue"></i>
+																				<i class="ace-icon fa fa-pencil blue"></i>
 																			</a>
 
 																			<a href="#">
-																				<i class="icon-trash red"></i>
+																				<i class="ace-icon fa fa-trash-o red"></i>
 																			</a>
 																		</div>
 																	</div>
@@ -1644,29 +1447,29 @@
 															<div class="hr hr8"></div>
 
 															<div class="center">
-																<i class="icon-comments-alt icon-2x green"></i>
+																<i class="ace-icon fa fa-comments-o fa-2x green middle"></i>
 
 																&nbsp;
-																<a href="#">
+																<a href="#" class="btn btn-sm btn-white btn-info">
 																	See all comments &nbsp;
-																	<i class="icon-arrow-right"></i>
+																	<i class="ace-icon fa fa-arrow-right"></i>
 																</a>
 															</div>
 
 															<div class="hr hr-double hr8"></div>
 														</div>
 													</div>
-												</div><!-- /widget-main -->
-											</div><!-- /widget-body -->
-										</div><!-- /widget-box -->
-									</div><!-- /span -->
+												</div><!-- /.widget-main -->
+											</div><!-- /.widget-body -->
+										</div><!-- /.widget-box -->
+									</div><!-- /.col -->
 
 									<div class="col-sm-6">
-										<div class="widget-box ">
+										<div class="widget-box">
 											<div class="widget-header">
-												<h4 class="lighter smaller">
-													<i class="icon-comment blue"></i>
-													会话
+												<h4 class="widget-title lighter smaller">
+													<i class="ace-icon fa fa-comment blue"></i>
+													Conversation
 												</h4>
 											</div>
 
@@ -1675,23 +1478,23 @@
 													<div class="dialogs">
 														<div class="itemdiv dialogdiv">
 															<div class="user">
-																<img alt="Alexa's Avatar" src="${resource}/ace/assets/avatars/avatar1.png" />
+																<img alt="Alexa's Avatar" src="${html}/ace/avatars/avatar1.png" />
 															</div>
 
 															<div class="body">
 																<div class="time">
-																	<i class="icon-time"></i>
-																	<span class="green">4秒钟前</span>
+																	<i class="ace-icon fa fa-clock-o"></i>
+																	<span class="green">4 sec</span>
 																</div>
 
 																<div class="name">
 																	<a href="#">Alexa</a>
 																</div>
-																<div class="text">大家好啊</div>
+																<div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis.</div>
 
 																<div class="tools">
 																	<a href="#" class="btn btn-minier btn-info">
-																		<i class="icon-only icon-share-alt"></i>
+																		<i class="icon-only ace-icon fa fa-share"></i>
 																	</a>
 																</div>
 															</div>
@@ -1699,23 +1502,23 @@
 
 														<div class="itemdiv dialogdiv">
 															<div class="user">
-																<img alt="John's Avatar" src="${resource}/ace/assets/avatars/avatar.png" />
+																<img alt="John's Avatar" src="${html}/ace/avatars/avatar.png" />
 															</div>
 
 															<div class="body">
 																<div class="time">
-																	<i class="icon-time"></i>
-																	<span class="blue">38秒以前</span>
+																	<i class="ace-icon fa fa-clock-o"></i>
+																	<span class="blue">38 sec</span>
 																</div>
 
 																<div class="name">
 																	<a href="#">John</a>
 																</div>
-																<div class="text">框架很好用嘛</div>
+																<div class="text">Raw denim you probably haven&#39;t heard of them jean shorts Austin.</div>
 
 																<div class="tools">
 																	<a href="#" class="btn btn-minier btn-info">
-																		<i class="icon-only icon-share-alt"></i>
+																		<i class="icon-only ace-icon fa fa-share"></i>
 																	</a>
 																</div>
 															</div>
@@ -1723,24 +1526,24 @@
 
 														<div class="itemdiv dialogdiv">
 															<div class="user">
-																<img alt="Bob's Avatar" src="${resource}/ace/assets/avatars/user.jpg" />
+																<img alt="Bob's Avatar" src="${html}/ace/avatars/user.jpg" />
 															</div>
 
 															<div class="body">
 																<div class="time">
-																	<i class="icon-time"></i>
-																	<span class="orange">2分钟以前</span>
+																	<i class="ace-icon fa fa-clock-o"></i>
+																	<span class="orange">2 min</span>
 																</div>
 
 																<div class="name">
 																	<a href="#">Bob</a>
 																	<span class="label label-info arrowed arrowed-in-right">admin</span>
 																</div>
-																<div class="text">欢迎大家使用ACE后台管理系统.</div>
+																<div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis.</div>
 
 																<div class="tools">
 																	<a href="#" class="btn btn-minier btn-info">
-																		<i class="icon-only icon-share-alt"></i>
+																		<i class="icon-only ace-icon fa fa-share"></i>
 																	</a>
 																</div>
 															</div>
@@ -1748,23 +1551,23 @@
 
 														<div class="itemdiv dialogdiv">
 															<div class="user">
-																<img alt="Jim's Avatar" src="${resource}/ace/assets/avatars/avatar4.png" />
+																<img alt="Jim's Avatar" src="${html}/ace/avatars/avatar4.png" />
 															</div>
 
 															<div class="body">
 																<div class="time">
-																	<i class="icon-time"></i>
-																	<span class="grey">3分钟以前</span>
+																	<i class="ace-icon fa fa-clock-o"></i>
+																	<span class="grey">3 min</span>
 																</div>
 
 																<div class="name">
 																	<a href="#">Jim</a>
 																</div>
-																<div class="text">大家多提提BUG</div>
+																<div class="text">Raw denim you probably haven&#39;t heard of them jean shorts Austin.</div>
 
 																<div class="tools">
 																	<a href="#" class="btn btn-minier btn-info">
-																		<i class="icon-only icon-share-alt"></i>
+																		<i class="icon-only ace-icon fa fa-share"></i>
 																	</a>
 																</div>
 															</div>
@@ -1772,23 +1575,23 @@
 
 														<div class="itemdiv dialogdiv">
 															<div class="user">
-																<img alt="Alexa's Avatar" src="${resource}/ace/assets/avatars/avatar1.png" />
+																<img alt="Alexa's Avatar" src="${html}/ace/avatars/avatar1.png" />
 															</div>
 
 															<div class="body">
 																<div class="time">
-																	<i class="icon-time"></i>
-																	<span class="green">4分钟以前</span>
+																	<i class="ace-icon fa fa-clock-o"></i>
+																	<span class="green">4 min</span>
 																</div>
 
 																<div class="name">
 																	<a href="#">Alexa</a>
 																</div>
-																<div class="text">继续支持ACE后台系统</div>
+																<div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
 
 																<div class="tools">
 																	<a href="#" class="btn btn-minier btn-info">
-																		<i class="icon-only icon-share-alt"></i>
+																		<i class="icon-only ace-icon fa fa-share"></i>
 																	</a>
 																</div>
 															</div>
@@ -1801,117 +1604,99 @@
 																<input placeholder="Type your message here ..." type="text" class="form-control" name="message" />
 																<span class="input-group-btn">
 																	<button class="btn btn-sm btn-info no-radius" type="button">
-																		<i class="icon-share-alt"></i>
-																		发送
+																		<i class="ace-icon fa fa-share"></i>
+																		Send
 																	</button>
 																</span>
 															</div>
 														</div>
 													</form>
-												</div><!-- /widget-main -->
-											</div><!-- /widget-body -->
-										</div><!-- /widget-box -->
-									</div><!-- /span -->
-								</div><!-- /row -->
+												</div><!-- /.widget-main -->
+											</div><!-- /.widget-body -->
+										</div><!-- /.widget-box -->
+									</div><!-- /.col -->
+								</div><!-- /.row -->
 
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
-				</div><!-- /.main-content -->
+				</div>
+			</div><!-- /.main-content -->
 
-				<div class="ace-settings-container" id="ace-settings-container">
-					<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
-						<i class="icon-cog bigger-150"></i>
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">Ace</span>
+							Application &copy; 2015-2014
+						</span>
+
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="#">
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-rss-square orange bigger-150"></i>
+							</a>
+						</span>
 					</div>
-
-					<div class="ace-settings-box" id="ace-settings-box">
-						<div>
-							<div class="pull-left">
-								<select id="skin-colorpicker" class="hide">
-									<option data-skin="default" value="#438EB9">#438EB9</option>
-									<option data-skin="skin-1" value="#222A2D">#222A2D</option>
-									<option data-skin="skin-2" value="#C6487E">#C6487E</option>
-									<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
-								</select>
-							</div>
-							<span>&nbsp; 选择皮肤</span>
-						</div>
-
-						<div>
-							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
-							<label class="lbl" for="ace-settings-navbar"> 固定导航条</label>
-						</div>
-
-						<div>
-							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
-							<label class="lbl" for="ace-settings-sidebar"> 固定滑动条</label>
-						</div>
-
-						<div>
-							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
-							<label class="lbl" for="ace-settings-breadcrumbs">固定面包屑</label>
-						</div>
-
-						<div>
-							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
-							<label class="lbl" for="ace-settings-rtl">切换到左边</label>
-						</div>
-
-						<div>
-							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
-							<label class="lbl" for="ace-settings-add-container">
-								切换窄屏
-								<b></b>
-							</label>
-						</div>
-					</div>
-				</div><!-- /#ace-settings-container -->
-			</div><!-- /.main-container-inner -->
+				</div>
+			</div>
 
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-				<i class="icon-double-angle-up icon-only bigger-110"></i>
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 			</a>
 		</div><!-- /.main-container -->
 
-		<!-- basic scripts -->
-
 		<!--[if !IE]> -->
-		<script src="${resource}/js/jquery.211.js"></script>
+		<script src="${html}/js/jquery.211.js"></script>
 		<!-- <![endif]-->
 
 		<!--[if IE]>
-		<script src="${resource}/js/jquery.1101.js"></script>
-<![endif]-->
-
-		<!--[if !IE]> -->
-
-		<script type="text/javascript">
-			if("ontouchend" in document) document.write("<script src='${resource}/ace/assets/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
-		</script>
-		<script src="${resource}/ace/assets/js/bootstrap.min.js"></script>
-		<script src="${resource}/ace/assets/js/typeahead-bs2.min.js"></script>
-
-		<!--[if lte IE 8]>
-		  <script src="${resource}/ace/assets/js/excanvas.min.js"></script>
+		<script src="${html}/js/jquery.1101.js"></script>
 		<![endif]-->
 
-		<script src="${resource}/ace/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
-		<script src="${resource}/ace/assets/js/jquery.ui.touch-punch.min.js"></script>
-		<script src="${resource}/ace/assets/js/jquery.slimscroll.min.js"></script>
-		<script src="${resource}/ace/assets/js/jquery.easy-pie-chart.min.js"></script>
-		<script src="${resource}/ace/assets/js/jquery.sparkline.min.js"></script>
-		<script src="${resource}/ace/assets/js/flot/jquery.flot.min.js"></script>
-		<script src="${resource}/ace/assets/js/flot/jquery.flot.pie.min.js"></script>
-		<script src="${resource}/ace/assets/js/flot/jquery.flot.resize.min.js"></script>
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='${html}/ace/js/jquery.min.js'>"+"<"+"/script>");
+		</script>
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='${html}/ace/js/jquery1x.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='${html}/ace/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="//cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<!--[if lte IE 8]>
+		  <script src="${html}/ace/js/excanvas.min.js"></script>
+		<![endif]-->
+		<script src="${html}/ace/js/jquery-ui.custom.min.js"></script>
+		<script src="${html}/ace/js/jquery.ui.touch-punch.min.js"></script>
+		<script src="${html}/ace/js/jquery.easypiechart.min.js"></script>
+		<script src="${html}/ace/js/jquery.sparkline.min.js"></script>
+		<script src="${html}/ace/js/flot/jquery.flot.min.js"></script>
+		<script src="${html}/ace/js/flot/jquery.flot.pie.min.js"></script>
+		<script src="${html}/ace/js/flot/jquery.flot.resize.min.js"></script>
 
 		<!-- ace scripts -->
-
-		<script src="${resource}/ace/assets/js/ace-elements.min.js"></script>
-		<script src="${resource}/ace/assets/js/ace.min.js"></script>
+		<script src="${html}/ace/js/ace-elements.min.js"></script>
+		<script src="${html}/ace/js/ace.min.js"></script>
 
 		<!-- inline scripts related to this page -->
-
 		<script type="text/javascript">
 			jQuery(function($) {
 				$('.easy-pie-chart.percentage').each(function(){
@@ -1933,11 +1718,19 @@
 				$('.sparkline').each(function(){
 					var $box = $(this).closest('.infobox');
 					var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
-					$(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
+					$(this).sparkline('html',
+									 {
+										tagValuesAttribute:'data-values',
+										type: 'bar',
+										barColor: barColor ,
+										chartRangeMin:$(this).data('min') || 0
+									 });
 				});
 			
 			
-			
+			  //flot chart resize plugin, somehow manipulates default browser resize event to optimize it!
+			  //but sometimes it brings up errors with normal resize event handlers
+			  $.resize.throttleWindow = false;
 			
 			  var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
 			  var data = [
@@ -1986,7 +1779,7 @@
 			 placeholder.data('draw', drawPieChart);
 			
 			
-			
+			  //pie chart tooltip example
 			  var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
 			  var previousPoint = null;
 			
@@ -2005,7 +1798,10 @@
 				
 			 });
 			
-			
+				/////////////////////////////////////
+				$(document).one('ajaxloadstart.page', function(e) {
+					$tooltip.remove();
+				});
 			
 			
 			
@@ -2063,15 +1859,15 @@
 					var w1 = $parent.width();
 			
 					var off2 = $source.offset();
-					var w2 = $source.width();
+					//var w2 = $source.width();
 			
 					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
 					return 'left';
 				}
 			
 			
-				$('.dialogs,.comments').slimScroll({
-					height: '300px'
+				$('.dialogs,.comments').ace_scroll({
+					size: 300
 			    });
 				
 				
@@ -2093,7 +1889,8 @@
 					placeholder: 'draggable-placeholder',
 					forcePlaceholderSize:true,
 					tolerance:'pointer',
-					stop: function( event, ui ) {//just for Chrome!!!! so that dropdowns on items don't appear below other items after being moved
+					stop: function( event, ui ) {
+						//just for Chrome!!!! so that dropdowns on items don't appear below other items after being moved
 						$(ui.item).css('z-index', 'auto');
 					}
 					}
@@ -2103,10 +1900,19 @@
 					if(this.checked) $(this).closest('li').addClass('selected');
 					else $(this).closest('li').removeClass('selected');
 				});
-				
+			
+			
+				//show the dropdowns on top or bottom depending on window height and menu position
+				$('#task-tab .dropdown-hover').on('mouseenter', function(e) {
+					var offset = $(this).offset();
+			
+					var $w = $(window)
+					if (offset.top > $w.scrollTop() + $w.innerHeight() - 100) 
+						$(this).addClass('dropup');
+					else $(this).removeClass('dropup');
+				});
 			
 			})
 		</script>
-</body>
+	</body>
 </html>
-
