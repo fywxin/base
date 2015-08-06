@@ -16,6 +16,8 @@ public class UserAuth implements Serializable {
 	
 	private Set<Long> leafMenuIds;
 	
+	private Set<Long> menuIds;
+	
 
 	public Long getUserId() {
 		return userId;
@@ -39,6 +41,14 @@ public class UserAuth implements Serializable {
 
 	public void setLeafMenuIds(Set<Long> leafMenuIds) {
 		this.leafMenuIds = leafMenuIds;
+	}
+	
+	public Set<Long> getMenuIds() {
+		return menuIds;
+	}
+
+	public void setMenuIds(Set<Long> menuIds) {
+		this.menuIds = menuIds;
 	}
 
 	public Set<String> getAuthCodes() {

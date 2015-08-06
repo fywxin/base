@@ -13,18 +13,30 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.whale</groupId>
-			<artifactId>system-controller</artifactId>
+			<artifactId>system-web</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>model-log</artifactId>
 			<version>${project.parent.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.whale</groupId>
+					<artifactId>system-controller</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>model-file</artifactId>
 			<version>${project.parent.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.whale</groupId>
+					<artifactId>system-controller</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>
@@ -35,11 +47,23 @@
 			<groupId>org.whale</groupId>
 			<artifactId>ext-sms</artifactId>
 			<version>${project.parent.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.whale</groupId>
+					<artifactId>system-controller</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>ext-code</artifactId>
 			<version>${project.parent.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.whale</groupId>
+					<artifactId>system-controller</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>

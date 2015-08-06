@@ -1,6 +1,6 @@
 <%@page import="org.whale.system.common.constant.SysConstant"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>用户列表</title>
@@ -122,6 +122,14 @@ $(function() {
 	    }
 	});
 });
+
+function pid(){
+	if($("#ftlType").val() == 5 || $("#ftlType").val() == 6){
+		$("#domainPId").show();
+	}else{
+		$("#domainPId").hide();
+	}
+}
 </script>
 </head>
 <body style="overflow-x: hidden;">
@@ -160,7 +168,7 @@ $(function() {
 					</td>
 					<td class="td-label">模板分类</td>
 					<td class="td-value">
-						<select name="ftlType" id="ftlType" style="width: 165px;">
+						<select name="ftlType" id="ftlType" style="width: 125px;" onchange="pid()">
 							<option value="1" >增删改查(单表)</option>
 							<option value="2" >增删改查(一对多)</option>
 							<option value="3" >仅持久化层(dao/domain)</option>
@@ -168,6 +176,7 @@ $(function() {
 							<option value="5" >树结构表(一体)</option>
 							<option value="6" >树结构表(左树右表)</option>
 						</select>
+						<input type="text" id="domainPId" name="domainPId" style="width: 80px;display: none;"   placeholder="树父Id字段名" ></input>
 					</td>
 				</tr>
 			</tbody>
@@ -262,9 +271,9 @@ $(function() {
                         	<option value="input" <c:if test="${attr.formType == 'input'}">selected="selected"</c:if> >单行文本</option>
 	                        <option value="textarea" <c:if test="${attr.formType == 'textarea'}">selected="selected"</c:if> >多行文本</option>
 	                        <option value="select" <c:if test="${attr.formType == 'select'}">selected="selected"</c:if> >下拉选项</option>
-                            <option value="radiobox" <c:if test="${attr.formType == 'radiobox'}">selected="selected"</c:if> >单选按钮</option>
+                            <option value="radiobox" <c:if test="${attr.formType == 'radiobox' || attr.type == 'Boolean'}">selected="selected"</c:if> >单选按钮</option>
                             <option value="checkbox" <c:if test="${attr.formType == 'checkbox'}">selected="selected"</c:if> >复选框</option>
-                            <option value="date" <c:if test="${item.type == 'Date' || attr.formType == 'date' }">selected="selected"</c:if> >日期选择</option> 
+                            <option value="date" <c:if test="${item.type == 'Date' || attr.type == 'Date' }">selected="selected"</c:if> >日期选择</option> 
                             <option value="dict" <c:if test="${!empty item.dictName || attr.formType == 'dict' }">selected="selected"</c:if> >字典</option> 
                             <option value="file" <c:if test="${attr.formType == 'file'}">selected="selected"</c:if> >文件上传选择</option>
                             <option value="image" <c:if test="${attr.formType == 'image'}">selected="selected"</c:if> >图片上传选择</option>            

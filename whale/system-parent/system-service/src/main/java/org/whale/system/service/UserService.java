@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 import org.whale.system.base.BaseCrudEvent;
 import org.whale.system.base.Page;
 import org.whale.system.common.constant.SysConstant;
@@ -215,14 +214,11 @@ public class UserService extends BaseService<User, Long> {
 	}
 	
 	public String getEncryptedPwd(String passwd){
-		return DigestUtils.md5DigestAsHex(passwd.getBytes());
+		return Strings.encrypt(passwd);
 	}
 	
 	public boolean validPasswd(String passwd, String dbPasswd){
-		return dbPasswd.equals(getEncryptedPwd(passwd));
+		return Strings.decrypt(passwd, dbPasswd);
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(DigestUtils.md5DigestAsHex("1".getBytes()));
-	}
 }

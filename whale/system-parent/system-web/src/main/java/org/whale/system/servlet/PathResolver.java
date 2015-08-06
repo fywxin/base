@@ -26,7 +26,7 @@ public class PathResolver implements ServletContextAware {
 		}
 		
 		this.servletContext.setAttribute("ctx", getServletContext().getContextPath());
-		this.servletContext.setAttribute("resource", resourceRoot);
+		this.servletContext.setAttribute("html", resourceRoot);
 	}
 	
 	@Override

@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,14 +39,10 @@ import org.whale.system.service.MenuService;
 import org.whale.system.service.UserService;
 import org.whale.system.servlet.MySessionContext;
 
-import com.alibaba.fastjson.JSON;
-
-
 @Controller
-@RequestMapping("/ace")
-public class MenuAceController extends BaseController {
-
-private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+public class MainController extends BaseController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 	
 	@Autowired
 	private UserService userService;
@@ -65,6 +59,8 @@ private static final Logger logger = LoggerFactory.getLogger(MainController.clas
 	
 	private Boolean sort = Boolean.FALSE;
 
+	
+	
 	/**
 	 * 用户登录
 	 * @param request
@@ -76,24 +72,27 @@ private static final Logger logger = LoggerFactory.getLogger(MainController.clas
 	public void doLogin(HttpServletRequest request, HttpServletResponse response, String userName, String password, String encryptedPwd){
 		logger.info("用户登录[{}/{}] ：ip[{}]",userName, password, WebUtil.getIp(request));
 		if(Strings.isBlank(userName)){
-			WebUtil.printFail(request, response, "用户名不能为空");
+			WebUtil.printFail(request, response, "用户名不能为空", errorCount(request));
 			return ;
 		}
 		
 		if(Strings.isBlank(password) && Strings.isBlank(encryptedPwd)){
-			WebUtil.printFail(request, response, "密码不能为空");
+			WebUtil.printFail(request, response, "密码不能为空", errorCount(request));
 			return ;
 		}
 		
+		Integer errorCount = (Integer)request.getSession().getAttribute("ERROR");
 		String msg = null;
-		if((Strings.isNotBlank(password) || Strings.isBlank(encryptedPwd)) && SysConstant.LOGIC_TRUE.equals(dictCacheService.getItemValue(DictConstant.DICT_SYS_CONF, "VERITY_CODE_FLAG")) && (msg = this.checkVerify(request)) != null){
-			WebUtil.printFail(request, response, msg);
+		if((Strings.isNotBlank(password) || Strings.isBlank(encryptedPwd)) 
+				&& ((errorCount != null && errorCount >= 3) || SysConstant.LOGIC_TRUE.equals(dictCacheService.getItemValue(DictConstant.DICT_SYS_CONF, "VERITY_CODE_FLAG"))) 
+				&& (msg = this.checkVerify(request)) != null){
+			WebUtil.printFail(request, response, msg, errorCount(request));
 			return ;
 		}
 		
 		User user = this.userService.getByUserName(userName);
 		if(user == null || user.getStatus() == SysConstant.STATUS_DEL){
-			WebUtil.printFail(request, response, "用户名不存在");
+			WebUtil.printFail(request, response, "用户名不存在", errorCount(request));
 			return ;
 		}
 		if(user.getStatus() != SysConstant.STATUS_NORMAL){
@@ -107,12 +106,12 @@ private static final Logger logger = LoggerFactory.getLogger(MainController.clas
 					return ;
 				}
 			}else{
-				WebUtil.printFail(request, response, "密码不能为空");
+				WebUtil.printFail(request, response, "密码不能为空", errorCount(request));
 				return ;
 			}
 		}else{
 			if(!this.userService.validPasswd(password, user.getPassword())){
-				WebUtil.printFail(request, response, "密码错误");
+				WebUtil.printFail(request, response, "密码错误", errorCount(request));
 				return ;
 			}
 		}
@@ -136,6 +135,7 @@ private static final Logger logger = LoggerFactory.getLogger(MainController.clas
 				}
 			}
 			this.bind(request, user);
+			request.getSession().removeAttribute("ERROR");
 		} catch (Exception e) {
 			logger.error("绑定用户上下文出现异常", e);
 			this.clearUserContext(request);
@@ -143,7 +143,7 @@ private static final Logger logger = LoggerFactory.getLogger(MainController.clas
 			return ;
 		}
 		if(SysConstant.LOGIC_TRUE.equals(DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "AUTO_LOGIN_FLAG"))){
-			WebUtil.printSuccess(request, response, Strings.isBlank(password) ? encryptedPwd : this.userService.getEncryptedPwd(password));
+			WebUtil.printSuccess(request, response, Strings.isBlank(password) ? encryptedPwd : user.getPassword());
 		}else{
 			WebUtil.printSuccess(request, response);
 		}
@@ -268,16 +268,55 @@ private static final Logger logger = LoggerFactory.getLogger(MainController.clas
 		ThreadContext.getContext().remove(ThreadContext.KEY_USER_CONTEXT);
 	}
 	
+	/**
+	 * 登录错误次数维护
+	 * @param request
+	 * @return
+	 */
+	private String errorCount(HttpServletRequest request){
+		Integer errorCount = (Integer)request.getSession().getAttribute("ERROR");
+		if(errorCount == null){
+			errorCount =1 ;
+		}else{
+			errorCount++;
+		}
+		request.getSession().setAttribute("ERROR", errorCount);
+		return errorCount >=3 ? "1": "";
+	}
+	
 	//-------------------------------------------------------------------------------------
 	
-	@RequestMapping("/main2")
-	public ModelAndView main2(HttpServletRequest request,HttpServletResponse response) {
+	
+	@RequestMapping("/main")
+	public ModelAndView main(HttpServletRequest request,HttpServletResponse response) {
+		UserContext uc = this.getUserContext(request);
 		List<Menu> totalMenus = this.menuService.queryAll();
 		Map<Long, Menu> idMenus = new HashMap<Long, Menu>(totalMenus.size() * 2);
-		Map<Long, List<Menu>> pidMenus = new HashMap<Long, List<Menu>>(totalMenus.size());
-		List<Menu> menus = null;
+		
 		for(Menu menu : totalMenus){
 			idMenus.put(menu.getMenuId(), menu);
+		}
+		
+		
+		List<Menu> userMenus = null;
+		if(uc.isSuperAdmin()){
+			userMenus = totalMenus;
+		}else{
+			Set<Long> userMenuIds = userAuthCacheService.getUserAuth(uc.getUserId()).getMenuIds();
+			if(userMenuIds != null){
+				userMenus = new ArrayList<Menu>(userMenuIds.size());
+				for(Long id : userMenuIds){
+					userMenus.add(idMenus.get(id));
+				}
+			}else{
+				userMenus = new ArrayList<Menu>(0);
+			}
+		}
+		
+		
+		Map<Long, List<Menu>> pidMenus = new HashMap<Long, List<Menu>>(userMenus.size());
+		List<Menu> menus = null;
+		for(Menu menu : totalMenus){
 			menus = pidMenus.get(menu.getParentId());
 			if(menus == null){
 				menus = new ArrayList<Menu>();
@@ -285,6 +324,7 @@ private static final Logger logger = LoggerFactory.getLogger(MainController.clas
 			}
 			menus.add(menu);
 		}
+		
 		
 		List<Menu> tabMenus = pidMenus.get(0L);
 		sortMenu(tabMenus);
@@ -295,9 +335,9 @@ private static final Logger logger = LoggerFactory.getLogger(MainController.clas
 			activce=false;
 		}
 		return new ModelAndView("main").addObject("menus", strb.toString());
+		
 	}
-	
-	
+
 	private String createMenuTree(Menu node, Map<Long, List<Menu>> pidMenus, boolean activce){
 		StringBuilder strb = new StringBuilder();
 		
@@ -335,155 +375,6 @@ private static final Logger logger = LoggerFactory.getLogger(MainController.clas
 				return o1.getOrderNo() - o2.getOrderNo();
 			}
 		});
-	}
-	
-	
-	@RequestMapping("/main")
-	public ModelAndView main(HttpServletRequest request,HttpServletResponse response) {
-		UserContext uc = this.getUserContext(request);
-		List<Menu> tabMenus = null;
-		List<Menu> allMenus = null;
-		List<Menu> totalMenus = this.menuService.queryAll();
-		
-		if(uc.isSuperAdmin()){
-			allMenus = totalMenus;
-			if(allMenus != null){
-				tabMenus = new ArrayList<Menu>();
-				for(Menu menu : allMenus){
-					if(menu.getMenuType() == 1){
-						tabMenus.add(menu);
-					}
-				}
-			}
-		}else{
-			Map<Long, Menu> totalMenuMap = new HashMap<Long, Menu>();
-			for(Menu m : totalMenus){
-				totalMenuMap.put(m.getMenuId(), m);
-			}
-			
-			Set<Long> leafIds = userAuthCacheService.getUserAuth(uc.getUserId()).getLeafMenuIds();
-			List<Menu> pubMenus = this.menuService.getPublicMenus();
-			if(pubMenus != null && pubMenus.size() > 0){
-				for(Menu m : pubMenus){
-					leafIds.add(m.getMenuId());
-				}
-			}
-			
-			Iterator<Long> iterable = leafIds.iterator();
-			
-			Set<Long> dirIds = new HashSet<Long>();
-			allMenus = new ArrayList<Menu>(leafIds.size()*2);
-			
-			Menu m = null;
-			while(iterable.hasNext()){
-				m = totalMenuMap.get(iterable.next());
-				allMenus.add(m);
-				while(m != null && m.getParentId() != 0 && m.getParentId() != null){
-					m = totalMenuMap.get(m.getParentId());
-					if(m == null)
-						break;
-					dirIds.add(m.getMenuId());
-				}
-			}
-			
-			tabMenus = new ArrayList<Menu>();
-			
-			iterable = dirIds.iterator();
-			while(iterable.hasNext()){
-				m = totalMenuMap.get(iterable.next());
-				allMenus.add(m);
-				if(m.getMenuType() == 1){
-					tabMenus.add(m);
-				}
-			}
-		}
-		
-		Collections.sort(tabMenus, new Comparator<Menu>() {
-
-			@Override
-			public int compare(Menu o1, Menu o2) {
-				return o1.getOrderNo() - o2.getOrderNo();
-			}
-		});
-		
-		String html = "";
-		String js = "";
-		Long firstTabId = 0L;
-		if(tabMenus != null && tabMenus.size() > 0){
-			html = this.createHtml(tabMenus);
-			js = this.createJs(allMenus, tabMenus);
-			firstTabId = tabMenus.get(0).getMenuId();
-		}
-		return new ModelAndView("main")
-			.addObject("html", html)
-			.addObject("js", js)
-			.addObject("firstTabId", firstTabId)
-			.addObject("realName", uc.getRealName());
-	}
-
-	
-	private String createHtml(List<Menu> tabMenus){
-		StringBuilder strb = new StringBuilder();
-		for(Menu tabMenu : tabMenus){
-			if(tabMenu != null){
-				strb.append("<div title='").append(tabMenu.getMenuName()).append("' class='l-scroll' id='div_").append(tabMenu.getMenuId()).append("'>")
-					.append("<ul id='tab_").append(tabMenu.getMenuId()).append("' class='ztree' style='overflow:auto;' />")
-					.append("</div>\n");
-			}
-		}
-		
-		return strb.toString();
-	}
-	
-	/**
-	 * 根据tabMenu 分隔出所有tab对应的所有子节点
-	 * @param menuList
-	 * @param tabMenu
-	 * @return
-	 */
-	private List<Menu> divideByTabMenu(List<Menu> allMenuList, Long parentMenuId){
-		List<Menu> list = new ArrayList<Menu>();
-		
-		for(Menu menu : allMenuList){
-			if(menu.getParentId().longValue() == parentMenuId.longValue()){
-				list.add(menu);
-				//文件夹类型菜单，递归获取其子菜单
-				if(menu.getMenuType() == 2){
-					list.addAll(this.divideByTabMenu(allMenuList, menu.getMenuId()));
-				}
-			}
-		}
-		Collections.sort(list, new Comparator<Menu>() {
-
-			@Override
-			public int compare(Menu o1, Menu o2) {
-				return o1.getOrderNo() - o2.getOrderNo();
-			}
-		});
-		return list;
-	}
-	
-	
-	/**
-	 * 根据tab菜单，生成对应数量的ztree js
-	 * 关键：每颗tab树菜单下的节点，需由tab向下在 总菜单列表中递归选择出来
-	 * @param allMenuList 所有菜单列表
-	 * @param tabMenus  tab菜单列表
-	 * @return
-	 */
-	private String createJs(List<Menu> allMenuList, List<Menu> tabMenus){
-		StringBuilder strb = new StringBuilder();
-		
-		List<Menu> menuTree = null;
-		for(Menu tabMenu : tabMenus){
-			if(tabMenu != null){
-				menuTree = this.divideByTabMenu(allMenuList, tabMenu.getMenuId());
-				if(menuTree == null)
-					continue ;
-				strb.append("$.fn.zTree.init($(\"#tab_").append(tabMenu.getMenuId()).append("\"), setting, ").append(JSON.toJSONString(menuTree)).append(");\n\n");
-			}
-		}
-		return strb.toString();
 	}
 
 	public List<UserContextAccessor> getAccessores() {

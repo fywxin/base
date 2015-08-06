@@ -17,8 +17,10 @@ import org.whale.system.common.util.Bootable;
 import org.whale.system.common.util.PropertiesUtil;
 import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.dao.AuthDao;
+import org.whale.system.dao.MenuDao;
 import org.whale.system.dao.UserDao;
 import org.whale.system.domain.Auth;
+import org.whale.system.domain.Menu;
 import org.whale.system.domain.User;
 
 /**
@@ -37,6 +39,8 @@ public class UserAuthCacheService implements Bootable{
 	private UserDao userDao;
 	@Autowired
 	private AuthDao authDao;
+	@Autowired
+	private MenuDao menuDao;
 	@Autowired(required=false)
 	private ICacheService<UserAuth> cacheService;
 	
@@ -142,15 +146,27 @@ public class UserAuthCacheService implements Bootable{
 			List<Long> authIds = new ArrayList<Long>(auths.size());
 			Set<String> authCodes = new HashSet<String>(auths.size() * 2);
 			Set<Long> leafMenuIds = new HashSet<Long>(auths.size());
+			Set<Long> menuIds = new HashSet<Long>(auths.size() * 2);
 			
+			Menu menu = null;
 			for(Auth auth : auths){
 				authIds.add(auth.getAuthId());
 				authCodes.add(auth.getAuthCode());
 				leafMenuIds.add(auth.getMenuId());
+				
+				if(!menuIds.contains(auth.getMenuId())){
+					menuIds.add(auth.getMenuId());
+					menu = this.menuDao.get(auth.getMenuId());
+					while(menu.getParentId() != null && menu.getParentId() != 0L){
+						menuIds.add(menu.getParentId());
+						menu = this.menuDao.get(menu.getParentId());
+					}
+				}
 			}
 			userAuth.setAuthIds(authIds);
 			userAuth.setLeafMenuIds(leafMenuIds);
 			userAuth.setAuthCodes(authCodes);
+			userAuth.setMenuIds(menuIds);
 		}
 				
 		return userAuth;
