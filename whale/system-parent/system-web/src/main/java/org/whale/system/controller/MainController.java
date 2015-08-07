@@ -290,14 +290,14 @@ public class MainController extends BaseController {
 	@RequestMapping("/main")
 	public ModelAndView main(HttpServletRequest request,HttpServletResponse response) {
 		UserContext uc = this.getUserContext(request);
+		//获取所有的菜单
 		List<Menu> totalMenus = this.menuService.queryAll();
 		Map<Long, Menu> idMenus = new HashMap<Long, Menu>(totalMenus.size() * 2);
-		
 		for(Menu menu : totalMenus){
 			idMenus.put(menu.getMenuId(), menu);
 		}
 		
-		
+		//获取分配给用户的菜单
 		List<Menu> userMenus = null;
 		if(uc.isSuperAdmin()){
 			userMenus = totalMenus;
@@ -313,7 +313,7 @@ public class MainController extends BaseController {
 			}
 		}
 		
-		
+		//用户菜单建立  父菜单， 子菜单列表关系
 		Map<Long, List<Menu>> pidMenus = new HashMap<Long, List<Menu>>(userMenus.size());
 		List<Menu> menus = null;
 		for(Menu menu : totalMenus){
@@ -325,25 +325,27 @@ public class MainController extends BaseController {
 			menus.add(menu);
 		}
 		
-		
+		//用户所有tab菜单
 		List<Menu> tabMenus = pidMenus.get(0L);
 		sortMenu(tabMenus);
+		
 		StringBuilder strb = new StringBuilder();
+		//默认第一个tab菜单打开
 		boolean activce = true;
 		for(Menu node : tabMenus){
-			strb.append(this.createMenuTree(node, pidMenus,activce));
+			//递归创建所有菜单的HTML节点
+			strb.append(this.createMenuTree(request, node, pidMenus,activce));
 			activce=false;
 		}
-		return new ModelAndView("main").addObject("menus", strb.toString());
-		
+		return new ModelAndView("main").addObject("menus", strb.toString()).addObject("uc", uc);
 	}
 
-	private String createMenuTree(Menu node, Map<Long, List<Menu>> pidMenus, boolean activce){
+	private String createMenuTree(HttpServletRequest request, Menu node, Map<Long, List<Menu>> pidMenus, boolean activce){
 		StringBuilder strb = new StringBuilder();
 		
 		boolean leaf = node.getMenuType() == 3;
 		strb.append("<li").append(activce ? " class='active'" : "").append(">")
-			.append("<a ").append(leaf ? "onclick=\"menu('"+node.getMenuUrl()+"')\"" : "class='dropdown-toggle'").append(" >")
+			.append("<a ").append(leaf ? "onclick=\"menu('"+request.getContextPath()+node.getMenuUrl()+"')\"" : "class='dropdown-toggle'").append(" >")
 			.append("<i class='menu-icon fa ").append(Strings.isNotBlank(node.getInco()) ? node.getInco() : leaf ? "fa-caret-right" : "fa-desktop").append("'></i>")
 			.append(leaf ? "" : "<span class='menu-text'>")
 			.append(node.getMenuName())
@@ -356,7 +358,7 @@ public class MainController extends BaseController {
 			strb.append("<ul class='submenu'>");
 			sortMenu(subMenus);
 			for(Menu menu : subMenus){
-				strb.append(this.createMenuTree(menu, pidMenus, false));
+				strb.append(this.createMenuTree(request, menu, pidMenus, false));
 			}
 			strb.append("</ul>");
 		}
