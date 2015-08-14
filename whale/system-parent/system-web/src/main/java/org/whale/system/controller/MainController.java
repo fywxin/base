@@ -39,6 +39,8 @@ import org.whale.system.service.MenuService;
 import org.whale.system.service.UserService;
 import org.whale.system.servlet.MySessionContext;
 
+import com.alibaba.fastjson.JSON;
+
 @Controller
 public class MainController extends BaseController {
 	
@@ -313,10 +315,10 @@ public class MainController extends BaseController {
 			}
 		}
 		
-		//用户菜单建立  父菜单， 子菜单列表关系
+		//用户菜单建立  <pid, List<子菜单>>
 		Map<Long, List<Menu>> pidMenus = new HashMap<Long, List<Menu>>(userMenus.size());
 		List<Menu> menus = null;
-		for(Menu menu : totalMenus){
+		for(Menu menu : userMenus){
 			menus = pidMenus.get(menu.getParentId());
 			if(menus == null){
 				menus = new ArrayList<Menu>();
@@ -337,7 +339,10 @@ public class MainController extends BaseController {
 			strb.append(this.createMenuTree(request, node, pidMenus,activce));
 			activce=false;
 		}
-		return new ModelAndView("main").addObject("menus", strb.toString()).addObject("uc", uc);
+		return new ModelAndView("main")
+				.addObject("menus", strb.toString())
+				.addObject("idMenus", JSON.toJSONString(idMenus))
+				.addObject("uc", uc);
 	}
 
 	private String createMenuTree(HttpServletRequest request, Menu node, Map<Long, List<Menu>> pidMenus, boolean activce){
@@ -345,7 +350,7 @@ public class MainController extends BaseController {
 		
 		boolean leaf = node.getMenuType() == 3;
 		strb.append("<li").append(activce ? " class='active'" : "").append(">")
-			.append("<a ").append(leaf ? "onclick=\"menu('"+request.getContextPath()+node.getMenuUrl()+"')\"" : "class='dropdown-toggle'").append(" >")
+			.append("<a ").append(leaf ? "onclick=\"menu("+node.getMenuId()+")\"" : "class='dropdown-toggle'").append(" >")
 			.append("<i class='menu-icon fa ").append(Strings.isNotBlank(node.getInco()) ? node.getInco() : leaf ? "fa-caret-right" : "fa-desktop").append("'></i>")
 			.append(leaf ? "" : "<span class='menu-text'>")
 			.append(node.getMenuName())

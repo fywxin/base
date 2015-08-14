@@ -40,11 +40,11 @@ public class Page implements Serializable {
 	// 是否自动分页, 由于增加一层嵌套，可能会影响sql执行效率
 	private boolean autoPage = true;
 
-	public int getTotalPages() {
+	public long getTotalPages() {
 		if (this.total % this.pageSize == 0L) {
-			return new Long(String.valueOf(this.total / this.pageSize)).intValue();
+			return this.total / this.pageSize;
 		}
-		return new Long(String.valueOf(this.total / this.pageSize)).intValue() + 1;
+		return (this.total / this.pageSize) + 1;
 	}
 
 	public boolean isPrevious() {

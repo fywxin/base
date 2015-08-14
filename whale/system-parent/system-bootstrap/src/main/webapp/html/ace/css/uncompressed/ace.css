@@ -12194,7 +12194,7 @@ td .lbl:only-child {
   overflow: visible;
 }
 .ui-jqgrid .ui-pager-control {
-  height: 50px;
+  /**height: 50px;*/
   position: relative;
   padding-left: 9px;
   padding-right: 9px;

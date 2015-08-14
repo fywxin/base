@@ -6,46 +6,23 @@
 <%@include file="/html/jsp/common.jsp" %>
 <script type="text/javascript">
 $(function(){
-	$.grid({
+	$(window).resize(function(){
+		$("#grid-table").jqGrid('setGridWidth', $("#breadcrumbs", parent.document).width()+20).jqGrid('setGridHeight', $.h());
+	});
+	
+	$("#grid-table").jqGrid({
     	url :'${ctx}/dept/doList',
-    	uid : "id",
-    	pid : "pid",
-    	orderCol : "orderNo",
-    	checkbox : true,
-    	autoCheckChildren : false,
-    	orderAsc : true,
-    	usePager: false,
-    	alternatingRow : false,
-    	toolbar: {items: [
-           		{text: '新增', icon: 'add', click: 
-           			function(){
-	           			var idArr = grid.getSelIds();
-	           			if(idArr.length != 1){
-	           				$.alert('请在列表上选择一个父组织');
-	           				return ;
-	           			}
-	           			
-	           			$.openWin({url: "${ctx}/dept/goSave?pid="+idArr[0], "title":'新增组织'});
-           			} 
-				}
-            ]
-        },
-        columns: [
-      	        {display: '操作', name: 'opt', width: 100,frozen: true,
-      	        	render: function (row){
-      	        		var strArr = [];
-      	        		strArr.push("<a href='#' class='r15' onclick='update(\""+row.id+"\");'>修改</a>");
-      	        		
-      	        		strArr.push("<a href='#' onclick='del(\""+row.id+"\")'>删除</a>");
-      	        	    return strArr.join("");
-  	        	}},
-      	        {display: '组织名称', name: 'deptName', id: "deptName", align: 'left', frozen: true,width: 250},
-      	        {display: '组织编码', name: 'deptCode' },
-      	        {display: '联系电话', name: 'deptTel' },
-      	      	{display: '联系地址', name: 'deptAddr' },
-      	    	{display: '备注', name: 'remark' }
-              ],
-         tree: {columnId: 'deptName'}
+    	datatype: "json",
+    	colNames: ['组织名称','组织编码','联系电话','联系地址','备注'],
+    	colModel:[
+					{name:'deptName',index:'deptName', width:160},
+					{name:'deptCode',index:'deptCode',width:90},
+					{name:'deptTel',index:'deptTel', width:90},
+					{name:'deptAddr',index:'deptAddr', width:120} ,
+					{name:'remark',index:'remark', width:170} 
+				],
+		altRows: true,
+		treeGrid: true
 	});
 });
 
@@ -65,7 +42,6 @@ function del(id){
 		<form id="queryForm" >
 		</form>
 	</div>
-	<div id="grid" style="margin: 2px 2px 1px 2px;"></div>
-	<div style="display: none;"></div>
+	<table id="grid-table"></table>
 </body>
 </html>

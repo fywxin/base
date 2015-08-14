@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <title>日志列表</title>
 <%@include file="/html/jsp/common.jsp"%>
@@ -8,39 +8,31 @@
 var rsStatus = {1:"<span class='sgreen'>成功</span>",2:"<span class='sred'>系统异常</span>",3:"<span class='sorange'>OrmException</span>",4:"<span class='sorange'>运行时异常</span>",5:"<span class='sred'>业务异常</span>",6:"<span class='sgray'>未知异常</span>"};
 var time = new Date();
 $(function (){
-	$(window).resize(function(){
-		$("#gridTable").jqGrid('setGridWidth', parent.getW()).jqGrid('setGridHeight', $.h());
+    $.grid({
+    	url :'${ctx}/log/doList',
+        columns: [
+				{display: '操作', name: 'cnName', width: 70, frozen: true,render: function (row){
+					return "<a href='#' onclick='view(\""+row.id+"\");'>查看</a>"
+				} },
+      	        {display: '对象名称', name: 'cnName', width: 120 },
+      	        {display: '表名称', name: 'tableName', minWidth: 140},
+      	        {display: 'uri', name: 'uri' },
+      	        {display: '操作类型', name: 'opt' },
+      	      	{display: '方法耗时(ms)', name: 'methodCostTime' },
+    	        {display: '调用耗时(ms)', name: 'costTime' },
+      	        {display: 'ip地址', name: 'ip' },
+      	        {display: '创建时间', name: 'createTime',type: 'date', width: 170, render: function(row){
+      				time.setTime(row.createTime);
+      				return time.Format("yyyy-MM-dd hh:mm:ss.S");
+      	        }},
+      	        {display: '操作人', name: 'userName' },
+      	        {display: '结果', name: 'rsType',
+      	        	render: function (row){
+      	        	    return rsStatus[row.rsType];
+      	        	}
+      	        }
+              ]
 	});
-	
-	$("#gridTable").jqGrid({
-		url: "${ctx}/log2/doList",
-		datatype: "json",
-		colNames: ['操作', '对象名称', '表名称', 'uri', '操作类型', '方法耗时(ms)','调用耗时(ms)', 'ip地址', '创建时间', '操作人', '结果'],
-		colModel: [{name:'myac',index:'', width:80, fixed:true, sortable:false, resize:false,
-					formatter: function(cellvalue, options, rowObject){
-						return "asda";
-					}},
-					{name:'cnName',index:'cnName', width:60},
-					{name:'tableName',index:'tableName', width:60},
-					{name:'uri',index:'uri', width:60},
-					{name:'opt',index:'opt', width:60},
-					{name:'methodCostTime',index:'methodCostTime', width:60},
-					{name:'costTime',index:'costTime', width:60},
-					{name:'ip',index:'ip', width:60},
-					{name:'createTime',index:'createTime', width:60},
-					{name:'userName',index:'userName', width:60},
-					{name:'rsType',index:'rsType', width:60}
-			],
-		rowNum : 20,
-		rowList : [ 10, 20, 30, 50],
-		pager : '#gridPager',
-		height: $.h()-75-$("#queryForm").height(),
-		repeatitems: false,
-		altRows: true,
-		width: parent.getW()-10,
-		mtype : "post"
-	});
-	
 });
 
 function view(id){
@@ -50,11 +42,10 @@ function view(id){
 </script>
 </head>
 
-<body style="overflow: hidden;background-color: white;">
-	<div class="row">
-		<div class="col-xs-12">
+<body style="overflow: hidden;">
+	<div class="edit-form">
 		<form id="queryForm" >
-				<table class="query">
+				<table>
 						<col  width="8%" />
 						<col  width="25%"/>
 						<col  width="8%" />
@@ -64,12 +55,12 @@ function view(id){
 					<tbody>
 						<tr>
 							<td class="td-label">处理结果</td>
-							<td>
+							<td class="td-value">
 								<select id="rsType" name="rsType" style="width: 165px;">
 									<option value="">--请选择--</option>
 									<option value="1">处理成功</option>
 									<option value="11">返回异常</option>
-									<optgroup td-label="异常">
+									<optgroup label="异常">
 										<option value="2">系统异常</option>
 										<option value="3">ORM异常</option>
 										<option value="4">运行时异常</option>
@@ -79,11 +70,11 @@ function view(id){
 								</select>
 							</td>
 							<td class="td-label">操作类型</td>
-							<td>
+							<td class="td-value">
 								<select id="opt" name="opt" style="width: 165px;">
 									<option value="">--请选择--</option>
 									<option value="dll">变更操作</option>
-									<optgroup td-label="详细变更操作" >
+									<optgroup label="详细变更操作" >
 										<option value="save" >新增</option>
 										<option value="saves" >循环新增</option>
 										<option value="saveBatch" >批量新增</option>
@@ -95,7 +86,7 @@ function view(id){
 										<option value="deleteBatch" >批量删除</option>
 									</optgroup>
 									<option value="find">查询操作</option>
-									<optgroup td-label="详细查询操作" >
+									<optgroup label="详细查询操作" >
 										<option value="get" >根据ID获取对象</option>
 										<option value="getObject" >按条件获取对象</option>
 										<option value="query" >对象列表查询</option>
@@ -109,30 +100,20 @@ function view(id){
 								</select>
 							</td>
 							<td class="td-label">所属应用</td>
-							<td>
+							<td class="td-value">
 								<input type="text" id="appId" name="appId" style="width:160px;" value="${item.appId}" />
 							</td>
 						</tr>
 						
 						<tr>
 							<td class="td-label">方法耗时</td>
-							<td>
-								<div class="input-group">
-									<div class="input-group-addon" >></div>
-									<input type="text" id="methodCostTime" name="methodCostTime" class="form-control" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:130px;padding:1px;" />
-								</div>
-							</td>
+							<td class="td-value">><input type="text" id="methodCostTime" name="methodCostTime" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:160px;" value="${item.userName}" /></td>
 						
 							<td class="td-label">调用耗时></td>
-							<td>
-								<div class="input-group">
-									<div class="input-group-addon" >></div>
-									<input type="text" id="costTime" name="costTime"  class="form-control" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:130px;padding:1px;" />
-								</div>
-							</td>
+							<td class="td-value">><input type="text" id="costTime" name="costTime" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:160px;" value="${item.userName}" /></td>
 						
 							<td class="td-label">操作时间</td>
-							<td>
+							<td class="td-value">
 								<input type="text" style="width:160px;" id="startTime" name="startTime" class="i-date" onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true,maxDate:'#F{$dp.$D(\'endTime\')}'})"  value="${startTime }"/>
 								至
 								<input type="text" style="width:160px;" id="endTime" name="endTime" class="i-date" onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true,minDate:'#F{$dp.$D(\'startTime\')}'})" value="${endTime }"/>
@@ -140,15 +121,15 @@ function view(id){
 						</tr>
 						<tr>
 							<td class="td-label">表名称</td>
-							<td>
+							<td class="td-value">
 								<input type="text" id="tableName" name="tableName" style="width:160px;" value="${item.tableName}" />
 							</td>
 							<td class="td-label">uri</td>
-							<td>
+							<td class="td-value">
 								<input type="text" id="uri" name="uri" style="width:160px;" value="${item.uri}" />
 							</td>
 							<td class="td-label">操作人</td>
-							<td>
+							<td class="td-value">
 								<input type="text" id="userName" name="userName" style="width:160px;" value="${item.userName}" />
 								<button id="queryBut" type="button" class="btn-query">查询</button>
 							</td>
@@ -157,14 +138,7 @@ function view(id){
 				</table>
 			</form>
 	</div>
-	</div>
-	<table id="gridTable"></table>
-	<div id="gridPager" style="height:35px;"></div>
+	<div id="grid" style="margin: 2px;"></div>
+	<div style="display: none;"></div>
 </body>
-
-<script type="text/javascript">
-$(function(){
-	
-})
-</script>
 </html>

@@ -29,7 +29,7 @@
 		<![endif]-->
 	</head>
 
-	<body class="no-skin">
+	<body class="no-skin" style="overflow: hidden;">
 		<div id="navbar" class="navbar navbar-default navbar-fixed-top">
 			<script type="text/javascript">
 				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
@@ -400,12 +400,13 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">首页</a>
+								首页
 							</li>
-							<li class="active">个人门户</li>
+							<li >个人门户</li>
+							<li class="active"><a href="#">个人门户</a></li>
 						</ul>
 					</div>
-					<div>
+					<div class="page-content" style="padding: 5px 5px 5px;">
 						<iframe frameborder="0" id="mainFrame" src=""></iframe>
 					</div>
 				</div>
@@ -453,7 +454,15 @@
 		<script src="${html}/ace/js/ace-elements.min.js"></script>
 		<script src="${html}/ace/js/ace.min.js"></script>
 		<script src="${html}/js/cookie.js"></script>
+		<script src="${html}/js/fun.js"></script>
 <script type="text/javascript">
+$(function(){
+	$(window).on('resize.jqGrid', function () {
+		$("#mainFrame").css("width", getW()).css("height", getH());
+    });
+});
+
+var idMenus = ${idMenus};
 function loginOut(){
 	$.ajax({
 		    url: "${ctx}/loginOut",
@@ -472,8 +481,31 @@ function loginOut(){
 		});
 }
 
-function menu(url){
-	$("#mainFrame").attr("src", url);
+function menu(id){
+	var path = [];
+	
+	var obj = idMenus[id];
+	var i=0;
+	while(obj != null){
+		if(i == 0){
+			path[i] = "<li class='active'>"+obj.menuName+"</li>";
+		}else{
+			path[i] = "<li>"+obj.menuName+"</li>";
+		}
+		obj = idMenus[obj.parentId];
+		i++;
+	}
+	path.reverse();
+	$("#breadcrumbs ul").html(path.join(""));
+	$("#mainFrame").css("width", getW()).css("height", getH()).attr("src", "${ctx}"+idMenus[id].menuUrl);
+}
+
+function getW(){
+	return $("#breadcrumbs").width()+20;
+}
+
+function getH(){
+	return $.h()-100;
 }
 </script>
 	</body>

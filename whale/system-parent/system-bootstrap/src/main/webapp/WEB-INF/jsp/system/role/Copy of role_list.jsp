@@ -49,7 +49,7 @@
 				var grid_selector = "#grid-table";
 				var pager_selector = "#grid-pager";
 				$(window).resize(function(){
-					$(grid_selector).jqGrid('setGridWidth', parent.getW()).jqGrid('setGridHeight', $.h());
+					$(grid_selector).jqGrid('setGridWidth', $("#breadcrumbs", parent.document).width()+20).jqGrid('setGridHeight', $.h());
 				});
 				
 				
