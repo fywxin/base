@@ -1,15 +1,12 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>日志列表</title>
-<%@include file="/html/jsp/common.jsp"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="/html/jsp/frame.jsp" %>
+
 <script type="text/javascript">
 var rsStatus = {1:"<span class='sgreen'>成功</span>",2:"<span class='sred'>系统异常</span>",3:"<span class='sorange'>OrmException</span>",4:"<span class='sorange'>运行时异常</span>",5:"<span class='sred'>业务异常</span>",6:"<span class='sgray'>未知异常</span>"};
 var time = new Date();
 $(function (){
 	$(window).resize(function(){
-		$("#gridTable").jqGrid('setGridWidth', parent.getW()).jqGrid('setGridHeight', $.h());
+		$("#gridTable").jqGrid('setGridWidth', $("#navbarDiv").width()-20).jqGrid('setGridHeight', $.h()-115-$("#queryForm").height());
 	});
 	
 	$("#gridTable").jqGrid({
@@ -34,10 +31,10 @@ $(function (){
 		rowNum : 20,
 		rowList : [ 10, 20, 30, 50],
 		pager : '#gridPager',
-		height: $.h()-75-$("#queryForm").height(),
+		height: $.h()-150-$("#queryForm").height(),
 		repeatitems: false,
 		altRows: true,
-		width: parent.getW()-10,
+		autowidth: true,
 		mtype : "post"
 	});
 	
@@ -48,12 +45,7 @@ function view(id){
 }
 
 </script>
-</head>
-
-<body style="overflow: hidden;background-color: white;">
-	<div class="row">
-		<div class="col-xs-12">
-		<form id="queryForm" >
+		<form id="queryForm"  style="background-color: white;margin: 10px 0px;">
 				<table class="query">
 						<col  width="8%" />
 						<col  width="25%"/>
@@ -117,18 +109,14 @@ function view(id){
 						<tr>
 							<td class="td-label">方法耗时</td>
 							<td>
-								<div class="input-group">
-									<div class="input-group-addon" >></div>
-									<input type="text" id="methodCostTime" name="methodCostTime" class="form-control" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:130px;padding:1px;" />
-								</div>
+								><input type="text" id="methodCostTime" name="methodCostTime" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:130px;padding:1px;" />
+								
 							</td>
 						
 							<td class="td-label">调用耗时></td>
 							<td>
-								<div class="input-group">
-									<div class="input-group-addon" >></div>
-									<input type="text" id="costTime" name="costTime"  class="form-control" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:130px;padding:1px;" />
-								</div>
+								> <input type="text" id="costTime" name="costTime"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:130px;padding:1px;" />
+							
 							</td>
 						
 							<td class="td-label">操作时间</td>
@@ -156,15 +144,6 @@ function view(id){
 					</tbody>
 				</table>
 			</form>
-	</div>
-	</div>
-	<table id="gridTable"></table>
-	<div id="gridPager" style="height:35px;"></div>
-</body>
-
-<script type="text/javascript">
-$(function(){
-	
-})
-</script>
-</html>
+			<table id="gridTable"></table>
+			<div id="gridPager" style="height:35px;"></div>
+<%@include file="/html/jsp/foot.jsp" %>

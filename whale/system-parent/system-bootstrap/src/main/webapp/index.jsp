@@ -23,279 +23,55 @@
 	pageContext.setAttribute("autoLoginFlag", autoLoginFlag);
 %>
 	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<meta name="renderer" content="webkit">
+		
 		<title>基础开发平台</title>
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link href="${html}/www/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+	    <link href="${html}/www/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
+	
+	    <link href="${html}/www/css/animate.css" rel="stylesheet">
+	    <link href="${html}/www/css/style.css?v=2.2.0" rel="stylesheet">
 
-		<!-- bootstrap & fontawesome -->
-		<link rel="stylesheet" href="${html}/ace/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css" />
-
-		<!-- ace styles -->
-		<link rel="stylesheet" href="${html}/ace/css/ace.min.css" />
-
-		<!--[if lte IE 9]>
-			<link rel="stylesheet" href="${html}/ace/css/ace-part2.min.css" />
-		<![endif]-->
-		<link rel="stylesheet" href="${html}/ace/css/ace-rtl.min.css" />
-
-		<!--[if lte IE 9]>
-		<link rel="stylesheet" href="${html}/ace/css/ace-ie.min.css" />
-		<script src="${html}/ace/js/html5shiv.min.js"></script>
-		<script src="${html}/ace/js/respond.min.js"></script>
-		<![endif]-->
+    	<script src="${html}/www/js/jquery-2.1.1.min.js"></script>
+    	<script src="${html}/www/js/bootstrap.min.js?v=3.4.0"></script>
+    	<script src="${html}/js/cookie.js"></script>	     
 	</head>
 
-	<body class="login-layout light-login">
-		<div class="main-container">
-			<div class="main-content">
-				<div class="row">
-					<div class="col-sm-10 col-sm-offset-1">
-						<div class="login-container">
-							<div class="center">
-								<h1>
-									<i class="ace-icon fa fa-leaf green"></i>
-									<span class="red">Whale</span>
-									<span class="white" id="id-text2">管理平台</span>
-								</h1>
-								<h4 class="blue" id="id-company-text">&copy; 大盗公司</h4>
-							</div>
-
-							<div class="space-6"></div>
-
-							<div class="position-relative">
-								<div id="login-box" class="login-box visible widget-box no-border">
-									<div class="widget-body">
-										<div class="widget-main">
-											<h4 class="header blue lighter bigger">
-												<i class="ace-icon fa fa-coffee green"></i>
-												请输入登录信息
-											</h4>
-
-											<div class="space-6"></div>
-
-											<form id="loginForm">
-												<input type="hidden" id="encryptedPwd" name="encryptedPwd">
-												<fieldset>
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="text" id="userName" name="userName" class="form-control" placeholder="用户名" autocomplete="off" />
-															<i class="ace-icon fa fa-user"></i>
-														</span>
-													</label>
-
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="password" id="password" name="password" class="form-control" placeholder="登录密码" autocomplete="off" />
-															<i class="ace-icon fa fa-lock"></i>
-														</span>
-													</label>
-													<div <c:if test="${!verityFlag }">style="display: none;"</c:if> id="verityDiv">
-													<label  class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="text" id="verifycode" name="verifycode" class="col-xs-7" placeholder="验证码" maxlength="4" size="4" autocomplete="off" onkeyup="value=value.replace(/[^\d]/g,'')" />
-														</span>
-														<img id="secimg" src="${ctx}/code.jpg" width="120" height="32" alt="看不清楚，换一张" title="看不清楚，换一张" onclick="javascript:createCode();" style="cursor:pointer;border: 0;padding-left: 20px;">
-													</label>
-												</div>
-												<c:if test="${autoLoginFlag }">
-													<div class="clearfix">
-														<input type="checkbox" id="autoLogin" name="autoLogin" checked="checked" /> 一个月内自动登录
-													</div>
-												</c:if>
-													<div class="space"></div>
-													<div class="clearfix">
-														<button type="button" class="width-100  btn btn-sm btn-success" onclick="return login();">
-															<i class="ace-icon fa fa-key"></i>
-															<span class="bigger-110">立即登录</span>
-														</button>
-													</div>
-												
-													<div class="clearfix" id="loginNoteDiv" align="center">
-														<h5 class="red lighter bigger" >
-															<i class="ace-icon fa fa-exclamation-triangle hide"></i>
-															&nbsp;<span style="display: none"></span>
-														</h5>
-													</div>
-												</fieldset>
-											</form>
-										</div>
-
-										<div class="toolbar clearfix">
-											<div>
-												<a href="#" data-target="#forgot-box" class="forgot-password-link">
-													<i class="ace-icon fa fa-arrow-left"></i>
-													忘记密码
-												</a>
-											</div>
-
-											<div>
-												<a href="#" data-target="#signup-box" class="user-signup-link">
-													用户注册
-													<i class="ace-icon fa fa-arrow-right"></i>
-												</a>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div id="forgot-box" class="forgot-box widget-box no-border">
-									<div class="widget-body">
-										<div class="widget-main">
-											<h4 class="header red lighter bigger">
-												<i class="ace-icon fa fa-key"></i>
-												找回密码
-											</h4>
-
-											<div class="space-6"></div>
-											<p>
-												请输入你的邮箱地址获取密码
-											</p>
-
-											<form>
-												<fieldset>
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="email" class="form-control" placeholder="邮箱" />
-															<i class="ace-icon fa fa-envelope"></i>
-														</span>
-													</label>
-
-													<div class="clearfix">
-														<button type="button" class="width-35 pull-right btn btn-sm btn-danger">
-															<i class="ace-icon fa fa-lightbulb-o"></i>
-															<span class="bigger-110">发送!</span>
-														</button>
-													</div>
-												</fieldset>
-											</form>
-										</div><!-- /.widget-main -->
-
-										<div class="toolbar center">
-											<a href="#" data-target="#login-box" class="back-to-login-link">
-												返回登录页面
-												<i class="ace-icon fa fa-arrow-right"></i>
-											</a>
-										</div>
-									</div><!-- /.widget-body -->
-								</div><!-- /.forgot-box -->
-
-								<div id="signup-box" class="signup-box widget-box no-border">
-									<div class="widget-body">
-										<div class="widget-main">
-											<h4 class="header green lighter bigger">
-												<i class="ace-icon fa fa-users blue"></i>
-												新用户注册
-											</h4>
-
-											<div class="space-6"></div>
-											<p> 请输入你的详细信息: </p>
-
-											<form>
-												<fieldset>
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="email" class="form-control" placeholder="邮箱" />
-															<i class="ace-icon fa fa-envelope"></i>
-														</span>
-													</label>
-
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="用户名" />
-															<i class="ace-icon fa fa-user"></i>
-														</span>
-													</label>
-
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="密码" />
-															<i class="ace-icon fa fa-lock"></i>
-														</span>
-													</label>
-
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="确认密码" />
-															<i class="ace-icon fa fa-retweet"></i>
-														</span>
-													</label>
-
-													<label class="block">
-														<input type="checkbox" class="ace" />
-														<span class="lbl">
-															点击注册按钮表示您已同意并接受
-															<a >《大盗网用户使用协议》</a>
-														</span>
-													</label>
-
-													<div class="space-24"></div>
-
-													<div class="clearfix">
-														<button type="reset" class="width-30 pull-left btn btn-sm">
-															<i class="ace-icon fa fa-refresh"></i>
-															<span class="bigger-110">重置</span>
-														</button>
-
-														<button type="button" class="width-65 pull-right btn btn-sm btn-success">
-															<span class="bigger-110">注册</span>
-
-															<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-														</button>
-													</div>
-												</fieldset>
-											</form>
-										</div>
-
-										<div class="toolbar center">
-											<a href="#" data-target="#login-box" class="back-to-login-link">
-												<i class="ace-icon fa fa-arrow-left"></i>
-												返回登录页面
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+<body class="gray-bg">
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <h2>基础开发框架</h2>
+            
+            <form class="m-t" role="form" id="loginForm">
+            <input type="hidden" id="encryptedPwd" name="encryptedPwd">
+                <div class="form-group">
+                    <input type="text" id="userName" name="userName" class="form-control" placeholder="用户名" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="密码" autocomplete="off">
+                </div>
+				<div class="form-group" <c:if test="${!verityFlag }">style="display: none;"</c:if> id="verityDiv">
+					<input type="text" id="verifycode" name="verifycode" class="form-control" style="width:190px;float: left;" placeholder="验证码" maxlength="4" size="4" autocomplete="off" onkeyup="value=value.replace(/[^\d]/g,'')" />
+					<img id="secimg" src="${ctx}/code.jpg" alt="看不清楚，换一张" title="看不清楚，换一张" onclick="javascript:createCode();" style="cursor:pointer;border: 0;padding-left: 20px;height:33px;width:100px">
 				</div>
-			</div>
-		</div>
-
-		<!--[if !IE]> -->
-		<script src="${html}/js/jquery.211.js"></script>
-		<!-- <![endif]-->
-
-		<!--[if IE]>
-<script src="${html}/js/jquery.1101.js"></script>
-<![endif]-->
-		<script src="${html}/js/cookie.js"></script>
-
-		<!--[if !IE]> -->
-		<script type="text/javascript">
-			window.jQuery || document.write("<script src='${html}/ace/js/jquery.min.js'>"+"<"+"/script>");
-		</script>
-		<!-- <![endif]-->
-
-		<!--[if IE]>
+				<c:if test="${autoLoginFlag }">
+				<div class="form-group" align="left">
+					<input type="checkbox" id="autoLogin" name="autoLogin" checked="checked" /> 一个月内自动登录
+				</div>
+				</c:if>
+				
+                <button type="button" onclick="return login();" class="btn btn-primary block full-width m-b">登 录</button>
+                <p class="text-muted text-center"> <a href="login.html#"><small>忘记密码了？</small></a> | <a href="register.html">注册一个新账号</a>
+                </p>
+				<div class="alert alert-danger" style="display: none;" id="loginNoteDiv" align="center"></div>
+            </form>
+        </div>
+    </div>
 <script type="text/javascript">
- window.jQuery || document.write("<script src='${html}/ace/js/jquery1x.min.js'>"+"<"+"/script>");
-</script>
-<![endif]-->
-		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='${html}/ace/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
-		</script>
-<script type="text/javascript">
-jQuery(function($) {
-	 $(document).on('click', '.toolbar a[data-target]', function(e) {
-		e.preventDefault();
-		var target = $(this).data('target');
-		$('.widget-box.visible').removeClass('visible');
-		$(target).addClass('visible');
-	 });
-	 
+$(function($) {
 	 <c:if test="${autoLoginFlag }">
 		if($.cookie("userName") != null && $.cookie("userName") != ""){
 			$("#userName").val($.cookie("userName"));
@@ -335,8 +111,7 @@ jQuery(function($) {
 		$("#userName")[0].focus();
 });
 function error(msg, id){
-	$("#loginNoteDiv span").html(msg).show();
-	$("#loginNoteDiv i").removeClass("hide");
+	$("#loginNoteDiv").html(msg).show();
 	if(id != null){
 		document.getElementById(id).focus();
 		document.getElementById(id).select();
@@ -414,5 +189,5 @@ function createCode(){
 	$("#secimg").attr("src","${ctx}/code.jpg?"+new Date().getTime());
 }
 </script>
-	</body>
+</body>
 </html>

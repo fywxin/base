@@ -61,6 +61,14 @@ public class MainController extends BaseController {
 	
 	private Boolean sort = Boolean.FALSE;
 
+	List<String> menuCss = new ArrayList<String>(3);
+	{
+		menuCss.add("nav");
+		menuCss.add("nav nav-second-level");
+		menuCss.add("nav nav-third-level");
+		menuCss.add("nav nav-fourth-level");
+		menuCss.add("nav nav-fifth-level");
+	}
 	
 	
 	/**
@@ -219,6 +227,8 @@ public class MainController extends BaseController {
 		session.setAttribute(SysConstant.USER_CONTEXT_KEY, uc);
 		uc.setSessionId(request.getSession().getId());
 		
+		uc.getCustomDatas().put("menusStr", this.createMenu(request));
+		
 		ThreadContext.getContext().put(ThreadContext.KEY_USER_CONTEXT, uc);
 	}
 	
@@ -289,6 +299,8 @@ public class MainController extends BaseController {
 	//-------------------------------------------------------------------------------------
 	
 	
+	
+	
 	@RequestMapping("/main")
 	public ModelAndView main(HttpServletRequest request,HttpServletResponse response) {
 		UserContext uc = this.getUserContext(request);
@@ -336,7 +348,7 @@ public class MainController extends BaseController {
 		boolean activce = true;
 		for(Menu node : tabMenus){
 			//递归创建所有菜单的HTML节点
-			strb.append(this.createMenuTree(request, node, pidMenus,activce));
+			strb.append(this.createMenuTree(request, node, pidMenus, 1, activce));
 			activce=false;
 		}
 		return new ModelAndView("main")
@@ -344,26 +356,74 @@ public class MainController extends BaseController {
 				.addObject("idMenus", JSON.toJSONString(idMenus))
 				.addObject("uc", uc);
 	}
+	
+	
+	private String createMenu(HttpServletRequest request){
+		UserContext uc = this.getUserContext(request);
+		//获取所有的菜单
+		List<Menu> totalMenus = this.menuService.queryAll();
+		Map<Long, Menu> idMenus = new HashMap<Long, Menu>(totalMenus.size() * 2);
+		for(Menu menu : totalMenus){
+			idMenus.put(menu.getMenuId(), menu);
+		}
+		
+		//获取分配给用户的菜单
+		List<Menu> userMenus = null;
+		if(uc.isSuperAdmin()){
+			userMenus = totalMenus;
+		}else{
+			Set<Long> userMenuIds = userAuthCacheService.getUserAuth(uc.getUserId()).getMenuIds();
+			if(userMenuIds != null){
+				userMenus = new ArrayList<Menu>(userMenuIds.size());
+				for(Long id : userMenuIds){
+					userMenus.add(idMenus.get(id));
+				}
+			}else{
+				userMenus = new ArrayList<Menu>(0);
+			}
+		}
+		
+		//用户菜单建立  <pid, List<子菜单>>
+		Map<Long, List<Menu>> pidMenus = new HashMap<Long, List<Menu>>(userMenus.size());
+		List<Menu> menus = null;
+		for(Menu menu : userMenus){
+			menus = pidMenus.get(menu.getParentId());
+			if(menus == null){
+				menus = new ArrayList<Menu>();
+				pidMenus.put(menu.getParentId(), menus);
+			}
+			menus.add(menu);
+		}
+		
+		//用户所有tab菜单
+		List<Menu> tabMenus = pidMenus.get(0L);
+		sortMenu(tabMenus);
+		
+		StringBuilder strb = new StringBuilder();
+		//默认第一个tab菜单打开
+		boolean activce = true;
+		for(Menu node : tabMenus){
+			//递归创建所有菜单的HTML节点
+			strb.append(this.createMenuTree(request, node, pidMenus, 1, activce));
+			activce=false;
+		}
+		return strb.toString();
+	}
 
-	private String createMenuTree(HttpServletRequest request, Menu node, Map<Long, List<Menu>> pidMenus, boolean activce){
+	private String createMenuTree(HttpServletRequest request, Menu node, Map<Long, List<Menu>> pidMenus, int level, boolean activce){
 		StringBuilder strb = new StringBuilder();
 		
 		boolean leaf = node.getMenuType() == 3;
 		strb.append("<li").append(activce ? " class='active'" : "").append(">")
-			.append("<a ").append(leaf ? "onclick=\"menu("+node.getMenuId()+")\"" : "class='dropdown-toggle'").append(" >")
-			.append("<i class='menu-icon fa ").append(Strings.isNotBlank(node.getInco()) ? node.getInco() : leaf ? "fa-caret-right" : "fa-desktop").append("'></i>")
-			.append(leaf ? "" : "<span class='menu-text'>")
-			.append(node.getMenuName())
-			.append(leaf ? "" : "</span><b class='arrow fa fa-angle-down'></b>")
-			.append("</a>")
-			.append("<b class='arrow'></b>");
-		
+			.append(leaf? "<a href=\""+request.getContextPath()+node.getMenuUrl()+"\">"+node.getMenuName()+"</a>" 
+						: "<a href='#'><i class='fa fa-th-large'></i><span class='nav-label'>"+node.getMenuName()+"</span><span class='fa arrow'></span></a>");
+					
 		List<Menu> subMenus = pidMenus.get(node.getMenuId());
 		if(subMenus != null && subMenus.size() > 0){
-			strb.append("<ul class='submenu'>");
+			strb.append("<ul class='"+menuCss.get(level)+(activce ? " collapse in' aria-expanded=true'":" collapse'")+" >");
 			sortMenu(subMenus);
 			for(Menu menu : subMenus){
-				strb.append(this.createMenuTree(request, menu, pidMenus, false));
+				strb.append(this.createMenuTree(request, menu, pidMenus, level+1, false));
 			}
 			strb.append("</ul>");
 		}
