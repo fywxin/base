@@ -28,7 +28,6 @@
 		<script src="${html}/ace/js/respond.min.js"></script>
 		<![endif]-->
 	</head>
-<jsp:include page=""></jsp:include>
 
 	<body class="no-skin" style="overflow: hidden;">
 		<div id="navbar" class="navbar navbar-default navbar-fixed-top">

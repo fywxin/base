@@ -34,21 +34,24 @@ h5 {
   margin-top: 5px;
   font-weight: 600;
 }
+.nav > li{
+	background-color: #fff;
+	border: 1px dotted #E4E4E4;
+}
+
 .nav > li > a {
-  color: #a7b1c2;
-  font-weight: 600;
   padding: 14px 20px 14px 25px;
 }
 .nav.navbar-right > li > a {
   color: #999c9e;
 }
 .nav > li.active > a {
-  color: #ffffff;
+  /**color: #ffffff;*/
 }
 .navbar-default .nav > li > a:hover,
 .navbar-default .nav > li > a:focus {
-  background-color: #293846;
-  color: white;
+  color: #4b88b7;
+  background-color: #f1f5f9;
 }
 .nav .open > a,
 .nav .open > a:hover,
@@ -66,8 +69,8 @@ h5 {
   border: 0;
 }
 .navbar-default {
-  background-color: transparent;
-  border-color: #2f4050;
+  background-color: #F8F8F8;
+  border-color: 1px solid #E5E5E5;
 }
 .navbar-top-links li {
   display: inline-block;
@@ -165,7 +168,7 @@ body.body-small .navbar-top-links li:last-child {
 }
 .nav > li.active {
   border-left: 4px solid #19aa8d;
-  background: #293846;
+  background: #FAFAFA;
 }
 .nav.nav-second-level > li.active {
   border: none;
@@ -1909,7 +1912,7 @@ table.dataTable thead .sorting:after {
   border-right-style: solid;
   border-right-width: 1px;
   text-align: left;
-  border-color: #ddd; /** wjs 表格border颜色*/
+  border-color: #CCCCCC; /** wjs 表格border颜色*/
   background-color: inherit;
 }
 .ui-search-toolbar input[type="text"] {
@@ -2040,7 +2043,7 @@ table.dataTable thead .sorting:after {
   border-bottom-right-radius: 0;
 }
 .ui-widget-content {
-  
+  border: 1px solid #ddd;
 }
 .ui-jqgrid .ui-jqgrid-titlebar {
   padding: 0;

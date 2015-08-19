@@ -1,5 +1,5 @@
-table.query{clear:both; width:100%; border-collapse:collapse; border-style:solid; border-width:1px; border-color:#A2A7B0; table-layout: fixed; word-break:break-all;}
-table.query td{padding:4px; border-style:solid; border-width:1px; border-color:#A2A7B0;}
+table.query{clear:both; width:100%; border-collapse:collapse; border-style:solid; border-width:1px; border-color:#CCCCCC; table-layout: fixed; word-break:break-all;}
+table.query td{padding:5px; border-style:solid; border-width:1px; border-color:#CCCCCC;}
 table.query .td-label{background:#F4F5F7; text-align:right; }
-table.query input{padding:1px; border-style:solid; border-width:1px; border-color:#A2A7B0;}
-table.query select{padding:1px; border-style:solid; border-width:1px; border-color:#A2A7B0;}
+table.query input{padding:1px; border-style:solid; border-width:1px; border-color:#CCCCCC;}
+table.query select{padding:1px; border-style:solid; border-width:1px; border-color:#CCCCCC;}
