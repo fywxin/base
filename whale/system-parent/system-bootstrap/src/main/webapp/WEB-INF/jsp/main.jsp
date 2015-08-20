@@ -15,10 +15,10 @@
     </script>
     <![endif]-->
 
-    <link href="${html }/frame/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${html }/frame/css/font-awesome.min.css" rel="stylesheet">
-    <link href="${html }/frame/css/animate.css" rel="stylesheet">
-    <link href="${html }/frame/css/style.css" rel="stylesheet">
+    <link href="${html }/w3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${html }/w3/css/font-awesome.min.css" rel="stylesheet">
+    <link href="${html }/w3/css/animate.css" rel="stylesheet">
+    <link href="${html }/w3/css/style.css" rel="stylesheet">
 </head>
 
 <body class="fixed-sidebar full-height-layout gray-bg">
@@ -29,7 +29,7 @@
                 <ul class="nav" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <span><img alt="image" class="img-circle" src="${html }/frame/img/profile_small.jpg" /></span>
+                            <span><img alt="image" class="img-circle" src="${html }/w3/img/profile_small.jpg" /></span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
                                <span class="block m-t-xs"><strong class="font-bold">Beaut-zihan</strong></span>
@@ -61,7 +61,7 @@
                         </a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a class="J_menuItem" href="${html }/frame/index_v1.html" data-index="0">主页示例一</a>
+                                <a class="J_menuItem" href="${html }/w3/index_v1.html" data-index="0">主页示例一</a>
                             </li>
                             <li>
                                 <a class="J_menuItem" href="index_v2.html">主页示例二</a>
@@ -386,7 +386,7 @@
                                 <li class="m-t-xs">
                                     <div class="dropdown-messages-box">
                                         <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="${html }/frame/img/a7.jpg">
+                                            <img alt="image" class="img-circle" src="${html }/w3/img/a7.jpg">
                                         </a>
                                         <div class="media-body">
                                             <small class="pull-right">46小时前</small>
@@ -400,7 +400,7 @@
                                 <li>
                                     <div class="dropdown-messages-box">
                                         <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="${html }/frame/img/a4.jpg">
+                                            <img alt="image" class="img-circle" src="${html }/w3/img/a4.jpg">
                                         </a>
                                         <div class="media-body ">
                                             <small class="pull-right text-navy">25小时前</small>
@@ -477,7 +477,7 @@
 
             </div>
             <div class="row J_mainContent" id="content-main">
-                <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="${html }/frame/index_v1.html?v=3.0" frameborder="0" data-id="index_v1.html" seamless></iframe>
+                <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="${html }/w3/index_v1.html?v=3.0" frameborder="0" data-id="index_v1.html" seamless></iframe>
             </div>
             <div class="footer">
                 <div class="pull-right">&copy; 2014-2015 <a href="http://www.zi-han.net/" target="_blank">zihan's blog</a>
@@ -521,7 +521,7 @@
                             <div class="sidebar-message">
                                 <a href="#">
                                     <div class="pull-left text-center">
-                                        <img alt="image" class="img-circle message-avatar" src="${html }/frame/img/a1.jpg">
+                                        <img alt="image" class="img-circle message-avatar" src="${html }/w3/img/a1.jpg">
 
                                         <div class="m-t-xs">
                                             <i class="fa fa-star text-warning"></i>
@@ -539,7 +539,7 @@
                             <div class="sidebar-message">
                                 <a href="#">
                                     <div class="pull-left text-center">
-                                        <img alt="image" class="img-circle message-avatar" src="${html }/frame/img/a2.jpg">
+                                        <img alt="image" class="img-circle message-avatar" src="${html }/w3/img/a2.jpg">
                                     </div>
                                     <div class="media-body">
                                         HCY48之音乐大魔王会员专属皮肤已上线，快来一键换装拥有他，宣告你对华晨宇的爱吧！
@@ -551,7 +551,7 @@
                             <div class="sidebar-message">
                                 <a href="#">
                                     <div class="pull-left text-center">
-                                        <img alt="image" class="img-circle message-avatar" src="${html }/frame/img/a3.jpg">
+                                        <img alt="image" class="img-circle message-avatar" src="${html }/w3/img/a3.jpg">
 
                                         <div class="m-t-xs">
                                             <i class="fa fa-star text-warning"></i>
@@ -569,7 +569,7 @@
                             <div class="sidebar-message">
                                 <a href="#">
                                     <div class="pull-left text-center">
-                                        <img alt="image" class="img-circle message-avatar" src="${html }/frame/img/a4.jpg">
+                                        <img alt="image" class="img-circle message-avatar" src="${html }/w3/img/a4.jpg">
                                     </div>
 
                                     <div class="media-body">
@@ -582,7 +582,7 @@
                             <div class="sidebar-message">
                                 <a href="#">
                                     <div class="pull-left text-center">
-                                        <img alt="image" class="img-circle message-avatar" src="${html }/frame/img/a8.jpg">
+                                        <img alt="image" class="img-circle message-avatar" src="${html }/w3/img/a8.jpg">
                                     </div>
                                     <div class="media-body">
 
@@ -595,7 +595,7 @@
                             <div class="sidebar-message">
                                 <a href="#">
                                     <div class="pull-left text-center">
-                                        <img alt="image" class="img-circle message-avatar" src="${html }/frame/img/a7.jpg">
+                                        <img alt="image" class="img-circle message-avatar" src="${html }/w3/img/a7.jpg">
                                     </div>
                                     <div class="media-body">
                                         这哥们的新视频又来了，创意杠杠滴，帅炸了！
@@ -607,7 +607,7 @@
                             <div class="sidebar-message">
                                 <a href="#">
                                     <div class="pull-left text-center">
-                                        <img alt="image" class="img-circle message-avatar" src="${html }/frame/img/a3.jpg">
+                                        <img alt="image" class="img-circle message-avatar" src="${html }/w3/img/a3.jpg">
 
                                         <div class="m-t-xs">
                                             <i class="fa fa-star text-warning"></i>
@@ -625,7 +625,7 @@
                             <div class="sidebar-message">
                                 <a href="#">
                                     <div class="pull-left text-center">
-                                        <img alt="image" class="img-circle message-avatar" src="${html }/frame/img/a4.jpg">
+                                        <img alt="image" class="img-circle message-avatar" src="${html }/w3/img/a4.jpg">
                                     </div>
                                     <div class="media-body">
                                         我发起了一个投票 【你认为下午大盘会翻红吗？】
@@ -833,31 +833,25 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="sidebar-content">
                             <h4>设置</h4>
                             <div class="small">
                                 你可以从这里设置一些常用选项，当然啦，这个只是个演示的示例。
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
-
-
-
         </div>
     </div>
-    <script src="${html }/frame/js/jquery-2.1.1.min.js"></script>
-    <script src="${html }/frame/js/bootstrap.min.js"></script>
-    <script src="${html }/frame/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="${html }/frame/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="${html }/frame/js/plugins/layer/layer.min.js"></script>
-    <script src="${html }/frame/js/hplus.js"></script>
-    <script src="${html }/frame/js/contabs.js"></script>
-    <script src="${html }/frame/js/plugins/pace/pace.min.js"></script>
+    <script src="${html }/w3/js/jquery-2.1.1.min.js"></script>
+    <script src="${html }/w3/js/bootstrap.min.js"></script>
+    <script src="${html }/w3/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="${html }/w3/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="${html }/w3/js/plugins/layer/layer.min.js"></script>
+    <script src="${html }/w3/js/hplus.js"></script>
+    <script src="${html }/w3/js/contabs.js"></script>
+    <script src="${html }/w3/js/plugins/pace/pace.min.js"></script>
 </body>
 
 </html>

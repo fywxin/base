@@ -29,11 +29,11 @@
 
     <title>基础开发框架 - 登录</title>
 
-    <link href="${html }/frame/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${html }/frame/css/font-awesome.css" rel="stylesheet">
-    <link href="${html }/frame/css/animate.css" rel="stylesheet">
-    <link href="${html }/frame/css/style.css" rel="stylesheet">
-    <link href="${html }/frame/css/login.css" rel="stylesheet">
+    <link href="${html }/w3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${html }/w3/css/font-awesome.css" rel="stylesheet">
+    <link href="${html }/w3/css/animate.css" rel="stylesheet">
+    <link href="${html }/w3/css/style.css" rel="stylesheet">
+    <link href="${html }/w3/css/login.css" rel="stylesheet">
 
 </head>
 
@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-<script src="${html}/frame/js/jquery-2.1.1.min.js"></script>
+<script src="${html}/w3/js/jquery-2.1.1.min.js"></script>
 <script src="${html}/js/cookie.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
