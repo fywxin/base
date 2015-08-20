@@ -40,9 +40,9 @@ $(function (){
 		rowNum : 20,
 		rowList : [ 10, 20, 30, 50],
 		pager : '#gridPager',
-		height: $.h()-150-$("#queryForm").height(),
+		height: $.h()-190-$("#queryForm").height(),
 		repeatitems: false,
-		altRows: true,
+		//altRows: true,
 		autowidth: true,
 		mtype : "post"
 	});
