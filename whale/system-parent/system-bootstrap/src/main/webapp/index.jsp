@@ -4,8 +4,6 @@
 <%@page import="org.whale.system.common.constant.SysConstant"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <%
@@ -23,63 +21,78 @@
 	pageContext.setAttribute("autoLoginFlag", autoLoginFlag);
 %>
 	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-		<meta name="renderer" content="webkit">
-		
-		<title>基础开发平台</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="${html }/favicon.png" type="image/png">
 
-		<link href="${html}/www/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
-	    <link href="${html}/www/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
-	
-	    <link href="${html}/www/css/animate.css" rel="stylesheet">
-	    <link href="${html}/www/css/style.css?v=2.2.0" rel="stylesheet">
+    <title>基础开发框架 - 登录</title>
 
-    	<script src="${html}/www/js/jquery-2.1.1.min.js"></script>
-    	<script src="${html}/www/js/bootstrap.min.js?v=3.4.0"></script>
-    	<script src="${html}/js/cookie.js"></script>	     
-	</head>
+    <link href="${html }/frame/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${html }/frame/css/font-awesome.css" rel="stylesheet">
+    <link href="${html }/frame/css/animate.css" rel="stylesheet">
+    <link href="${html }/frame/css/style.css" rel="stylesheet">
+    <link href="${html }/frame/css/login.css" rel="stylesheet">
 
-<body class="gray-bg">
-    <div class="middle-box text-center loginscreen  animated fadeInDown">
-        <div>
-            <h2>基础开发框架</h2>
-            
-            <form class="m-t" role="form" id="loginForm">
-            <input type="hidden" id="encryptedPwd" name="encryptedPwd">
-                <div class="form-group">
-                    <input type="text" id="userName" name="userName" class="form-control" placeholder="用户名" autocomplete="off">
+</head>
+
+<body class="signin">
+    <div class="signinpanel">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="signin-info">
+                    <div class="logopanel m-b">
+                        <h1>[ Whale ]</h1>
+                    </div>
+                    <div class="m-b"></div>
+                    <h4>欢迎使用 <strong>Whale 后台基础框架</strong></h4>
+                    <ul class="m-b">
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势一</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势二</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势三</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势四</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势五</li>
+                    </ul>
+                    <strong>还没有账号？ <a href="#">立即注册&raquo;</a></strong>
                 </div>
-                <div class="form-group">
-                    <input type="password" id="password" name="password" class="form-control" placeholder="密码" autocomplete="off">
+            </div>
+            <div class="col-sm-5" >
+            <div id="logindiv">
+                <form id="loginForm">
+                    <h3 class="no-margins">登录：</h3>
+                    <p class="m-t-md">登录到Whale后台基础框架</p>
+                    
+                    <input type="text" id="userName" name="userName" class="form-control uname" style="color: black;" placeholder="用户名" autocomplete="off" />
+                    <input type="password" id="password" name="password" class="form-control pword" style="color: black;" placeholder="密码" autocomplete="off" />
+					<div <c:if test="${!verityFlag }">style="display: none;"</c:if> id="verityDiv">
+					<input type="text" id="verifycode" name="verifycode" class="form-control code" style="width:160px;float: left;color: black;" placeholder="验证码" maxlength="4" size="4" autocomplete="off" onkeyup="value=value.replace(/[^\d]/g,'')" />
+					<img id="secimg" src="${ctx}/code.jpg"  alt="看不清楚，换一张" title="看不清楚，换一张" onclick="javascript:createCode();" style="cursor:pointer;border: 1px solid white;height:32px;width:70px;margin: 15px 0px 15px 5px;">
+					</div>
+					<div style="clear:both;margin-top: 10px;"></div>
+                    <input type="checkbox" id="autoLogin" name="autoLogin" checked="checked" />一个月内自动登录
+                </form>
+                <button class="btn btn-success btn-block" onclick="return login();">登录</button>
+                            <div class="alert alert-danger" style="display: none;margin-bottom: 0px;" id="loginNoteDiv" align="center"></div>
+                
                 </div>
-				<div class="form-group" <c:if test="${!verityFlag }">style="display: none;"</c:if> id="verityDiv">
-					<input type="text" id="verifycode" name="verifycode" class="form-control" style="width:190px;float: left;" placeholder="验证码" maxlength="4" size="4" autocomplete="off" onkeyup="value=value.replace(/[^\d]/g,'')" />
-					<img id="secimg" src="${ctx}/code.jpg" alt="看不清楚，换一张" title="看不清楚，换一张" onclick="javascript:createCode();" style="cursor:pointer;border: 0;padding-left: 20px;height:33px;width:100px">
-				</div>
-				<c:if test="${autoLoginFlag }">
-				<div class="form-group" align="left">
-					<input type="checkbox" id="autoLogin" name="autoLogin" checked="checked" /> 一个月内自动登录
-				</div>
-				</c:if>
-				
-                <button type="button" onclick="return login();" class="btn btn-primary block full-width m-b">登 录</button>
-                <p class="text-muted text-center"> <a href="login.html#"><small>忘记密码了？</small></a> | <a href="register.html">注册一个新账号</a>
-                </p>
-				<div class="alert alert-danger" style="display: none;" id="loginNoteDiv" align="center"></div>
-            </form>
+             </div>
+        </div>
+        <div class="signup-footer">
+            <div class="pull-left">
+                &copy; 2015 All Rights Reserved. 
+            </div>
         </div>
     </div>
+<script src="${html}/frame/js/jquery-2.1.1.min.js"></script>
+<script src="${html}/js/cookie.js"></script>
 <script type="text/javascript">
-$(function($) {
-	
+$(document).ready(function(){
 	 <c:if test="${autoLoginFlag }">
-	 alert($.cookie("userName"))
 		if($.cookie("userName") != null && $.cookie("userName") != ""){
 			$("#userName").val($.cookie("userName"));
 			$("#encryptedPwd").val($.cookie("encryptedPwd"));
 			$("#autoLogin").attr('checked', 'checked');
-			alert(2)
 			login();
 			return ;
 		}
@@ -168,7 +181,6 @@ function login(){
 		    			if($("#password").val() != null){
 		    				$.cookie("userName", $("#userName").val(), { expires: 30 });
 			    			$.cookie("encryptedPwd", obj.msg, { expires: 30 });
-			    			alert($.cookie("userName"))
 		    			}
 		    		}else{
 		    			$.cookie("userName", null);

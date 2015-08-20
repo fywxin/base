@@ -415,7 +415,7 @@ public class MainController extends BaseController {
 		
 		boolean leaf = node.getMenuType() == 3;
 		strb.append("<li").append(activce ? " class='active'" : "").append(">")
-			.append(leaf? "<a href=\""+request.getContextPath()+node.getMenuUrl()+"\">"+node.getMenuName()+"</a>" 
+			.append(leaf? "<a class='J_menuItem' href=\""+request.getContextPath()+node.getMenuUrl()+"\">"+node.getMenuName()+"</a>" 
 						: "<a href='#'><i class='fa fa-th-large'></i><span class='nav-label'>"+node.getMenuName()+"</span><span class='fa arrow'></span></a>");
 					
 		List<Menu> subMenus = pidMenus.get(node.getMenuId());

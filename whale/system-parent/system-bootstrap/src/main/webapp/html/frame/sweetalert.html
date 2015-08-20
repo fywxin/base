@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>H+ 后台主题UI框架 - Sweet alert</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link href="css/bootstrap.min.css~v=3.4.0.css" rel="stylesheet">
+    <link href="css/font-awesome.css~v=4.3.0.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css~v=3.0.0.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+
+
+<!-- Copyright � 2005. Spidersoft Ltd -->
+<style>
+A.applink:hover {border: 2px dotted #DCE6F4;padding:2px;background-color:#ffff00;color:green;text-decoration:none}
+A.applink       {border: 2px dotted #DCE6F4;padding:2px;color:#2F5BFF;background:transparent;text-decoration:none}
+A.info          {color:#2F5BFF;background:transparent;text-decoration:none}
+A.info:hover    {color:green;background:transparent;text-decoration:underline}
+</style>
+<div style='BORDER: 1px solid #DCE6F4; MARGIN-TOP: 20px; MARGIN-BOTTOM: 20px; MARGIN-LEFT: 5px; MARGIN-RIGHT: 5px; PADDING: 5px; BACKGROUND-COLOR: #eef8ff;line-height:180%; COLOR: #000000; font-family: Arial; font-size: 8pt; width=100%; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr="#FFFFFFFF", EndColorStr="#F2F5FAFF");'>
+This page was saved using <a class="applink" href="http://www.spidersoft.com"><b>WebZIP 7.0.3.1030</b></a> <a class="applink" href="http://www.spidersoft.com"><b>offline browser</b></a>  (Unregistered) on  08/20/15 17:18:47.<br>
+<b>Address:</b> <a class="info" href="http://www.zi-han.net/theme/hplus/sweetalert.html">http://www.zi-han.net/theme/hplus/sweetalert.html</a><br>
+<b>Title:</b> H+ 后台主题UI框架 - Sweet alert &nbsp;&bull;&nbsp; <b>Size:</b> 6421 &nbsp;&bull;&nbsp; <b>Last Modified:</b> Thu, 20 Aug 2015 06:37:00 GMT<br></div>
+<!-- /Copyright � 2005. Spidersoft Ltd -->
+
+
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>Sweet Alert</h5>
+                    </div>
+
+                    <div class="ibox-content">
+
+                        <strong>可以替换JavaScript中alert的插件</strong>
+
+                        <p>
+                            Sweet Alert 是一个替代传统的 JavaScript Alert 的漂亮提示效果。SweetAlert 自动居中对齐在页面中央，不管您使用的是台式电脑，手机或平板电脑看起来效果都很棒。另外提供了丰富的自定义配置选择，可以灵活控制。项目主页：
+                            <a href="http://t4t5.github.io/sweetalert/" target="_blank">http://t4t5.github.io/sweetalert/</a>
+
+                        </p>
+
+                        <div class="row text-center">
+
+                            <div class="col-sm-6 h-100 p-lg">
+                                <p>基本消息</p>
+                                <button class="btn btn-primary btn-sm demo1">打开示例</button>
+                            </div>
+                            <div class="col-sm-6 h-100 p-lg">
+                                <p>成功提示 </p>
+                                <button class="btn btn-success btn-sm demo2">打开示例</button>
+                            </div>
+                            <div class="col-sm-6 h-100 p-lg">
+                                <p>警告信息</p>
+                                <button class="btn btn-warning btn-sm demo3">打开示例</button>
+                            </div>
+                            <div class="col-sm-6 h-100 p-lg">
+                                <p>通过传参可以自定义取消按钮 </p>
+                                <button class="btn btn-danger btn-sm demo4">打开示例</button>
+                            </div>
+
+
+
+
+
+                        </div>
+                        <div class="m-t-md">
+                            <p>
+                                您可以在js中很简单的实用SweetAlert，如添加一个警告框：
+                            </p>
+                            <pre>
+$('.demo3').click(function () {
+    swal({
+        title: "您确定要删除这条信息吗",
+        text: "删除后将无法恢复，请谨慎操作！",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "删除",
+        closeOnConfirm: false
+    }, function () {
+        swal("删除成功！", "您已经永久删除了这条信息。", "success");
+    });
+});</pre>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 全局js -->
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js~v=3.4.0"></script>
+
+    <!-- 自定义js -->
+    <script src="js/content.js~v=1.0.0"></script>
+
+    <!-- Sweet alert -->
+    <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('.demo1').click(function () {
+                swal({
+                    title: "欢迎使用SweetAlert",
+                    text: "Sweet Alert 是一个替代传统的 JavaScript Alert 的漂亮提示效果。"
+                });
+            });
+
+            $('.demo2').click(function () {
+                swal({
+                    title: "太帅了",
+                    text: "小手一抖就打开了一个框",
+                    type: "success"
+                });
+            });
+
+            $('.demo3').click(function () {
+                swal({
+                    title: "您确定要删除这条信息吗",
+                    text: "删除后将无法恢复，请谨慎操作！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "删除",
+                    closeOnConfirm: false
+                }, function () {
+                    swal("删除成功！", "您已经永久删除了这条信息。", "success");
+                });
+            });
+
+            $('.demo4').click(function () {
+                swal({
+                        title: "您确定要删除这条信息吗",
+                        text: "删除后将无法恢复，请谨慎操作！",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "是的，我要删除！",
+                        cancelButtonText: "让我再考虑一下…",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            swal("删除成功！", "您已经永久删除了这条信息。", "success");
+                        } else {
+                            swal("已取消", "您取消了删除操作！", "error");
+                        }
+                    });
+            });
+
+
+        });
+    </script>
+
+
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+    <!--统计代码，可删除-->
+
+</body>
+
+</html>
