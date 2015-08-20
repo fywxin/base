@@ -1,8 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/html/jsp/parent.jsp" %>
-
         </div>
     </div>
-</body>
+
+<script src="${html}/www/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+	<script src="${html}/www/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	
+	<script src="${html}/www/js/plugins/jqgrid/i18n/grid.locale-cn.js"></script>
+	<script src="${html}/www/js/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+	
+	<script src="${html}/www/js/hplus.js?v=2.2.0"></script>
+	<script src="${html}/www/js/plugins/pace/pace.min.js"></script>
+	<script src="${html}/www/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+	
+	<script src="${html}/js/cookie.js"></script>	
+	<script src="${html}/js/fun.js"></script>
 <script type="text/javascript">
 function loginOut(){
 	$.ajax({
@@ -25,12 +37,6 @@ function loginOut(){
 function changePassword(){
 	$.openWin({url:"${ctx }/user/goChangePassword", width: 600, height: 300});
 }
-
-$("body").addClass('fixed-sidebar');
-$('.sidebar-collapse').slimScroll({
-    height: '100%',
-    railOpacity: 0.9
-});
 </script>
-
+</body>
 </html>

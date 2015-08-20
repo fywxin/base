@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-				<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+				<div id="page-wrapper" class="gray-bg dashbard-1">
+            <div class="row border-bottom" id="navbarDiv" style="height:52px;">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0;height:52px;">
                     <div class="navbar-header">
                         <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
                         <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
@@ -95,5 +97,5 @@
                             </a>
                         </li>
                     </ul>
-
                 </nav>
+            </div>

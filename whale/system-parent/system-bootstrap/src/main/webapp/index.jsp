@@ -72,11 +72,14 @@
     </div>
 <script type="text/javascript">
 $(function($) {
+	
 	 <c:if test="${autoLoginFlag }">
+	 alert($.cookie("userName"))
 		if($.cookie("userName") != null && $.cookie("userName") != ""){
 			$("#userName").val($.cookie("userName"));
 			$("#encryptedPwd").val($.cookie("encryptedPwd"));
 			$("#autoLogin").attr('checked', 'checked');
+			alert(2)
 			login();
 			return ;
 		}
@@ -165,6 +168,7 @@ function login(){
 		    			if($("#password").val() != null){
 		    				$.cookie("userName", $("#userName").val(), { expires: 30 });
 			    			$.cookie("encryptedPwd", obj.msg, { expires: 30 });
+			    			alert($.cookie("userName"))
 		    			}
 		    		}else{
 		    			$.cookie("userName", null);

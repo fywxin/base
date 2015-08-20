@@ -34,14 +34,15 @@ $(document).ready(function() {
 	});
 
 	// Append config box / Only for demo purpose
-	$.get("html/www/skin-config.html", function(data) {
-		$('body').append(data);
-	});
+//	$.get("html/www/skin-config.html", function(data) {
+//		$('body').append(data);
+//	});
 
 	// minimalize menu
 	$('.navbar-minimalize').click(function() {
 		$("body").toggleClass("mini-navbar");
 		SmoothlyMenu();
+		return false;
 	})
 
 	// tooltips
@@ -122,6 +123,9 @@ function SmoothlyMenu() {
 		// Remove all inline style from jquery fadeIn function to reset menu
 		// state
 		$('#side-menu').removeAttr('style');
+	}
+	if($.isFunction(afterSmoothlyMenu)){
+		afterSmoothlyMenu();
 	}
 }
 
