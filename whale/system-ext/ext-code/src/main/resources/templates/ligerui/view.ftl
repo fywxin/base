@@ -34,7 +34,13 @@ $(function(){
 					<tr>
 	</#if>
 						<td class="td-label">${fAttr.cnName}</td>
-						<td class="td-value">${r"${item."}${fAttr.name}}</td>
+						<td class="td-value">
+						<#if fAttr.formType == "dict">
+							<tag:dict id="${fAttr.name}" dictCode="${fAttr.dictName}" value="${r"${item."}${fAttr.name}}" headerLabel="-- 请选择 --" readonlye="true"></tag:dict>
+						<#else>
+						${r"${item."}${fAttr.name}}
+						</#if>
+						</td>
 	<#if fAttr_index%2==1>
 					</tr>
 	</#if>

@@ -31,8 +31,7 @@ $(function() {
 <#list domain.formAttrs as fAttr>
 			"${fAttr.name}": {
 				<#if fAttr.type == "String">validIllegalChar: true,</#if>
-				<#if !fAttr.nullAble >required: true,</#if>
-				<#if fAttr.width gt 0>maxlength: ${fAttr.width?c}</#if>
+				<#if !fAttr.isNull >required: true</#if>
 			}<#if fAttr_has_next>,</#if>
 </#list>
 		}
@@ -58,9 +57,17 @@ $(function() {
 	<#if fAttr_index%2==0>
 					<tr>
 	</#if>
-						<td class="td-label">${fAttr.cnName}</td>
+						<td class="td-label"><#if !fAttr.isNull><span class="required">*</span></#if>${fAttr.cnName}</td>
 						<td class="td-value">
-							<input type="text" id="${fAttr.name}" name="${fAttr.name}" style="width:160px;" value="${r"${item."}${fAttr.name}}" <#if fAttr.width gt 0>maxlength="${fAttr.width?c}" title="最多${fAttr.width?c}字"</#if> <#if fAttr.type == "Integer">onkeyup="value=value.replace(/[^\d]/g,'')"</#if> />
+						<#if fAttr.formType == "dict">
+							<tag:dict id="${fAttr.name}" dictCode="${fAttr.dictName}" value="${r"${item."}${fAttr.name}}" headerLabel="-- 请选择 --"></tag:dict>
+						<#elseif fAttr.name == "remark" || fAttr.formType == "textarea">
+							<textarea id="${fAttr.name}" name="${fAttr.name}" rows="5" title="最多只能输入${fAttr.maxLength}个字"></textarea>
+						<#elseif fAttr.formType == "date">
+							<input type="text" id="${fAttr.name}" name="${fAttr.name}" style="width:160px;" class="i-date" onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true})" value="${r"${item."}${fAttr.name}}"/>
+						<#else>
+							<input type="text" id="${fAttr.name}" name="${fAttr.name}" style="width:160px;" value="${r"${item."}${fAttr.name}}" <#if fAttr.type == "Integer" || fAttr.type == "Long">onkeyup="value=value.replace(/[^\d]/g,'')"</#if> />
+						</#if>
 						</td>
 	<#if fAttr_index%2==1>
 					</tr>

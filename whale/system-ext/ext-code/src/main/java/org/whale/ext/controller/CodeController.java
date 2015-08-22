@@ -73,6 +73,7 @@ public class CodeController extends BaseController {
 			domain = new Domain();
 			List<Attr> attrs = new ArrayList<Attr>(cols.size());
 			
+			
 			domain.setDomainSqlName(tableName);
 			domain.setDomainCnName(table.get("comments") == null ? "" : table.get("comments").toString());
 			domain.setDomainName(OrmUtil.sql2DumpStyle(tableName));
@@ -98,7 +99,11 @@ public class CodeController extends BaseController {
 						if(attr.getMaxLength() == null || attr.getMaxLength() >= 10){
 							attr.setType("Long");
 						}else{
-							attr.setType("Integer");
+							if(dbType.indexOf("int(1") != -1){
+								attr.setType("Long");
+							}else{
+								attr.setType("Integer");
+							}
 						}
 					}else if(dbType.equalsIgnoreCase("bigint")){
 						attr.setType("Long");
@@ -168,6 +173,10 @@ public class CodeController extends BaseController {
 			String[] inOrders = inOrder.split(",");
 			
 			List<Attr> attrs = new ArrayList<Attr>(sqlNames.length);
+			List<Attr> listAttrs = new ArrayList<Attr>();
+			List<Attr> formAttrs = new ArrayList<Attr>();
+			List<Attr> queryAttrs = new ArrayList<Attr>();
+			
 			Attr attr = null;
 			for(int i=0; i<sqlNames.length; i++){
 				attr = new Attr();
@@ -199,16 +208,25 @@ public class CodeController extends BaseController {
 					}
 				}
 				
-			}
-			Collections.sort(attrs, new Comparator<Attr>(){
-				@Override
-				public int compare(Attr o1, Attr o2) {
-					return o1.getInOrder() - o2.getInOrder();
+				if(attr.getInList()){
+					listAttrs.add(attr);
 				}
-			});
+				if(attr.getInForm()){
+					formAttrs.add(attr);
+				}
+				if(attr.getInQuery()){
+					queryAttrs.add(attr);
+				}
+			}
+			sort(attrs);
+			sort(listAttrs);
+			sort(formAttrs);
+			sort(queryAttrs);
 			
 			domain.setAttrs(attrs);
-			
+			domain.setListAttrs(listAttrs);
+			domain.setQueryAttrs(queryAttrs);
+			domain.setFormAttrs(formAttrs);
 			
 			if(domain.getId() == null){
 				this.domainService.save(domain);
@@ -227,6 +245,15 @@ public class CodeController extends BaseController {
 		WebUtil.printSuccess(request, response);
 	}
 	
+	
+	private void sort(List<Attr> list){
+		Collections.sort(list, new Comparator<Attr>(){
+			@Override
+			public int compare(Attr o1, Attr o2) {
+				return o1.getInOrder() - o2.getInOrder();
+			}
+		});
+	}
 	
 	@RequestMapping("/doDelete")
 	public void doDelete(HttpServletRequest request, HttpServletResponse response, Long id){

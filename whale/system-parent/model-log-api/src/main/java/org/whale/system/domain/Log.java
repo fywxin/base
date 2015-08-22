@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.whale.system.annotation.jdbc.Column;
 import org.whale.system.annotation.jdbc.Id;
 import org.whale.system.annotation.jdbc.Table;
+import org.whale.system.common.util.Strings;
 
 
 @Table(value="sys_log", cnName="日志")
@@ -174,12 +175,18 @@ public class Log implements Serializable{
 		return argStr;
 	}
 	public void setArgStr(String argStr) {
+		if(Strings.isNotBlank(argStr) && argStr.length() > 1024){
+			argStr = argStr.substring(0, 1023);
+		}
 		this.argStr = argStr;
 	}
 	public String getRsStr() {
 		return rsStr;
 	}
 	public void setRsStr(String rsStr) {
+		if(Strings.isNotBlank(rsStr) && rsStr.length() > 1024){
+			rsStr = rsStr.substring(0, 1023);
+		}
 		this.rsStr = rsStr;
 	}
 	public Object getRs() {

@@ -19,7 +19,7 @@ public class ${domain.domainName}Dao extends BaseDao<${domain.domainName}, Long>
 <#list domain.attrs as attr>
     <#if !attr.isId && attr.isUnique>
     /**
-	 * 按 ${attr.cnName} 获取 ${domain.cnName}
+	 * 按 ${attr.cnName} 获取 ${domain.domainCnName}
 	 * @param ${attr.name} ${attr.cnName}
 	 * @return
 	 */

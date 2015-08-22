@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 import org.whale.ext.domain.Domain;
+import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.util.Strings;
 
 import freemarker.template.Configuration;
@@ -100,6 +101,7 @@ public class CodeEngine {
 	}
 	
 	public String getFltPath(){
-		return this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()+File.separator+"templates"+File.separator;
+		return DictCacheService.getThis().getItemValue("DICT_SYS_CONF", "FTL_PATH", this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()
+																+File.separator+"templates"+File.separator+"hplus"+File.separator);
 	}
 }

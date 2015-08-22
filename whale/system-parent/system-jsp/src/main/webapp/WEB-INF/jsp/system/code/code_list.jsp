@@ -15,7 +15,7 @@
 .myButtom{text-decoration: none;background-color: #ddd;background-image: linear-gradient(#eee, #ddd);background-repeat: repeat-x;border-color: #ccc;position: relative;display: inline-block;padding: 7px 25px;font-size: 13px;font-weight: bold;color: #333;text-shadow: 0 1px 0 rgba(255,255,255,0.9);white-space: nowrap;vertical-align: middle;cursor: pointer;border: 1px solid #d5d5d5;border-radius: 3px;-webkit-user-select: none;box-sizing: border-box;margin-left: 25px;}
 </style>
 
-<script language="javascript">
+<script>
 function save(){
 	doSave(false);
 }
@@ -44,12 +44,6 @@ function doSave(gen){
 	if(!pass){
 		return false;
 	}
-	
-	$("input[type='checkbox']").each(function(){
-	    if (!$(this).is(':checked')) {
-	        $(this).val(0).attr("checked","checked"); 
-	    }
-	});
 	
 	$.ajax({
 		url:'${ctx}/code/doSave?gen='+gen,
@@ -232,22 +226,40 @@ function pid(){
 					</td>
 					<td><input type="text" name="maxLength" value="${attr.maxLength }" style="width:60px;" title="[${attr.sqlName }]最大长度"/></td>
 					<td>
-						<input type="checkbox" name="isId" value="1" <c:if test="${attr.isId || (index_item.index == 0)}">checked</c:if> title="[${attr.sqlName }]是否主键" />
+						<select name="isId" title="[${attr.sqlName }]是否主键">
+							<option value="1"  <c:if test="${attr.isId || (index_item.index == 0)}">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.isId && (index_item.index != 0)}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
-						<input type="checkbox" name="isEdit" value="1" <c:if test="${attr.isEdit}"> checked </c:if> title="[${attr.sqlName }]是否可编辑" />
+						<select name="isEdit" title="[${attr.sqlName }]是否可编辑">
+							<option value="1"  <c:if test="${attr.isEdit }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.isEdit}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
-						<input type="checkbox" name="isNull" value="1" <c:if test="${attr.isNull}">checked</c:if> title="[${attr.sqlName }]是否可空" />
+						<select name="isNull" title="[${attr.sqlName }]是否可空">
+							<option value="1"  <c:if test="${attr.isNull }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.isNull}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
-						<input type="checkbox" name="isUnique" value="1" <c:if test="${attr.isUnique}">checked</c:if> title="[${attr.sqlName }]是否唯一"/>
+						<select name="isUnique" title="[${attr.sqlName }]是否唯一">
+							<option value="1"  <c:if test="${attr.isUnique }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.isUnique}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
-						<input type="checkbox" name="inList" value="1" <c:if test="${attr.inList}">checked</c:if> title="[${attr.sqlName }]列表显示"/>
+						<select name="inList" title="[${attr.sqlName }]列表显示">
+							<option value="1"  <c:if test="${attr.inList }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.inList}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
-						<input type="checkbox" name="inQuery" value="1" <c:if test="${attr.inQuery}">checked</c:if> title="[${attr.sqlName }]列表查询条件显示"/>
+						<select name="inQuery" title="[${attr.sqlName }]列表查询条件显示">
+							<option value="1"  <c:if test="${attr.inQuery }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.inQuery}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
 						<select name="queryType" >
@@ -264,7 +276,10 @@ function pid(){
                           </select>
 					</td>
 					<td>
-						<input type="checkbox" name="inForm" value="1" <c:if test="${attr.inForm}">checked</c:if> title="[${attr.sqlName }]表单显示"/>
+						<select name="inForm" title="[${attr.sqlName }]表单显示">
+							<option value="1"  <c:if test="${attr.inForm }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.inForm}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
 						<select name="formType">

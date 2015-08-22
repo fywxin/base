@@ -1,10 +1,22 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<#list domain.listAttrs as attr>
+	<#if attr.formType == "dict">
+<%@page import="org.whale.system.cache.service.DictCacheService"%>
+		<#break>
+	</#if>
+</#list>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>${domain.domainCnName}列表</title>
 <%@include file="/html/jsp/common.jsp" %>
 <script type="text/javascript">
+<#list domain.listAttrs as attr>
+	<#if attr.formType == "dict">
+var dict_${attr.name} = <%=DictCacheService.getThis().getMapJson("${attr.dictName}") %>;
+	</#if>
+</#list>
+
 <#list domain.attrs as attr>
     <#if attr.type == "Date">
     	<#if attr.inQuery>
@@ -20,41 +32,43 @@ $(function(){
     	toolbar: {items: [
 <tag:auth authCode="${domain.domainName?upper_case}_SAVE">
            		{text: '新增${domain.domainCnName}', icon: 'add', click: function(){
-           				$.openWin({url: "'${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goSave","title":'新增${domain.domainCnName}'});
+           				$.openWin({url: "${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goSave",title:"新增${domain.domainCnName}"});
            			} 
 				}
 </tag:auth>
             ]
         },
         columns: [
-				{display: '操作', name: 'opt', width: 70, frozen: true, render: function (row){
-					var strArr = [];
+				{display: '操作', name: 'opt', width: 70, frozen: true, 
+					render: function (row){
+						var strArr = [];
 <tag:auth authCode="${domain.domainName?upper_case}_UPDATE">
-      	        	strArr.push("<a href='#' class='r15' onclick='update(\""+row.${domain.idAttr.name}+"\");'>修改</a>");
+      	        		strArr.push("<a href='#' class='r15' onclick='update(\""+row.${domain.idAttr.name}+"\");'>修改</a>");
 </tag:auth>
 <tag:auth authCode="${domain.domainName?upper_case}_DEL">     	        		
-      	        	strArr.push("<a href='#' class='r15' onclick='del(\""+row.${domain.idAttr.name}+"\");'>删除</a>");
+      	        		strArr.push("<a href='#' class='r15' onclick='del(\""+row.${domain.idAttr.name}+"\");'>删除</a>");
 </tag:auth>
 <tag:auth authCode="${domain.domainName?upper_case}_VIEW">   				
-					strArr.push("<a href='#' onclick='view(\""+row.${domain.idAttr.name}+"\");'>查看</a>");
+						strArr.push("<a href='#' onclick='view(\""+row.${domain.idAttr.name}+"\");'>查看</a>");
 </tag:auth>
-					return strArr.join("");
-				} },
-				<#list domain.attrs as attr>
-					<#if attr.inList>
-					    <#if attr.type == "Date">
-							{display: '${attr.cnName}', name: '${attr.name}', width: 140,
-								render: function (row){
-									time.setTime(row.${attr.name});
-									return time.Format("yyyy-MM-dd hh:mm:ss.S");
-								}
-							},
-						</#if>
-						<#if attr.type != "Date">
-							{display: '${attr.cnName}', name: '${attr.name}'},
-						</#if>
-					</#if>
-				</#list>
+						return strArr.join("");
+					}
+				},
+		<#list domain.listAttrs as attr>
+		    <#if attr.type == "Date">
+				{display: '${attr.cnName}', name: '${attr.name}', width: 140,
+					render: function (row){
+						time.setTime(row.${attr.name});
+						return time.Format("yyyy-MM-dd hh:mm:ss.S");
+					}
+				}<#if (attr_has_next)>,</#if><#elseif attr.formType == "dict">
+				{display: '${attr.cnName}', name: '${attr.name}', width: 140,
+					render: function (row){
+						return dict_${attr.name}[row.${attr.name}];
+					}
+				}<#if (attr_has_next)>,</#if><#else>
+				{display: '${attr.cnName}', name: '${attr.name}'}<#if (attr_has_next)>,</#if></#if>
+		</#list>
               ]
 	});
 });
@@ -90,7 +104,11 @@ function view(id){
 		</#if>
 							<td class="td-label">${qAttr.cnName}</td>
 							<td class="td-value">
-								<input type="text" id="${qAttr.name}" name="${qAttr.name}" style="width:160px;" />
+							<#if qAttr.formType == "dict">
+								<tag:dict id="${qAttr.name}" dictCode="${qAttr.dictName}" headerLabel="-- 请选择 --"></tag:dict>
+							<#else>
+								<input type="text" id="${qAttr.name}" name="${qAttr.name}" style="width:160px;" value="${r"${item."}${qAttr.name}}" <#if qAttr.type == "Integer" || qAttr.type == "Long">onkeyup="value=value.replace(/[^\d]/g,'')"</#if> />
+							</#if>
 							</td>
 		<#if qAttr_index%2==1>
 						</tr>

@@ -3,6 +3,7 @@ package org.whale.system.cache.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,8 @@ import org.whale.system.dao.DictDao;
 import org.whale.system.dao.DictItemDao;
 import org.whale.system.domain.Dict;
 import org.whale.system.domain.DictItem;
+
+import com.alibaba.fastjson.JSON;
 
 @Component
 public class DictCacheService implements Bootable{
@@ -373,6 +376,33 @@ public class DictCacheService implements Bootable{
 	}
 	
 	/**
+	 * 返回Map形式
+	 * @param dictCode
+	 * @return
+	 */
+	public Map<String, Object> getMap(String dictCode){
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<DictItem> dictItems = getItemsByDictCode(dictCode);
+		if(dictItems != null){
+			for(DictItem item : dictItems) {
+				map.put(item.getItemCode(), item.getItemName());
+			}
+		}
+		return map;
+	}
+	
+	/**
+	 * 返回Map 的json形式
+	 * @param dictCode
+	 * @return
+	 */
+	public String getMapJson(String dictCode) {
+		return JSON.toJSONString(this.getMap(dictCode));
+	}
+	
+	
+	
+	/**
 	 * 生成选择项
 	 * @param dictCode
 	 * @param initValue
@@ -394,6 +424,8 @@ public class DictCacheService implements Bootable{
 		}
 		return strb.toString();
 	}
+	
+	
 	
 	
 	@Override

@@ -75,7 +75,7 @@ public class ${domain.domainName}Controller extends BaseController {
 	}
 	
 	@RequestMapping("/goUpdate")
-	public ModelAndView goUpdate(HttpServletRequest request, HttpServletResponse response, Long id){
+	public ModelAndView goUpdate(HttpServletRequest request, HttpServletResponse response, ${domain.idAttr.type} id){
 		${domain.domainName} ${domain.domainName?uncap_first} = null;
 		if(id == null || (${domain.domainName?uncap_first} = this.${domain.domainName?uncap_first}Service.get(id)) == null ){
 			throw new SysException("查找不到 ${domain.domainCnName} id="+${domain.idAttr.name});
