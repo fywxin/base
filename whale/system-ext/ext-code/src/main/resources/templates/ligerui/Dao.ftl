@@ -1,7 +1,5 @@
 package ${domain.pkgName!"org.whale.system"}.dao;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
 
 import org.whale.system.base.BaseDao;
@@ -24,10 +22,9 @@ public class ${domain.domainName}Dao extends BaseDao<${domain.domainName}, Long>
 	 * @return
 	 */
     public ${domain.domainName} getBy${attr.name?cap_first }(${attr.type} ${attr.name}) {
-    	StringBuilder strb = this.getSqlHead();
-    	strb.append("and t.${attr.sqlName}=?");
+    	String sql = this.sqlHead() + " where t.${attr.sqlName}=?";
     	
-    	return this.queryForObject(strb.toString(), ${attr.name});
+    	return this.getObject(sql, ${attr.name});
     }
     </#if>
 </#list>

@@ -36,7 +36,9 @@ $(function(){
 						<td class="td-label">${fAttr.cnName}</td>
 						<td class="td-value">
 						<#if fAttr.formType == "dict">
-							<tag:dict id="${fAttr.name}" dictCode="${fAttr.dictName}" value="${r"${item."}${fAttr.name}}" headerLabel="-- 请选择 --" readonlye="true"></tag:dict>
+							<tag:dict id="${fAttr.name}" dictCode="${fAttr.dictName}" value="${r"${item."}${fAttr.name}}" readonly="true"></tag:dict>
+						<#elseif fAttr.name == "remark" || fAttr.formType == "textarea">
+							<div style="height:80px;" class="textAreaDiv">${r"${item."}${fAttr.name}}</div>
 						<#else>
 						${r"${item."}${fAttr.name}}
 						</#if>

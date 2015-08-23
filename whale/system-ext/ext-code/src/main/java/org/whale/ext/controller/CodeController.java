@@ -228,14 +228,14 @@ public class CodeController extends BaseController {
 			domain.setQueryAttrs(queryAttrs);
 			domain.setFormAttrs(formAttrs);
 			
+			if(gen){
+				this.codeEngine.createCode(domain);
+			}
+			
 			if(domain.getId() == null){
 				this.domainService.save(domain);
 			}else{
 				this.domainService.update(domain);
-			}
-			
-			if(gen){
-				this.codeEngine.createCode(domain);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

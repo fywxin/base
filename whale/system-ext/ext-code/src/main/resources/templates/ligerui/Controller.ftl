@@ -101,8 +101,8 @@ public class ${domain.domainName}Controller extends BaseController {
 				.addObject("item", ${domain.domainName?uncap_first});
 	}
 	
-	@RequestMapping("/doDelete")
-	public void doDelete(HttpServletRequest request, HttpServletResponse response, String ids){
+	@RequestMapping("/doDel")
+	public void doDel(HttpServletRequest request, HttpServletResponse response, String ids){
 		List<Long> idS = LangUtil.splitIds(ids);
 		if(idS == null || idS.size() < 1){
 			WebUtil.printFail(request, response, "请选择要删除的记录");

@@ -369,7 +369,13 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		
 		if(page.getTotal() == null || page.getTotal() < 1){
 			if(Strings.isBlank(countSql)){
-				countSql = "select count(1) "+sql.substring(sql.indexOf("from"));
+				int index = -1;
+				String temp = sql.toLowerCase();
+				if(temp.substring((index = temp.indexOf("from"))+5).indexOf("from") == -1){
+					countSql = "select count(1) "+sql.substring(index);
+				}else{
+					countSql = "select count(1) from ("+sql+")";
+				}
 			}
 			page.setTotal(this.jdbcTemplate.queryForLong(countSql,params.toArray()));
 		}

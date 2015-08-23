@@ -39,7 +39,7 @@ $(function(){
             ]
         },
         columns: [
-				{display: '操作', name: 'opt', width: 70, frozen: true, 
+				{display: '操作', name: 'opt', width: 170, frozen: true, 
 					render: function (row){
 						var strArr = [];
 <tag:auth authCode="${domain.domainName?upper_case}_UPDATE">
@@ -82,7 +82,7 @@ function del(id){
 }
 
 function view(id){
-	$.openWin({url: "${"$"+"{ctx}"}/sms/goView?id="+id, title:"查看${domain.domainCnName}"});
+	$.openWin({url: "${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goView?id="+id, title:"查看${domain.domainCnName}"});
 }
 
 </script>

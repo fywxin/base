@@ -226,6 +226,7 @@ public class MainController extends BaseController {
 	private void updateUserLoginInfo(HttpServletRequest request, User user){
 		user.setLoginIp(WebUtil.getIp(request));
 		user.setLastLoginTime(new Date());
+		user.setLoginNum(user.getLoginNum() == null ? 1 : user.getLoginNum()+1);
 		this.userService.update(user);
 	}
 	

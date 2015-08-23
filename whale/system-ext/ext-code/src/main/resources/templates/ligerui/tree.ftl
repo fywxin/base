@@ -52,7 +52,7 @@
 	
 	function setSpace() {
 		var width = parseInt(document.documentElement.scrollWidth);
-		var height=$.clientHeight()-20;
+		var height=$.h()-20;
 		$("#mainTable").css("width",width+"px").css("height",height+"px");
 		$("#tree").css("height",height+"px");
 		$("#listFrame").css("height",$("#mainTable").css("height"));

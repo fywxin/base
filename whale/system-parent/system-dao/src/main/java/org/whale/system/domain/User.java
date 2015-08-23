@@ -44,6 +44,9 @@ public class User extends BaseEntry {
 	@Column(updateable=false,cnName="创建人")
 	private Long createUserId;
 	
+	@Column(cnName="登录次数")
+	private Long loginNum;
+	
 	@Column(cnName="最后登录时间")
 	private Date lastLoginTime;
 	
@@ -61,6 +64,8 @@ public class User extends BaseEntry {
 	
 	@Column(cnName="备注")
 	private String remark;
+	
+	
 	
 	//TODO 按实体类模糊查询时，怎么过滤有初始值的字段
 	@Column(updateable=false,cnName="是否管理员")
@@ -193,5 +198,15 @@ public class User extends BaseEntry {
 	public void setIsAdmin(Boolean isAdmin) {
 		this.isAdmin = isAdmin;
 	}
+
+	public Long getLoginNum() {
+		return loginNum;
+	}
+
+	public void setLoginNum(Long loginNum) {
+		this.loginNum = loginNum;
+	}
+	
+	
 	
 }
