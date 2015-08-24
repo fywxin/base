@@ -832,48 +832,6 @@ fieldset[disabled] .btn-info.active {
     background-color: #26d7d9;
     border-color: #26d7d9;
 }
-
-.btn-default {
-    background-color: #c2c2c2;
-    border-color: #c2c2c2;
-    color: #FFFFFF;
-}
-
-.btn-default:hover,
-.btn-default:focus,
-.btn-default:active,
-.btn-default.active,
-.open .dropdown-toggle.btn-default {
-    background-color: #bababa;
-    border-color: #bababa;
-    color: #FFFFFF;
-}
-
-.btn-default:active,
-.btn-default.active,
-.open .dropdown-toggle.btn-default {
-    background-image: none;
-}
-
-.btn-default.disabled,
-.btn-default.disabled:hover,
-.btn-default.disabled:focus,
-.btn-default.disabled:active,
-.btn-default.disabled.active,
-.btn-default[disabled],
-.btn-default[disabled]:hover,
-.btn-default[disabled]:focus,
-.btn-default[disabled]:active,
-.btn-default.active[disabled],
-fieldset[disabled] .btn-default,
-fieldset[disabled] .btn-default:hover,
-fieldset[disabled] .btn-default:focus,
-fieldset[disabled] .btn-default:active,
-fieldset[disabled] .btn-default.active {
-    background-color: #cccccc;
-    border-color: #cccccc;
-}
-
 .btn-warning {
     background-color: #f8ac59;
     border-color: #f8ac59;
@@ -3641,7 +3599,7 @@ nav.page-tabs .page-tabs-content {
 }
 
 #content-main {
-    height: calc(100% - 140px);
+   	height: calc(100% - 88px); /** wjs修改滚动条 */
 }
 /* TABLES */
 
@@ -7807,3 +7765,52 @@ body.skin-3 {
     opacity: .5;
 }
 .gohome a:hover{opacity: 1;}
+
+
+/**wjs */
+.navbar-btn.btn-ss {
+	margin-top: 16px;
+	margin-bottom: 16px
+}
+
+.btn-group-xs>.btn .badge, .btn-ss .badge {
+	top: 0;
+	padding: 1px 5px
+}
+
+.btn-group-xs>.btn, .btn-ss {
+	padding: 2px 5px;
+	font-size: 12px;
+	line-height: 1;
+	border-radius: 3px
+}
+
+.todo-list.small-list .btn-ss,
+.todo-list.small-list .btn-group-ss > .btn {
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 1;
+    padding: 1px 2px 1px 3px;
+}
+
+.spinner-buttons.input-group-btn .btn-ss {
+    line-height: 1;
+}
+
+/** jqgrid*/
+.ui-jqgrid-btable .ui-priority-secondary {
+  background-image: none;
+  background-color: #F9F9F9;
+  opacity: 1;
+}
+
+.table>tbody>tr.active>td {
+  background-image: none;
+  background-color: #D9EDF7;
+  opacity: 1;
+}
+.table>tbody>tr.success>td {
+  background-image: none;
+  background-color: #DFF0D8;
+  opacity: 1;
+}

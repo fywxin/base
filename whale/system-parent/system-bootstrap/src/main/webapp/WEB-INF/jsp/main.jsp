@@ -11,18 +11,18 @@
 
     <!--[if lt IE 8]>
     <script>
-        alert('H+已不支持IE6-8，请使用谷歌、火狐等浏览器\n或360、QQ等国产浏览器的极速模式浏览本页面！');
+        alert('Whale不支持IE6-8，请使用谷歌、火狐等浏览器\n或360、QQ等国产浏览器的极速模式浏览本页面！');
     </script>
     <![endif]-->
 
     <link href="${html }/w3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${html }/w3/css/font-awesome.min.css" rel="stylesheet">
+    <link href="${html }/w3/css/font-awesome.css" rel="stylesheet">
     <link href="${html }/w3/css/animate.css" rel="stylesheet">
     <link href="${html }/w3/css/style.css" rel="stylesheet">
 </head>
 
-<body class="fixed-sidebar full-height-layout gray-bg">
-    <div id="wrapper">
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow: hidden;">
+    <div id="wrapper" style="overflow: hidden;">
         <!--左侧导航开始-->
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
@@ -32,27 +32,24 @@
                             <span><img alt="image" class="img-circle" src="${html }/w3/img/profile_small.jpg" /></span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
-                               <span class="block m-t-xs"><strong class="font-bold">Beaut-zihan</strong></span>
-                                <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
+                               <span class="block m-t-xs"><strong class="font-bold">${uc.userName }</strong></span>
+                                <span class="text-muted text-xs block">${uc.realName }<b class="caret"></b></span>
                                 </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a class="J_menuItem" href="form_avatar.html">修改头像</a>
+                                <li><a class="J_menuItem" href="form_avatar.html">修改密码</a>
                                 </li>
                                 <li><a class="J_menuItem" href="profile.html">个人资料</a>
                                 </li>
-                                <li><a class="J_menuItem" href="contacts.html">联系我们</a>
-                                </li>
-                                <li><a class="J_menuItem" href="mailbox.html">信箱</a>
-                                </li>
                                 <li class="divider"></li>
-                                <li><a href="login.html">安全退出</a>
+                                <li><a href="#" onclick="loginOut();">安全退出</a>
                                 </li>
                             </ul>
                         </div>
-                        <div class="logo-element">H+
+                        <div class="logo-element">Whale
                         </div>
                     </li>
+                    ${uc.customDatas.menusStr }
                     <li>
                         <a href="#">
                             <i class="fa fa-home"></i>
@@ -64,22 +61,22 @@
                                 <a class="J_menuItem" href="${html }/w3/index_v1.html" data-index="0">主页示例一</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="index_v2.html">主页示例二</a>
+                                <a class="J_menuItem" href="${html }/w3/index_v2.html">主页示例二</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="index_v3.html">主页示例三</a>
+                                <a class="J_menuItem" href="${html }/w3/index_v3.html">主页示例三</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="index_v4.html">主页示例四</a>
+                                <a class="J_menuItem" href="${html }/w3/index_v4.html">主页示例四</a>
                             </li>
                             <li>
-                                <a href="index_v5.html" target="_blank">主页示例五</a>
+                                <a href="${html }/w3/index_v5.html" target="_blank">主页示例五</a>
                             </li>
                         </ul>
 
                     </li>
                     <li>
-                        <a class="J_menuItem" href="layouts.html"><i class="fa fa-columns"></i> <span class="nav-label">布局</span></a>
+                        <a class="J_menuItem" href="${html }/w3/layouts.html"><i class="fa fa-columns"></i> <span class="nav-label">布局</span></a>
                     </li>
                     <li>
                         <a href="#">
@@ -89,273 +86,273 @@
                         </a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a class="J_menuItem" href="graph_echarts.html">百度ECharts</a>
+                                <a class="J_menuItem" href="${html }/w3/graph_echarts.html">百度ECharts</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="graph_flot.html">Flot</a>
+                                <a class="J_menuItem" href="${html }/w3/graph_flot.html">Flot</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="graph_morris.html">Morris.js</a>
+                                <a class="J_menuItem" href="${html }/w3/graph_morris.html">Morris.js</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="graph_rickshaw.html">Rickshaw</a>
+                                <a class="J_menuItem" href="${html }/w3/graph_rickshaw.html">Rickshaw</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="graph_peity.html">Peity</a>
+                                <a class="J_menuItem" href="${html }/w3/graph_peity.html">Peity</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="graph_sparkline.html">Sparkline</a>
+                                <a class="J_menuItem" href="${html }/w3/graph_sparkline.html">Sparkline</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="graph_metrics.html">图表组合</a>
+                                <a class="J_menuItem" href="${html }/w3/graph_metrics.html">图表组合</a>
                             </li>
                         </ul>
                     </li>
 
                     <li>
-                        <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">信箱 </span><span class="label label-warning pull-right">16</span></a>
+                        <a href="${html }/w3/mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">信箱 </span><span class="label label-warning pull-right">16</span></a>
                         <ul class="nav nav-second-level">
-                            <li><a class="J_menuItem" href="mailbox.html">收件箱</a>
+                            <li><a class="J_menuItem" href="${html }/w3/mailbox.html">收件箱</a>
                             </li>
-                            <li><a class="J_menuItem" href="mail_detail.html">查看邮件</a>
+                            <li><a class="J_menuItem" href="${html }/w3/mail_detail.html">查看邮件</a>
                             </li>
-                            <li><a class="J_menuItem" href="mail_compose.html">写信</a>
+                            <li><a class="J_menuItem" href="${html }/w3/mail_compose.html">写信</a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">表单</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a class="J_menuItem" href="form_basic.html">基本表单</a>
+                            <li><a class="J_menuItem" href="${html }/w3/form_basic.html">基本表单</a>
                             </li>
-                            <li><a class="J_menuItem" href="form_validate.html">表单验证</a>
+                            <li><a class="J_menuItem" href="${html }/w3/form_validate.html">表单验证</a>
                             </li>
-                            <li><a class="J_menuItem" href="form_advanced.html">高级插件</a>
+                            <li><a class="J_menuItem" href="${html }/w3/form_advanced.html">高级插件</a>
                             </li>
-                            <li><a class="J_menuItem" href="form_wizard.html">表单向导</a>
+                            <li><a class="J_menuItem" href="${html }/w3/form_wizard.html">表单向导</a>
                             </li>
                             <li>
                                 <a href="#">文件上传 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a class="J_menuItem" href="form_webuploader.html">百度WebUploader</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/form_webuploader.html">百度WebUploader</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="form_file_upload.html">DropzoneJS</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/form_file_upload.html">DropzoneJS</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="form_avatar.html">头像裁剪上传</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/form_avatar.html">头像裁剪上传</a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#">编辑器 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a class="J_menuItem" href="form_editors.html">富文本编辑器</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/form_editors.html">富文本编辑器</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="form_simditor.html">simditor</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/form_simditor.html">simditor</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="form_markdown.html">MarkDown编辑器</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/form_markdown.html">MarkDown编辑器</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="code_editor.html">代码编辑器</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/code_editor.html">代码编辑器</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li><a class="J_menuItem" href="suggest.html">搜索自动补全</a>
+                            <li><a class="J_menuItem" href="${html }/w3/suggest.html">搜索自动补全</a>
                             </li>
-                            <li><a class="J_menuItem" href="layerdate.html">日期选择器layerDate</a>
+                            <li><a class="J_menuItem" href="${html }/w3/layerdate.html">日期选择器layerDate</a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">页面</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a class="J_menuItem" href="contacts.html">联系人</a>
+                            <li><a class="J_menuItem" href="${html }/w3/contacts.html">联系人</a>
                             </li>
-                            <li><a class="J_menuItem" href="profile.html">个人资料</a>
+                            <li><a class="J_menuItem" href="${html }/w3/profile.html">个人资料</a>
                             </li>
                             <li>
                                 <a href="#">项目管理 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a class="J_menuItem" href="projects.html">项目</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/projects.html">项目</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="project_detail.html">项目详情</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/project_detail.html">项目详情</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li><a class="J_menuItem" href="teams_board.html">团队管理</a>
+                            <li><a class="J_menuItem" href="${html }/w3/teams_board.html">团队管理</a>
                             </li>
-                            <li><a class="J_menuItem" href="social_feed.html">社交</a>
+                            <li><a class="J_menuItem" href="${html }/w3/social_feed.html">社交</a>
                             </li>
-                            <li><a class="J_menuItem" href="clients.html">客户管理</a>
+                            <li><a class="J_menuItem" href="${html }/w3/clients.html">客户管理</a>
                             </li>
-                            <li><a class="J_menuItem" href="file_manager.html">文件管理器</a>
+                            <li><a class="J_menuItem" href="${html }/w3/file_manager.html">文件管理器</a>
                             </li>
-                            <li><a class="J_menuItem" href="calendar.html">日历</a>
+                            <li><a class="J_menuItem" href="${html }/w3/calendar.html">日历</a>
                             </li>
                             <li>
                                 <a href="#">博客 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a class="J_menuItem" href="blog.html">文章列表</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/blog.html">文章列表</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="article.html">文章详情</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/article.html">文章详情</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li><a class="J_menuItem" href="faq.html">帮助中心</a>
+                            <li><a class="J_menuItem" href="${html }/w3/faq.html">帮助中心</a>
                             </li>
                             <li>
                                 <a href="#">时间轴 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a class="J_menuItem" href="timeline.html">时间轴</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/timeline.html">时间轴</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="timeline_v2.html">时间轴v2</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/timeline_v2.html">时间轴v2</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li><a class="J_menuItem" href="pin_board.html">标签墙</a>
+                            <li><a class="J_menuItem" href="${html }/w3/pin_board.html">标签墙</a>
                             </li>
                             <li>
                                 <a href="#">单据 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a class="J_menuItem" href="invoice.html">单据</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/invoice.html">单据</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="invoice_print.html">单据打印</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/invoice_print.html">单据打印</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li><a class="J_menuItem" href="search_results.html">搜索结果</a>
+                            <li><a class="J_menuItem" href="${html }/w3/search_results.html">搜索结果</a>
                             </li>
-                            <li><a class="J_menuItem" href="forum_main.html">论坛</a>
+                            <li><a class="J_menuItem" href="${html }/w3/forum_main.html">论坛</a>
                             </li>
                             <li>
                                 <a href="#">即时通讯 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a class="J_menuItem" href="chat_view.html">聊天窗口</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/chat_view.html">聊天窗口</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="webim.html">layIM</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/webim.html">layIM</a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#">登录注册相关 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a href="login.html" target="_blank">登录页面</a>
+                                    <li><a href="${html }/w3/login.html" target="_blank">登录页面</a>
                                     </li>
-                                    <li><a href="login_v2.html" target="_blank">登录页面v2</a>
+                                    <li><a href="${html }/w3/login_v2.html" target="_blank">登录页面v2</a>
                                     </li>
-                                    <li><a href="register.html" target="_blank">注册页面</a>
+                                    <li><a href="${html }/w3/register.html" target="_blank">注册页面</a>
                                     </li>
-                                    <li><a href="lockscreen.html" target="_blank">登录超时</a>
+                                    <li><a href="${html }/w3/lockscreen.html" target="_blank">登录超时</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li><a class="J_menuItem" href="404.html">404页面</a>
+                            <li><a class="J_menuItem" href="${html }/w3/404.html">404页面</a>
                             </li>
-                            <li><a class="J_menuItem" href="500.html">500页面</a>
+                            <li><a class="J_menuItem" href="${html }/w3/500.html">500页面</a>
                             </li>
-                            <li><a class="J_menuItem" href="empty_page.html">空白页</a>
+                            <li><a class="J_menuItem" href="${html }/w3/empty_page.html">空白页</a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-flask"></i> <span class="nav-label">UI元素</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a class="J_menuItem" href="typography.html">排版</a>
+                            <li><a class="J_menuItem" href="${html }/w3/typography.html">排版</a>
                             </li>
                             <li>
                                 <a href="#">字体图标 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
                                     <li>
-                                        <a class="J_menuItem" href="icons.html">Font Awesome</a>
+                                        <a class="J_menuItem" href="${html }/w3/icons.html">Font Awesome</a>
                                     </li>
                                     <li>
-                                        <a class="J_menuItem" href="iconfont.html">阿里巴巴矢量图标库</a>
+                                        <a class="J_menuItem" href="${html }/w3/iconfont.html">阿里巴巴矢量图标库</a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#">拖动排序 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a class="J_menuItem" href="draggable_panels.html">拖动面板</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/draggable_panels.html">拖动面板</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="agile_board.html">任务清单</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/agile_board.html">任务清单</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li><a class="J_menuItem" href="buttons.html">按钮</a>
+                            <li><a class="J_menuItem" href="${html }/w3/buttons.html">按钮</a>
                             </li>
-                            <li><a class="J_menuItem" href="tabs_panels.html">选项卡 &amp; 面板</a>
+                            <li><a class="J_menuItem" href="${html }/w3/tabs_panels.html">选项卡 &amp; 面板</a>
                             </li>
-                            <li><a class="J_menuItem" href="notifications.html">通知 &amp; 提示</a>
+                            <li><a class="J_menuItem" href="${html }/w3/notifications.html">通知 &amp; 提示</a>
                             </li>
-                            <li><a class="J_menuItem" href="badges_labels.html">徽章，标签，进度条</a>
+                            <li><a class="J_menuItem" href="${html }/w3/badges_labels.html">徽章，标签，进度条</a>
                             </li>
                             <li>
-                                <a class="J_menuItem" href="grid_options.html">栅格</a>
+                                <a class="J_menuItem" href="${html }/w3/grid_options.html">栅格</a>
                             </li>
                             <li>
                                 <a href="#">弹框插件 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a class="J_menuItem" href="layer.html">Web弹层组件layer</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/layer.html">Web弹层组件layer</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="modal_window.html">模态窗口</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/modal_window.html">模态窗口</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="sweetalert.html">SweetAlert</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/sweetalert.html">SweetAlert</a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#">树形视图 <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
-                                    <li><a class="J_menuItem" href="jstree.html">jsTree</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/jstree.html">jsTree</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="tree_view.html">Bootstrap Tree View</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/tree_view.html">Bootstrap Tree View</a>
                                     </li>
-                                    <li><a class="J_menuItem" href="nestable_list.html">nestable</a>
+                                    <li><a class="J_menuItem" href="${html }/w3/nestable_list.html">nestable</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li><a class="J_menuItem" href="toastr_notifications.html">Toastr通知</a>
+                            <li><a class="J_menuItem" href="${html }/w3/toastr_notifications.html">Toastr通知</a>
                             </li>
-                            <li><a class="J_menuItem" href="diff.html">文本对比</a>
+                            <li><a class="J_menuItem" href="${html }/w3/diff.html">文本对比</a>
                             </li>
-                            <li><a class="J_menuItem" href="spinners.html">加载动画</a>
+                            <li><a class="J_menuItem" href="${html }/w3/spinners.html">加载动画</a>
                             </li>
-                            <li><a class="J_menuItem" href="widgets.html">小部件</a>
+                            <li><a class="J_menuItem" href="${html }/w3/widgets.html">小部件</a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-table"></i> <span class="nav-label">表格</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a class="J_menuItem" href="table_basic.html">基本表格</a>
+                            <li><a class="J_menuItem" href="${html }/w3/table_basic.html">基本表格</a>
                             </li>
-                            <li><a class="J_menuItem" href="table_data_tables.html">DataTables</a>
+                            <li><a class="J_menuItem" href="${html }/w3/table_data_tables.html">DataTables</a>
                             </li>
-                            <li><a class="J_menuItem" href="table_jqgrid.html">jqGrid</a>
+                            <li><a class="J_menuItem" href="${html }/w3/table_jqgrid.html">jqGrid</a>
                             </li>
-                            <li><a class="J_menuItem" href="table_foo_table.html">Foo Tables</a>
+                            <li><a class="J_menuItem" href="${html }/w3/table_foo_table.html">Foo Tables</a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">相册</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a class="J_menuItem" href="basic_gallery.html">基本图库</a>
+                            <li><a class="J_menuItem" href="${html }/w3/basic_gallery.html">基本图库</a>
                             </li>
-                            <li><a class="J_menuItem" href="carousel.html">图片切换</a>
+                            <li><a class="J_menuItem" href="${html }/w3/carousel.html">图片切换</a>
                             </li>
-                            <li><a class="J_menuItem" href="layerphotos.html">layer相册</a>
+                            <li><a class="J_menuItem" href="${html }/w3/layerphotos.html">layer相册</a>
                             </li>
-                            <li><a class="J_menuItem" href="blueimp.html">Blueimp相册</a>
+                            <li><a class="J_menuItem" href="${html }/w3/blueimp.html">Blueimp相册</a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a class="J_menuItem" href="css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">CSS动画</span></a>
+                        <a class="J_menuItem" href="${html }/w3/css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">CSS动画</span></a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-cutlery"></i> <span class="nav-label">工具 </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a class="J_menuItem" href="form_builder.html">表单构建器</a>
+                            <li><a class="J_menuItem" href="${html }/w3/form_builder.html">表单构建器</a>
                             </li>
                         </ul>
                     </li>
@@ -368,7 +365,7 @@
         <div id="page-wrapper" class="gray-bg dashbard-1">
             <div class="row border-bottom">
                 <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                    <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                    <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="${ctx }/main"><i class="fa fa-bars"></i> </a>
                         <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
                             <div class="form-group">
                                 <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search" id="top-search">
@@ -454,7 +451,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="login.html"> <i class="fa fa-sign-out"></i> 退出 </a>
+                            <a href="#" onclick="loginOut();"> <i class="fa fa-sign-out"></i> 退出 </a>
                         </li>
                         <li>
                             <a class="right-sidebar-toggle">
@@ -477,11 +474,7 @@
 
             </div>
             <div class="row J_mainContent" id="content-main">
-                <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="${html }/w3/index_v1.html?v=3.0" frameborder="0" data-id="index_v1.html" seamless></iframe>
-            </div>
-            <div class="footer">
-                <div class="pull-right">&copy; 2014-2015 <a href="http://www.zi-han.net/" target="_blank">zihan's blog</a>
-                </div>
+                <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="" frameborder="0" data-id="index_v1.html" seamless></iframe>
             </div>
         </div>
         <!--右侧部分结束-->
@@ -852,6 +845,27 @@
     <script src="${html }/w3/js/hplus.js"></script>
     <script src="${html }/w3/js/contabs.js"></script>
     <script src="${html }/w3/js/plugins/pace/pace.min.js"></script>
+    <script src="${html}/js/cookie.js"></script>
+<script type="text/javascript">
+function loginOut(){
+	$.ajax({
+		    url: "${ctx}/loginOut",
+		    type: 'post',
+		    error: function(){
+		        window.location.href="${ctx}";
+		    },
+		    success: function(obj){
+		    	$.cookie("userName", null);
+	    		$.cookie("encryptedPwd", null); 
+		    	window.location.href="${ctx}";
+			}
+		});
+}
+
+function changePassword(){
+	$.openWin({url:"${ctx }/user/goChangePassword", width: 600, height: 300});
+}
+</script>
 </body>
 
 </html>

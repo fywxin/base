@@ -1,16 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<title>日志</title>
-<%@include file="/jsp/grid.jsp" %>
+<%@include file="/html/jsp/frame.jsp" %>
+
 <script type="text/javascript">
-var rsStatus = {1:"<button type='button' class='btn btn-primary btn-ss'>成功</button>",
-				2:"<button type='button' class='btn btn-warning btn-ss'>系统异常</button>",
-				3:"<button type='button' class='btn btn-warning btn-ss'>OrmException</button>",
-				4:"<button type='button' class='btn btn-info btn-ss'>运行时异常</button>",
-				5:"<button type='button' class='btn btn-danger btn-ss'>业务异常</button>",
-				6:"<button type='button' class='btn btn-info btn-ss'>未知异常</button>"};
+var rsStatus = {1:"<button type='button' class='btn btn-primary btn-xs'>成功</button>",
+				2:"<button type='button' class='btn btn-warn btn-xs'>系统异常</button>",
+				3:"<button type='button' class='btn btn-warn btn-xs'>OrmException</button>",
+				4:"<button type='button' class='btn btn-info btn-xs'>运行时异常</button>",
+				5:"<button type='button' class='btn btn-danger btn-xs'>业务异常</button>",
+				6:"<button type='button' class='btn btn-info btn-xs'>未知异常</button>"};
 var time = new Date();
 $(function (){
 	$("#gridTable").jqGrid({
@@ -19,8 +16,7 @@ $(function (){
 		colNames: ['操作', '对象名称', '表名称', 'uri', '操作类型', '方法耗时(ms)','调用耗时(ms)', 'ip地址', '创建时间', '操作人', '结果'],
 		colModel: [{name:'myac',index:'', width:150, fixed:true, sortable:false, resize:false, align: "center",
 					formatter: function(cellvalue, options, rowObject){
-						return "<button type='button' class='btn btn-default btn-ss' title='修改'><i class='fa fa-pencil'></i> 修改</button>  <button type='button' class='btn btn-default btn-ss' title='删除'><i class='fa fa-minus'> 删除</i></button>";
-					
+						return "<button type='button' class='btn btn-default btn-xs'><i class='fa fa-pencil'></i> 修  改</button>  <button type='button' class='btn btn-default btn-xs'><i class='fa fa-minus'></i> 删  除</button>";
 					}},
 					{name:'cnName',index:'cnName', width:60},
 					{name:'tableName',index:'tableName', width:60},
@@ -40,11 +36,10 @@ $(function (){
 		rowNum : 20,
 		rowList : [ 10, 20, 30, 50],
 		pager : '#gridPager',
-		height: $.h()-98-$("#queryForm").height(),
+		height: $.h()-130-$("#queryForm").height(),
 		repeatitems: false,
-		altRows: true,
+		//altRows: true,
 		autowidth: true,
-		styleUI: "Bootstrap",
 		mtype : "post"
 	});
 	
@@ -55,8 +50,7 @@ function view(id){
 }
 
 </script>
-</head>
-<body class="gray-bg" style="overflow: hidden;background-color: #fff;">
+	<div class="row" style="background-color: #fff;">
         <div style="margin: 3px 7px;">
 		<form id="queryForm" >
 			<table class="query">
@@ -161,7 +155,7 @@ function view(id){
 				</div>
 			</form>
 				<table id="gridTable" ></table>
-				<div id="gridPager"></div>
+				<div id="gridPager" style="height:35px;"></div>
 			</div>
-</body>
-</html>
+			</div>
+<%@include file="/html/jsp/foot.jsp" %>

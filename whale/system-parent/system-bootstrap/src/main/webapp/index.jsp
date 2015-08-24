@@ -60,6 +60,7 @@
             <div class="col-sm-5" >
             <div id="logindiv">
                 <form id="loginForm">
+                	<input type="hidden" id="encryptedPwd" name="encryptedPwd">
                     <h3 class="no-margins">登录：</h3>
                     <p class="m-t-md">登录到Whale后台基础框架</p>
                     

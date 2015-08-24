@@ -26,6 +26,15 @@ $(function () {
                     $('.J_mainContent .J_iframe').each(function () {
                         if ($(this).data('id') == dataUrl) {
                             $(this).show().siblings('.J_iframe').hide();
+                            $(this)[0].contentWindow.location.reload(true); //wjs 刷新窗口
+                            return false;
+                        }
+                    });
+                }else{//wjs 刷新窗口
+                	// 显示tab对应的内容区
+                    $('.J_mainContent .J_iframe').each(function () {
+                        if ($(this).data('id') == dataUrl) {
+                            $(this)[0].contentWindow.location.reload(true);
                             return false;
                         }
                     });
@@ -102,7 +111,7 @@ $(function () {
                 });
 
                 var marginLeftVal = parseInt($('.page-tabs-content').css('margin-left'));
-                console.log((marginLeftVal + currentWidth));
+                //console.log((marginLeftVal + currentWidth));
                 if (marginLeftVal < 0) {
                     $('.page-tabs-content').animate({
                         marginLeft: (marginLeftVal + currentWidth) + 'px'
@@ -181,7 +190,6 @@ $(function () {
                     $('.page-tabs-content').animate({
                         marginLeft: marginLeftVal + (-100) + 'px'
                     }, "fast");
-                    console.log(1);
                 }
                 return
             }
@@ -190,15 +198,12 @@ $(function () {
                 $('.page-tabs-content').animate({
                     marginLeft: marginLeftVal - marginLeftVal + 'px'
                 }, "fast");
-                console.log(2);
                 return;
             }
 
             // 超过左边
             if (marginLeftVal < 0) {
-                console.log("3");
                 if (visibleWidth > countWidth) {
-                    console.log("33")
                     $('.page-tabs-content').animate({
                         marginLeft: marginLeftVal + (100) + 'px'
                     }, "fast");
@@ -208,12 +213,10 @@ $(function () {
             }
 
         } else if (visibleWidth < countWidth) {
-            console.log("else 1");
             if (marginLeftVal + 100 > 0) {
                 $('.page-tabs-content').animate({
                     marginLeft: marginLeftVal - marginLeftVal + 'px'
                 }, "fast");
-                console.log('else' + 2);
                 return;
             } else {
                 $('.page-tabs-content').animate({
