@@ -841,7 +841,7 @@
     <script src="${html }/w3/js/bootstrap.min.js"></script>
     <script src="${html }/w3/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="${html }/w3/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="${html }/w3/js/plugins/layer/layer.min.js"></script>
+    <script src="${html }/w3/js/plugins/layer/layer.js"></script>
     <script src="${html }/w3/js/hplus.js"></script>
     <script src="${html }/w3/js/contabs.js"></script>
     <script src="${html }/w3/js/plugins/pace/pace.min.js"></script>

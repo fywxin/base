@@ -5,30 +5,21 @@
 <html>
 <head>
 	<title>查看 日志</title>
-<%@include file="/html/jsp/common.jsp" %>
+<%@include file="/jsp/base.jsp" %>
 <script type="text/javascript">
-var toolBar = null;
-$(function(){
-	toolBar = $("#toolbar").ligerToolBar({ items: [
-	    {id: 'closeBut', text: '关闭', icon:"close", click: function(){ 
-	    	$.closeWin();
-	    	return false; 
-	    	}
-	    }
-	 ]
-	});
-});
+function closeWin(){
+	
+}
 </script>
 
 </head>
     
-<body style="padding:0px; overflow-x:hidden; "> 
-	<div id="toolbar" style="margin: 0px 2px 0px 2px;"></div> 
-	<div class="infoBox" id="infoBoxDiv"></div>
-		<div class="edit-form">
+<body style="padding:5px;"> 
+	<button type="button" class="btn btn-info btn-sm" onclick="window.top.layer.closeAll();"><i class="fa fa-times" ></i> 关闭</button>
+	<div style="padding-top:5px;">
 			<form action="" method="post" id="dataForm">
 				<input type="hidden" id="id" name="id" value="${item.id}" />
-				<table>
+				<table class="query">
 					<col width="10%"/>
 					<col width="40%"/>
 					<col width="10%"/>

@@ -1,10 +1,7 @@
 //自定义js
 
 //公共配置
-layer.config({
-    extend: ['extend/layer.ext.js', 'skin/moon/style.css'],
-    skin: 'layer-ext-moon'
-});
+layer.config({extend: 'extend/layer.ext.js'});
 
 $(document).ready(function () {    
     
