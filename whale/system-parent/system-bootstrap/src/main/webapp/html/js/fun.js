@@ -25,7 +25,25 @@
 		}
 	});
 	
-	$.fn.serializeJson=function(){
+	$.fn.grid=function(options){
+		var defaults = {
+				datatype: "json",
+				rowNum : 20,
+				rowList : [ 10, 20, 30, 50],
+				pager : '#gridPager',
+				height: $.h()-98-$("#queryForm").height(),
+				repeatitems: false,
+				altRows: true,
+				autowidth: true,
+				styleUI: "Bootstrap",
+				mtype : "post"
+		}
+		var opts = $.extend(defaults, options);
+		
+        return $(this).jqGrid(opts);
+    };
+    
+    $.fn.serializeJson=function(){
         var serializeObj={};
         var array=this.serializeArray();
         var str=this.serialize();

@@ -51,7 +51,6 @@ $(function() {
 <body style="padding:0px; overflow-x:hidden; "> 
 	<div id="toolbar" style="margin: 0px 2px 0px 2px;"></div> 
 	<div class="infoBox" id="infoBoxDiv"></div>
-	<div class="edit-form">
 	<form action="" method="post" id="dataForm">
 		<table>
 			<col width="10%"/>
@@ -74,6 +73,5 @@ $(function() {
 			</tbody>
 		</table>
 	</form>
-</div>
 </body>
 </html>
