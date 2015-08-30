@@ -5,22 +5,27 @@
 <html>
 <head>
 	<title>查看 日志</title>
-<%@include file="/jsp/base.jsp" %>
+<%@include file="/jsp/form.jsp" %>
 <script type="text/javascript">
-function closeWin(){
-	
+function show(){
+	$("#infoBoxDiv").show()
+}
+
+function del(){
+	$.confirm("你的沙发上",{}, function(){
+		alert(2);
+	});
 }
 </script>
-
 </head>
     
-<body style="padding:2px 5px;overflow: hidden;"> 
+<body class="my_formBody"> 
 	<div class="navbar-fixed-bottom my_toolbar" >
-		<button type="button" class="btn btn-info btn-sm" onclick="window.top.layer.closeAll();"><i class="fa fa-times" ></i> 关闭</button>
+		<button type="button" class="btn btn-info btn-sm" onclick="closeWin()"><i class="fa fa-times" ></i> 关闭</button>
+		<button type="button" class="btn btn-info btn-sm" onclick="del()"><i class="fa fa-times" ></i> 关闭</button>
 	</div>
-	<div style="margin-bottom: 35px;height:400px;overflow-y: auto;">
-		<div class="infoBox alert alert-danger" id="infoBoxDiv">asdf</div>
-		<div>
+	<div id="formBoxDiv" class="my_formBox" >
+		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 		<form action="" method="post" id="dataForm">
 			<input type="hidden" id="id" name="id" value="${item.id}" />
 			<table class="query">
@@ -104,25 +109,24 @@ function closeWin(){
 					<tr>
 						<td class="td-label">sql</td>
 						<td class="td-value" colspan="3">
-							<div style="height:80px;" class="textAreaDiv">${item.sqlStr}</div>
+							<div style="height:40px;" class="my_textAreaDiv">${item.sqlStr}</div>
 						</td>
 					</tr>
 					<tr>
 						<td class="td-label">请求参数</td>
 						<td class="td-value" colspan="3">
-							<div style="height:120px;" class="textAreaDiv">${item.argStr}</div>
+							<div style="height:80px;" class="my_textAreaDiv">${item.argStr}</div>
 						</td>
 					</tr>
 					<tr>
 						<td class="td-label">处理结果</td>
 						<td class="td-value" colspan="3">
-							<div style="height:120px;" class="textAreaDiv">${item.rsStr}</div>
+							<div style="height:200px;" class="my_textAreaDiv">${item.rsStr}</div>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</form>
-		</div>
-		</div>
+	</div>
 </body>
 </html>

@@ -42,26 +42,12 @@ $(function (){
 });
 
 function view(id){
-	parent.layer.open({
-	    type: 2,
-	    title: '查看日志',
-	    shadeClose: false,
-	    shade: 0.4,
-	    area: ['60%', '70%'],
-	    content: '${ctx}/log2/goView?id='+id
-	}); 
-}
-
-function search(){
-	 $("#gridTable").jqGrid('setGridParam',{
-	    postData: $("#queryForm").serializeJson(),
-	    page:1
-	   }).trigger("reloadGrid");
+	$.openWin({title: '查看日志',content: '${ctx}/log2/goView?id='+id});
 }
 </script>
 </head>
-<body class="gray-bg" style="overflow: hidden;background-color: #fff;">
-        <div style="margin: 3px 7px;">
+<body class="my_gridBody gray-bg" >
+        <div class="my_gridBox">
 		<form id="queryForm" >
 			<table class="query">
 				<col width="8%" />
@@ -128,16 +114,16 @@ function search(){
 							>&nbsp;<input type="text" id="methodCostTime" name="methodCostTime" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:145px;padding:1px;" />
 						</td>
 					
-						<td class="td-label">调用耗时></td>
+						<td class="td-label">调用耗时</td>
 						<td>
 							>&nbsp;<input type="text" id="costTime" name="costTime"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:145px;padding:1px;" />
 						</td>
 					
 						<td class="td-label">操作时间</td>
 						<td>
-							<input type="text" style="width:150px;" id="startTime" name="startTime" />
+							<input type="text" style="width:130px;" id="startTime" name="startTime" />
 							至
-							<input type="text" style="width:150px;" id="endTime" name="endTime" />
+							<input type="text" style="width:130px;" id="endTime" name="endTime" />
 						</td>
 					</tr>
 					<tr>
@@ -157,7 +143,7 @@ function search(){
 					</tr>
 				</tbody>
 			</table>
-				<div style="margin:3px 0px;border: 1px solid #CCCCCC; padding:3px 7px">
+				<div class="my_gridToolBar">
 				  <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> 新  增</button>
 				  <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> 修  改</button>
 				  <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> 删  除</button>

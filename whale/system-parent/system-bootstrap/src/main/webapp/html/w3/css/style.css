@@ -7782,7 +7782,9 @@ body.skin-3 {
 	padding: 2px 5px;
 	font-size: 12px;
 	line-height: 1;
-	border-radius: 3px
+	border-radius: 3px;
+	margin-left:5px;
+	margin-right:5px;
 }
 
 .todo-list.small-list .btn-ss,
@@ -7796,6 +7798,48 @@ body.skin-3 {
 .spinner-buttons.input-group-btn .btn-ss {
     line-height: 1;
 }
+
+.btn-gray {
+    background-color: #c2c2c2;
+    border-color: #c2c2c2;
+    color: #FFFFFF;
+}
+
+.btn-gray:hover,
+.btn-gray:focus,
+.btn-gray:active,
+.btn-gray.active,
+.open .dropdown-toggle.btn-gray {
+    background-color: #bababa;
+    border-color: #bababa;
+    color: #FFFFFF;
+}
+
+.btn-gray:active,
+.btn-gray.active,
+.open .dropdown-toggle.btn-gray {
+    background-image: none;
+}
+
+.btn-gray.disabled,
+.btn-gray.disabled:hover,
+.btn-gray.disabled:focus,
+.btn-gray.disabled:active,
+.btn-gray.disabled.active,
+.btn-gray[disabled],
+.btn-gray[disabled]:hover,
+.btn-gray[disabled]:focus,
+.btn-gray[disabled]:active,
+.btn-gray.active[disabled],
+fieldset[disabled] .btn-gray,
+fieldset[disabled] .btn-gray:hover,
+fieldset[disabled] .btn-gray:focus,
+fieldset[disabled] .btn-gray:active,
+fieldset[disabled] .btn-gray.active {
+    background-color: #cccccc;
+    border-color: #cccccc;
+}
+
 
 /** jqgrid*/
 .ui-jqgrid-btable .ui-priority-secondary {
@@ -7818,3 +7862,5 @@ body.skin-3 {
 .ui-jqgrid-pager{
 	background-color: #EFF3F8;
 }
+
+

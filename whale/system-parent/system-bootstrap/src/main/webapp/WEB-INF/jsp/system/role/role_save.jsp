@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@include file="/html/jsp/common.jsp" %>
+<%@include file="/jsp/form.jsp" %>
 <script type="text/javascript">
 
 var toolBar = null;
@@ -48,30 +48,39 @@ $(function() {
 
 </head>
     
-<body style="padding:0px; overflow-x:hidden; "> 
-	<div id="toolbar" style="margin: 0px 2px 0px 2px;"></div> 
-	<div class="infoBox" id="infoBoxDiv"></div>
-	<form action="" method="post" id="dataForm">
-		<table>
-			<col width="10%"/>
-			<col width="40%"/>
-			<col width="10%"/>
-			<col width="40%"/>
-			<tbody>
-				<tr>
-					<td class="td-label"><span class="required">*</span>角色名称</td>
-					<td class="td-value"><input type="text" style="width:160px;" id="roleName" name="roleName" maxlength="16" title="最多16个字"/></td>
-					<td class="td-label" ><span class="required">*</span>角色编码</td>
-					<td class="td-value"><input type="text" style="width:160px;" id="roleCode" name="roleCode" maxlength="64" title="最多64位"/></td>
-				</tr>
-				<tr>
-					<td class="td-label" >备注</td>
-					<td class="td-value" colspan="3">
-						<textarea id="remark" name="remark" rows="5" title="最多只能输入100个字"></textarea>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</form>
+<body class="my_formBody "> 
+	<div class="navbar-fixed-bottom my_toolbar" >
+		<button type="button" class="btn btn-primary btn-sm" onclick="save()"><i class="fa fa-times" ></i> 保存</button>
+		<button type="button" class="btn btn-danger btn-sm" onclick="closeWin()"><i class="fa fa-times" ></i> 关闭</button>
+	</div>
+	<div id="formBoxDiv" class="my_formBox" >
+		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
+		<form action="" method="post" id="dataForm" class="form-horizontal ">
+			 <div class="form-group">
+                                <label class="col-sm-3 control-label">姓名：</label>
+                                <div class="col-sm-8">
+                                    <input id="cname" name="name" minlength="2" type="text" class="form-control" required="" aria-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">E-mail：</label>
+                                <div class="col-sm-8">
+                                    <input id="cemail" type="email" class="form-control" name="email" required="" aria-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">网站：</label>
+                                <div class="col-sm-8">
+                                    <input id="curl" type="url" class="form-control" name="url">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">说明：</label>
+                                <div class="col-sm-8">
+                                    <textarea id="ccomment" name="comment" class="form-control" required="" aria-required="true"></textarea>
+                                </div>
+                            </div>
+		</form>
+	</div>
 </body>
 </html>

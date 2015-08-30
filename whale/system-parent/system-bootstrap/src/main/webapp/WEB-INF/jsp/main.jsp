@@ -847,6 +847,8 @@
     <script src="${html }/w3/js/plugins/pace/pace.min.js"></script>
     <script src="${html}/js/cookie.js"></script>
 <script type="text/javascript">
+var currentOpenId = null;
+
 function loginOut(){
 	$.ajax({
 		    url: "${ctx}/loginOut",

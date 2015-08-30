@@ -6,3 +6,15 @@
 ::-webkit-scrollbar{width: 16px;background-color: #F5F5F5;}
 .table>tbody>tr>td, .table>tbody>tr>th {padding: 7px;}
 </style>
+<script type="text/javascript">
+$(window).resize(function(){
+	$("#gridTable").jqGrid('setGridWidth', $.w()-20).jqGrid('setGridHeight', $.h()-98-$("#queryForm").height());
+});
+
+function search(){
+	 $("#gridTable").jqGrid('setGridParam',{
+	    postData: $("#queryForm").serializeJson(),
+	    page:1
+	   }).trigger("reloadGrid");
+}
+</script>

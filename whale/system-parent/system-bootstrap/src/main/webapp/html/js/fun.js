@@ -22,6 +22,58 @@
 				&& document.documentElement.clientWidth){winWidth = document.documentElement.clientWidth;}
 
 			return winWidth;
+		},
+		
+		openWin: function(options){
+			var defaults = {
+					type: 2,
+				    shadeClose: false,
+				    shade: 0.4,
+				    area: ['60%', '70%']
+			};
+			var opts = $.extend(defaults, options);
+			window.top.currentOpenId = window.top.layer.open(opts);
+			window.openId = window.top.currentOpenId;
+		},
+		
+		closeWin: function(){
+			if(window.top.currentOpenId != null){
+				window.top.layer.close(window.top.currentOpenId);
+				window.top.currentOpenId = window.parent.parent.openId;
+				window.parent.openId = null;
+			}else{
+				window.top.layer.close(window.parent.openId);
+				window.top.currentOpenId = window.parent.parent.openId;
+				window.parent.openId = null;
+			}
+		},
+		
+		confirm: function(str, options, yes, no){
+			var defaults = {
+					btn: ['确定','取消'],
+					shadeClose: false,
+					shade: true
+			}
+			if(typeof(no) == "undefined" || !$.isFunction(no)){
+				no = function(id){
+					alert("关闭"+id)
+				}
+			}
+			var opts = $.extend(defaults, options);
+			
+			window.top.layer.confirm(str, opts, yes, no);
+		},
+		
+		alert: function(str){
+			
+		},
+		
+		msg: function(str){
+			
+		},
+		
+		tip: function(str){
+			
 		}
 	});
 	
@@ -37,9 +89,8 @@
 				autowidth: true,
 				styleUI: "Bootstrap",
 				mtype : "post"
-		}
+		};
 		var opts = $.extend(defaults, options);
-		
         return $(this).jqGrid(opts);
     };
     
