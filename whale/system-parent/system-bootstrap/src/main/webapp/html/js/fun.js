@@ -24,6 +24,66 @@
 			return winWidth;
 		},
 		
+		save : function(param){
+			if(window.saving){
+				return ;
+			}
+			window.saving = true;
+			var formId = param.formId || "dataForm";
+			if($.isFunction(param.beforeSave)){
+    			param.beforeSave();
+    		}
+			
+			try{
+				if(!$("#"+formId).valid()) {return false;}
+			}catch(e){
+				alert(e);
+			}
+			
+			param.datas = param.datas || $("#"+formId).serialize();
+			$("#saveBut").hide();
+			$("#infoBoxDiv").html("").hide();
+			
+			var loadId = $.wait();
+			
+			$.ajax({
+				url: param.url,
+				type: 'post',
+				data: param.datas,
+				dataType: 'json',
+				cache: false,
+				error: function(obj){
+					window.saving = false;
+					window.top.layer.close(loadId);
+					$("#infoBoxDiv").html('保存数据出错~').show();
+					$("#saveBut").show();
+					if($.isFunction(param.onError)){
+						param.onError();
+					}
+			    },
+			    success: function(obj){
+			    	window.saving = false;
+			    	window.top.layer.close(loadId);
+			    	if(obj.rs){
+			    		if($.isFunction(param.onSucess)){
+			    			param.onSucess(obj);
+			    		}else{
+			    			window.top.layer.msg(obj.msg, {time: 2000});
+			    			try{
+		    					window.parent.search();
+		    				}catch(e){}
+			    		}
+			    	}else{
+			    		$("#infoBoxDiv").html(obj.msg).show();
+			    		$("#saveBut").show();
+			    		if($.isFunction(param.onFail)){
+			    			param.onFail(obj);
+			    		}
+			    	}
+			    }
+			 });
+		},
+		
 		openWin: function(options){
 			var defaults = {
 					type: 2,
@@ -74,6 +134,10 @@
 		
 		tip: function(str){
 			
+		},
+		
+		wait: function(str){
+			return window.top.layer.load();
 		}
 	});
 	
