@@ -11,6 +11,6 @@ public class DictDao extends BaseDao<Dict, Long> {
 
 	public Dict getByDictCode(String dictCode){
 		
-		return this.getBy(Query.newQuery(Dict.class).addEq("dictCode", dictCode));
+		return this.getBy(Query.newQuery(Dict.class).eq("dictCode", dictCode));
 	}
 }

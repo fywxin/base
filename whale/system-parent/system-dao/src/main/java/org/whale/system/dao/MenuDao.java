@@ -21,21 +21,21 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	}
 	
 	public List<Menu> getByParentId(Long parentId){
-		Query query = Query.newQuery(Menu.class).addEq("parentId", parentId);
+		Query query = Query.newQuery(Menu.class).eq("parentId", parentId);
 		return this.queryBy(query);
 	}
 	
 	public List<Menu> getMenuByType(Integer menuType){
-		return this.queryBy(Query.newQuery(Menu.class).addEq("menuType", menuType));
+		return this.queryBy(Query.newQuery(Menu.class).eq("menuType", menuType));
 	}
 	
 	public List<Menu> getPublicMenus(){
-		return this.queryBy(Query.newQuery(Menu.class).addEq("menuType", 3).addEq("isPublic", 1));
+		return this.queryBy(Query.newQuery(Menu.class).eq("menuType", 3).eq("isPublic", 1));
 	}
 	
 	public Menu getByMenuName(String menuName){
 		
-		return this.getBy(Query.newQuery(Menu.class).addEq("menuName", menuName));
+		return this.getBy(Query.newQuery(Menu.class).eq("menuName", menuName));
 	}
 	
 	

@@ -16,7 +16,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 * @return
 	 */
     public Dept getByDeptName(String deptName) {
-    	Query query = Query.newQuery(Dept.class).addEq("deptName", deptName);
+    	Query query = Query.newQuery(Dept.class).eq("deptName", deptName);
     	return this.getBy(query);
     }
     /**
@@ -25,7 +25,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 * @return
 	 */
     public Dept getByDeptCode(String deptCode) {
-    	Query query = Query.newQuery(Dept.class).addEq("deptCode", deptCode);
+    	Query query = Query.newQuery(Dept.class).eq("deptCode", deptCode);
     	return this.getBy(query);
     }
     
@@ -35,7 +35,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
      * @return
      */
     public List<Dept> getByPid(Long pid){
-    	Query query = Query.newQuery(Dept.class).addEq("pid", pid);
+    	Query query = Query.newQuery(Dept.class).eq("pid", pid);
     	return this.queryBy(query);
     }
 	

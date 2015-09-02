@@ -25,7 +25,7 @@ public class DictService extends BaseService<Dict, Long> {
 	public void delete(Long dictId){
 		this.dictDao.delete(dictId);
 		
-		this.dictItemDao.deleteBy(Query.newQuery(DictItem.class).addEq("dictId", dictId));
+		this.dictItemDao.deleteBy(Query.newQuery(DictItem.class).eq("dictId", dictId));
 	}
 	
 	public Dict getByDictCode(String dictCode){

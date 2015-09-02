@@ -21,8 +21,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
-import org.whale.system.base.Query;
 import org.whale.system.common.exception.StaleObjectStateException;
 import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.common.util.Strings;
@@ -227,7 +227,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	/**
 	 * 按自定义条件删除
 	 */
-	public void deleteBy(Query query){
+	public void deleteBy(Iquery query){
 		this.jdbcTemplate.update(query.getDelSql(), query.getArgs());
 	}
 	
@@ -267,7 +267,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	/**
 	 * 按自定义条件获取
 	 */
-	public T getBy(Query query){
+	public T getBy(Iquery query){
 		List<T> list = this.jdbcTemplate.query(query.getQuerySql(), query.getArgs().toArray(), this.rowMapper);
 		
 		if(list == null || list.size() < 1)
@@ -302,7 +302,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	/**
 	 * 按自定义条件查询
 	 */
-	public List<T> queryBy(Query query){
+	public List<T> queryBy(Iquery query){
 		
 		return this.jdbcTemplate.query(query.getQuerySql(), query.getArgs().toArray(), this.rowMapper);
 	}

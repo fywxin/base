@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
-import org.whale.system.base.Query;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 
@@ -71,7 +71,7 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 * 按照自定义条件删除
 	 * @param query
 	 */
-	void deleteBy(Query query);
+	void deleteBy(Iquery query);
 	
 	/**
 	 * 获取单个对象
@@ -93,7 +93,7 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 * @param t
 	 * @return
 	 */
-	T getBy(Query query);
+	T getBy(Iquery query);
 	
 	
 	/**
@@ -115,7 +115,7 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 * @param query
 	 * @return
 	 */
-	List<T> queryBy(Query query);
+	List<T> queryBy(Iquery query);
 	
 	/**
 	 * 分页查询

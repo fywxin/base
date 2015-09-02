@@ -17,7 +17,7 @@ public class DictItemDao extends BaseDao<DictItem, Long> {
 	
 	public DictItem getByDictIdAndItemCode(Long dictId, String itemCode){
 		
-		return this.getBy(Query.newQuery(DictItem.class).addEq("dictId", dictId).addEq("itemCode", itemCode));
+		return this.getBy(Query.newQuery(DictItem.class).eq("dictId", dictId).eq("itemCode", itemCode));
 	}
 	
 	public List<DictItem> getByDictId(Long dictId){

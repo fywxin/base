@@ -14,12 +14,12 @@ public class UserDao extends BaseDao<User, Long> {
 	
 	public List<User> getByDeptId(Long deptId){
 
-		return this.queryBy(Query.newQuery(User.class).addEq("deptId", deptId));
+		return this.queryBy(Query.newQuery(User.class).eq("deptId", deptId));
 	}
 
 	public User getByUserName(String userName){
 
-		return this.getBy(Query.newQuery(User.class).addEq("userName", userName));
+		return this.getBy(Query.newQuery(User.class).eq("userName", userName));
 	}
 	
 	final String findAuthIds_SQL ="select ra.authId "+

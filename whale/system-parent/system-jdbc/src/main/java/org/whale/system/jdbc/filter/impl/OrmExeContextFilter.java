@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 import org.whale.system.base.Page;
-import org.whale.system.base.Query;
+import org.whale.system.base.Iquery;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.jdbc.filter.BaseDaoFilterWarpper;
@@ -109,12 +109,12 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 	}
 
 	@Override
-	public void beforeDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
+	public void beforeDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
 		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("deleteBy", query.getDelSql(),query.getArgs(), baseDao));
 	}
 
 	@Override
-	public void afterDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
+	public void afterDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
 		this.clear();
 	}
 
@@ -129,12 +129,12 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 	}
 	
 	@Override
-	public void beforeGetBy(IOrmDao<T, PK> baseDao, Query query) {
+	public void beforeGetBy(IOrmDao<T, PK> baseDao, Iquery query) {
 		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("getBy", query.getQuerySql(), query.getArgs(), baseDao));
 	}
 
 	@Override
-	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Query query) {
+	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Iquery query) {
 		this.clear();
 	}
 
@@ -160,12 +160,12 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 
 
 	@Override
-	public void beforeQueryBy(IOrmDao<T, PK> baseDao, Query query) {
+	public void beforeQueryBy(IOrmDao<T, PK> baseDao, Iquery query) {
 		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryBy", query.getQuerySql(), query.getArgs(), baseDao));
 	}
 
 	@Override
-	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Query query) {
+	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Iquery query) {
 		this.clear();
 	}
 

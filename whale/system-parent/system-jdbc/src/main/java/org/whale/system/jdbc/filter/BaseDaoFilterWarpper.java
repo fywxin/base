@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.whale.system.base.Page;
-import org.whale.system.base.Query;
+import org.whale.system.base.Iquery;
 import org.whale.system.jdbc.IOrmDao;
 
 /**
@@ -97,12 +97,12 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 	}
 
 	@Override
-	public void beforeDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
+	public void beforeDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
 		
 	}
 
 	@Override
-	public void afterDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
+	public void afterDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
 		
 	}
 	
@@ -117,12 +117,12 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 	}
 	
 	@Override
-	public void beforeGetBy(IOrmDao<T, PK> baseDao, Query query) {
+	public void beforeGetBy(IOrmDao<T, PK> baseDao, Iquery query) {
 		
 	}
 
 	@Override
-	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Query query) {
+	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Iquery query) {
 		
 	}
 
@@ -158,12 +158,12 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 	}
 	
 	@Override
-	public void beforeQueryBy(IOrmDao<T, PK> baseDao, Query query) {
+	public void beforeQueryBy(IOrmDao<T, PK> baseDao, Iquery query) {
 		
 	}
 
 	@Override
-	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Query query) {
+	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Iquery query) {
 		
 	}
 

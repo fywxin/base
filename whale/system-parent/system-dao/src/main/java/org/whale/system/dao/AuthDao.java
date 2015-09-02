@@ -13,7 +13,7 @@ public class AuthDao extends BaseDao<Auth, Long> {
 	
 
 	public List<Auth> getByMenuId(Long menuId){
-		Query query = Query.newQuery(Auth.class).addEq("menuId", menuId);
+		Query query = Query.newQuery(Auth.class).eq("menuId", menuId);
 		
 		return this.queryBy(query);
 	}
@@ -31,7 +31,7 @@ public class AuthDao extends BaseDao<Auth, Long> {
 	}
 	
 	public Auth getByAuthCode(String authCode){
-		Query query = Query.newQuery(Auth.class).addEq("authCode", authCode);
+		Query query = Query.newQuery(Auth.class).eq("authCode", authCode);
 		
 		return this.getBy(query);
 	}

@@ -13,7 +13,7 @@ public class DomainDao extends BaseDao<Domain, Long> {
 
 	public Domain getBySqlName(String sqlName){
 		
-		return this.getBy(Query.newQuery(Domain.class).addEq("sqlName", sqlName));
+		return this.getBy(Query.newQuery(Domain.class).eq("sqlName", sqlName));
 	}
 	
 	String queryAllTable_MYSQL =  "SELECT t.table_name AS name,"

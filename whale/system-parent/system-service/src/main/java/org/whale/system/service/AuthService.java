@@ -27,7 +27,7 @@ public class AuthService extends BaseService<Auth, Long> {
 			return ;
 		}
 		Query query = new Query(RoleAuth.class);
-		query.addEq("authId", authId);
+		query.eq("authId", authId);
 		this.roleAuthDao.deleteBy(query);
 		
 		this.authDao.delete(authId);

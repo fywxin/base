@@ -14,13 +14,15 @@ import org.whale.system.jdbc.orm.entry.OrmTable;
 
 /**
  * 单表查询构造器, AND 条件联合查询
+ * 不支持OR
  * 
  * @TODO 参考mybatis SQL
  * 		@org.apache.ibatis.jdbc.SQL
+ * 		https://github.com/nutzam/nutz/blob/master/src/org/nutz/dao/Cnd.java
  * 
  * @author 王金绍
  */
-public class Query {
+public class Query implements Iquery{
 
 	private Class<?> clazz;
 	/**等于 */
@@ -133,7 +135,12 @@ public class Query {
 			if(likeParams != null){
 				for(Map.Entry<String, Object> like : likeParams.entrySet()){
 					strb.append(" AND t.").append(like.getKey()).append(" LIKE ? ");
-					args.add("%"+like.getValue().toString().trim()+"%");
+					String val = like.getValue().toString().trim();
+					if(val.startsWith("%") || val.endsWith("%")){
+						args.add(val);
+					}else{
+						args.add("%"+val+"%");
+					}
 				}
 			}
 			if(neParams != null){
@@ -192,6 +199,9 @@ public class Query {
 			return sql;
 		}
 	}
+	
+	
+	
 
 	/**
 	 * 增加 等于[=] 查询条件
@@ -199,7 +209,7 @@ public class Query {
 	 * @param value
 	 * @return
 	 */
-	public Query addEq(String col, Object value){
+	public Query eq(String col, Object value){
 		if(eqParams == null){
 			eqParams = new HashMap<String, Object>();
 		}
@@ -213,7 +223,7 @@ public class Query {
 	 * @param value
 	 * @return
 	 */
-	public Query addNe(String col, Object value){
+	public Query ne(String col, Object value){
 		if(neParams == null){
 			neParams = new HashMap<String, Object>();
 		}
@@ -227,7 +237,7 @@ public class Query {
 	 * @param value
 	 * @return
 	 */
-	public Query addGt(String col, Object value){
+	public Query gt(String col, Object value){
 		if(value == null)
 			throw new IllegalArgumentException("value == null");
 		if(gtParams == null){
@@ -243,7 +253,7 @@ public class Query {
 	 * @param value
 	 * @return
 	 */
-	public Query addGtEq(String col, Object value){
+	public Query gtEq(String col, Object value){
 		if(value == null)
 			throw new IllegalArgumentException("value == null");
 		if(gtEqParams == null){
@@ -259,7 +269,7 @@ public class Query {
 	 * @param value
 	 * @return
 	 */
-	public Query addLt(String col, Object value){
+	public Query lt(String col, Object value){
 		if(value == null)
 			throw new IllegalArgumentException("value == null");
 			
@@ -276,7 +286,7 @@ public class Query {
 	 * @param value
 	 * @return
 	 */
-	public Query addLtEq(String col, Object value){
+	public Query ltEq(String col, Object value){
 		if(value == null)
 			throw new IllegalArgumentException("value == null");
 			
@@ -293,7 +303,7 @@ public class Query {
 	 * @param value
 	 * @return
 	 */
-	public Query addLike(String col, Object value){
+	public Query like(String col, Object value){
 		if(Strings.isNotBlank(value)){
 			if(likeParams == null){
 				likeParams = new HashMap<String, Object>();
@@ -310,7 +320,7 @@ public class Query {
 	 * @param big
 	 * @return
 	 */
-	public Query addBetween(String col, Object small, Object big){
+	public Query between(String col, Object small, Object big){
 		if(small == null || big == null)
 			throw new IllegalArgumentException("between 值不能为null");
 		if(likeParams == null){
@@ -326,12 +336,12 @@ public class Query {
 	 * @param objs
 	 * @return
 	 */
-	public Query addIn(String col, Object... objs){
+	public Query in(String col, Object... objs){
 		if(objs == null || objs.length < 1){
-			this.addEq(col, null);
+			this.eq(col, null);
 		}
 		if(objs.length == 1){
-			this.addEq(col, objs[0]);
+			this.eq(col, objs[0]);
 		}
 		Set<Object> values = new HashSet<Object>(objs.length * 2);
 		for(Object obj : objs){
@@ -351,7 +361,7 @@ public class Query {
 	 * @param asc 是否递增
 	 * @return
 	 */
-	public Query addOrder(String col, boolean asc){
+	public Query order(String col, boolean asc){
 		if(this.orders == null)
 			this.orders = new ArrayList<Query.Order>();
 		this.orders.add(new Order(col, asc));

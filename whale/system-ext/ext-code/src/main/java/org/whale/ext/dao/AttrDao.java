@@ -14,7 +14,7 @@ public class AttrDao extends BaseDao<Attr, Long> {
 	
 	public List<Attr> queryByDomainId(Long domainId){
 		
-		return this.queryBy(Query.newQuery(Attr.class).addEq("domainId", domainId));
+		return this.queryBy(Query.newQuery(Attr.class).eq("domainId", domainId));
 	}
 	
 	

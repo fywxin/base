@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.whale.system.base.Page;
-import org.whale.system.base.Query;
+import org.whale.system.base.Iquery;
 import org.whale.system.jdbc.IOrmDao;
 
 /**
@@ -97,12 +97,12 @@ public abstract class BaseDaoDllFilterWarpper<T extends Serializable,PK extends 
 	}
 
 	@Override
-	public void beforeDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
+	public void beforeDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
 		
 	}
 
 	@Override
-	public void afterDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
+	public void afterDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
 		
 	}
 

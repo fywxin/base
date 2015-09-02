@@ -12,7 +12,7 @@ public class RoleDao extends BaseDao<Role, Long> {
 
 	public Role getByRoleCode(String roleCode){
 
-		return this.getBy(Query.newQuery(Role.class).addEq("roleCode", roleCode));
+		return this.getBy(Query.newQuery(Role.class).eq("roleCode", roleCode));
 	}
 	
 	final String getByUserId_SQL = "SELECT r.* FROM sys_user_role ur, sys_role r WHERE ur.userId = ? AND ur.roleId = r.roleId";

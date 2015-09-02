@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.core.PriorityOrdered;
-import org.whale.system.base.Query;
+import org.whale.system.base.Iquery;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.jdbc.filter.OrmFilter;
 
@@ -52,8 +52,8 @@ public interface BaseDaoDllFilter<T extends Serializable,PK extends Serializable
 	
 	void afterDelete(List<PK> ids, IOrmDao<T, PK> baseDao);
 	
-	void beforeDeleteBy(Query query, IOrmDao<T, PK> baseDao);
+	void beforeDeleteBy(Iquery query, IOrmDao<T, PK> baseDao);
 	
-	void afterDeleteBy(Query query, IOrmDao<T, PK> baseDao);
+	void afterDeleteBy(Iquery query, IOrmDao<T, PK> baseDao);
 
 }

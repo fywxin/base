@@ -11,8 +11,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Component;
+import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
-import org.whale.system.base.Query;
 import org.whale.system.common.exception.OrmException;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.jdbc.filter.dll.BaseDaoDllFilter;
@@ -152,13 +152,13 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 		}
 	}
 	
-	public void exeBeforeDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
+	public void exeBeforeDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
 		for(BaseDaoDllFilter<T, PK> filter : dllFilters){
 			filter.beforeDeleteBy(query, baseDao);
 		}
 	}
 
-	public void exeAfterDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
+	public void exeAfterDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
 		for(int i=dllFilters.size()-1; i>=0; i--){
 			dllFilters.get(i).afterDeleteBy(query, baseDao);
 		}
@@ -189,13 +189,13 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 		}
 	}
 	
-	public void exeBeforeGetBy(IOrmDao<T, PK> baseDao, Query query) {
+	public void exeBeforeGetBy(IOrmDao<T, PK> baseDao, Iquery query) {
 		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
 			filter.beforeGetBy(baseDao, query);
 		}
 	}
 
-	public void exeAfterGetBy(IOrmDao<T, PK> baseDao, T rs, Query query) {
+	public void exeAfterGetBy(IOrmDao<T, PK> baseDao, T rs, Iquery query) {
 		for(int i=queryFilters.size()-1; i>=0; i--){
 			queryFilters.get(i).afterGetBy(baseDao, rs, query);
 		}
@@ -213,13 +213,13 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 		}
 	}
 
-	public void exeBeforeQueryBy(IOrmDao<T, PK> baseDao, Query query) {
+	public void exeBeforeQueryBy(IOrmDao<T, PK> baseDao, Iquery query) {
 		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
 			filter.beforeQueryBy(baseDao, query);
 		}
 	}
 
-	public void exeAfterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Query query) {
+	public void exeAfterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Iquery query) {
 		for(int i=queryFilters.size()-1; i>=0; i--){
 			queryFilters.get(i).afterQueryBy(baseDao, rs, query);
 		}

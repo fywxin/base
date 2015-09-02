@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
 import org.whale.system.base.Query;
 import org.whale.system.jdbc.filter.BaseDaoFilterService;
@@ -77,7 +78,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 
 	@Override
-	public void deleteBy(Query query) {
+	public void deleteBy(Iquery query) {
 		filter.exeBeforeDeleteBy(query, this);
 		super.deleteBy(query);
 		filter.exeAfterDeleteBy(query, this);
@@ -99,7 +100,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return t;
 	}
 	
-	public T getBy(Query query){
+	public T getBy(Iquery query){
 		filter.exeBeforeGetBy(this, query);
 		T t= super.getBy(query);
 		filter.exeAfterGetBy(this, t, query);
@@ -123,7 +124,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 
 	@Override
-	public List<T> queryBy(Query query) {
+	public List<T> queryBy(Iquery query) {
 		filter.exeBeforeQueryBy(this, query);
 		List<T> rs = super.queryBy(query);
 		filter.exeAfterQueryBy(this, rs, query);
