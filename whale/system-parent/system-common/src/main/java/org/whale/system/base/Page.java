@@ -3,7 +3,6 @@ package org.whale.system.base;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,23 +21,22 @@ public class Page implements Serializable {
 	private int pageNo = 1;
 	// total >0 ，则不执行sql总数查询，直接返回用户设置的total值, 有两个好处： 1. 减少总数sql查询， 2.
 	// 有限度防止被恶意翻页（如爬虫）
-	private long total;
+	private Long total;
 	// 返回结果
 	private List<?> datas;
 	// 分页sql
 	private String sql;
 	// 总记录数sql
 	private String countSql;
-	/** 查询条件 */
-	private Map<String, Object> param = new HashMap<String, Object>();
 	/** 参数 */
 	private List<Object> args = new ArrayList<Object>();
-	// 排序字段 空则默认按id排序
-	private List<String> orderColumn = new LinkedList<String>();
-	// 升降序
-	private List<Boolean> orderAsc = new LinkedList<Boolean>();
-	// 是否自动分页, 由于增加一层嵌套，可能会影响sql执行效率
-	private boolean autoPage = true;
+	
+	
+	/** 查询条件 */
+	private Map<String, Object> param = new HashMap<String, Object>();
+	
+	// 排序字段
+	private List<Order> orders;
 
 	public long getTotalPages() {
 		if (this.total % this.pageSize == 0L) {
@@ -142,8 +140,10 @@ public class Page implements Serializable {
 	public void addOrderBy(String column, boolean asc) {
 		if (Strings.isBlank(column))
 			return;
-		orderColumn.add(column);
-		orderAsc.add(asc ? Boolean.TRUE : Boolean.FALSE);
+		if(orders == null){
+			orders = new ArrayList<Page.Order>();
+		}
+		orders.add(new Order(column, asc));
 	}
 
 	// ----------------------------------------------------get
@@ -205,20 +205,37 @@ public class Page implements Serializable {
 		return param;
 	}
 
-	public List<String> getOrderColumn() {
-		return orderColumn;
+	public List<Order> getOrders() {
+		return orders;
 	}
 
-	public List<Boolean> getOrderAsc() {
-		return orderAsc;
-	}
 
-	public boolean isAutoPage() {
-		return autoPage;
-	}
+	public static class Order{
+		
+		private boolean asc = true;
+		
+		private String col;
+		
+		public Order(String col, boolean asc){
+			this.col = col;
+			this.asc = asc;
+		}
 
-	public void setAutoPage(boolean autoPage) {
-		this.autoPage = autoPage;
+		public boolean isAsc() {
+			return asc;
+		}
+
+		public void setAsc(boolean asc) {
+			this.asc = asc;
+		}
+
+		public String getCol() {
+			return col;
+		}
+
+		public void setCol(String col) {
+			this.col = col;
+		}
 	}
 
 }

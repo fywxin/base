@@ -12,7 +12,6 @@ import org.whale.system.dao.RoleDao;
 import org.whale.system.dao.UserRoleDao;
 import org.whale.system.domain.Role;
 import org.whale.system.domain.RoleAuth;
-import org.whale.system.domain.UserRole;
 import org.whale.system.jdbc.IOrmDao;
 
 @Service
@@ -30,16 +29,8 @@ public class RoleService extends BaseService<Role, Long> {
 	public void delete(Long roleId) {
 		super.delete(roleId);
 		
-//		this.roleAuthDao.deleteByRoleId(roleId);
-		RoleAuth ra= new RoleAuth();
-		ra.setRoleId(roleId);
-		this.roleAuthDao.deleteBy(ra);
-		
-//		this.userRoleDao.deleteByRoleId(roleId);
-		UserRole ur = new UserRole();
-		ur.setRoleId(roleId);
-		this.userRoleDao.deleteBy(ur);
-		
+		this.roleAuthDao.deleteByRoleId(roleId);
+		this.userRoleDao.deleteByRoleId(roleId);
 	}
 	
 	public void updateStatus(Long roleId, Integer status){
@@ -56,10 +47,7 @@ public class RoleService extends BaseService<Role, Long> {
 		if(roleId == null)
 			throw new SysException("roleId == null");
 		
-		//this.roleAuthDao.deleteByRoleId(roleId);
-		RoleAuth ra= new RoleAuth();
-		ra.setRoleId(roleId);
-		this.roleAuthDao.deleteBy(ra);
+		this.roleAuthDao.deleteByRoleId(roleId);
 		
 		if(authIds != null && authIds.size() > 0){
 			RoleAuth roleAuth = null;

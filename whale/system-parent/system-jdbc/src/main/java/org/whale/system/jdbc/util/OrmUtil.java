@@ -34,15 +34,16 @@ public class OrmUtil {
 			}
 		}
 		
-		OrmTable ormTable = ormDao.getOrmTable();
+		OrmTable ormTable = ormDao._getOrmTable();
 		page.setCountSql("SELECT count(1) FROM " + ormTable.getTableDbName() +" t "+strb.toString());
 		
-		if(page.getOrderColumn().size() < 1){
+		
+		if(page.getOrders() == null){
 			strb.append(ormTable.getSqlOrderSuffix());
 		}else{
-			for(int i=0; i<page.getOrderColumn().size(); i++){
-				strb.append(" ORDER BY t.").append(page.getOrderColumn().get(i)).append(page.getOrderAsc().get(i).booleanValue() ? " asc" : " desc");
-				if(i != page.getOrderColumn().size()-1){
+			for(int i=0; i<page.getOrders().size(); i++){
+				strb.append(" ORDER BY t.").append(page.getOrders().get(i).getCol()).append(page.getOrders().get(i).isAsc() ? " asc" : " desc");
+				if(i != page.getOrders().size()-1){
 					strb.append(",");
 				}
 			}

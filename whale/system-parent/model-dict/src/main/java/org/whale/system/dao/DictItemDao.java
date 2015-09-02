@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Query;
 import org.whale.system.domain.DictItem;
 
 @Repository
@@ -15,11 +16,8 @@ public class DictItemDao extends BaseDao<DictItem, Long> {
 	}
 	
 	public DictItem getByDictIdAndItemCode(Long dictId, String itemCode){
-		DictItem item = this.newT();
-		item.setDictId(dictId);
-		item.setItemCode(itemCode);
 		
-		return this.getObject(item);
+		return this.getBy(Query.newQuery(DictItem.class).addEq("dictId", dictId).addEq("itemCode", itemCode));
 	}
 	
 	public List<DictItem> getByDictId(Long dictId){

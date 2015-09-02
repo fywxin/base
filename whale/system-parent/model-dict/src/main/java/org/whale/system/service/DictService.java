@@ -2,6 +2,7 @@ package org.whale.system.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.whale.system.base.Query;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.DictDao;
@@ -24,9 +25,7 @@ public class DictService extends BaseService<Dict, Long> {
 	public void delete(Long dictId){
 		this.dictDao.delete(dictId);
 		
-		DictItem dictItem = new DictItem();
-		dictItem.setDictId(dictId);
-		this.dictItemDao.deleteBy(dictItem);
+		this.dictItemDao.deleteBy(Query.newQuery(DictItem.class).addEq("dictId", dictId));
 	}
 	
 	public Dict getByDictCode(String dictCode){

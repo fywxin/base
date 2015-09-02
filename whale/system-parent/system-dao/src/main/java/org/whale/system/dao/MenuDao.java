@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Query;
 import org.whale.system.domain.Menu;
 
 @Repository
@@ -20,45 +21,21 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	}
 	
 	public List<Menu> getByParentId(Long parentId){
-		Menu menu = this.newT();
-		menu.setParentId(parentId);
-		return this.query(menu);
-//		StringBuilder strb = this.getSqlHead();
-//		strb.append("and t.parentId=?");
-//		
-//		return this.query(strb.toString(), parentId);
+		Query query = Query.newQuery(Menu.class).addEq("parentId", parentId);
+		return this.queryBy(query);
 	}
 	
 	public List<Menu> getMenuByType(Integer menuType){
-//		StringBuilder strb = this.getSqlHead();
-//		strb.append("and t.menuType=? order by t.parentId, t.orderNo");
-//		return this.query(strb.toString(), menuType);
-		
-		Menu menu = this.newT();
-		menu.setMenuType(menuType);
-		return this.query(menu);
+		return this.queryBy(Query.newQuery(Menu.class).addEq("menuType", menuType));
 	}
 	
 	public List<Menu> getPublicMenus(){
-//		StringBuilder strb = this.getSqlHead();
-//		strb.append("and t.menuType=3 and t.isPublic=1");
-//		return this.query(strb.toString());
-		
-		Menu menu = this.newT();
-		menu.setMenuType(3);
-		menu.setIsPublic(1);
-		return this.query(menu);
+		return this.queryBy(Query.newQuery(Menu.class).addEq("menuType", 3).addEq("isPublic", 1));
 	}
 	
 	public Menu getByMenuName(String menuName){
-		Menu menu = new Menu();
-		menu.setMenuName(menuName);
-		return this.getObject(menu);
 		
-//		StringBuilder strb = this.getSqlHead();
-//		strb.append("and t.menuName=?");
-//		
-//		return this.getObject(strb.toString(), menuName);
+		return this.getBy(Query.newQuery(Menu.class).addEq("menuName", menuName));
 	}
 	
 	

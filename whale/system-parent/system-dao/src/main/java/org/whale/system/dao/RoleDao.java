@@ -4,20 +4,15 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Query;
 import org.whale.system.domain.Role;
 
 @Repository
 public class RoleDao extends BaseDao<Role, Long> {
 
 	public Role getByRoleCode(String roleCode){
-		Role role = this.newT();
-		role.setRoleCode(roleCode);
-		return this.getObject(role);
-		
-//		StringBuilder strb = this.getSqlHead();
-//		strb.append("and t.roleCode=?");
-//		
-//		return this.getObject(strb.toString(), roleCode);
+
+		return this.getBy(Query.newQuery(Role.class).addEq("roleCode", roleCode));
 	}
 	
 	final String getByUserId_SQL = "SELECT r.* FROM sys_user_role ur, sys_role r WHERE ur.userId = ? AND ur.roleId = r.roleId";

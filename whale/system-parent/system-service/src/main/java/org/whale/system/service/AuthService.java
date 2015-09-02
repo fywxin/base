@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.whale.system.base.Page;
+import org.whale.system.base.Query;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.AuthDao;
 import org.whale.system.dao.RoleAuthDao;
@@ -25,12 +26,9 @@ public class AuthService extends BaseService<Auth, Long> {
 		if(authId == null){
 			return ;
 		}
-		//this.roleAuthDao.deleteByAuthId(authId);
-		RoleAuth roleAuth = new RoleAuth();
-		roleAuth.setAuthId(authId);
-		this.roleAuthDao.deleteBy(roleAuth);
-		
-		//this.resourceDao.deleteByAuthId(authId);
+		Query query = new Query(RoleAuth.class);
+		query.addEq("authId", authId);
+		this.roleAuthDao.deleteBy(query);
 		
 		this.authDao.delete(authId);
 	}

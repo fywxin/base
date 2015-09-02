@@ -6,30 +6,20 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Query;
 import org.whale.system.domain.User;
 
 @Repository
 public class UserDao extends BaseDao<User, Long> {
 	
 	public List<User> getByDeptId(Long deptId){
-		User user = this.newT();
-		user.setDeptId(deptId);
-		return this.query(user);
-		
-//		StringBuilder strb = this.getSqlHead();
-//		strb.append("and t.deptId=? order by t.userId");
-//		
-//		return this.query(strb.toString(), deptId);
+
+		return this.queryBy(Query.newQuery(User.class).addEq("deptId", deptId));
 	}
 
 	public User getByUserName(String userName){
-		User user = this.newT();
-		user.setUserName(userName);
-		return this.getObject(user);
-//		StringBuilder strb = this.getSqlHead();
-//		strb.append("and t.userName=?");
-//		
-//		return this.getObject(strb.toString(), userName);
+
+		return this.getBy(Query.newQuery(User.class).addEq("userName", userName));
 	}
 	
 	final String findAuthIds_SQL ="select ra.authId "+

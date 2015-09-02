@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.whale.system.base.Page;
+import org.whale.system.base.Query;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 
@@ -17,13 +18,6 @@ import org.whale.system.jdbc.orm.entry.OrmTable;
  * 2014年9月17日-上午10:37:39
  */
 public interface IOrmDao<T extends Serializable,PK extends Serializable> {
-	
-	/**
-	 * 创建一个全部字段为空的对象
-	 * 
-	 * @return
-	 */
-	T newT();
 
 	/**
 	 * 保存实体
@@ -32,7 +26,7 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	void save(T t);
 	
 	/**
-	 * 保存多个实体
+	 * 循环保存多个实体
 	 * @param list
 	 */
 	void save(List<T> list);
@@ -50,7 +44,7 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	void update(T t);
 	
 	/**
-	 * 更新多个实体
+	 * 循环更新多个实体
 	 * @param list
 	 */
 	void update(List<T> list);
@@ -74,10 +68,10 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	void delete(List<PK> ids);
 	
 	/**
-	 * 按照实体条件删除记录
-	 * @param t
+	 * 按照自定义条件删除
+	 * @param query
 	 */
-	void deleteBy(T t);
+	void deleteBy(Query query);
 	
 	/**
 	 * 获取单个对象
@@ -85,20 +79,6 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 * @return
 	 */
 	T get(PK id);
-	
-	/**
-	 * 按条件查询对象
-	 * @param t
-	 * @return
-	 */
-	T getObject(T t);
-	
-	/**
-	 * 按sql返回单个对象
-	 * @param sql
-	 * @return
-	 */
-	T getObject(String sql);
 	
 	/**
 	 * 按sql返回单个对象
@@ -109,24 +89,18 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	T getObject(String sql, Object...args);
 	
 	/**
+	 * 按自定义条件查询对象
+	 * @param t
+	 * @return
+	 */
+	T getBy(Query query);
+	
+	
+	/**
 	 * 返回所有记录， 按id排序
 	 * @return
 	 */
 	List<T> queryAll();
-	
-	/**
-	 * 按对象条件动态拼接查询
-	 * @param t
-	 * @return
-	 */
-	List<T> query(T t);
-	
-	/**
-	 * 按sql返回多个对象
-	 * @param sql
-	 * @return
-	 */
-	List<T> query(String sql);
 	
 	/**
 	 * 按sql返回多个对象
@@ -137,21 +111,17 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	List<T> query(String sql, Object...args);
 	
 	/**
+	 * 按自定义条件查询
+	 * @param query
+	 * @return
+	 */
+	List<T> queryBy(Query query);
+	
+	/**
 	 * 分页查询
 	 * @param page
 	 */
 	void queryPage(Page page);
-	
-	/**
-	 * 在T 的dao里面查询返回非T（Clazz）的结果
-	 * 
-	 * @param clazz 
-	 * @param sql
-	 * @param args
-	 * @return
-	 */
-	<E> List<E> queryOther(Class<E> clazz, String sql, Object... args);
-	
 	
 	
 	//-----------------------------------代理 spring JdbcTemplate 接口---------------------------------
@@ -171,7 +141,7 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 
 	
 	//--------------------------------------本Orm提供的内部容器访问方法---------------------------------------
-	OrmTable getOrmTable();
+	OrmTable _getOrmTable();
 	
-	OrmContext getOrmContext();
+	OrmContext _getOrmContext();
 }

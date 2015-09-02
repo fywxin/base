@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.whale.system.base.Page;
+import org.whale.system.base.Query;
 import org.whale.system.jdbc.IOrmDao;
 
 /**
@@ -96,12 +97,12 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 	}
 
 	@Override
-	public void beforeDeleteBy(T obj, IOrmDao<T, PK> baseDao) {
+	public void beforeDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
 		
 	}
 
 	@Override
-	public void afterDeleteBy(T obj, IOrmDao<T, PK> baseDao) {
+	public void afterDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
 		
 	}
 	
@@ -116,22 +117,12 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 	}
 	
 	@Override
-	public void beforeGetObject(IOrmDao<T, PK> baseDao, T t) {
+	public void beforeGetBy(IOrmDao<T, PK> baseDao, Query query) {
 		
 	}
 
 	@Override
-	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, T t) {
-		
-	}
-
-	@Override
-	public void beforeGetObject(IOrmDao<T, PK> baseDao, String sql) {
-		
-	}
-
-	@Override
-	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql) {
+	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Query query) {
 		
 	}
 
@@ -155,25 +146,6 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 		
 	}
 
-	@Override
-	public void beforeQuery(IOrmDao<T, PK> baseDao, T t) {
-		
-	}
-
-	@Override
-	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, T t) {
-		
-	}
-
-	@Override
-	public void beforeQuery(IOrmDao<T, PK> baseDao, String sql) {
-		
-	}
-
-	@Override
-	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql) {
-		
-	}
 
 	@Override
 	public void beforeQuery(IOrmDao<T, PK> baseDao, String sql, Object... args) {
@@ -182,6 +154,16 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 
 	@Override
 	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql, Object... args) {
+		
+	}
+	
+	@Override
+	public void beforeQueryBy(IOrmDao<T, PK> baseDao, Query query) {
+		
+	}
+
+	@Override
+	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Query query) {
 		
 	}
 
@@ -222,15 +204,6 @@ public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Ser
 	@Override
 	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
 		
-	}
-
-	@Override
-	public void beforeQueryOther(IOrmDao<T, PK> baseDao, String sql, Object... args) {
-		
-	}
-
-	@Override
-	public void afterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args) {
 	}
 	
 }

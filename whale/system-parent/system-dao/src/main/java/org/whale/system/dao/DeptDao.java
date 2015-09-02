@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Query;
 import org.whale.system.domain.Dept;
 
 @Repository
@@ -15,9 +16,8 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 * @return
 	 */
     public Dept getByDeptName(String deptName) {
-    	Dept dept = this.newT();
-    	dept.setDeptName(deptName);
-    	return this.getObject(dept);
+    	Query query = Query.newQuery(Dept.class).addEq("deptName", deptName);
+    	return this.getBy(query);
     }
     /**
 	 * 按 部门编码 获取 部门
@@ -25,9 +25,8 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 * @return
 	 */
     public Dept getByDeptCode(String deptCode) {
-    	Dept dept = this.newT();
-    	dept.setDeptCode(deptCode);
-    	return this.getObject(dept);
+    	Query query = Query.newQuery(Dept.class).addEq("deptCode", deptCode);
+    	return this.getBy(query);
     }
     
     /**
@@ -36,9 +35,8 @@ public class DeptDao extends BaseDao<Dept, Long> {
      * @return
      */
     public List<Dept> getByPid(Long pid){
-    	Dept dept = this.newT();
-    	dept.setPid(pid);
-    	return this.query(dept);
+    	Query query = Query.newQuery(Dept.class).addEq("pid", pid);
+    	return this.queryBy(query);
     }
 	
     /**

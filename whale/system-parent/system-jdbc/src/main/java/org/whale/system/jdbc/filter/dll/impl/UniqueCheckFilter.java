@@ -29,13 +29,13 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 	
 	@Override
 	public void beforeSave(T obj, IOrmDao<T, PK> baseDao) {
-		List<OrmColumn> cols = baseDao.getOrmTable().getUniqueCheckCols();
+		List<OrmColumn> cols = baseDao._getOrmTable().getUniqueCheckCols();
 		if(cols == null)
 			return ;
 		
 		for(OrmColumn col : cols){
 			Object val = AnnotationUtil.getFieldValue(obj, col.getField());
-			String sql = "select count(1) from "+baseDao.getOrmTable().getTableDbName()
+			String sql = "select count(1) from "+baseDao._getOrmTable().getTableDbName()
 					+" where "+col.getSqlName()+"=?";
 			if(baseDao.getJdbcTemplate().queryForInt(sql, val) > 0){
 				throw new BusinessException(col.getCnName()+"["+val+"] 已存在值");
@@ -45,7 +45,7 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 
 	@Override
 	public void beforeSave(List<T> objs, IOrmDao<T, PK> baseDao) {
-		List<OrmColumn> cols = baseDao.getOrmTable().getUniqueCheckCols();
+		List<OrmColumn> cols = baseDao._getOrmTable().getUniqueCheckCols();
 		if(cols == null)
 			return ;
 		Map<OrmColumn, Set<Object>> valMap = new HashMap<OrmColumn, Set<Object>>();
@@ -68,7 +68,7 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 		
 		for(Map.Entry<OrmColumn, Set<Object>> entry : valMap.entrySet()){
 			for(Object colVal : entry.getValue()){
-				String sql = "select count(1) from "+baseDao.getOrmTable().getTableDbName()
+				String sql = "select count(1) from "+baseDao._getOrmTable().getTableDbName()
 						+" where "+entry.getKey().getSqlName()+"=?";
 				if(baseDao.getJdbcTemplate().queryForInt(sql, colVal) > 0){
 					throw new BusinessException(entry.getKey().getCnName()+"["+val+"] 已存在值");
@@ -84,7 +84,7 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 
 	@Override
 	public void beforeUpdate(T obj, IOrmDao<T, PK> baseDao) {
-		OrmTable ormTable = baseDao.getOrmTable();
+		OrmTable ormTable = baseDao._getOrmTable();
 		List<OrmColumn> cols = ormTable.getUniqueCheckCols();
 		if(cols == null)
 			return ;
@@ -109,7 +109,7 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 
 	@Override
 	public void beforeUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
-		OrmTable ormTable = baseDao.getOrmTable();
+		OrmTable ormTable = baseDao._getOrmTable();
 		List<OrmColumn> cols = ormTable.getUniqueCheckCols();
 		if(cols == null)
 			return ;

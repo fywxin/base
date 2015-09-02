@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.core.PriorityOrdered;
 import org.whale.system.base.Page;
+import org.whale.system.base.Query;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.jdbc.filter.OrmFilter;
 
@@ -22,13 +23,9 @@ public interface BaseDaoQueryFilter<T extends Serializable,PK extends Serializab
 	
 	void afterGet(IOrmDao<T, PK> baseDao, T rs, PK id);
 	
-	void beforeGetObject(IOrmDao<T, PK> baseDao, T t);
+	void beforeGetBy(IOrmDao<T, PK> baseDao, Query query);
 	
-	void afterGetObject(IOrmDao<T, PK> baseDao, T rs, T t);
-	
-	void beforeGetObject(IOrmDao<T, PK> baseDao, String sql);
-	
-	void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql);
+	void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Query query);
 	
 	void beforeGetObject(IOrmDao<T, PK> baseDao, String sql, Object...args);
 	
@@ -40,22 +37,13 @@ public interface BaseDaoQueryFilter<T extends Serializable,PK extends Serializab
 	
 	void afterQueryAll(IOrmDao<T, PK> baseDao, List<T> rs);
 	
-	void beforeQuery(IOrmDao<T, PK> baseDao, T t);
-	
-	void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, T t);
-	
-	void beforeQuery(IOrmDao<T, PK> baseDao, String sql);
-	
-	void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql);
-	
 	void beforeQuery(IOrmDao<T, PK> baseDao, String sql, Object...args);
 	
 	void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql, Object...args);
 	
+	void beforeQueryBy(IOrmDao<T, PK> baseDao, Query query);
 	
-	void beforeQueryOther(IOrmDao<T, PK> baseDao, String sql, Object... args);
-	
-	void afterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args);
+	void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Query query);
 	
 	void beforeQueryPage(IOrmDao<T, PK> baseDao, Page page);
 	

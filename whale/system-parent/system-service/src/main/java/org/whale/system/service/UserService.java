@@ -123,11 +123,7 @@ public class UserService extends BaseService<User, Long> {
 		if(userId == null)
 			throw new SysException("userId == null");
 		
-		UserRole ur = new UserRole();
-		ur.setUserId(userId);
-		this.userRoleDao.deleteBy(ur);
-		
-		//this.userRoleDao.deleteByUserId(userId);
+		this.userRoleDao.deleteByUserId(userId);
 		if(roleIds != null && roleIds.size() > 0){
 			UserRole userRole = null;
 			for(Long roleId : roleIds){
@@ -159,7 +155,7 @@ public class UserService extends BaseService<User, Long> {
 		}
 		
 		page.setCountSql("SELECT count(1) "+strb.toString());
-		page.setSql("SELECT t.*, (select d.deptName from sys_dept d where d.id = t.deptId) as deptName "+strb.toString()+this.userDao.getOrmTable().getSqlOrderSuffix());
+		page.setSql("SELECT t.*, (select d.deptName from sys_dept d where d.id = t.deptId) as deptName "+strb.toString()+this.userDao._getOrmTable().getSqlOrderSuffix());
 	
 		this.userDao.queryPage(page);
 	}

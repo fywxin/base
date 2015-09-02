@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.whale.system.base.Page;
+import org.whale.system.base.Query;
 import org.whale.system.base.UserContext;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.PropertiesUtil;
@@ -72,7 +73,7 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	
 	
 	private void saveLog(IOrmDao<T, PK> baseDao, Object rs){
-		OrmTable ormTable = baseDao.getOrmTable();
+		OrmTable ormTable = baseDao._getOrmTable();
 		if(ormTable.getEntityName().equals("Log"))
 			return ;
 		
@@ -377,7 +378,7 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	@Override
-	public void afterDeleteBy(T obj, IOrmDao<T, PK> baseDao) {
+	public void afterDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
 			this.saveLog(baseDao, null);
 		}
@@ -391,7 +392,7 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	@Override
-	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql) {
+	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Query query) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, rs);
 		}
@@ -413,22 +414,14 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	@Override
-	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, T t) {
+	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Query query) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, rs);
 		}
 	}
 
 	@Override
-	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql) {
-		if(this.saveFindLog){
-			this.saveLog(baseDao, rs);
-		}
-	}
-
-	@Override
-	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql,
-			Object... args) {
+	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql, Object... args) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, rs);
 		}
@@ -457,13 +450,6 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 
 	@Override
 	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
-		if(this.saveFindLog){
-			this.saveLog(baseDao, rs);
-		}
-	}
-
-	@Override
-	public void afterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, rs);
 		}

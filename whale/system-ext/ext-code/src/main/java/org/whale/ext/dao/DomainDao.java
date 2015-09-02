@@ -6,15 +6,14 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 import org.whale.ext.domain.Domain;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Query;
 import org.whale.system.jdbc.util.DbKind;
 @Repository
 public class DomainDao extends BaseDao<Domain, Long> {
 
 	public Domain getBySqlName(String sqlName){
-		Domain t = this.newT();
-		t.setDomainSqlName(sqlName);
 		
-		return this.getObject(t);
+		return this.getBy(Query.newQuery(Domain.class).addEq("sqlName", sqlName));
 	}
 	
 	String queryAllTable_MYSQL =  "SELECT t.table_name AS name,"

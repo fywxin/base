@@ -20,11 +20,11 @@ public class BaseMixDao<T extends Serializable,PK extends Serializable> extends 
 	private ICacheService<T> cacheService;
 
 	private String getId(T t){
-		return ReflectionUtil.getFieldValue(t, this.getOrmTable().getIdCol().getAttrName()).toString();
+		return ReflectionUtil.getFieldValue(t, this._getOrmTable().getIdCol().getAttrName()).toString();
 	}
 	
 	private MixOrmEntry getMixOrmEntry(){
-		Map<String, Object> extInfo = this.getOrmTable().getExtInfo();
+		Map<String, Object> extInfo = this._getOrmTable().getExtInfo();
 		if(extInfo != null)
 			return (MixOrmEntry)extInfo.get(MixOrmEntry.MIX_ORM_KEY);
 		return null;
@@ -100,12 +100,6 @@ public class BaseMixDao<T extends Serializable,PK extends Serializable> extends 
 	}
 
 	@Override
-	public void updateOnly(T t) {
-		// TODO Auto-generated method stub
-		super.updateOnly(t);
-	}
-
-	@Override
 	public void delete(PK id) {
 		super.delete(id);
 		MixOrmEntry mixOrm = this.getMixOrmEntry();
@@ -128,11 +122,6 @@ public class BaseMixDao<T extends Serializable,PK extends Serializable> extends 
 	}
 
 	@Override
-	public void deleteBy(T t) {
-		super.deleteBy(t);
-	}
-
-	@Override
 	public T get(PK id) {
 		MixOrmEntry mixOrm = this.getMixOrmEntry();
 		if(mixOrm != null){
@@ -141,15 +130,6 @@ public class BaseMixDao<T extends Serializable,PK extends Serializable> extends 
 		return super.get(id);
 	}
 
-	@Override
-	public T getObject(String sql) {
-		T t = super.getObject(sql);
-		MixOrmEntry mixOrm = this.getMixOrmEntry();
-		if(t != null && mixOrm != null){
-			return this.cacheService.get(mixOrm.getCacheName(), this.getId(t));
-		}
-		return t;
-	}
 
 	@Override
 	public T getObject(String sql, Object... args) {
@@ -162,21 +142,6 @@ public class BaseMixDao<T extends Serializable,PK extends Serializable> extends 
 	}
 	
 	
-
-	@Override
-	public List<T> query(T t) {
-		return this.cacheQuery(super.query(t));
-	}
-
-	@Override
-	public List<T> queryLike(T t) {
-		return this.cacheQuery(super.queryLike(t));
-	}
-
-	@Override
-	public List<T> query(String sql) {
-		return this.cacheQuery(super.query(sql));
-	}
 
 	@Override
 	public List<T> query(String sql, Object... args) {

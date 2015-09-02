@@ -27,7 +27,7 @@ public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> 
 
 	@Override
 	public void beforeSave(T obj, IOrmDao<T, PK> baseDao) {
-		List<OrmColumn> cols = baseDao.getOrmTable().getSqlExecCols();
+		List<OrmColumn> cols = baseDao._getOrmTable().getSqlExecCols();
 		if(cols == null)
 			return ;
 		for(OrmColumn col : cols){
@@ -39,7 +39,7 @@ public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> 
 
 	@Override
 	public void beforeSave(List<T> objs, IOrmDao<T, PK> baseDao) {
-		List<OrmColumn> cols = baseDao.getOrmTable().getSqlExecCols();
+		List<OrmColumn> cols = baseDao._getOrmTable().getSqlExecCols();
 		if(cols == null)
 			return ;
 		for(T obj : objs){

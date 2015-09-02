@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.whale.system.base.Page;
+import org.whale.system.base.Query;
 import org.whale.system.jdbc.filter.BaseDaoFilterService;
 
 /**
@@ -62,13 +63,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 
 	@Override
-	public void updateOnly(T t) {
-		filter.exeBeforeUpdate(t, this);
-		super.updateOnly(t);
-		filter.exeAfterUpdate(t, this);
-	}
-
-	@Override
 	public void delete(PK id) {
 		filter.exeBeforeDelete(id, this);
 		super.delete(id);
@@ -83,10 +77,10 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 
 	@Override
-	public void deleteBy(T t) {
-		filter.exeBeforeDeleteBy(t, this);
-		super.deleteBy(t);
-		filter.exeAfterDeleteBy(t, this);
+	public void deleteBy(Query query) {
+		filter.exeBeforeDeleteBy(query, this);
+		super.deleteBy(query);
+		filter.exeAfterDeleteBy(query, this);
 	}
 
 	@Override
@@ -94,22 +88,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeBeforeGet(this, id);
 		T t= super.get(id);
 		filter.exeAfterGet(this, t, id);
-		return t;
-	}
-	
-	@Override
-	public T getObject(T t) {
-		filter.exeBeforeGetObject(this, t);
-		T rs= super.getObject(t);
-		filter.exeAfterGetObject(this, rs, t);
-		return rs;
-	}
-
-	@Override
-	public T getObject(String sql) {
-		filter.exeBeforeGetObject(this, sql);
-		T t= super.getObject(sql);
-		filter.exeAfterGetObject(this, t, sql);
 		return t;
 	}
 
@@ -120,31 +98,22 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterGetObject(this, t, sql, args);
 		return t;
 	}
-
+	
+	public T getBy(Query query){
+		filter.exeBeforeGetBy(this, query);
+		T t= super.getBy(query);
+		filter.exeAfterGetBy(this, t, query);
+		return t;
+	}
+	
 	@Override
-	public List<T> query(T t) {
-		filter.exeBeforeQuery(this, t);
-		List<T> rs = super.query(t);
-		filter.exeAfterQuery(this, rs, t);
+	public List<T> queryAll() {
+		filter.exeBeforeQueryAll(this);
+		List<T> rs = super.queryAll();
+		filter.exeAfterQueryAll(this, rs);
 		return rs;
 	}
-
-	@Override
-	public List<T> queryLike(T t) {
-		filter.exeBeforeQuery(this, t);
-		List<T> rs = super.queryLike(t);
-		filter.exeAfterQuery(this, rs, t);
-		return rs;
-	}
-
-	@Override
-	public List<T> query(String sql) {
-		filter.exeBeforeQuery(this, sql);
-		List<T> rs = super.query(sql);
-		filter.exeAfterQuery(this, rs, sql);
-		return rs;
-	}
-
+	
 	@Override
 	public List<T> query(String sql, Object... args) {
 		filter.exeBeforeQuery(this, sql, args);
@@ -154,13 +123,14 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 
 	@Override
-	public List<T> queryAll() {
-		filter.exeBeforeQueryAll(this);
-		List<T> rs = super.queryAll();
-		filter.exeAfterQueryAll(this, rs);
+	public List<T> queryBy(Query query) {
+		filter.exeBeforeQueryBy(this, query);
+		List<T> rs = super.queryBy(query);
+		filter.exeAfterQueryBy(this, rs, query);
 		return rs;
 	}
 
+	
 	@Override
 	public void queryPage(Page page) {
 		filter.exeBeforeQueryPage(this, page);
@@ -200,14 +170,4 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return rs;
 	}
 
-	@Override
-	public <E> List<E> queryOther(Class<E> clazz, String sql, Object... args) {
-		filter.exeBeforeQueryOther(this, sql, args);
-		List<E> rs = super.queryOther(clazz, sql, args);
-		filter.exeAfterQueryOther(this, rs, sql, args);
-		return rs;
-	}
-
-	
-	
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 import org.whale.system.base.Page;
+import org.whale.system.base.Query;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.jdbc.filter.BaseDaoFilterWarpper;
@@ -108,12 +109,12 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 	}
 
 	@Override
-	public void beforeDeleteBy(T obj, IOrmDao<T, PK> baseDao) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("deleteBy", obj, baseDao));
+	public void beforeDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("deleteBy", query.getDelSql(),query.getArgs(), baseDao));
 	}
 
 	@Override
-	public void afterDeleteBy(T obj, IOrmDao<T, PK> baseDao) {
+	public void afterDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
 		this.clear();
 	}
 
@@ -128,23 +129,12 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 	}
 	
 	@Override
-	public void beforeGetObject(IOrmDao<T, PK> baseDao, T t) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("getObject", t, baseDao));
+	public void beforeGetBy(IOrmDao<T, PK> baseDao, Query query) {
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("getBy", query.getQuerySql(), query.getArgs(), baseDao));
 	}
 
 	@Override
-	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, T t) {
-		this.clear();
-	}
-
-
-	@Override
-	public void beforeGetObject(IOrmDao<T, PK> baseDao, String sql) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("getObject", sql, baseDao));
-	}
-
-	@Override
-	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql) {
+	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Query query) {
 		this.clear();
 	}
 
@@ -168,23 +158,14 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 		this.clear();
 	}
 
+
 	@Override
-	public void beforeQuery(IOrmDao<T, PK> baseDao, T t) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("query", null, t, baseDao));
+	public void beforeQueryBy(IOrmDao<T, PK> baseDao, Query query) {
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryBy", query.getQuerySql(), query.getArgs(), baseDao));
 	}
 
 	@Override
-	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, T t) {
-		this.clear();
-	}
-
-	@Override
-	public void beforeQuery(IOrmDao<T, PK> baseDao, String sql) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("query", sql, null, baseDao));
-	}
-
-	@Override
-	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql) {
+	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Query query) {
 		this.clear();
 	}
 
@@ -259,16 +240,5 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
 		this.clear();
 	}
-	
-	@Override
-	public void beforeQueryOther(IOrmDao<T, PK> baseDao, String sql, Object... args) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryOther", sql, this.parse(args), baseDao));
-	}
 
-	@Override
-	public void afterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args) {
-		this.clear();
-	}
-
-	
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Component;
 import org.whale.system.base.Page;
+import org.whale.system.base.Query;
 import org.whale.system.common.exception.OrmException;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.jdbc.filter.dll.BaseDaoDllFilter;
@@ -67,162 +68,114 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 		}
 	}
 
-
-	
 	public void exeBeforeSave(List<T> objs, IOrmDao<T, PK> baseDao) {
 		for(BaseDaoDllFilter<T, PK> filter : dllFilters){
 			filter.beforeSave(objs, baseDao);
 		}
 	}
 
-	
 	public void exeAfterSave(List<T> objs, IOrmDao<T, PK> baseDao) {
 		for(int i=dllFilters.size()-1; i>=0; i--){
 			dllFilters.get(i).afterSave(objs, baseDao);
 		}
 	}
 
-	
 	public void exeBeforeSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		for(BaseDaoDllFilter<T, PK> filter : dllFilters){
 			filter.beforeSaveBatch(objs, baseDao);
 		}
 	}
 
-	
 	public void exeAfterSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		for(int i=dllFilters.size()-1; i>=0; i--){
 			dllFilters.get(i).afterSaveBatch(objs, baseDao);
 		}
-		
 	}
 
-	
 	public void exeBeforeUpdate(T obj, IOrmDao<T, PK> baseDao) {
 		for(BaseDaoDllFilter<T, PK> filter : dllFilters){
 			filter.beforeUpdate(obj, baseDao);
 		}
 	}
 
-	
 	public void exeAfterUpdate(T obj, IOrmDao<T, PK> baseDao) {
 		for(int i=dllFilters.size()-1; i>=0; i--){
 			dllFilters.get(i).afterUpdate(obj, baseDao);
 		}
 	}
 
-	
 	public void exeBeforeUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
 		for(BaseDaoDllFilter<T, PK> filter : dllFilters){
 			filter.beforeUpdate(objs, baseDao);
 		}
 	}
 
-	
 	public void exeAfterUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
 		for(int i=dllFilters.size()-1; i>=0; i--){
 			dllFilters.get(i).afterUpdate(objs, baseDao);
 		}
 	}
 
-	
 	public void exeBeforeUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		for(BaseDaoDllFilter<T, PK> filter : dllFilters){
 			filter.beforeUpdateBatch(objs, baseDao);
 		}
 	}
 
-	
 	public void exeAfterUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		for(int i=dllFilters.size()-1; i>=0; i--){
 			dllFilters.get(i).afterUpdateBatch(objs, baseDao);
 		}
 	}
 
-	
 	public void exeBeforeDelete(PK id, IOrmDao<T, PK> baseDao) {
 		for(BaseDaoDllFilter<T, PK> filter : dllFilters){
 			filter.beforeDelete(id, baseDao);
 		}
 	}
 
-	
 	public void exeAfterDelete(PK id, IOrmDao<T, PK> baseDao) {
 		for(int i=dllFilters.size()-1; i>=0; i--){
 			dllFilters.get(i).afterDelete(id, baseDao);
 		}
 	}
 
-	
 	public void exeBeforeDelete(List<PK> ids, IOrmDao<T, PK> baseDao) {
 		for(BaseDaoDllFilter<T, PK> filter : dllFilters){
 			filter.beforeDelete(ids, baseDao);
 		}
 	}
-
 	
 	public void exeAfterDelete(List<PK> ids, IOrmDao<T, PK> baseDao) {
 		for(int i=dllFilters.size()-1; i>=0; i--){
 			dllFilters.get(i).afterDelete(ids, baseDao);
 		}
 	}
-
 	
-	public void exeBeforeDeleteBy(T obj, IOrmDao<T, PK> baseDao) {
+	public void exeBeforeDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
 		for(BaseDaoDllFilter<T, PK> filter : dllFilters){
-			filter.beforeDeleteBy(obj, baseDao);
+			filter.beforeDeleteBy(query, baseDao);
 		}
 	}
 
-	
-	public void exeAfterDeleteBy(T obj, IOrmDao<T, PK> baseDao) {
+	public void exeAfterDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
 		for(int i=dllFilters.size()-1; i>=0; i--){
-			dllFilters.get(i).afterDeleteBy(obj, baseDao);
+			dllFilters.get(i).afterDeleteBy(query, baseDao);
 		}
 	}
 
-	
 	public void exeBeforeGet(IOrmDao<T, PK> baseDao, PK id) {
 		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
 			filter.beforeGet(baseDao, id);
 		}
 	}
 
-	
 	public void exeAfterGet(IOrmDao<T, PK> baseDao, T rs, PK id) {
 		for(int i=queryFilters.size()-1; i>=0; i--){
 			queryFilters.get(i).afterGet(baseDao, rs, id);
 		}
 	}
-	
-	public void exeBeforeGetObject(IOrmDao<T, PK> baseDao, T t) {
-		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
-			filter.beforeGetObject(baseDao, t);
-		}
-	}
 
-	
-	public void exeAfterGetObject(IOrmDao<T, PK> baseDao, T rs, T t) {
-		for(int i=queryFilters.size()-1; i>=0; i--){
-			queryFilters.get(i).afterGetObject(baseDao, rs, t);
-		}
-	}
-
-	
-	public void exeBeforeGetObject(IOrmDao<T, PK> baseDao, String sql) {
-		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
-			filter.beforeGetObject(baseDao, sql);
-		}
-	}
-
-	
-	public void exeAfterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql) {
-		for(int i=queryFilters.size()-1; i>=0; i--){
-			queryFilters.get(i).afterGetObject(baseDao, rs, sql);
-		}
-	}
-
-	
 	public void exeBeforeGetObject(IOrmDao<T, PK> baseDao, String sql, Object... args) {
 		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
 			filter.beforeGetObject(baseDao, sql, args);
@@ -235,7 +188,18 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 			queryFilters.get(i).afterGetObject(baseDao, rs, sql, args);
 		}
 	}
+	
+	public void exeBeforeGetBy(IOrmDao<T, PK> baseDao, Query query) {
+		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
+			filter.beforeGetBy(baseDao, query);
+		}
+	}
 
+	public void exeAfterGetBy(IOrmDao<T, PK> baseDao, T rs, Query query) {
+		for(int i=queryFilters.size()-1; i>=0; i--){
+			queryFilters.get(i).afterGetBy(baseDao, rs, query);
+		}
+	}
 	
 	public void exeBeforeQueryAll(IOrmDao<T, PK> baseDao) {
 		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
@@ -243,49 +207,30 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 		}
 	}
 
-	
 	public void exeAfterQueryAll(IOrmDao<T, PK> baseDao, List<T> rs) {
 		for(int i=queryFilters.size()-1; i>=0; i--){
 			queryFilters.get(i).afterQueryAll(baseDao, rs);
 		}
 	}
 
-	
-	public void exeBeforeQuery(IOrmDao<T, PK> baseDao, T t) {
+	public void exeBeforeQueryBy(IOrmDao<T, PK> baseDao, Query query) {
 		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
-			filter.beforeQuery(baseDao, t);
+			filter.beforeQueryBy(baseDao, query);
 		}
 	}
 
-	
-	public void exeAfterQuery(IOrmDao<T, PK> baseDao, List<T> rs, T t) {
+	public void exeAfterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Query query) {
 		for(int i=queryFilters.size()-1; i>=0; i--){
-			queryFilters.get(i).afterQuery(baseDao, rs, t);
+			queryFilters.get(i).afterQueryBy(baseDao, rs, query);
 		}
 	}
 
-	
-	public void exeBeforeQuery(IOrmDao<T, PK> baseDao, String sql) {
-		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
-			filter.beforeQuery(baseDao, sql);
-		}
-	}
-
-	
-	public void exeAfterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql) {
-		for(int i=queryFilters.size()-1; i>=0; i--){
-			queryFilters.get(i).afterQuery(baseDao, rs, sql);
-		}
-	}
-
-	
 	public void exeBeforeQuery(IOrmDao<T, PK> baseDao, String sql, Object... args) {
 		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
 			filter.beforeQuery(baseDao, sql, args);
 		}
 	}
 
-	
 	public void exeAfterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql, Object... args) {
 		for(int i=queryFilters.size()-1; i>=0; i--){
 			queryFilters.get(i).afterQuery(baseDao, rs, sql, args);
@@ -344,16 +289,4 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 		}
 	}
 	
-	
-	public void exeBeforeQueryOther(IOrmDao<T, PK> baseDao, String sql, Object... args) {
-		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
-			filter.beforeQueryOther(baseDao, sql, args);
-		}
-	}
-	
-	public void exeAfterQueryOther(IOrmDao<T, PK> baseDao, List<?> rs, String sql, Object... args) {
-		for(int i=queryFilters.size()-1; i>=0; i--){
-			queryFilters.get(i).afterQueryOther(baseDao, rs, sql, args);
-		}
-	}
 }

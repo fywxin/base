@@ -22,12 +22,11 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.whale.system.base.BaseDao;
 import org.whale.system.base.Page;
-import org.whale.system.common.exception.OrmException;
+import org.whale.system.base.Query;
 import org.whale.system.common.exception.StaleObjectStateException;
 import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
-import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 import org.whale.system.jdbc.orm.entry.OrmValue;
 import org.whale.system.jdbc.orm.value.ValueBulider;
@@ -90,7 +89,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @date 2015年5月3日 上午11:26:10
 	 */
 	private void doSave(final OrmValue ormValue, T t){
-		Object idVal = ReflectionUtil.getFieldValue(t, this.getOrmTable().getIdCol().getAttrName());
+		Object idVal = ReflectionUtil.getFieldValue(t, this._getOrmTable().getIdCol().getAttrName());
 		if(idVal == null && DbKind.isMysql()){
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			this.jdbcTemplate.update(new PreparedStatementCreator(){
@@ -108,7 +107,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				}
 				
 			}, keyHolder);
-			Field idFile = this.getOrmTable().getIdCol().getField();
+			Field idFile = this._getOrmTable().getIdCol().getField();
 			idFile.setAccessible(true);
 			try {
 				ReflectionUtil.writeField(idFile, t, keyHolder.getKey().longValue());
@@ -149,8 +148,8 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		
 		int col = this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
 		//乐观锁， 锁已过期，更新记录数为0，抛出异常
-		if(this.getOrmTable().getOptimisticLockCol() != null && col == 0){
-			throw new StaleObjectStateException("乐观锁，当前版本 ["+AnnotationUtil.getFieldValue(t, this.getOrmTable().getOptimisticLockCol().getField())+"] 已过期，更新失败！");
+		if(this._getOrmTable().getOptimisticLockCol() != null && col == 0){
+			throw new StaleObjectStateException("乐观锁，当前版本 ["+AnnotationUtil.getFieldValue(t, this._getOrmTable().getOptimisticLockCol().getField())+"] 已过期，更新失败！");
 		}
 		
 	}
@@ -197,23 +196,6 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	}
 	
 	/**
-	 * 只对有值的部分进行修改
-	 * @param t
-	 */
-	public void updateOnly(T t){
-		OrmValue ormValues = this.valueBulider.getUpdateOnly(t);
-		if(ormValues == null) 
-			return ;
-		
-		int col = this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
-		
-		//乐观锁， 锁已过期，更新记录数为0，抛出异常
-		if(this.getOrmTable().getOptimisticLockCol() != null && col == 0){
-			throw new StaleObjectStateException("乐观锁，当前版本 ["+AnnotationUtil.getFieldValue(t, this.getOrmTable().getOptimisticLockCol().getField())+"] 已过期，更新失败！");
-		}
-	}
-	
-	/**
 	 * 删除对象
 	 * @param id
 	 */
@@ -243,14 +225,10 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	}
 	
 	/**
-	 * 按照实体条件删除记录
+	 * 按自定义条件删除
 	 */
-	public void deleteBy(T t) {
-		OrmValue ormValues = this.valueBulider.getDeleteBy(t);
-		if(ormValues == null) 
-			return ;
-		
-		this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
+	public void deleteBy(Query query){
+		this.jdbcTemplate.update(query.getDelSql(), query.getArgs());
 	}
 	
 	/**
@@ -266,27 +244,6 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		return list.get(0);
 	}
 	
-	/**
-	 * 按对象条件获取一条记录
-	 */
-	@Override
-	public T getObject(T t) {
-		OrmValue ormValues = this.valueBulider.getQuery(t);
-		if(ormValues == null) return null;
-		List<T> rs = (List<T>)this.jdbcTemplate.query(ormValues.getSql(), ormValues.getArgs(), this.rowMapper);
-		if(rs == null || rs.size() < 1)
-			return null;
-		return rs.get(0);
-	}
-	
-	/**
-	 * 返回单条记录
-	 * @param sql
-	 * @return
-	 */
-	public T getObject(String sql){
-		return this.jdbcTemplate.queryForObject(sql, rowMapper);
-	}
 	
 	/**
 	 * 返回单条记录
@@ -295,41 +252,37 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @return
 	 */
 	public T getObject(String sql, Object...args){
-		List<T> list = this.jdbcTemplate.query(sql, args, this.rowMapper);
+		List<T> list = null;
+		if(args == null || args.length < 1){
+			list = this.jdbcTemplate.query(sql, this.rowMapper);
+		}else{
+			list = this.jdbcTemplate.query(sql, args, this.rowMapper);
+		}
+		
 		if(list == null || list.size() < 1)
 			return null;
 		return list.get(0);
 	}
 	
 	/**
-	 * 按条件等值查询对象
-	 * @param t
-	 * @return
+	 * 按自定义条件获取
 	 */
-	public List<T> query(T t){
-		OrmValue ormValues = this.valueBulider.getQuery(t);
-		if(ormValues == null) return null;
-		return (List<T>)this.jdbcTemplate.query(ormValues.getSql(), ormValues.getArgs(), this.rowMapper);
+	public T getBy(Query query){
+		List<T> list = this.jdbcTemplate.query(query.getQuerySql(), query.getArgs().toArray(), this.rowMapper);
+		
+		if(list == null || list.size() < 1)
+			return null;
+		return list.get(0);
 	}
-	
+
 	/**
-	 * 模糊查询匹配
-	 * @param t
+	 * 获取所有记录
 	 * @return
 	 */
-	public List<T> queryLike(T t){
-		OrmValue ormValues = this.valueBulider.getQueryLike(t);
+	public List<T> queryAll(){
+		OrmValue ormValues = this.valueBulider.getAll(this.getClazz());
 		if(ormValues == null) return null;
-		return (List<T>)this.jdbcTemplate.query(ormValues.getSql(), ormValues.getArgs(), this.rowMapper);
-	}
-	
-	/**
-	 * 按sql返回查询对象
-	 * @param sql
-	 * @return
-	 */
-	public List<T> query(String sql){
-		return this.jdbcTemplate.query(sql, this.rowMapper);
+		return (List<T>)this.jdbcTemplate.query(ormValues.getSql(), this.rowMapper);
 	}
 	
 	/**
@@ -339,17 +292,19 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @return
 	 */
 	public List<T> query(String sql, Object...args){
-		return this.jdbcTemplate.query(sql, args, this.rowMapper);
+		if(args == null || args.length < 1){
+			return this.jdbcTemplate.query(sql, this.rowMapper);
+		}else{
+			return this.jdbcTemplate.query(sql, args, this.rowMapper);
+		}
 	}
 	
 	/**
-	 * 获取所有记录
-	 * @return
+	 * 按自定义条件查询
 	 */
-	public List<T> queryAll(){
-		OrmValue ormValues = this.valueBulider.getAll(this.getClazz());
-		if(ormValues == null) return null;
-		return (List<T>)this.jdbcTemplate.query(ormValues.getSql(), this.rowMapper);
+	public List<T> queryBy(Query query){
+		
+		return this.jdbcTemplate.query(query.getQuerySql(), query.getArgs().toArray(), this.rowMapper);
 	}
 	
 	/**
@@ -371,6 +326,8 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			if(Strings.isBlank(countSql)){
 				int index = -1;
 				String temp = sql.toLowerCase();
+				//出现多个from值时，采用保守方式获取总记录数，但会降低效率
+				//TODO 是否要移除order by
 				if(temp.substring((index = temp.indexOf("from"))+5).indexOf("from") == -1){
 					countSql = "select count(1) "+sql.substring(index);
 				}else{
@@ -380,16 +337,14 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			page.setTotal(this.jdbcTemplate.queryForLong(countSql,params.toArray()));
 		}
 		
-		if(page.isAutoPage()){
-			if(DbKind.isMysql()){
-				sql += " LIMIT ?, ?";
-				params.add((page.getPageNo()-1) * page.getPageSize());
-				params.add(page.getPageSize());
-			}else{
-				sql = "select * from (select row_.*, rownum rownum_ from ( "+sql+" ) row_ where rownum <=?) where rownum_>=?";
-				params.add((page.getPageNo()+1) * page.getPageSize());
-				params.add(page.getPageNo() * page.getPageSize());
-			}
+		if(DbKind.isMysql()){
+			sql += " LIMIT ?, ?";
+			params.add((page.getPageNo()-1) * page.getPageSize());
+			params.add(page.getPageSize());
+		}else{
+			sql = "select * from (select row_.*, rownum rownum_ from ( "+sql+" ) row_ where rownum <=?) where rownum_>=?";
+			params.add((page.getPageNo()+1) * page.getPageSize());
+			params.add(page.getPageNo() * page.getPageSize());
 		}
 		
 		page.setDatas(this.jdbcTemplate.queryForList(sql, params.toArray()));
@@ -401,20 +356,13 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		page.getParam().clear();
 	}
 	
-	
-	/**
-	 * 获取当前实体的数据库表名
-	 * @return
-	 */
-	public String getTableName(){
-		return getOrmTable().getTableDbName();
-	}
+//--------------------------------------内部方法-----------------------------------------------
 	
 	/**
 	 * 获取当前实体对象封装体
 	 * @return
 	 */
-	public OrmTable getOrmTable() {
+	public OrmTable _getOrmTable() {
 		if(ormTable == null){
 			synchronized (this) {
 				if(ormTable == null){
@@ -423,6 +371,11 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			}
 		}
 		return ormTable;
+	}
+	
+	@Override
+	public OrmContext _getOrmContext() {
+		return this.ormContext;
 	}
 
 //--------------------------------------------------------------------------------------------------
@@ -472,7 +425,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	
 	public void setOrmContext(OrmContext ormContext) {
 		this.ormContext = ormContext;
-		this.getOrmTable();
+		this._getOrmTable();
 	}
 
 	public RowMapper<T> getRowMapper() {
@@ -488,10 +441,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		return jdbcTemplate;
 	}
 
-	@Override
-	public OrmContext getOrmContext() {
-		return this.ormContext;
-	}
+	
 
 	@Override
 	@SuppressWarnings("all")
@@ -523,30 +473,6 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			return null;
 		return this.jdbcTemplate.queryForMap(sql, args);
 	}
-
-	@Override
-	public <E> List<E> queryOther(Class<E> clazz, String sql, Object... args) {
-		if(Strings.isBlank(sql))
-			return null;
-		return this.jdbcTemplate.query(sql, args, this.getOrmContext().getRowMapper(clazz));
-	}
-
-	@Override
-	public T newT() {
-		T t = null;
-		try {
-			t = this.clazz.newInstance();
-		} catch (Exception e) {
-			throw new OrmException("实体类"+ormTable.getClass()+"默认构造方法不能访问！");
-		}
-		List<OrmColumn> valCols = this.getOrmTable().getValueCols();
-		if(valCols != null && valCols.size() > 0){
-			for(OrmColumn col : valCols){
-				AnnotationUtil.setFieldValue(t, col.getField(), null);
-			}
-		}
-		return t;
-	}
 	
 	/**
 	 * 取得当前对象的select t.* from db t
@@ -555,7 +481,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 2015年6月14日 上午7:57:01
 	 */
 	public String sqlHead(){
-		return getOrmTable().getSqlHeadPrefix();
+		return _getOrmTable().getSqlHeadPrefix();
 	}
 	
 	/**
@@ -565,6 +491,6 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 2015年6月14日 上午7:57:01
 	 */
 	public String sqlOrder(){
-		return this.getOrmTable().getSqlOrderSuffix();
+		return this._getOrmTable().getSqlOrderSuffix();
 	}
 }
