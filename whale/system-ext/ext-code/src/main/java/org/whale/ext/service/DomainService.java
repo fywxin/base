@@ -10,7 +10,7 @@ import org.whale.ext.dao.DomainDao;
 import org.whale.ext.domain.Attr;
 import org.whale.ext.domain.Domain;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Query;
+import org.whale.system.base.Cmd;
 import org.whale.system.common.util.Strings;
 import org.whale.system.service.BaseService;
 
@@ -41,7 +41,7 @@ public class DomainService extends BaseService<Domain, Long> {
 	@Override
 	public void update(Domain domain) {
 		this.domainDao.update(domain);
-		this.attrDao.deleteBy(Query.newQuery(Attr.class).eq("domainId", domain.getId()));
+		this.attrDao.deleteBy(Cmd.newCmd(Attr.class).and("domainId", domain.getId()));
 		
 		List<Attr> attrs = domain.getAttrs();
 		if(attrs != null && attrs.size() > 0){
@@ -55,7 +55,7 @@ public class DomainService extends BaseService<Domain, Long> {
 	@Override
 	public void delete(Long id) {
 		this.domainDao.delete(id);
-		this.attrDao.deleteBy(Query.newQuery(Attr.class).eq("domainId", id));
+		this.attrDao.deleteBy(Cmd.newCmd(Attr.class).and("domainId", id));
 	}
 
 	@Override

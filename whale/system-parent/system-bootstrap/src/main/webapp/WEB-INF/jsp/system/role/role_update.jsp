@@ -2,28 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@include file="/html/jsp/common.jsp" %>
-
+<%@include file="/jsp/form.jsp" %>
 <script type="text/javascript">
-
-var toolBar = null;
-$(function(){
-	toolBar = $("#toolbar").ligerToolBar({ items: [
-	    {id: 'saveBut', text: '保存', icon:'save', click: 
-	    	function(){
-	    		$.save({'url':'${ctx}/role/doUpdate'}); 
-	    	}
-	    },
-	    { line:true },
-	    {id: 'closeBut', text: '关闭', icon:"close", click: 
-	    	function(){ 
-		    	$.closeWin();
-		    	return false; 
-	    	}
-	    }
-	 ]
-	});
-});
+function save(){
+	$.save({'url':'${ctx}/role/doUpdate'}); 
+}
 
 //校验函数
 $(function() {
@@ -51,19 +34,22 @@ $(function() {
 
 </head>
 
-<body style="padding:0px; overflow-x:hidden; "> 
-	<div id="toolbar" style="margin: 0px 2px 0px 2px;"></div> 
-	<div class="infoBox" id="infoBoxDiv"></div>
-	<div class="edit-form">
+<body class="my_formBody"> 
+	<div class="navbar-fixed-bottom my_toolbar" >
+		<button type="button" class="btn btn-primary btn-sm" onclick="save()"><i class="fa fa-hdd-o" ></i> 保存</button>
+		<button type="button" class="btn btn-info btn-sm" onclick="$.closeWin();"><i class="fa fa-times" ></i> 关闭</button>
+	</div>
+	<div id="formBoxDiv" class="my_formBox" >
+		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 		<form action="" method="post" id="dataForm">
 			<input type="hidden" id="roleId" name="roleId" value="${item.roleId }" />
 			<input type="hidden" id="status" name="status" value="${item.status }" />
 			<input type="hidden" id="roleCode" name="roleCode" value="${item.roleCode }"/>
-			<table>
-				<col width="10%"/>
-				<col width="40%"/>
-				<col width="10%"/>
-				<col width="40%"/>
+			<table class="query">
+				<col width="20%"/>
+				<col width="30%"/>
+				<col width="20%"/>
+				<col width="30%"/>
 				<tbody>
 					<tr>
 						<td class="td-label"><span class="required">*</span>角色名称</td>
@@ -74,7 +60,7 @@ $(function() {
 					<tr>
 						<td class="td-label" >备注</td>
 						<td class="td-value" colspan="3">
-							<textarea id="remark" name="remark" rows="5" title="最多只能输入100个字">
+							<textarea id="remark" name="remark" rows="5" cols="99" title="最多只能输入100个字">
 								${remark }
 							</textarea>
 						</td>

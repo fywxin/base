@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.whale.system.base.Cmd;
 import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
 import org.whale.system.jdbc.orm.OrmContext;
@@ -18,6 +19,8 @@ import org.whale.system.jdbc.orm.entry.OrmTable;
  * 2014年9月17日-上午10:37:39
  */
 public interface IOrmDao<T extends Serializable,PK extends Serializable> {
+	
+	Cmd cmd();
 
 	/**
 	 * 保存实体

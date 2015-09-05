@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
-import org.whale.system.base.Query;
 import org.whale.system.base.UserContext;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.PropertiesUtil;
@@ -378,7 +378,7 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	@Override
-	public void afterDeleteBy(Query query, IOrmDao<T, PK> baseDao) {
+	public void afterDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
 			this.saveLog(baseDao, null);
 		}
@@ -392,7 +392,7 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	@Override
-	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Query query) {
+	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Iquery query) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, rs);
 		}
@@ -414,7 +414,7 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	@Override
-	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Query query) {
+	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Iquery query) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, rs);
 		}

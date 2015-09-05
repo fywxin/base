@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
-import org.whale.system.base.Query;
 import org.whale.system.jdbc.filter.BaseDaoFilterService;
 
 /**

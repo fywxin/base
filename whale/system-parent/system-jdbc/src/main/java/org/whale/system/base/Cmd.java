@@ -39,7 +39,19 @@ public class Cmd implements Iquery{
 		OrmTable ormTable = ormContext.getOrmTable(clazz);
 		
 		StringBuilder strb = new StringBuilder();
-		strb.append("DELETE FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(sql);
+		strb.append("DELETE FROM ").append(ormTable.getTableDbName()).append(" WHERE 1=1 ").append(sql.toString().replaceAll("t.", ""));
+		
+		return strb.toString();
+	}
+	
+	@Override
+	public String getGetSql() {
+		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
+		OrmTable ormTable = ormContext.getOrmTable(clazz);
+		
+		StringBuilder strb = new StringBuilder();
+		
+		strb.append(ormTable.getSqlHeadPrefix()).append(" WHERE 1=1 ").append(sql);
 		
 		return strb.toString();
 	}

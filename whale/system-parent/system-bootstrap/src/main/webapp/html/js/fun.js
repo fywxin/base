@@ -36,9 +36,7 @@
 			
 			try{
 				if(!$("#"+formId).valid()) {return false;}
-			}catch(e){
-				alert(e);
-			}
+			}catch(e){}
 			
 			param.datas = param.datas || $("#"+formId).serialize();
 			$("#saveBut").hide();
@@ -68,10 +66,10 @@
 			    		if($.isFunction(param.onSucess)){
 			    			param.onSucess(obj);
 			    		}else{
-			    			window.top.layer.msg(obj.msg, {time: 2000});
 			    			try{
-		    					window.parent.search();
+		    					$.getParent().search();
 		    				}catch(e){}
+			    			window.top.layer.msg(obj.msg, {time: 2000});
 			    		}
 			    	}else{
 			    		$("#infoBoxDiv").html(obj.msg).show();
@@ -84,7 +82,27 @@
 			 });
 		},
 		
+		del : function(param){
+			if(param.datas == null){
+				var idArr = jQuery("#gridTable").jqGrid('getGridParam', 'selarrrow');
+				if(idArr.length < 1){
+					$.alert('请选择需要删除的记录');
+					return ;
+				}
+				param.datas = {ids: idArr.join(',')};
+			}
+			
+			param.info = '您确定要删除记录吗？';
+			
+			$.confirm(param);
+		},
+		
 		openWin: function(options){
+			if(!window.winOpener){
+				window.winOpener = window.top.winOpener;
+			}
+			window.top.winOpener = window;
+			
 			var defaults = {
 					type: 2,
 				    shadeClose: false,
@@ -108,24 +126,61 @@
 			}
 		},
 		
-		confirm: function(str, options, yes, no){
+		//获取父窗口对象
+		getParent : function(){
+			return window.winOpener || window.top.winOpener;
+		},
+		
+		confirm: function(param, options){
 			var defaults = {
 					btn: ['确定','取消'],
 					shadeClose: false,
-					shade: true
-			}
-			if(typeof(no) == "undefined" || !$.isFunction(no)){
-				no = function(id){
-					alert("关闭"+id)
-				}
+					shade: 0.4,
 			}
 			var opts = $.extend(defaults, options);
 			
-			window.top.layer.confirm(str, opts, yes, no);
+			var confirmId= window.top.layer.confirm(param.info, opts, function () {
+				 if($.isFunction(param.beforeAjax)){
+						param.beforeAjax();
+					 }
+			        $.ajax({
+						url : param.url,
+						data : param.datas,
+						contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+						dataType: 'json',
+						type: 'post',
+						cache: false,
+						error: function(){
+							window.top.layer.close(confirmId);
+					        $.alert('服务请求异常');
+					        if($.isFunction(param.onError)){
+								param.onError();
+							}
+					    },
+					    success: function(obj){
+					    	window.top.layer.close(confirmId);
+					    	if(obj.rs){
+					    		if($.isFunction(param.onSuccess)){
+					    			param.onSuccess(obj);
+					    		}else{
+									$.alert(obj.msg);
+									search();
+					    		}
+					    	}else{
+					    		if($.isFunction(param.onFail)){
+					    			param.onFail(obj);
+					    		}else{
+					    			$.alert(obj.msg);
+					    		}
+					    	}
+						}
+					});
+				});
+			
 		},
 		
 		alert: function(str){
-			
+			window.top.layer.alert(str);
 		},
 		
 		msg: function(str){
@@ -150,9 +205,11 @@
 				height: $.h()-98-$("#queryForm").height(),
 				repeatitems: false,
 				altRows: true,
-				autowidth: true,
+				width: $.w()-20,
 				styleUI: "Bootstrap",
-				mtype : "post"
+				mtype : "post",
+				viewrecords: true,
+				prmNames: {page:"page",rows:"rows", npage:null}
 		};
 		var opts = $.extend(defaults, options);
         return $(this).jqGrid(opts);

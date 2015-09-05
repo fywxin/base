@@ -29,10 +29,10 @@ function del(){
 		<form action="" method="post" id="dataForm">
 			<input type="hidden" id="id" name="id" value="${item.id}" />
 			<table class="query">
-				<col width="10%"/>
-				<col width="40%"/>
-				<col width="10%"/>
-				<col width="40%"/>
+				<col width="15%"/>
+				<col width="35%"/>
+				<col width="15%"/>
+				<col width="35%"/>
 				<tbody>
 					<tr>
 						<td class="td-label">应用</td>

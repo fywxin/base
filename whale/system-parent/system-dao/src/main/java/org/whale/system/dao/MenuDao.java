@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Query;
 import org.whale.system.domain.Menu;
 
 @Repository
@@ -21,21 +20,21 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	}
 	
 	public List<Menu> getByParentId(Long parentId){
-		Query query = Query.newQuery(Menu.class).eq("parentId", parentId);
-		return this.queryBy(query);
+		
+		return this.queryBy(this.cmd().and("parentId", parentId));
 	}
 	
 	public List<Menu> getMenuByType(Integer menuType){
-		return this.queryBy(Query.newQuery(Menu.class).eq("menuType", menuType));
+		return this.queryBy(this.cmd().and("menuType", menuType));
 	}
 	
 	public List<Menu> getPublicMenus(){
-		return this.queryBy(Query.newQuery(Menu.class).eq("menuType", 3).eq("isPublic", 1));
+		return this.queryBy(this.cmd().and("menuType", 3).and("isPublic", 1));
 	}
 	
 	public Menu getByMenuName(String menuName){
 		
-		return this.getBy(Query.newQuery(Menu.class).eq("menuName", menuName));
+		return this.getBy(this.cmd().and("menuName", menuName));
 	}
 	
 	

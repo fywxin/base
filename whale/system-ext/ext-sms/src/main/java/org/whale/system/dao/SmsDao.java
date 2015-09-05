@@ -20,6 +20,7 @@ public class SmsDao extends BaseDao<Sms, Long> {
 		if(size != null && size > 0){
 			sql+=" LIMIT 0, "+size;
 		}
+
 		
 		return this.query(sql, Sms.STATUS_SEND_WAITing);
 	}

@@ -195,6 +195,17 @@ public class Log implements Serializable{
 	public void setRs(Object rs) {
 		this.rs = rs;
 	}
+	@Override
+	public String toString() {
+		return "Log [id=" + id + ", appId=" + appId + ", opt=" + opt
+				+ ", cnName=" + cnName + ", tableName=" + tableName + ", uri="
+				+ uri + ", sqlStr=" + sqlStr + ", argStr=" + argStr
+				+ ", rsStr=" + rsStr + ", ip=" + ip + ", createTime="
+				+ createTime + ", userName=" + userName + ", callOrder="
+				+ callOrder + ", methodCostTime=" + methodCostTime
+				+ ", costTime=" + costTime + ", rsType=" + rsType + ", arg="
+				+ arg + ", rs=" + rs + "]";
+	}
 
 	
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Query;
 import org.whale.system.domain.Role;
 import org.whale.system.domain.User;
 import org.whale.system.domain.UserRole;
@@ -20,12 +19,12 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 
 	public List<UserRole> getByRoleId(Long roleId){
 		
-		return this.queryBy(Query.newQuery(UserRole.class).eq("roleId", roleId));
+		return this.queryBy(this.cmd().and("roleId", roleId));
 	}
 	
 	public List<UserRole> getByUserId(Long userId){
 		
-		return this.queryBy(Query.newQuery(UserRole.class).eq("userId", userId));
+		return this.queryBy(this.cmd().and("userId", userId));
 	}
 	
 	final String queryRoleByUserId_SQL = "SELECT t.* FROM sys_role t, sys_user_role ur WHERE t.roleId = ur.roleId  AND ur.userId = ?  order by t.roleId";
@@ -48,11 +47,11 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 	
 	public void deleteByRoleId(Long roleId){
 		
-		this.deleteBy(Query.newQuery(UserRole.class).eq("roleId", roleId));
+		this.deleteBy(this.cmd().and("roleId", roleId));
 	}
 	
 	public void deleteByUserId(Long userId){
 		
-		this.deleteBy(Query.newQuery(UserRole.class).eq("userId", userId));
+		this.deleteBy(this.cmd().and("userId", userId));
 	}
 }

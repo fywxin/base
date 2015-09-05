@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Query;
 import org.whale.system.domain.User;
 
 @Repository
@@ -14,12 +13,12 @@ public class UserDao extends BaseDao<User, Long> {
 	
 	public List<User> getByDeptId(Long deptId){
 
-		return this.queryBy(Query.newQuery(User.class).eq("deptId", deptId));
+		return this.queryBy(this.cmd().and("deptId", deptId));
 	}
 
 	public User getByUserName(String userName){
 
-		return this.getBy(Query.newQuery(User.class).eq("userName", userName));
+		return this.getBy(this.cmd().and("userName", userName));
 	}
 	
 	final String findAuthIds_SQL ="select ra.authId "+

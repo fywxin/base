@@ -21,6 +21,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Cmd;
 import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
 import org.whale.system.common.exception.StaleObjectStateException;
@@ -268,7 +269,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 按自定义条件获取
 	 */
 	public T getBy(Iquery query){
-		List<T> list = this.jdbcTemplate.query(query.getQuerySql(), query.getArgs().toArray(), this.rowMapper);
+		List<T> list = this.jdbcTemplate.query(query.getGetSql(), query.getArgs().toArray(), this.rowMapper);
 		
 		if(list == null || list.size() < 1)
 			return null;
@@ -492,5 +493,10 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 */
 	public String sqlOrder(){
 		return this._getOrmTable().getSqlOrderSuffix();
+	}
+
+	@Override
+	public Cmd cmd() {
+		return Cmd.newCmd(clazz);
 	}
 }

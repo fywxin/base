@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 import org.whale.ext.domain.Attr;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Query;
 import org.whale.system.jdbc.util.DbKind;
 
 @Repository
@@ -14,7 +13,7 @@ public class AttrDao extends BaseDao<Attr, Long> {
 	
 	public List<Attr> queryByDomainId(Long domainId){
 		
-		return this.queryBy(Query.newQuery(Attr.class).eq("domainId", domainId));
+		return this.queryBy(this.cmd().and("domainId", domainId));
 	}
 	
 	

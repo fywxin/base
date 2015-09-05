@@ -106,6 +106,16 @@ public class Query implements Iquery{
 		return strb.toString();
 	}
 	
+	@Override
+	public String getGetSql() {
+		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
+		OrmTable ormTable = ormContext.getOrmTable(clazz);
+		
+		StringBuilder strb = new StringBuilder();
+		strb.append(ormTable.getSqlHeadPrefix()).append(this.bulidAfterFromSql());
+		return strb.toString();
+	}
+	
 	/**
 	 * 创建 查询条件后缀
 	 * 注意线程安全与效率
@@ -405,5 +415,7 @@ public class Query implements Iquery{
 			return col;
 		}
 	}
+
+	
 	
 }
