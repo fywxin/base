@@ -81,7 +81,6 @@
 		
 		$.save({url: "${ctx}/role/doSetRoleAuth?roleId=${roleId}",datas:{authIdS: idArr.join(',')}, onSuccess: function(){
 			$.alert('设置角色权限成功！');
-    		$.closeWin();
 		}});
 	}
     </script>
@@ -93,7 +92,7 @@
 	</div>
 	<div id="formBoxDiv" class="my_formBox" >
 		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
-		<div style="flow:left;height:420px;overflow:auto;" id="treeDiv">
+		<div style="flow:left;height:410px;overflow:auto;" id="treeDiv">
 			<ul id="tree" class="ztree"></ul>
 		</div>
 	</div>

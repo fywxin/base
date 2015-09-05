@@ -63,8 +63,8 @@
 			    	window.saving = false;
 			    	window.top.layer.close(loadId);
 			    	if(obj.rs){
-			    		if($.isFunction(param.onSucess)){
-			    			param.onSucess(obj);
+			    		if($.isFunction(param.onSuccess)){
+			    			param.onSuccess(obj);
 			    		}else{
 			    			try{
 		    					$.getParent().reGrid();

@@ -58,7 +58,7 @@ function del(){
 }
 
 function setAuth(roleId){
-	$.openWin({content:'${ctx}/role/goSetRoleAuth?roleId='+roleId, area: ['400px', '600px'],title: "分配权限"});
+	$.openWin({content:'${ctx}/role/goSetRoleAuth?roleId='+roleId, area: ['400px', '510px'],title: "分配权限"});
 }
 
 function setStatus(id,name,type){
