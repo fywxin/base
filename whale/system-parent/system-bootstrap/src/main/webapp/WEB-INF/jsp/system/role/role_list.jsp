@@ -9,12 +9,15 @@ var statusObj = {1:"<button type='button' class='btn btn-primary btn-ss'><i clas
 				2:"<button type='button' class='btn btn-gray btn-ss'><i class='fa fa-lock'></i> 禁用</button>"};
 $(function(){
 	$("#gridTable").grid({
-		multiboxonly: true,
-		multiselect : true,
 		id: "roleId",
     	url :'${ctx}/role/doList',
-    	colNames: ['操作', '角色名称', '角色编码', '备注', '状态'],
-       	colModel: [{name:'id',index:'roleId', width:280, fixed:true, sortable:false, resize:false, align: "center",
+    	colNames: ['','操作', '角色名称', '角色编码', '备注', '状态'],
+       	colModel: [{name:'roleId',index:'roleId', width:35,formatter: 
+			       		function(cellvalue, options, row){
+       						return '<input type="checkbox" value="'+row.roleId+'" name="chk_col">';
+			       		}
+			       	},
+       	           {name:'opt',index:'opt', width:230, fixed:true, sortable:false, resize:false, align: "center",
 					formatter: function(cellvalue, options, row){
 						var strArr = [];
 						strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"update('"+row.roleId+"')\"><i class='fa fa-pencil'></i> 修改</button>");
@@ -28,10 +31,10 @@ $(function(){
       	        		return strArr.join("");
 					
 					}},
-					{name:'roleName',index:'roleName', width:160, sortable:false},
-					{name:'roleCode',index:'roleCode', width:160, sortable:false},
-					{name:'remark',index:'remark', width:260, sortable:false},
-					{name:'status',index:'status', width:60,
+					{name:'roleName',index:'roleName', width:160},
+					{name:'roleCode',index:'roleCode', width:160},
+					{name:'remark',index:'remark', width:260},
+					{name:'status',index:'status', width:80,
 						formatter: function(cellvalue, options, rowObject){
 							return statusObj[cellvalue];
 						}	

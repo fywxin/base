@@ -17,4 +17,10 @@ function search(){
 	    page:1
 	   }).trigger("reloadGrid");
 }
+
+function reGrid(){
+	 $("#gridTable").jqGrid('setGridParam',{
+	    postData: $("#queryForm").serializeJson()
+	   }).trigger("reloadGrid");
+}
 </script>

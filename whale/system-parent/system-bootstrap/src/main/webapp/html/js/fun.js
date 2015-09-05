@@ -67,7 +67,7 @@
 			    			param.onSucess(obj);
 			    		}else{
 			    			try{
-		    					$.getParent().search();
+		    					$.getParent().reGrid();
 		    				}catch(e){}
 			    			window.top.layer.msg(obj.msg, {time: 2000});
 			    		}
@@ -84,11 +84,16 @@
 		
 		del : function(param){
 			if(param.datas == null){
-				var idArr = jQuery("#gridTable").jqGrid('getGridParam', 'selarrrow');
-				if(idArr.length < 1){
+				var chks = $("#gridTable input:checkbox:checked[name='chk_col']");
+				if(chks.length < 1){
 					$.alert('请选择需要删除的记录');
 					return ;
 				}
+				var idArr = [];
+				chks.each(function(){
+					idArr.push($(this).val());
+				});
+				
 				param.datas = {ids: idArr.join(',')};
 			}
 			
@@ -164,7 +169,7 @@
 					    			param.onSuccess(obj);
 					    		}else{
 									$.alert(obj.msg);
-									search();
+									reGrid();
 					    		}
 					    	}else{
 					    		if($.isFunction(param.onFail)){
