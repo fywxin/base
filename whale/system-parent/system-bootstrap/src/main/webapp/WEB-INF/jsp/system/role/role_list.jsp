@@ -3,16 +3,15 @@
 <html>
 <head>
 	<title>角色列表</title>
-	<%@include file="/jsp/grid.jsp" %>
+<%@include file="/jsp/grid.jsp" %>
 <script type="text/javascript">
 var statusObj = {1:"<button type='button' class='btn btn-primary btn-ss'><i class='fa fa-check'></i> 正常</button>",
 				2:"<button type='button' class='btn btn-gray btn-ss'><i class='fa fa-lock'></i> 禁用</button>"};
 $(function(){
 	$("#gridTable").grid({
-		id: "roleId",
     	url :'${ctx}/role/doList',
     	colNames: ['','操作', '角色名称', '角色编码', '备注', '状态'],
-       	colModel: [{name:'roleId',index:'roleId', width:35,formatter: 
+       	colModel: [{name:'roleId',index:'roleId', width:30,fixed:true, resize:false, formatter: 
 			       		function(cellvalue, options, row){
        						return '<input type="checkbox" value="'+row.roleId+'" name="chk_col">';
 			       		}
@@ -34,7 +33,7 @@ $(function(){
 					{name:'roleName',index:'roleName', width:160},
 					{name:'roleCode',index:'roleCode', width:160},
 					{name:'remark',index:'remark', width:260},
-					{name:'status',index:'status', width:80,
+					{name:'status',index:'status', fixed:true, width:80,
 						formatter: function(cellvalue, options, rowObject){
 							return statusObj[cellvalue];
 						}	

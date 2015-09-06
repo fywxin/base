@@ -21,6 +21,7 @@ import org.whale.system.common.util.TreeUtil;
 import org.whale.system.common.util.WebUtil;
 import org.whale.system.domain.Auth;
 import org.whale.system.domain.Menu;
+import org.whale.system.jqgrid.Grid;
 import org.whale.system.service.AuthService;
 import org.whale.system.service.MenuService;
 
@@ -84,7 +85,7 @@ public class AuthController extends BaseController {
 	@org.whale.system.annotation.auth.Auth(code="AUTH_LIST",name="查询权限")
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, String authName, String authCode, Long menuId){
-		Page page = this.newPage(request);
+		Page page = Grid.newPage(request);
 		page.put("authName", authName);
 		page.put("authCode", authCode);
 		Menu menu = this.menuService.get(menuId);
@@ -108,7 +109,7 @@ public class AuthController extends BaseController {
 		}
 		
 		this.authService.queryPage(page);
-		WebUtil.print(request, response, page);
+		WebUtil.print(request, response, Grid.grid(page));
 	}
 	
 	/**

@@ -2,26 +2,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@include file="/html/jsp/common.jsp" %>
-<%@include file="/html/jsp/ztree.jsp" %>
+<%@include file="/jsp/form.jsp" %>
+<%@include file="/jsp/ztree.jsp" %>
 <script type="text/javascript">
-var toolBar = null;
-$(function(){
-	toolBar = $("#toolbar").ligerToolBar({ items: [
-	    {id: 'saveBut', text: '保存', icon:'save', click: function(){
-	    	$.save({'url':'${ctx}/auth/doUpdate'}); 
-	    	}
-	    },
-	    { line:true },
-	    {id: 'closeBut', text: '关闭', icon:"close", click: function(){
-	    	$.getWinOpener().grid.loadData();
-	    	$.closeWin();
-	    	return false; 
-	    	}
-	    }
-	 ]
-	});
-});
+function save(){
+	$.save({'url':'${ctx}/auth/doUpdate'}); 
+}
 
 //校验函数
 $(function() {
@@ -62,14 +48,17 @@ function changeMenuIcon(){
 
 </head>
     
-<body style="padding:0px; overflow-x:hidden; "> 
-	<div id="toolbar" style="margin: 0px 2px 0px 2px;"></div> 
-	<div class="infoBox" id="infoBoxDiv"></div>
-		<div class="edit-form">
-			<form action="" method="post" id="dataForm">
+<body class="my_formBody"> 
+	<div class="navbar-fixed-bottom my_toolbar" >
+		<button type="button" class="btn btn-primary btn-sm" onclick="save()"><i class="fa fa-hdd-o" ></i> 保存</button>
+		<button type="button" class="btn btn-info btn-sm" onclick="$.closeWin();"><i class="fa fa-times" ></i> 关闭</button>
+	</div>
+	<div id="formBoxDiv" class="my_formBox" >
+		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
+		<form action="" method="post" id="dataForm">
 				<input type="hidden" name="authId" value="${item.authId }" />
 				<input type="hidden" name="oldAuthCode" value="${item.authCode }" />
-				<table>
+				<table class="query">
 					<col width="10%" />
 					<col width="40%" />
 					<col width="10%" />

@@ -2,34 +2,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@include file="/html/jsp/common.jsp" %>
-<%@include file="/html/jsp/ztree.jsp" %>
+<%@include file="/jsp/form.jsp" %>
+<%@include file="/jsp/ztree.jsp" %>
 <script type="text/javascript">
-var toolBar = null;
-$(function(){
-	toolBar = $("#toolbar").ligerToolBar({ items: [
-	    {id: 'saveBut', text: '保存', icon:'save', click: function(){
-	    	$.save({'url':'${ctx}/auth/doSave'}); 
-	    	}
-	    },
-	    { line:true },
-	    {id: 'conBut', text: '保存并继续', icon:'add', click: function(){
-	    	$.save({'url':'${ctx}/auth/doSave', onSuccess: function(){
-	    		$.alert("添加权限成功");
-	    		window.location.reload();
-	    	}}); 
-	    	}
-	    },
-	    { line:true },
-	    {id: 'closeBut', text: '关闭', icon:"close", click: function(){
-	    	$.getWinOpener().grid.loadData();
-	    	$.closeWin();
-	    	return false; 
-	    	}
-	    }
-	 ]
-	});
-});
+function save(){
+	$.save({'url':'${ctx}/auth/doSave'}); 
+}
 
 //校验函数
 $(function() {
@@ -71,17 +49,21 @@ function changeMenuIcon(){
 
 </head>
     
-<body style="padding:0px; overflow-x:hidden; "> 
-	<div id="toolbar" style="margin: 0px 2px 0px 2px;"></div> 
-	<div class="infoBox" id="infoBoxDiv"></div>
-		<div class="edit-form">
-			<form action="" method="post" id="dataForm">
-				<table>
-					<col width="10%" />
-					<col width="40%" />
-					<col width="10%" />
-					<col width="40%" />
-					<tbody>
+
+<body class="my_formBody"> 
+	<div class="navbar-fixed-bottom my_toolbar" >
+		<button type="button" class="btn btn-primary btn-sm" onclick="save()"><i class="fa fa-hdd-o" ></i> 保存</button>
+		<button type="button" class="btn btn-info btn-sm" onclick="$.closeWin();"><i class="fa fa-times" ></i> 关闭</button>
+	</div>
+	<div id="formBoxDiv" class="my_formBox" >
+		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
+		<form action="" method="post" id="dataForm">
+			<table class="query">
+				<col width="15%"/>
+				<col width="35%"/>
+				<col width="15%"/>
+				<col width="35%"/>
+				<tbody>
 						<tr>
 							<td class="td-label"><span class="required">*</span>权限名称</td>
 							<td class="td-value"><input type="text" style="width:160px;" id="authName" name="authName" maxlength="16" title="最多16个字"/></td>

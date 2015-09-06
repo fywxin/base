@@ -41,10 +41,10 @@ $(function() {
 		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 		<form action="" method="post" id="dataForm">
 			<table class="query">
-				<col width="20%"/>
-				<col width="30%"/>
-				<col width="20%"/>
-				<col width="30%"/>
+				<col width="15%"/>
+				<col width="35%"/>
+				<col width="15%"/>
+				<col width="35%"/>
 				<tbody>
 					<tr>
 						<td class="td-label"><span class="required">*</span>角色名称</td>

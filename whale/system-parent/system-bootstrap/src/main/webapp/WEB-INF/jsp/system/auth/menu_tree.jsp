@@ -2,83 +2,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
-<%@include file="/html/jsp/parent.jsp" %>
-<%@include file="/html/jsp/ztree.jsp" %>
-    <script type="text/javascript">
-	var zTree;
+    <title>部门 树</title>
+<%@include file="/jsp/base.jsp" %>
+<%@include file="/jsp/btree.jsp" %>
+<script type="text/javascript">
+$(window).resize(function(){
+	$("#treeDiv, #listFrame").height($.h());
+});
 
-	var setting = {
-		view: {
-			dblClickExpand: false,
-			showLine: true,
-			selectedMulti: false
-		},
-		
-		data: {
-			key: {
-				name: "menuName"
-			},
-			simpleData: {
-				enable:true,
-				idKey: "menuId",
-				pIdKey: "parentId",
-				rootPId: null
-			}
-		},
+var nodes = $.parseTree(${nodes},"menuId","parentId","menuName","orderNo");
 
-		callback: {
-			beforeClick: function(treeId, treeNode) {
-				if (treeNode.isParent) {
-					zTree.expandNode(treeNode, true);
-				}
-				clickTree(treeNode);
-				return true;
-			}
-		}
-	};
-	
-	var zNodes =${nodes};
-	
-	$(document).ready(function(){
-		for(var i=0; i<zNodes.length; i++){
-			zNodes[i].isParent = (zNodes[i].menuType != 3)
-		}
-		
-		zTree = $.fn.zTree.init($("#tree"), setting, zNodes);
-		setSpace();
-		var node = zTree.getNodeByParam("menuId", "${clkId}");
-		if(node != null){
-			zTree.expandNode(node);
-			clickTree(node);
-		}
-	});
-	
-	function setSpace() {
-		var width = parseInt(document.documentElement.scrollWidth);
-		var height=$.h()-20;
-		$("#mainTable").css("width",width+"px").css("height",height+"px");
-		$("#tree").css("height",height+"px");
-		$("#testIframe").css("height",$("#mainTable").css("height"));
-	}
-	
-	function clickTree(treeNode){
-		$("#testIframe").attr("src", "${ctx}/auth/goList?menuId="+treeNode.menuId);
-	}
-    </script>
+$(function () {
+	$("#treeDiv, #listFrame").height($.h());
+    $('#tree').treeview({
+        data: nodes,
+        color: "#428bca",
+        showTags: true,
+        levels: 3,
+        onNodeSelected: function(event, data) {
+        	$("#listFrame").attr("src", "${ctx }/auth/goList?menuId="+data.menuId);
+        }
+    });
+    
+});
+
+</script>
 </head>
-<body style="width:100%;height:100%;border:0;overflow:hidden;">
-<table id="mainTable" style="position: absolute;left: 0px;top: 0px;">
-	<tr>
-		<td width=200px align=left valign=top style="border: solid 1px #CCC;">
-			<ul id="tree" class="ztree" style="width:200px; overflow:auto;"></ul>
-		</td>
-		<td align=left valign=top>
-			<iframe id="testIframe" name="testIframe" frameborder=0 scrolling=auto width=100% ></iframe>
-		</td>
-	</tr>
-</table>
+<body class="my_gridBody gray-bg">
+	<div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-2" id="treeDiv" style="padding: 0px;overflow: auto;">
+		  		<div id="tree"></div>
+		  </div>
+		  <div class="col-xs-10" id="frameDiv" style="padding: 0px;overflow: hidden;">
+		  		<iframe id="listFrame" name="listFrame" frameborder=0 scrolling=auto width=100% src="${ctx }/auth/goList"></iframe>
+		  </div>
+		</div>
+	</div>
 </body>
 </html>
-
-

@@ -39,6 +39,9 @@ public class Page implements Serializable {
 	private List<Order> orders;
 
 	public long getTotalPages() {
+		if(total == null){
+			return Long.MAX_VALUE;
+		}
 		if (this.total % this.pageSize == 0L) {
 			return this.total / this.pageSize;
 		}

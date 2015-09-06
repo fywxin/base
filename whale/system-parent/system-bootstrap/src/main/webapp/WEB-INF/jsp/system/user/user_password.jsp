@@ -3,30 +3,15 @@
 <html>
 <head>
 	<title>修改密码</title>
-	<%@include file="/html/jsp/common.jsp" %>
+<%@include file="/jsp/form.jsp" %>
 <script type="text/javascript">
-var toolBar = null;
-$(function(){
-	toolBar = $("#toolbar").ligerToolBar({ items: [
-	    {id: 'saveBut', text: '保存', icon:'save', click: function(){
-	    	$.save({'url':'${ctx}/user/doChangePassword', onSuccess: function(){
-	    		$.alert('修改密码成功，请重新登入！');
-	    		window.top.location.href="${ctx}/";
-				$.closeWin();
-	    	}}); 
-	    	}
-	    },
-	    { line:true },
-	    {id: 'closeBut', text: '关闭', icon:"close", click: function(){ 
-	    	$.closeWin();
-	    	return false; 
-	    	}
-	    }
-	 ]
-	});
-	$("#oldPassword")[0].focus();
-});
-
+function save(){
+	$.save({'url':'${ctx}/user/doChangePassword', onSuccess: function(){
+		$.alert('修改密码成功，请重新登入！');
+		window.top.location.href="${ctx}/";
+		$.closeWin();
+	}}); 
+}
 //校验函数
 $(function() {
 	$("#dataForm").validate({
@@ -62,14 +47,17 @@ $(function() {
 
 </head>
     
-<body style="padding:0px; overflow-x:hidden; "> 
-	<div id="toolbar" style="margin: 0px 2px 0px 2px;"></div> 
-	<div class="infoBox" id="infoBoxDiv"></div>
-		<div class="edit-form">
-			<form action="" method="post" id="dataForm" enctype="multipart/form-data" >
-				<table>
+<body class="my_formBody"> 
+	<div class="navbar-fixed-bottom my_toolbar" >
+		<button type="button" class="btn btn-primary btn-sm" onclick="save()"><i class="fa fa-hdd-o" ></i> 保存</button>
+		<button type="button" class="btn btn-info btn-sm" onclick="$.closeWin();"><i class="fa fa-times" ></i> 关闭</button>
+	</div>
+	<div id="formBoxDiv" class="my_formBox" >
+		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
+		<form action="" method="post" id="dataForm">
+			<table class="query">
 					<col  width="100"/>
-					<col  width="350"/>
+					<col />
 					<tbody>
 						<tr>
 							<td class="td-label"><span class="required">*</span>旧密码</td>

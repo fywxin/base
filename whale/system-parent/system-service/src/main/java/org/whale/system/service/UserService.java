@@ -3,6 +3,7 @@ package org.whale.system.service;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
@@ -215,6 +216,10 @@ public class UserService extends BaseService<User, Long> {
 	
 	public boolean validPasswd(String passwd, String dbPasswd){
 		return Strings.decrypt(passwd, dbPasswd);
+	}
+	
+	public List<Map<String, Object>> queryDeptTree(){
+		return this.userDao.queryDeptTree();
 	}
 	
 }

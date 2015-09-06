@@ -3,87 +3,69 @@
 <html>
 <head>
 	<title>菜单列表</title>
-<%@include file="/html/jsp/common.jsp" %>
+<%@include file="/jsp/grid.jsp" %>
 <script type="text/javascript">
 var menuTypeObj = {1: "tab菜单", 2: "文件夹菜单", 3: "叶子菜单"};
 var openTypeObj = {1: "窗口内打开", 2: "弹出窗口"};
 var openStateObj = {1: "打开", 2: "合并"};
+
 $(function(){
-	$.grid({
+	$("#gridTable").grid({
     	url :'${ctx}/menu/doList',
-    	uid : "menuId",
-    	pid : "parentId",
-    	orderCol : "orderNo",
-    	orderAsc : true,
-    	usePager: false,
-    	alternatingRow : false,
-    	toolbar: {items: [
-           		{text: '新增菜单', icon: 'add', click: 
-           			function(){
-	           			var idArr = grid.getSelIds();
-	           			if(idArr.length > 1){
-	           				$.alert('请选择一个父菜单');
-	           				return ;
-	           			}
-	           			if(idArr != null && idArr.length == 0){
-	           				$.openWin({url: "${ctx}/menu/goSave", "title":'新增菜单'});
-	           			}else{
-	           				$.openWin({url: "${ctx}/menu/goSave?pid="+idArr[0], "title":'新增菜单'});
-	           			}
-           			} 
-				}
-            ]
-        },
-        columns: [
-      	        {display: '操作', name: 'opt', width: 100,frozen: true,
-      	        	render: function (row){
-      	        		var strArr = [];
-      	        		strArr.push("<a href='#' class='r15' onclick='update(\""+row.menuId+"\");'>修改</a>");
-      	        		
-      	        		strArr.push("<a href='#' onclick='del(\""+row.menuId+"\")'>删除</a>");
-      	        	    return strArr.join("");
-  	        	}},
-      	        {display: '菜单名称', name: 'menuName', id: "menuName", align: 'left', frozen: true,width: 200},
-      	        {display: '链接地址', name: 'menuUrl', width:300, align: 'left', frozen: true},
-      	      	{display: '菜单类型', name: 'menuType',width: 130,
-      	        	render: function (row){
-          	        	    return menuTypeObj[row.menuType];
-          	        	} },
-      	    	{display: '打开方式', name: 'openType',width: 150,
-      	        	render: function (row){
-          	        	    return openTypeObj[row.openType];
-          	        	} },
-      	    	{display: '打开状态', name: 'openState',width: 120,
-      	        	render: function (row){
-          	        	    return openStateObj[row.openState];
-          	        	} },
-      	      	{display: '是否公共', name: 'isPublic', width: 80,
-      	        	render: function (row){
-          	        	    return yesObj[row.isPublic];
-          	        	} },
-          	    {display: '图标', name: 'inco' }
-              ],
-         tree: {columnId: 'menuName'}
+    	gridGrid:true,
+    	treeGridModel: 'adjacency',
+    	ExpandColumn:"name",
+    	pager: false,
+    	treeReader : {
+    	      level_field: "level",
+    	      parent_id_field: "pid",
+    	      leaf_field: "isleaf",
+    	      expanded_field: "expanded"
+    	    },
+    	colNames: ['菜单名称', '链接地址', '菜单类型', '是否公共'],
+       	colModel: [
+       	           
+					{name:'name',index:'name', width:260},
+					{name:'menuUrl',index:'menuUrl', width:160},
+					{name:'menuType',index:'menuType', width:260},
+					{name:'isPublic',index:'isPublic', fixed:true, width:80,
+						formatter: function(cellvalue, options, rowObject){
+							return openStateObj[cellvalue];
+						}	
+					}
+			]
 	});
 });
-
-function update(menuId){
-	$.openWin({url: "${ctx}/menu/goUpdate?view=0&menuId="+menuId,"title":'编辑菜单'});
-}
-
-function del(id){
-	$.del({url:"${ctx}/menu/doDelete", datas:{ids:id}});
-}
-
 </script>
 </head>
     
-<body style="overflow: hidden;">
-	<div class="edit-form">
+<body class="my_gridBody gray-bg">
+	<div class="my_gridBox">
 		<form id="queryForm" >
-		</form>
+			<table class="query">
+					<col  width="10%" />
+					<col  width="40%"/>
+					<col  width="10%"/>
+					<col  width="40%"/>
+				<tbody>
+					<tr>
+						<td class="td-label">角色名称</td>
+						<td class="td-value"><input type="text" id="roleName" name="roleName" style="width:160px;" value="${roleName }" /></td>
+						<td class="td-label">角色编码</td>
+						<td class="td-value">
+							<input type="text" id="roleCode" name="roleCode" style="width:160px;"  value="${roleCode }" />
+							<button type="button" class="btn btn-success btn-xs" onclick="search()"><i class="fa fa-search" ></i> 查  询</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="my_gridToolBar">
+				  <button type="button" class="btn btn-primary btn-sm" onclick="add()"><i class="fa fa-plus"></i> 新  增</button>
+				  <button type="button" class="btn btn-danger btn-sm" onclick="del()"><i class="fa fa-trash-o"></i> 删  除</button>
+			</div>
+</form>
+		<table id="gridTable" ></table>
+		<div id="gridPager"></div>
 	</div>
-	<div id="grid" style="margin: 2px 2px 1px 2px;"></div>
-	<div style="display: none;"></div>
 </body>
 </html>

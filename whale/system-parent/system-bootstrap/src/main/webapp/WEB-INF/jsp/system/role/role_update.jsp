@@ -46,10 +46,10 @@ $(function() {
 			<input type="hidden" id="status" name="status" value="${item.status }" />
 			<input type="hidden" id="roleCode" name="roleCode" value="${item.roleCode }"/>
 			<table class="query">
-				<col width="20%"/>
-				<col width="30%"/>
-				<col width="20%"/>
-				<col width="30%"/>
+				<col width="15%"/>
+				<col width="35%"/>
+				<col width="15%"/>
+				<col width="35%"/>
 				<tbody>
 					<tr>
 						<td class="td-label"><span class="required">*</span>角色名称</td>

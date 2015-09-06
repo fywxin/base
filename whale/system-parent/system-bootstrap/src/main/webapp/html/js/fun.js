@@ -107,6 +107,9 @@
 				window.winOpener = window.top.winOpener;
 			}
 			window.top.winOpener = window;
+			if(typeof(options.url) != undefined && options.url != null){
+				options.content = options.url;
+			}
 			
 			var defaults = {
 					type: 2,
@@ -198,7 +201,51 @@
 		
 		wait: function(str){
 			return window.top.layer.load();
+		},
+		
+		parseTree : function(datas, id, pid, name, order, asc){
+			key = id || "id",
+			parentKey = pid || "pid",
+			nameKey = name || "name",
+			childKey = "nodes",
+			orderCol = order || key,
+			orderAsc = asc || true,
+			sNodes = datas;
+
+			var r = [];
+			var tmpMap = [];
+			for (i=0, l=sNodes.length; i<l; i++) {
+				tmpMap[sNodes[i][key]] = sNodes[i];
+				sNodes[i].text = sNodes[i][nameKey];
+			}
+			for (i=0, l=sNodes.length; i<l; i++) {
+				if (tmpMap[sNodes[i][parentKey]] && sNodes[i][key] != sNodes[i][parentKey]) {
+					if (!tmpMap[sNodes[i][parentKey]][childKey])
+						tmpMap[sNodes[i][parentKey]][childKey] = [];
+					tmpMap[sNodes[i][parentKey]][childKey].push(sNodes[i]);
+					//按排序字段排序
+					tmpMap[sNodes[i][parentKey]][childKey].sort(function(o1, o2){
+						if(orderAsc){
+							return o1[orderCol] - o2[orderCol];
+						}else{
+							return o2[orderCol] - o1[orderCol];
+						}
+					});
+				} else {
+					r.push(sNodes[i]);
+				}
+			}
+			r.sort(function(o1, o2){
+				if(orderAsc){
+					return o1[orderCol] - o2[orderCol];
+				}else{
+					return o2[orderCol] - o1[orderCol];
+				}
+			});
+			return r;
 		}
+		
+		
 	});
 	
 	$.fn.grid=function(options){
@@ -207,9 +254,9 @@
 				rowNum : 20,
 				rowList : [ 10, 20, 30, 50],
 				pager : '#gridPager',
-				height: $.h()-98-$("#queryForm").height(),
 				repeatitems: false,
 				altRows: true,
+				height: $.h()-98-$("#queryForm").height(),
 				width: $.w()-20,
 				styleUI: "Bootstrap",
 				mtype : "post",

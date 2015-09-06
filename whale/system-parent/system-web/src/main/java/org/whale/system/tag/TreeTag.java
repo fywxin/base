@@ -247,10 +247,7 @@ public class TreeTag extends TagSupport {
 	
 	private String bulidOnReady(boolean mulSel, boolean search){
 		StringBuilder strb = new StringBuilder();
-		strb.append("$(document).ready(function(){\n")
-			.append("	if($.browser.msie && parseInt($.browser.version)<=6){\n")
-			.append("		document.execCommand(\"BackgroundImageCache\",false,true);\n")
-			.append("	}\n");
+		strb.append("$(document).ready(function(){\n");
 		
 		if(Strings.isNotBlank(beforeLoadTree)){
 		strb.append("	if(typeof("+beforeLoadTree+") == 'function')\n")

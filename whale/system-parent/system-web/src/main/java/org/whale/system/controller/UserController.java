@@ -1,6 +1,9 @@
 package org.whale.system.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +28,7 @@ import org.whale.system.common.util.WebUtil;
 import org.whale.system.domain.Dept;
 import org.whale.system.domain.Role;
 import org.whale.system.domain.User;
+import org.whale.system.jqgrid.Grid;
 import org.whale.system.service.DeptService;
 import org.whale.system.service.RoleService;
 import org.whale.system.service.UserService;
@@ -46,16 +50,87 @@ public class UserController extends BaseController {
 	
 	@Auth(code="USER_LIST",name="查询用户")
 	@RequestMapping("/goTree")
-	public ModelAndView goTree(HttpServletRequest request, HttpServletResponse response){
-		String nodes = "[]";
-		List<Dept> list = this.deptService.queryAll();
-		if(list != null && list.size() > 0){
-			nodes = JSON.toJSONString(list);
+	public ModelAndView goTree(HttpServletRequest request, HttpServletResponse response, Long pid){
+		if(pid == null){
+			pid = -1L;
 		}
+		List<Map<String, Object>> depts = this.userService.queryDeptTree();
+		String nodes = "[]";
+		if(depts != null){
+			//pid, children
+			Map<Long, List<Map<String, Object>>> pMap = new HashMap<Long, List<Map<String,Object>>>();
+			//id, node
+			Map<Long, Map<String, Object>> idMap = new HashMap<Long, Map<String,Object>>();
+			
+			List<Map<String, Object>> tmp = null;
+			
+			for(Map<String, Object> map : depts){
+				idMap.put((Long)map.get("id"), map);
+				tmp = pMap.get((Long)map.get("pid"));
+				if(tmp == null){
+					tmp = new ArrayList<Map<String,Object>>();
+					pMap.put((Long)map.get("pid"), tmp);
+				}
+				tmp.add(map);
+			}
+			List<Map<String, Object>> rootDepts = pMap.get(pid);
+			
+			List<Map<String, Object>> rs = new ArrayList<Map<String,Object>>();
+			if(rootDepts != null){
+				for(Map<String, Object> root : rootDepts){
+					rs.add(this.createDeptTree(root, pMap, idMap));
+				}
+				
+//				Map<String, Object> state = new HashMap<String, Object>();
+//				state.put("selected", true);
+//				rs.get(0).put("state", state);
+				nodes = JSON.toJSONString(rs);
+			}
+		}
+		
 		return new ModelAndView("system/user/dept_tree")
-				.addObject("nodes", nodes)
-				.addObject("rootName", DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "ITEM_DEPT_ROOT"));
+				.addObject("nodes", nodes);
 	}
+	
+	/**
+	 * 构建部门树
+	 * @param map
+	 * @param pMap
+	 * @param idMap
+	 * @return
+	 */
+	private Map<String, Object> createDeptTree(Map<String, Object> map, Map<Long, List<Map<String, Object>>> pMap, Map<Long, Map<String, Object>> idMap){
+		Map<String, Object> node = new HashMap<String, Object>();
+		Long userNum = (Long)map.get("userNum");
+		node.put("id", map.get("id"));
+		node.put("text", map.get("deptName"));
+		node.put("tags", new Long[]{userNum});
+		map.put("node", node); //与转换后的节点简历关联关系，方便更新userNum值
+		
+		//向上递归至根节点，上级节点userNum值加上本节点值, 
+		Map<String, Object> parentNode = null;//父节点
+		Map<String, Object> tmpNode = null;//父节点对应转换后的树节点
+		Long pid = (Long)map.get("pid");
+		while(pid != null && pid != -1L && (parentNode = idMap.get(pid)) != null){
+			tmpNode = (Map<String, Object>)parentNode.get("node");
+			Long[] tags = (Long[])tmpNode.get("tags");
+			tmpNode.put("tags", new Long[]{(tags[0]+userNum)});
+			pid = (Long)parentNode.get("pid");
+		}
+		
+		//递归建立nodes
+		List<Map<String, Object>> subNodes = pMap.get(map.get("id"));
+		if(subNodes != null && subNodes.size() > 0){
+			List<Map<String, Object>> subs = new ArrayList<Map<String,Object>>();
+			
+			for(Map<String, Object> sub : subNodes){
+				subs.add(this.createDeptTree(sub, pMap, idMap));
+			}
+			node.put("nodes", subs);
+		}
+		return node;
+	}
+	
 	
 	@Auth(code="USER_LIST",name="查询用户")
 	@RequestMapping("/goList")
@@ -69,7 +144,7 @@ public class UserController extends BaseController {
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, String userName, String realName, Long deptId){
 		UserContext uc = this.getUserContext(request);
-		Page page = this.newPage(request);
+		Page page = Grid.newPage(request);
 		page.put("userName", userName);
 		page.put("realName", realName);
 		page.put("userId", uc.getUserId());
@@ -80,7 +155,7 @@ public class UserController extends BaseController {
 		
 		this.userService.queryPage(page);
 		
-		WebUtil.print(request, response, page);
+		WebUtil.print(request, response, Grid.grid(page));
 	}
 	
 	@Auth(code="USER_SAVE",name="新增用户")
