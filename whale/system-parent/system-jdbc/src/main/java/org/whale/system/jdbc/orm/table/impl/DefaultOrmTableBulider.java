@@ -244,8 +244,8 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		}
 		
 		//建表和判断数据是否超过大小时有用
-		ormColumn.setWidth(column.width());
-		ormColumn.setPrecision(column.precision());
+//		ormColumn.setWidth(column.width());
+//		ormColumn.setPrecision(column.precision());
 		
 		//字段约束
 		ormColumn.setUnique(column.unique());
@@ -562,7 +562,8 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		if(t.equals("class java.sql.Timestamp")){
 			return Types.TIME;
 		}
-		return column.type();
+		return Types.VARCHAR;
+		//return column.type();
 	}
 	
 	/**

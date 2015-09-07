@@ -41,70 +41,70 @@ public class MySqlAlterTableService extends AbstractAlterTableService {
 			
 			if(col.getType() == Types.NUMERIC){
 				strb.append("numeric");
-				if(col.getWidth() > 0){
-					strb.append("(").append(col.getWidth()).append(",").append(col.getPrecision()).append(")");
-				}
+//				if(col.getWidth() > 0){
+//					strb.append("(").append(col.getWidth()).append(",").append(col.getPrecision()).append(")");
+//				}
 			}else if(col.getType() == Types.BIT){
 				strb.append("bit");
-				if(col.getWidth() > 0){
-					strb.append("(").append(col.getWidth()).append(")");
-				}
+//				if(col.getWidth() > 0){
+//					strb.append("(").append(col.getWidth()).append(")");
+//				}
 			}else if(col.getType() == Types.REAL){
 				strb.append("real");
-				if(col.getWidth() > 0){
-					strb.append("(").append(col.getWidth()).append(")");
-				}
+//				if(col.getWidth() > 0){
+//					strb.append("(").append(col.getWidth()).append(")");
+//				}
 			}else if(col.getType() == Types.TINYINT){
 				strb.append("tinyint");
-				if(col.getWidth() > 0){
-					strb.append("(").append(col.getWidth()).append(")");
-				}
+//				if(col.getWidth() > 0){
+//					strb.append("(").append(col.getWidth()).append(")");
+//				}
 			}else if(col.getType() == Types.SMALLINT){
 				strb.append("smallint");
-				if(col.getWidth() > 0){
-					strb.append("(").append(col.getWidth()).append(")");
-				}
+//				if(col.getWidth() > 0){
+//					strb.append("(").append(col.getWidth()).append(")");
+//				}
 			}else if(col.getType() == Types.INTEGER){
 				strb.append("int");
-				if(col.getWidth() > 0){
-					strb.append("(").append(col.getWidth()).append(")");
-				}
+//				if(col.getWidth() > 0){
+//					strb.append("(").append(col.getWidth()).append(")");
+//				}
 			}else if(col.getType() == Types.BIGINT){
-				//strb.append("bigint");
-				if(col.getWidth() > 0){
-					strb.append("bigint(").append(col.getWidth()).append(")");
-				}else{
-					strb.append("int(").append(col.getWidth()).append(") unsigned");
-				}
+				strb.append("bigint");
+//				if(col.getWidth() > 0){
+//					strb.append("bigint(").append(col.getWidth()).append(")");
+//				}else{
+//					strb.append("int(").append(col.getWidth()).append(") unsigned");
+//				}
 			}else if(col.getType() == Types.FLOAT){
 				strb.append("float");
-				if(col.getWidth() > 0){
-					strb.append("(").append(col.getWidth()).append(",").append(col.getPrecision()).append(")");
-				}
+//				if(col.getWidth() > 0){
+//					strb.append("(").append(col.getWidth()).append(",").append(col.getPrecision()).append(")");
+//				}
 			}else if(col.getType() == Types.DOUBLE){
 				strb.append("double");
-				if(col.getWidth() > 0){
-					strb.append("(").append(col.getWidth()).append(",").append(col.getPrecision()).append(")");
-				}
+//				if(col.getWidth() > 0){
+//					strb.append("(").append(col.getWidth()).append(",").append(col.getPrecision()).append(")");
+//				}
 			}else if(col.getType() == Types.DECIMAL){
 				strb.append("decimal");
-				if(col.getWidth() > 0){
-					strb.append("(").append(col.getWidth()).append(",").append(col.getPrecision()).append(")");
-				}
+//				if(col.getWidth() > 0){
+//					strb.append("(").append(col.getWidth()).append(",").append(col.getPrecision()).append(")");
+//				}
 			}else if(col.getType() == Types.VARCHAR){
 				strb.append("varchar");
-				if(col.getWidth() <= 0){
-					strb.append("(1024)");
-				}else{
-					strb.append("(").append(col.getWidth()).append(")");
-				}
+//				if(col.getWidth() <= 0){
+//					strb.append("(1024)");
+//				}else{
+//					strb.append("(").append(col.getWidth()).append(")");
+//				}
 			}else if(col.getType() == Types.CHAR){
 				strb.append("char");
-				if(col.getWidth() <= 0){
-					strb.append("(100)");
-				}else{
-					strb.append("(").append(col.getWidth()).append(")");
-				}
+//				if(col.getWidth() <= 0){
+//					strb.append("(100)");
+//				}else{
+//					strb.append("(").append(col.getWidth()).append(")");
+//				}
 			}else if(col.getType() == Types.LONGVARCHAR){
 				strb.append("longtext");
 			}else if(col.getType() == Types.DATE){

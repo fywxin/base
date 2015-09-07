@@ -16,9 +16,9 @@ public class OrmColumn extends Acolumn {
 	//字段类型 java.sql.Types
 	private int type;
 	//长度
-	private int width;
+//	private int width;
 	//小数点
-	private int precision;
+//	private int precision;
 	//db字段名
 	private String sqlName;
 	//是否主键
@@ -84,18 +84,18 @@ public class OrmColumn extends Acolumn {
 	public void setIsId(boolean isId) {
 		this.isId = isId;
 	}
-	public int getWidth() {
-		return width;
-	}
-	public void setWidth(int width) {
-		this.width = width;
-	}
-	public int getPrecision() {
-		return precision;
-	}
-	public void setPrecision(int precision) {
-		this.precision = precision;
-	}
+//	public int getWidth() {
+//		return width;
+//	}
+//	public void setWidth(int width) {
+//		this.width = width;
+//	}
+//	public int getPrecision() {
+//		return precision;
+//	}
+//	public void setPrecision(int precision) {
+//		this.precision = precision;
+//	}
 
 	//	public boolean isPk() {
 //		return isPk;
