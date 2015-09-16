@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.auth.cache.UserAuthCacheService;
 import org.whale.system.base.BaseController;
+import org.whale.system.base.Cmd;
 import org.whale.system.base.Page;
 import org.whale.system.base.UserContext;
 import org.whale.system.cache.service.DictCacheService;
@@ -99,6 +100,7 @@ public class UserController extends BaseController {
 	 * @param idMap
 	 * @return
 	 */
+	@SuppressWarnings("all")
 	private Map<String, Object> createDeptTree(Map<String, Object> map, Map<Long, List<Map<String, Object>>> pMap, Map<Long, Map<String, Object>> idMap){
 		Map<String, Object> node = new HashMap<String, Object>();
 		Long userNum = (Long)map.get("userNum");
@@ -143,14 +145,14 @@ public class UserController extends BaseController {
 	@Auth(code="USER_LIST",name="查询用户")
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, String userName, String realName, Long deptId){
-		UserContext uc = this.getUserContext(request);
-		Page page = Grid.newPage(request);
-		page.put("userName", userName);
-		page.put("realName", realName);
-		page.put("userId", uc.getUserId());
-		page.put("isAdmin", uc.isSuperAdmin());
-		if(deptId != null && deptId != 0L){
-			page.put("deptId", deptId);
+		Page page = this.newPage(request);
+		Cmd cmd = page.newCmd(User.class)
+					.selectAll()
+					.select("(select d.deptName from sys_dept d where d.id = t.deptId) as deptName")
+					.like("userName", userName)
+					.like("realName", realName);
+		if(deptId != null && !deptId.equals(0L)){
+			cmd.and("deptId", deptId);
 		}
 		
 		this.userService.queryPage(page);

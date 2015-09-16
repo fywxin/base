@@ -12,7 +12,7 @@ public class DomainDao extends BaseDao<Domain, Long> {
 
 	public Domain getBySqlName(String sqlName){
 		
-		return this.getBy(this.cmd().and("sqlName", sqlName));
+		return this.getBy(this.cmd().and("domainSqlName", sqlName));
 	}
 	
 	String queryAllTable_MYSQL =  "SELECT t.table_name AS name,"

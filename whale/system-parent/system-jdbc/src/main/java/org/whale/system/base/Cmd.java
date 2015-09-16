@@ -2,9 +2,12 @@ package org.whale.system.base;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.whale.system.common.util.SpringContextHolder;
+import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 
@@ -24,6 +27,10 @@ public class Cmd implements Iquery{
 	private StringBuilder order;
 	
 	private List<Object> args = new ArrayList<Object>();
+	
+	private Set<String> fields;
+	
+	private boolean selectAll = false;
 	
 	public static Cmd newCmd(Class<?> clazz){
 		return new Cmd(clazz);
@@ -63,12 +70,36 @@ public class Cmd implements Iquery{
 		
 		StringBuilder strb = new StringBuilder();
 		
-		strb.append(ormTable.getSqlHeadPrefix()).append(" WHERE 1=1 ").append(sql);
+		if(fields != null && fields.size() > 0){
+			strb.append("SELECT ");
+			if(selectAll){
+				strb.append(ormTable.getSqlColPrexs()).append(",");
+			}
+			for(String field : fields){
+				strb.append(field).append(",");
+			}
+			strb.deleteCharAt(strb.length()-1).append(" FROM ").append(ormTable.getTableDbName()).append(" t ");
+		}else{
+			strb.append(ormTable.getSqlHeadPrefix());
+		}
+		
+		strb.append("WHERE 1=1 ").append(sql);
 		if(order == null){
 			strb.append(ormTable.getSqlOrderSuffix());
 		}else{
 			strb.append(" ORDER BY ").append(order.deleteCharAt(order.length()-1));
 		}
+		return strb.toString();
+	}
+	
+	@Override
+	public String getCountSql() {
+		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
+		OrmTable ormTable = ormContext.getOrmTable(clazz);
+		
+		StringBuilder strb = new StringBuilder();
+		strb.append("SELECT COUNT(1) FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(sql);
+		
 		return strb.toString();
 	}
 
@@ -77,8 +108,47 @@ public class Cmd implements Iquery{
 		return args;
 	}
 	
+	/**
+	 * 相当于 select t.*
+	 * @return
+	 */
+	public Cmd selectAll(){
+		this.selectAll = true;
+		return this;
+	}
+	
+	/**
+	 * 加入查询返回字段
+	 * 
+	 * @param field
+	 * @return
+	 */
+	public Cmd select(String field){
+		if(this.fields == null){
+			this.fields = new HashSet<String>();
+		}
+		this.fields.add(field);
+		return this;
+	}
+	
+	/**
+	 * 创建 and = 条件语句
+	 * @param col
+	 * @param value
+	 * @return
+	 */
 	public Cmd and(String col, Object value){
 		return this.and(col, "=", value);
+	}
+	
+	/**
+	 * 创建 and like 条件语句
+	 * @param col
+	 * @param value
+	 * @return
+	 */
+	public Cmd like(String col, Object value){
+		return this.and(col, "like", value);
 	}
 	
 	/**
@@ -106,8 +176,8 @@ public class Cmd implements Iquery{
 				args.add(value);
 			}
 		} else if("like".equalsIgnoreCase(opt)){
-			if(value == null){
-				throw new IllegalArgumentException("value == null");
+			if(value == null || Strings.isBlank(value.toString())){
+				return this;
 			}else{
 				sql.append(" AND t.").append(col).append(" LIKE ?");
 				String val = value.toString().trim();
@@ -119,42 +189,46 @@ public class Cmd implements Iquery{
 			}
 		} else if(">".equals(opt)){
 			if(value == null){
-				throw new IllegalArgumentException("value == null");
+				return this;
 			}else{
 				sql.append(" AND t.").append(col).append(" > ?");
 				args.add(value);
 			}
 		} else if(">=".equals(opt)){
 			if(value == null){
-				throw new IllegalArgumentException("value == null");
+				return this;
 			}else{
 				sql.append(" AND t.").append(col).append(" >= ?");
 				args.add(value);
 			}
 		} else if("<".equals(opt)){
 			if(value == null){
-				throw new IllegalArgumentException("value == null");
+				return this;
 			}else{
 				sql.append(" AND t.").append(col).append(" < ?");
 				args.add(value);
 			}
 		} else if("<=".equals(opt)){
 			if(value == null){
-				throw new IllegalArgumentException("value == null");
+				return this;
 			}else{
 				sql.append(" AND t.").append(col).append(" <= ?");
 				args.add(value);
 			}
 		} else if("in".equalsIgnoreCase(opt)){
 			if(value == null){
-				throw new IllegalArgumentException("value == null");
+				return this;
 			}else{
 				List<Object> list = (List<Object>)value;
 				if(list.size() < 1){
-					throw new IllegalArgumentException("value length = 0");
+					return this;
 				}else if(list.size() == 1){
-					sql.append(" AND t.").append(col).append(" = ?");
-					args.add(list.get(0));
+					if(list.get(0) == null){
+						sql.append(" AND t.").append(col).append(" IS NULL");
+					}else{
+						sql.append(" AND t.").append(col).append(" = ?");
+						args.add(list.get(0));
+					}
 				}else{
 					sql.append(" AND t.").append(col).append(" IN (");
 					for(Object val : list){
@@ -167,7 +241,7 @@ public class Cmd implements Iquery{
 			}
 		} else if("between".equalsIgnoreCase(opt)){
 			if(value == null){
-				throw new IllegalArgumentException("value == null");
+				return this;
 			}else{
 				List<Object> list = (List<Object>)value;
 				if(list.size() != 2){
@@ -215,4 +289,6 @@ public class Cmd implements Iquery{
 		order.append(col).append(" DESC,");
 		return this;
 	}
+
+	
 }

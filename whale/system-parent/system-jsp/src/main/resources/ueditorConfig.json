@@ -1,4 +1,5 @@
 /* 前后端通信相关的配置,注释只允许使用多行方式 */
+/* 请求后台配置项http错误,上传功能将不能正常使用!错误是因为tomcat 部署目录下没有新建  ueditor/jsp/upload/image/ 目录*/
 {
     /* 上传图片配置项 */
     "imageActionName": "uploadimage", /* 执行上传图片的action名称 */

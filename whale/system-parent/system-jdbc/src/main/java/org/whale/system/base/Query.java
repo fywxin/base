@@ -83,6 +83,16 @@ public class Query implements Iquery{
 		return strb.toString();
 	}
 	
+	@Override
+	public String getGetSql() {
+		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
+		OrmTable ormTable = ormContext.getOrmTable(clazz);
+		
+		StringBuilder strb = new StringBuilder();
+		strb.append(ormTable.getSqlHeadPrefix()).append(this.bulidAfterFromSql());
+		return strb.toString();
+	}
+	
 	/**
 	 * queryBy getBy SQL 语句
 	 * 
@@ -107,14 +117,16 @@ public class Query implements Iquery{
 	}
 	
 	@Override
-	public String getGetSql() {
+	public String getCountSql() {
 		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
 		OrmTable ormTable = ormContext.getOrmTable(clazz);
-		
 		StringBuilder strb = new StringBuilder();
-		strb.append(ormTable.getSqlHeadPrefix()).append(this.bulidAfterFromSql());
+		strb.append("SELECT COUNT(1) FROM ").append(ormTable.getTableDbName()).append(" t ").append(this.bulidAfterFromSql());
+		
 		return strb.toString();
 	}
+	
+	
 	
 	/**
 	 * 创建 查询条件后缀
@@ -415,7 +427,5 @@ public class Query implements Iquery{
 			return col;
 		}
 	}
-
-	
 	
 }

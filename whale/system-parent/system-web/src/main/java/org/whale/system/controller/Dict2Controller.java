@@ -103,8 +103,7 @@ public class Dict2Controller extends BaseController {
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, String dictName, String dictCode){
 		Page page = Grid.newPage(request);
-		page.put("dictName", dictName);
-		page.put("dictCode", dictCode);
+		page.newCmd(Dict.class).like("dictName", dictName).like("dictCode", dictCode);
 		
 		this.dictService.queryPage(page);
 		

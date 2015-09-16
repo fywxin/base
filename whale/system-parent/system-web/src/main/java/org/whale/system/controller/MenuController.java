@@ -60,7 +60,6 @@ public class MenuController extends BaseController {
 	public void doList(HttpServletRequest request, HttpServletResponse response){
 		Page page = Grid.newPage(request);
 		List<Menu> menus = this.menuService.queryAll();
-		String json = "[]";
 		if(menus != null && menus.size() > 0){
 			Map<Long, List<Map<String, Object>>> pMap = new HashMap<Long, List<Map<String,Object>>>();
 			Map<Long, Map<String, Object>> idMap = new HashMap<Long, Map<String, Object>>();

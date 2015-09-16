@@ -1,11 +1,7 @@
 package org.whale.system.jdbc.util;
 
-import java.util.Map;
 
-import org.whale.system.base.Page;
 import org.whale.system.common.util.Strings;
-import org.whale.system.jdbc.IOrmDao;
-import org.whale.system.jdbc.orm.entry.OrmTable;
 
 public class OrmUtil {
 	
@@ -14,7 +10,7 @@ public class OrmUtil {
 	 * 
 	 * 子类可以覆盖此方法
 	 * @param page
-	 */
+	
 	@SuppressWarnings("all")
 	public static void _createPageSql(IOrmDao ormDao, Page page){
 		StringBuilder strb = new StringBuilder(" where 1=1 ");
@@ -51,7 +47,7 @@ public class OrmUtil {
 		
 		page.setSql(ormTable.getSqlHeadPrefix()+strb.toString());
 	}
-
+ */
 	
 	/**
 	 * 

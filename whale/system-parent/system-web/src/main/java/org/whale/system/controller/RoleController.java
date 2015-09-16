@@ -75,8 +75,7 @@ public class RoleController extends BaseController {
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, String roleName, String roleCode){
 		Page page = Grid.newPage(request);
-		page.put("roleName", roleName);
-		page.put("roleCode", roleCode);
+		page.newCmd(Role.class).like("roleName", roleName).like("roleCode", roleCode);
 		
 		this.roleService.queryPage(page);
 		

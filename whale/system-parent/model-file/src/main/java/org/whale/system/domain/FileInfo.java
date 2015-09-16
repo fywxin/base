@@ -86,47 +86,47 @@ public class FileInfo extends BaseEntry {
 	private String fileName;
 	
 	@Validate(required=true)
-  	@Column(name="fileType", cnName="文件类型", width=2)
+  	@Column(name="fileType", cnName="文件类型")
 	private Integer fileType;
 	
 	@Validate(required=true)
-  	@Column(name="realFileName", cnName="原文件名", width=64)
+  	@Column(name="realFileName", cnName="原文件名")
 	private String realFileName;
 	
-  	@Column(name="fileSuffix", cnName="文件后缀名", width=16)
+  	@Column(name="fileSuffix", cnName="文件后缀名")
 	private String fileSuffix;
   	
-  	@Column(name="filePath", cnName="文件路径", width=256)
+  	@Column(name="filePath", cnName="文件路径")
 	private String filePath;
   	
-  	@Column(name="absolutePath", cnName="绝对路径", width=256)
+  	@Column(name="absolutePath", cnName="绝对路径")
 	private String absolutePath;
   	
   	@Validate(required=true)
-  	@Column(name="urlPath", cnName="url访问地址", unique=true, width=256)
+  	@Column(name="urlPath", cnName="url访问地址", unique=true)
 	private String urlPath;
   	
   	@Validate(required=true)
-  	@Column(name="saveWay", cnName="保存方式", width=2)
+  	@Column(name="saveWay", cnName="保存方式")
 	private Integer saveWay;
   	
-  	@Column(name="width", cnName="图片宽度", width=6)
+  	@Column(name="width", cnName="图片宽度")
 	private Integer width;
   	
-  	@Column(name="height", cnName="图片高度", width=6)
+  	@Column(name="height", cnName="图片高度")
 	private Integer height;
   	
   	@Validate(required=true)
-  	@Column(name="fileSize", cnName="文件大小", width=10)
+  	@Column(name="fileSize", cnName="文件大小")
 	private Long fileSize;
   	
-  	@Column(name="originalImgId", cnName="原始图Id", width=10)
+  	@Column(name="originalImgId", cnName="原始图Id")
 	private Long originalImgId;
   	
-  	@Column(name="extInfo", cnName="扩展信息", width=512)
+  	@Column(name="extInfo", cnName="扩展信息")
 	private String extInfo;
   	
-  	@Column(name="creator", cnName="创建人", width=10)
+  	@Column(name="creator", cnName="创建人")
 	private Long creator;
   	
   	@Column(name="createTime", cnName="创建时间")

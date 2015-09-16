@@ -24,34 +24,34 @@ public class Log implements Serializable{
 	@Column(cnName="id")
 	private String id;
 	
-	@Column(cnName="所属应用",width=16)
+	@Column(cnName="所属应用")
 	private String appId;
 	
-	@Column(cnName="操作方法",width=64)
+	@Column(cnName="操作方法")
     private String opt;
 	
-	@Column(cnName="对象名称",width=128)
+	@Column(cnName="对象名称")
 	private String cnName;
 	
-	@Column(cnName="表名称",width=64)
+	@Column(cnName="表名称")
 	private String tableName;
 	
-	@Column(cnName="请求路径",width=128)
+	@Column(cnName="请求路径")
 	private String uri;
 	
-	@Column(cnName="执行sql语句",width=512)
+	@Column(cnName="执行sql语句")
 	private String sqlStr;
 	
-	@Column(cnName="请求参数", width=2048)
+	@Column(cnName="请求参数")
     private String argStr;
     
-	@Column(cnName="处理结果", width=2048)
+	@Column(cnName="处理结果")
     private String rsStr;
     
-	@Column(cnName="ip地址", width=15)
+	@Column(cnName="ip地址")
     private String ip;
 	
-	@Column(cnName="创建时间", width=15)
+	@Column(cnName="创建时间")
     private Long createTime;
 	
 	@Column(cnName="操作人")
@@ -60,14 +60,14 @@ public class Log implements Serializable{
 	@Column(cnName="调用链顺序")
 	private Integer callOrder;
 	
-	@Column(cnName="方法耗时", width=6)
+	@Column(cnName="方法耗时")
 	private Integer methodCostTime;
 	
-	@Column(cnName="调用耗时", width=6)
+	@Column(cnName="调用耗时")
 	private Integer costTime;
 	
 	//1 正常， 2. SysException 3.OrmException 4.RunTimeException 0.other
-	@Column(cnName="结果类型", width=2)
+	@Column(cnName="结果类型")
 	private Integer rsType;
 	
 	

@@ -25,6 +25,7 @@ import org.whale.system.base.Cmd;
 import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
 import org.whale.system.common.exception.StaleObjectStateException;
+import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
@@ -33,7 +34,6 @@ import org.whale.system.jdbc.orm.entry.OrmValue;
 import org.whale.system.jdbc.orm.value.ValueBulider;
 import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
-import org.whale.system.jdbc.util.OrmUtil;
 
 public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implements IOrmDao<T, PK> {
 
@@ -314,13 +314,12 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 */
 	@SuppressWarnings("all")
 	public void queryPage(Page page){
-		String sql = page.getSql();
-		String countSql = page.getCountSql();
-		List<Object> params = page.getArgs();
+		String sql = page.sql();
+		String countSql = page.countSql();
+		List<Object> params = page.args();
 		
 		if(Strings.isBlank(sql)){
-			OrmUtil._createPageSql(this, page);
-			sql = page.getSql();
+			throw new SysException("Page 分页语句为空");
 		}
 		
 		if(page.getTotal() == null || page.getTotal() < 1){
@@ -347,14 +346,16 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			params.add((page.getPageNo()+1) * page.getPageSize());
 			params.add(page.getPageNo() * page.getPageSize());
 		}
-		
+		if(logger.isDebugEnabled()){
+			logger.debug(page.toString());
+		}
 		page.setDatas(this.jdbcTemplate.queryForList(sql, params.toArray()));
 		
 		//防止sql语句返回前台，导致安全问题
 		page.setCountSql(null);
 		page.setSql(null);
-		page.getArgs().clear();
-		page.getParam().clear();
+		page.args().clear();
+		page.setCmd(null);
 	}
 	
 //--------------------------------------内部方法-----------------------------------------------

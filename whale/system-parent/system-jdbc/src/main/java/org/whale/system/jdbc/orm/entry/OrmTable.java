@@ -70,14 +70,14 @@ public class OrmTable extends Atable {
 	}
 	
 	
-	private String getSqlColPrexs(){
+	public String getSqlColPrexs(){
 		if(Strings.isBlank(sqlColPrexs)){
 			this.sqlColPrexs = this.getSqlColPrexs("t");
 		}
 		return sqlColPrexs;
 	}
 	
-	private String getSqlColPrexs(String as){
+	public String getSqlColPrexs(String as){
 		if(Strings.isBlank(as)){
 			as = "t";
 		}
@@ -101,7 +101,7 @@ public class OrmTable extends Atable {
 				strb.append("t.").append(idCol.getSqlName()).append( " desc");
 			}else{
 				for(OrmColumn orderCol : orderCols){
-					strb.append("t.").append(idCol.getSqlName()).append(orderCol.getOrmOrder().getAsc()? " asc," : " desc,");
+					strb.append("t.").append(orderCol.getSqlName()).append(orderCol.getOrmOrder().getAsc()? " asc," : " desc,");
 				}
 				strb.deleteCharAt(strb.length()-1);
 			}

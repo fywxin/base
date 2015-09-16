@@ -61,11 +61,7 @@ public class DictItem2Controller extends BaseController {
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, Long dictId, String itemName, String itemCode){
 		Page page = Grid.newPage(request);
-		page.put("dictId", dictId);
-		page.put("itemName", itemName);
-		page.put("itemCode", itemCode);
-		
-		page.addOrderBy("orderNo", true);
+		page.newCmd(DictItem.class).and("dictId", dictId).like("itemName", itemName).like("itemCode", itemCode);
 		
 		this.dictItemService.queryPage(page);
 		

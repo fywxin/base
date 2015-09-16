@@ -76,8 +76,7 @@ public class DictController extends BaseController {
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, String dictName, String dictCode){
 		Page page = this.newPage(request);
-		page.put("dictName", dictName);
-		page.put("dictCode", dictCode);
+		page.newCmd(Dict.class).like("dictName", dictName).like("dictCode", dictCode);
 		
 		this.dictService.queryPage(page);
 		

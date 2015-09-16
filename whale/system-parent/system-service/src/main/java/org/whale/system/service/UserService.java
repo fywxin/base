@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Service;
 import org.whale.system.base.BaseCrudEvent;
-import org.whale.system.base.Page;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;
@@ -137,30 +136,6 @@ public class UserService extends BaseService<User, Long> {
 		}
 	}
 	
-
-	@Override
-	public void queryPage(Page page) {
-		StringBuilder strb = new StringBuilder();
-		strb.append(" FROM sys_user t WHERE t.isAdmin=0 ");
-		if(Strings.isNotBlank(page.getParamStr("userName"))){
-			strb.append(" AND t.userName like ?");
-			page.addArg("%"+page.getParamStr("userName")+"%");
-		}
-		if(Strings.isNotBlank(page.getParamStr("realName"))){
-			strb.append(" AND t.realName like ?");
-			page.addArg("%"+page.getParamStr("realName")+"%");
-		}
-		if(page.getParamInteger("deptId") != null){
-			strb.append(" AND t.deptId=?");
-			page.addArg(page.getParamInteger("deptId"));
-		}
-		
-		page.setCountSql("SELECT count(1) "+strb.toString());
-		page.setSql("SELECT t.*, (select d.deptName from sys_dept d where d.id = t.deptId) as deptName "+strb.toString()+this.userDao._getOrmTable().getSqlOrderSuffix());
-	
-		this.userDao.queryPage(page);
-	}
-
 	@Override
 	public IOrmDao<User, Long> getDao() {
 		return userDao;

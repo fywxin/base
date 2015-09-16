@@ -17,6 +17,7 @@ import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.DictConstant;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.util.LangUtil;
+import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.TreeUtil;
 import org.whale.system.common.util.WebUtil;
 import org.whale.system.domain.Auth;
@@ -86,8 +87,9 @@ public class AuthController extends BaseController {
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, String authName, String authCode, Long menuId){
 		Page page = Grid.newPage(request);
-		page.put("authName", authName);
-		page.put("authCode", authCode);
+		StringBuilder strb = new StringBuilder();
+		strb.append(" FROM sys_auth t WHERE 1=1 ");
+		
 		Menu menu = this.menuService.get(menuId);
 		if(menu != null){
 			List<Long> menuIds = null;
@@ -105,8 +107,21 @@ public class AuthController extends BaseController {
 					menuIds.add(-1L);
 				}
 			}
-			page.put("menuIds", LangUtil.joinIds(menuIds));
+			strb.append(" AND t.menuId in(").append(LangUtil.joinIds(menuIds)).append(")");
 		}
+		
+		if(Strings.isNotBlank(authName)){
+			strb.append(" AND t.authName like ?");
+			page.addArg("%"+authName.trim()+"%");
+		}
+		if(Strings.isNotBlank(authCode)){
+			strb.append(" AND t.authCode like ?");
+			page.addArg("%"+authCode.trim()+"%");
+		}
+		
+		page.setCountSql("SELECT count(1) "+strb.toString());
+		page.setSql("SELECT t.*,(select m.menuName from sys_menu m where m.menuId = t.menuId) as menuName "+strb.toString()+" ORDER BY t.authId");
+		
 		
 		this.authService.queryPage(page);
 		WebUtil.print(request, response, Grid.grid(page));

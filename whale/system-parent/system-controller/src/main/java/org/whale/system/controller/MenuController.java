@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.base.BaseController;
+import org.whale.system.base.Cmd;
 import org.whale.system.base.Page;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
@@ -41,8 +42,11 @@ public class MenuController extends BaseController {
 		Page page = this.newPage(request);
 		page.setPageNo(1);
 		page.setPageSize(Integer.MAX_VALUE);
-		page.put("menuName", menu.getMenuName());
-		page.put("parentId", menu.getParentId());
+		
+		Cmd cmd = page.newCmd(Menu.class).like("menuName", menu.getMenuName());
+		if(menu.getParentId() != null){
+			cmd.and("parentId", menu.getParentId());
+		}
 		
 		this.menuService.queryPage(page);
 		

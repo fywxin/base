@@ -44,6 +44,7 @@ public class DeptController extends BaseController {
 		Page page = this.newPage(request);
 		page.setPageNo(1);
 		page.setPageSize(Integer.MAX_VALUE);
+		page.newCmd(Dept.class);
 		this.deptService.queryPage(page);
 		
 		WebUtil.print(request, response, page);

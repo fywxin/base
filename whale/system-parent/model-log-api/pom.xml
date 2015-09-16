@@ -21,7 +21,7 @@
   <dependencies>
     	<dependency>
 			<groupId>org.whale</groupId>
-			<artifactId>system-common</artifactId>
+			<artifactId>system-jdbc</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
   </dependencies>
