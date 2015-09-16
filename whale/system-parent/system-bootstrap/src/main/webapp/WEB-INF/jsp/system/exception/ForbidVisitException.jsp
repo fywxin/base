@@ -20,7 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
 	
-	<script language="javascript" src="${resource}/com/jquery.js"></script>
+	<script language="javascript" src="${html}/js/jquery.js"></script>
     <script type="text/javascript">
     	
     	function goTop(){

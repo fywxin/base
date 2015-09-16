@@ -3,25 +3,16 @@
 <html>
 <head>
 	<title>新增 部门</title>
-<%@include file="/html/jsp/common.jsp" %>
-<%@include file="/html/jsp/ztree.jsp" %>
+<%@include file="/jsp/form.jsp" %>
+<%@include file="/jsp/ztree.jsp" %>
 <script type="text/javascript">
-var toolBar = null;
-$(function(){
-	toolBar = $("#toolbar").ligerToolBar({ items: [
-	    {id: 'saveBut', text: '保存', icon:'save', click: function(){
-	    	$.save({'url':'${ctx}/dept/doSave'}); 
-	    	}
-	    },
-	    { line:true },
-	    {id: 'closeBut', text: '关闭', icon:"close", click: function(){ 
-	    	$.closeWin();
-	    	return false; 
-	    	}
-	    }
-	 ]
-	});
-});
+function save(){
+	$.save({'url':'${ctx}/dept/doSave', onSuccess: function(){
+		$.getParent().location.reload();
+		$.alert("保存成功");
+		$.closeWin();
+	}}); 
+}
 
 //校验函数
 $(function() {
@@ -56,22 +47,24 @@ $(function() {
 
 </head>
     
-<body style="padding:0px; overflow-x:hidden; "> 
-	<div id="toolbar" style="margin: 0px 2px 0px 2px;"></div> 
-	<div class="infoBox" id="infoBoxDiv"></div>
-	<div class="edit-form">
+<body class="my_formBody"> 
+	<div class="navbar-fixed-bottom my_toolbar" >
+		<button type="button" class="btn btn-primary btn-sm" onclick="save()"><i class="fa fa-hdd-o" ></i> 保存</button>
+		<button type="button" class="btn btn-info btn-sm" onclick="$.closeWin();"><i class="fa fa-times" ></i> 关闭</button>
+	</div>
+	<div id="formBoxDiv" class="my_formBox" >
+		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 		<form action="" method="post" id="dataForm">
-			<table>
-				<col width="10%"/>
-				<col width="40%"/>
-				<col width="10%"/>
-				<col width="40%"/>
+			<table class="query">
+				<col width="15%"/>
+				<col width="35%"/>
+				<col width="15%"/>
+				<col width="35%"/>
 				<tbody>
 					<tr>
 						<td class="td-label">父部门</td>
 						<td class="td-value">
-							${pName }
-							<input type="hidden" id="pid" name="pid" style="width:160px;" value="${pid}" />
+							<tag:tree nodeName="deptName" nodeId="id" id="pid" nodes="${nodes }" nodePId="pid" value="${pid }"></tag:tree>
 						</td>
 						<td class="td-label"><span class="required">*</span>部门名称</td>
 						<td class="td-value">
@@ -103,7 +96,7 @@ $(function() {
 					<tr>
 						<td class="td-label">备注</td>
 						<td class="td-value" colspan="3">
-							<textarea rows="4" cols="2" name="remark" id="remark" title="最多只能输入256个字"></textarea>
+							<textarea rows="4" cols="99" name="remark" id="remark" title="最多只能输入256个字"></textarea>
 						</td>
 					</tr>
 				</tbody>

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.whale.system.base.Cmd;
-import org.whale.system.base.Page;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.AuthDao;
 import org.whale.system.dao.RoleAuthDao;

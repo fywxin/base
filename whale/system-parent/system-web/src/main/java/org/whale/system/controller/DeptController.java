@@ -1,6 +1,9 @@
 package org.whale.system.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.base.BaseController;
-import org.whale.system.base.Page;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.WebUtil;
@@ -40,30 +42,78 @@ public class DeptController extends BaseController {
 	
 	@Auth(code="DEPT_LIST", name="查询部门")
 	@RequestMapping("/doList")
-	public void doList(HttpServletRequest request, HttpServletResponse response, Dept dept){
-		Page page = this.newPage(request);
-		page.setPageNo(1);
-		page.setPageSize(Integer.MAX_VALUE);
-		this.deptService.queryPage(page);
+	public void doList(HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Dept> depts = this.deptService.queryAll();
+		List<Map<String, Object>> rs = new ArrayList<Map<String,Object>>(depts.size());
+		if(depts != null && depts.size() > 0){
+			Map<Long, List<Map<String, Object>>> pMap = new HashMap<Long, List<Map<String,Object>>>();
+			Map<Long, Map<String, Object>> idMap = new HashMap<Long, Map<String, Object>>();
+			List<Map<String, Object>> tmpList = null;
+			Map<String, Object> tmp = null;
+			for(Dept dept : depts){
+				tmp = new HashMap<String, Object>();
+				tmp.put("name", dept.getDeptName());
+				tmp.put("id", dept.getId());
+				tmp.put("pid", dept.getPid());
+				tmp.put("deptAddr", dept.getDeptAddr());
+				tmp.put("deptTel", dept.getDeptTel());
+				tmp.put("remark", dept.getRemark());
+				tmp.put("deptCode", dept.getDeptCode());
+				idMap.put(dept.getId(), tmp);
+				
+				tmpList = pMap.get(dept.getPid());
+				if(tmpList == null){
+					tmpList = new ArrayList<Map<String,Object>>();
+					pMap.put(dept.getPid(), tmpList);
+				}
+				tmpList.add(tmp);
+			}
+			
+			List<Map<String, Object>> rootList = pMap.get(0L);
+			int num=0;
+			for(Map<String, Object> root : rootList){
+				num = this.loop(rs, root, pMap, idMap, num, 0);
+			}
+			
+		}
+		map.put("rows", rs);
+		WebUtil.print(request, response, map);
+	}
+	
+	private Integer loop(List<Map<String, Object>> rs, Map<String, Object> node, Map<Long, List<Map<String, Object>>> pMap, Map<Long, Map<String, Object>> idMap, Integer index, Integer level){
+		int lft = index+1;
 		
-		WebUtil.print(request, response, page);
+		rs.add(node);
+		node.put("level", level);
+		node.put("lft", lft);
+		
+		List<Map<String, Object>> subNodes = pMap.get(node.get("id"));
+		if(subNodes != null && subNodes.size() > 0){
+			node.put("uiicon", "ui-icon-image");
+			node.put("expanded", true);
+			level++;
+			int num = lft;
+			for(Map<String, Object> sub : subNodes){
+				num = this.loop(rs, sub, pMap, idMap, num, level);
+			}
+			lft = num+1;
+		}else{
+			node.put("expanded", false);
+			node.put("uiicon", "ui-icon-document");
+			lft = lft+1;
+		}
+		node.put("rgt", lft);
+		return lft;
 	}
 	
 	@Auth(code="DEPT_SAVE", name="新增部门")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(HttpServletRequest request, HttpServletResponse response, Long pid){
-		String pName = "";
-		if(pid != null){
-			Dept pDept = this.deptService.get(pid);
-			if(pDept == null){
-				throw new SysException("查找不到 父部门pid="+pid);
-			}
-			pName = pDept.getDeptName();
-		}
 		
 		return new ModelAndView("system/dept/dept_save")
+				.addObject("nodes", JSON.toJSONString(this.deptService.queryAll()))
 				.addObject("pid", pid)
-				.addObject("pName", pName)
 				.addObject("nextOrderNo", this.deptService.getNextOrder(pid));
 	}
 	
