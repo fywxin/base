@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Cmd;
 import org.whale.system.domain.Dept;
 
 @Repository
@@ -16,7 +15,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 * @return
 	 */
     public Dept getByDeptName(String deptName) {
-    	return this.getBy(Cmd.newCmd(Dept.class).and("deptName", deptName));
+    	return this.getBy(this.cmd().and("deptName", deptName));
     }
     /**
 	 * 按 部门编码 获取 部门
@@ -25,7 +24,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 */
     public Dept getByDeptCode(String deptCode) {
 
-    	return this.getBy(Cmd.newCmd(Dept.class).and("deptCode", deptCode));
+    	return this.getBy(this.cmd().and("deptCode", deptCode));
     }
     
     /**

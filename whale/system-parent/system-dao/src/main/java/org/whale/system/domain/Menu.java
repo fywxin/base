@@ -1,12 +1,15 @@
 package org.whale.system.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.whale.system.annotation.jdbc.Column;
 import org.whale.system.annotation.jdbc.Id;
 import org.whale.system.annotation.jdbc.Order;
 import org.whale.system.annotation.jdbc.Table;
 import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
-import org.whale.system.common.util.ITreeNode;
+import org.whale.system.common.util.TreeNode;
 
 /**
  * 
@@ -14,7 +17,7 @@ import org.whale.system.common.util.ITreeNode;
  *
  */
 @Table(value="sys_menu", cnName="菜单")
-public class Menu extends BaseEntry  implements ITreeNode{
+public class Menu extends BaseEntry implements TreeNode{
 
 	private static final long serialVersionUID = -122342341L;
 
@@ -183,6 +186,17 @@ public class Menu extends BaseEntry  implements ITreeNode{
 	@Override
 	public String name() {
 		return menuName;
+	}
+
+	@Override
+	public Map<String, Object> asMap() {
+		Map<String, Object> tmp = new HashMap<String, Object>();
+		tmp.put("menuType", this.getMenuType());
+		tmp.put("menuUrl", this.getMenuUrl());
+		tmp.put("openType", this.getOpenType());
+		tmp.put("openState", this.getOpenState());
+		tmp.put("isPublic", this.getIsPublic());
+		return tmp;
 	}
 
 }

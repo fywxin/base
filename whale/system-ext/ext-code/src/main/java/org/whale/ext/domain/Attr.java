@@ -7,13 +7,6 @@ import org.whale.system.annotation.jdbc.Table;
 import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
 
-/**
- * 属性字段
- *
- * @author 王金绍
- * 2014年9月10日-下午4:02:37
- */
-@Table(value="sys_attr", cnName="属性字段")
 public class Attr extends BaseEntry{
 
 	private static final long serialVersionUID = -324398431L;

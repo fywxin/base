@@ -56,6 +56,7 @@ $(function() {
 	<div id="formBoxDiv" class="my_formBox" >
 		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 		<form action="" method="post" id="dataForm">
+			<input type="hidden" id="dictId" name="dictId" value="${dictId }" />
 			<table class="query">
 						<tr>
 							<td class="td-label"><span class="required">*</span>元素名称</td>

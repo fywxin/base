@@ -1,9 +1,6 @@
 package org.whale.system.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +13,7 @@ import org.whale.system.annotation.auth.Auth;
 import org.whale.system.base.BaseController;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
+import org.whale.system.common.util.TreeUtil;
 import org.whale.system.common.util.WebUtil;
 import org.whale.system.domain.Menu;
 import org.whale.system.service.MenuService;
@@ -40,70 +38,7 @@ public class MenuController extends BaseController {
 	@Auth(code="MENU_LIST",name="查询菜单")
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response){
-		Map<String, Object> map = new HashMap<String, Object>();
-		List<Menu> menus = this.menuService.queryAll();
-		List<Map<String, Object>> rs = new ArrayList<Map<String,Object>>(menus.size());
-		
-		if(menus != null && menus.size() > 0){
-			Map<Long, List<Map<String, Object>>> pMap = new HashMap<Long, List<Map<String,Object>>>();
-			Map<Long, Map<String, Object>> idMap = new HashMap<Long, Map<String, Object>>();
-			List<Map<String, Object>> tmpList = null;
-			Map<String, Object> tmp = null;
-			for(Menu menu : menus){
-				tmp = new HashMap<String, Object>();
-				tmp.put("name", menu.getMenuName());
-				tmp.put("id", menu.getMenuId());
-				tmp.put("pid", menu.getParentId());
-				tmp.put("menuType", menu.getMenuType());
-				tmp.put("menuUrl", menu.getMenuUrl());
-				tmp.put("openType", menu.getOpenType());
-				tmp.put("openState", menu.getOpenState());
-				tmp.put("isPublic", menu.getIsPublic());
-				idMap.put(menu.getMenuId(), tmp);
-				
-				tmpList = pMap.get(menu.getParentId());
-				if(tmpList == null){
-					tmpList = new ArrayList<Map<String,Object>>();
-					pMap.put(menu.getParentId(), tmpList);
-				}
-				tmpList.add(tmp);
-			}
-			
-			List<Map<String, Object>> rootList = pMap.get(0L);
-			int num=0;
-			for(Map<String, Object> root : rootList){
-				num = this.loop(rs, root, pMap, idMap, num, 0);
-			}
-			
-		}
-		map.put("rows", rs);
-		WebUtil.print(request, response, map);
-	}
-	
-	private Integer loop(List<Map<String, Object>> rs, Map<String, Object> node, Map<Long, List<Map<String, Object>>> pMap, Map<Long, Map<String, Object>> idMap, Integer index, Integer level){
-		int lft = index+1;
-		
-		rs.add(node);
-		node.put("level", level);
-		node.put("lft", lft);
-		
-		List<Map<String, Object>> subNodes = pMap.get(node.get("id"));
-		if(subNodes != null && subNodes.size() > 0){
-			node.put("uiicon", "ui-icon-image");
-			node.put("expanded", true);
-			level++;
-			int num = lft;
-			for(Map<String, Object> sub : subNodes){
-				num = this.loop(rs, sub, pMap, idMap, num, level);
-			}
-			lft = num+1;
-		}else{
-			node.put("expanded", false);
-			node.put("uiicon", "ui-icon-document");
-			lft = lft+1;
-		}
-		node.put("rgt", lft);
-		return lft;
+		WebUtil.print(request, response, TreeUtil.jqGridTree(this.menuService.queryAll(), 0L));
 	}
 	
 	@Auth(code="MENU_SAVE",name="新增菜单")

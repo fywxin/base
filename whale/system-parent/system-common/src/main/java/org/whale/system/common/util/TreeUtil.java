@@ -1,9 +1,149 @@
 package org.whale.system.common.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.core.OrderComparator;
+import org.springframework.core.Ordered;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 public class TreeUtil {
+	
+	/**
+	 * jqGrid树列表转换方法
+	 * @param list
+	 * @param rootId
+	 * @return
+	 */
+	public static <T extends TreeNode> JSONObject jqGridTree(List<T> list, Object rootId){
+		JSONObject obj = new JSONObject();
+		if(list == null || list.size() < 1){
+			obj.put("rows", new JSONArray());
+		}else{
+			obj.put("rows", parseJqGridTreeNodes(list, rootId));
+		}
+		return obj;
+	}
+	
+	private static <T extends TreeNode> List<Map<String, Object>> parseJqGridTreeNodes(List<T> list, Object rootId){
+		List<Map<String, Object>> rs = new ArrayList<Map<String,Object>>(list.size());
+		//父Id，子列表
+		Map<Object, List<Map<String, Object>>> pMap = new HashMap<Object, List<Map<String,Object>>>();
+		//Id, 节点树对象
+		Map<Object, Map<String, Object>> idMap = new HashMap<Object, Map<String, Object>>();
+		
+		//转换Temp
+		List<Map<String, Object>> tmpList = null;
+		Map<String, Object> tmp = null;
+		Boolean hasOrderCol = null;
+		for(int i=0; i<list.size(); i++){//pMap、idMap构造
+			if(hasOrderCol == null){
+				if(list.get(0) instanceof Ordered){
+					hasOrderCol = true;
+				}else{
+					hasOrderCol = false;
+				}
+			}
+			T obj = list.get(i);
+			tmp = obj.asMap();
+			tmp.put("name", obj.name());
+			tmp.put("id", obj.id());
+			tmp.put("pid", obj.pid());
+			if(hasOrderCol.booleanValue()){
+				Ordered ordered = (Ordered)list.get(i);
+				tmp.put("order", ordered.getOrder());
+			}
+			
+			idMap.put(obj.id(), tmp);
+			
+			tmpList = pMap.get(obj.pid());
+			if(tmpList == null){
+				tmpList = new ArrayList<Map<String,Object>>();
+				pMap.put(obj.pid(), tmpList);
+			}
+			tmpList.add(tmp);
+		}
+		
+		if(hasOrderCol.booleanValue()){
+			for(List<Map<String, Object>> chls : pMap.values()){
+				Collections.sort(chls, new OrderComparator());
+			}
+		}
+		
+		if(rootId == null){
+			rootId = 0L;
+		}
+		//获取根节点集合
+		List<Map<String, Object>> rootList = pMap.get(rootId);
+		if(rootList == null){
+			//获取所有的子节点集合
+			Set<Object> childIds = new HashSet<Object>();
+			for(List<Map<String, Object>> chls : pMap.values()){
+				for(Map<String, Object> map : chls){
+					childIds.add(map.get("id"));
+				}
+			}
+			//不在子节点集合里面的都是根节点
+			rootList = new ArrayList<Map<String,Object>>(list.size()-childIds.size());
+			for(T obj : list){
+				if(!childIds.contains(obj.id())){
+					rootList.add(idMap.get(obj.id()));
+				}
+			}
+		}
+		
+		//按根节点循环获取所有的树结构
+		int num=0;
+		for(Map<String, Object> root : rootList){//从根节点循环获取树结构对象类别
+			num = loop(rs, root, pMap, idMap, num, 0);
+		}
+		
+		return rs;
+	}
+	
+	/**
+	 * 构造树结构 lft rgt level
+	 * @param rs  返回结果集合
+	 * @param node 当前节点
+	 * @param pMap 父Id，子列表
+	 * @param idMap Id, 节点树对象
+	 * @param index 当前index值
+	 * @param level 
+	 * @return
+	 */
+	private static Integer loop(List<Map<String, Object>> rs, Map<String, Object> node, Map<Object, List<Map<String, Object>>> pMap, Map<Object, Map<String, Object>> idMap, Integer index, Integer level){
+		//进入节点前，先+1，做为上个节点的次节点
+		int lft = index+1;
+		rs.add(node);
+		node.put("level", level);
+		node.put("lft", lft);
+		
+		List<Map<String, Object>> subNodes = pMap.get(node.get("id"));
+		if(subNodes != null && subNodes.size() > 0){
+			node.put("uiicon", "ui-icon-image");
+			node.put("expanded", true);
+			level++;
+			int num = lft;
+			for(Map<String, Object> sub : subNodes){
+				num = loop(rs, sub, pMap, idMap, num, level);
+			}
+			lft = num+1;
+		}else{
+			node.put("expanded", false);
+			node.put("uiicon", "ui-icon-document");
+			lft = lft+1;
+		}
+		node.put("rgt", lft);
+		return lft;
+	}
+	
 
 	/**
 	 * 返回子树结构
@@ -11,7 +151,7 @@ public class TreeUtil {
 	 * @param rootId
 	 * @return
 	 */
-	public static <T extends ITreeNode> Tree<T> parseTree(List<T> list, Long rootId){
+	public static <T extends TreeNode> Tree<T> parseTree(List<T> list, Object rootId){
 		if(list == null || list.size() < 1)
 			return null;
 		T root = getNode(list, rootId);
@@ -31,7 +171,7 @@ public class TreeUtil {
 	 * @param root
 	 * @return
 	 */
-	public static <T extends ITreeNode> Tree<T> parseTree(List<T> list, T root){
+	public static <T extends TreeNode> Tree<T> parseTree(List<T> list, T root){
 		
 		return parseTree(list, root, null);
 	}
@@ -43,7 +183,7 @@ public class TreeUtil {
 	 * @param parent
 	 * @return
 	 */
-	public static <T extends ITreeNode> Tree<T> parseTree(List<T> list, T node, Tree<T> parent){
+	public static <T extends TreeNode> Tree<T> parseTree(List<T> list, T node, Tree<T> parent){
 		Tree<T> tree = new Tree<T>();
 		tree.setLeaf(false);
 		if(parent == null){
@@ -76,7 +216,7 @@ public class TreeUtil {
 	 * @param id
 	 * @return
 	 */
-	public static <T extends ITreeNode> List<T> getSubNodes(List<T> list, Long id){
+	public static <T extends TreeNode> List<T> getSubNodes(List<T> list, Object id){
 		List<T> rs = new ArrayList<T>();
 		
 		if(list != null && list.size() > 0){
@@ -95,8 +235,8 @@ public class TreeUtil {
 	 * @param id
 	 * @return
 	 */
-	public static <T extends ITreeNode> List<T> getAllSubNodes(List<T> list, Long id){
-		if(id == null || id == 0L)
+	public static <T extends TreeNode> List<T> getAllSubNodes(List<T> list, Object id){
+		if(id == null)
 			return list;
 		
 		List<T> rs = new ArrayList<T>();
@@ -116,7 +256,7 @@ public class TreeUtil {
 	 * @param id
 	 * @return
 	 */
-	public static <T extends ITreeNode> boolean isLeaf(List<T> list, Long id){
+	public static <T extends TreeNode> boolean isLeaf(List<T> list, Object id){
 		if(list != null && list.size() > 0){
 			for(T t : list){
 				if(t.pid() == id){
@@ -133,7 +273,7 @@ public class TreeUtil {
 	 * @param id
 	 * @return
 	 */
-	public static <T extends ITreeNode>T getNode(List<T> list, Long id){
+	public static <T extends TreeNode>T getNode(List<T> list, Object id){
 		if(list == null || list.size() < 1)
 			return null;
 		for(T t : list){
@@ -149,7 +289,7 @@ public class TreeUtil {
 	 * @param list
 	 * @return
 	 */
-	public static <T extends ITreeNode>List<T> getAllLeaf(List<T> list){
+	public static <T extends TreeNode>List<T> getAllLeaf(List<T> list){
 		List<T> rs = new ArrayList<T>();
 		for(T t : list){
 			if(isLeaf(list, t.id())){
@@ -165,7 +305,7 @@ public class TreeUtil {
 	 * @param id
 	 * @return
 	 */
-	public static <T extends ITreeNode>List<T> getAllSubLeaf(List<T> list, Long id){
+	public static <T extends TreeNode>List<T> getAllSubLeaf(List<T> list, Long id){
 		if(id == null || id == 0L){
 			return getAllLeaf(list);
 		}

@@ -2,7 +2,7 @@ package org.whale.system.common.util;
 
 import java.util.List;
 
-public class Tree<T extends ITreeNode> {
+public class Tree<T extends TreeNode> {
 	
 	private boolean isRoot;
 	

@@ -44,14 +44,20 @@ public class DeptController extends BaseController {
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response){
 		Map<String, Object> map = new HashMap<String, Object>();
+		//获取所有部门数据
 		List<Dept> depts = this.deptService.queryAll();
+		//部门转为树节点集合
 		List<Map<String, Object>> rs = new ArrayList<Map<String,Object>>(depts.size());
 		if(depts != null && depts.size() > 0){
+			//父Id，子列表
 			Map<Long, List<Map<String, Object>>> pMap = new HashMap<Long, List<Map<String,Object>>>();
+			//Id, 节点树对象
 			Map<Long, Map<String, Object>> idMap = new HashMap<Long, Map<String, Object>>();
+			
+			//转换Temp
 			List<Map<String, Object>> tmpList = null;
 			Map<String, Object> tmp = null;
-			for(Dept dept : depts){
+			for(Dept dept : depts){//pMap、idMap构造
 				tmp = new HashMap<String, Object>();
 				tmp.put("name", dept.getDeptName());
 				tmp.put("id", dept.getId());
@@ -70,10 +76,11 @@ public class DeptController extends BaseController {
 				tmpList.add(tmp);
 			}
 			
+			//获取根节点集合
 			List<Map<String, Object>> rootList = pMap.get(0L);
 			int num=0;
-			for(Map<String, Object> root : rootList){
-				num = this.loop(rs, root, pMap, idMap, num, 0);
+			for(Map<String, Object> root : rootList){//从根节点循环获取树结构对象类别
+				num = loop(rs, root, pMap, idMap, num, 0);
 			}
 			
 		}
@@ -81,9 +88,19 @@ public class DeptController extends BaseController {
 		WebUtil.print(request, response, map);
 	}
 	
-	private Integer loop(List<Map<String, Object>> rs, Map<String, Object> node, Map<Long, List<Map<String, Object>>> pMap, Map<Long, Map<String, Object>> idMap, Integer index, Integer level){
+	/**
+	 * 构造树结构 lft rgt level
+	 * @param rs  返回结果集合
+	 * @param node 当前节点
+	 * @param pMap 父Id，子列表
+	 * @param idMap Id, 节点树对象
+	 * @param index 当前index值
+	 * @param level 
+	 * @return
+	 */
+	public static Integer loop(List<Map<String, Object>> rs, Map<String, Object> node, Map<Long, List<Map<String, Object>>> pMap, Map<Long, Map<String, Object>> idMap, Integer index, Integer level){
+		//进入节点前，先+1，做为上个节点的次节点
 		int lft = index+1;
-		
 		rs.add(node);
 		node.put("level", level);
 		node.put("lft", lft);
@@ -95,7 +112,7 @@ public class DeptController extends BaseController {
 			level++;
 			int num = lft;
 			for(Map<String, Object> sub : subNodes){
-				num = this.loop(rs, sub, pMap, idMap, num, level);
+				num = loop(rs, sub, pMap, idMap, num, level);
 			}
 			lft = num+1;
 		}else{

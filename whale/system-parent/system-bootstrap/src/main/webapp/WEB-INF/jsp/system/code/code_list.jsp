@@ -4,9 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>用户列表</title>
-<%@include file="/html/jsp/common.jsp" %>
+<%@include file="/jsp/form.jsp" %>
 <style type="text/css">
-.result{clear:both; width:100%; border-spacing:0px; *border-spacing:expression(this.cellSpacing="0px"); border-collapse:collapse; font-size:12px; text-align:center; }
+.result{clear:both; width:100%; border-spacing:0px; *border-spacing:expression(this.cellSpacing="0px"); border-collapse:collapse; font-size:12px; text-align:center;margin-top:2px; }
 .result thead{font-weight:bold; background:#F4F5F7; }
 
 .result td{padding:2px 0; border-width:1px; border-style:solid; border-color:#A3C0E8;text-align: left;padding-left: 5px;}
@@ -15,7 +15,7 @@
 .myButtom{text-decoration: none;background-color: #ddd;background-image: linear-gradient(#eee, #ddd);background-repeat: repeat-x;border-color: #ccc;position: relative;display: inline-block;padding: 7px 25px;font-size: 13px;font-weight: bold;color: #333;text-shadow: 0 1px 0 rgba(255,255,255,0.9);white-space: nowrap;vertical-align: middle;cursor: pointer;border: 1px solid #d5d5d5;border-radius: 3px;-webkit-user-select: none;box-sizing: border-box;margin-left: 25px;}
 </style>
 
-<script language="javascript">
+<script>
 function save(){
 	doSave(false);
 }
@@ -44,12 +44,6 @@ function doSave(gen){
 	if(!pass){
 		return false;
 	}
-	
-	$("input[type='checkbox']").each(function(){
-	    if (!$(this).is(':checked')) {
-	        $(this).val(0).attr("checked","checked"); 
-	    }
-	});
 	
 	$.ajax({
 		url:'${ctx}/code/doSave?gen='+gen,
@@ -124,20 +118,20 @@ $(function() {
 });
 
 function pid(){
-	if($("#ftlType").val() == 5 || $("#ftlType").val() == 6){
-		$("#domainPId").show();
+	if($("#treeModel").val() == 3){
+		$("#treeGridTr").show();
 	}else{
-		$("#domainPId").hide();
+		$("#treeGridTr").hide();
 	}
 }
 </script>
 </head>
-<body style="overflow-x: hidden;">
+<body class="gray-bg" style="background-color: white;padding:5px;">
 <form action="" id="dataForm">
 	<div class="edit-form">
 		<input type="hidden" id="attrVals" name="attrVals"/>
 		<input type="hidden" id="id" name="id" value="${domain.id }" />
-		<table id="tableTable">
+		<table id="tableTable" class="query">
 			<col width="8%" />
 			<col width="25%"/>
 			<col width="8%" />
@@ -166,17 +160,30 @@ function pid(){
 					<td class="td-value">
 						<input type="text" name="codePath" id="codePath" style="width:200px;" value="${domain.codePath }" />
 					</td>
-					<td class="td-label">模板分类</td>
+					<td class="td-label">树模型</td>
 					<td class="td-value">
-						<select name="ftlType" id="ftlType" style="width: 125px;" onchange="pid()">
-							<option value="1" >增删改查(单表)</option>
-							<option value="2" >增删改查(一对多)</option>
-							<option value="3" >仅持久化层(dao/domain)</option>
-							<option value="4" >仅后台层(dao/service/control)</option>
-							<option value="5" >树结构表(一体)</option>
-							<option value="6" >树结构表(左树右表)</option>
+						<select name="treeModel" id="treeModel" style="width: 165px;" onchange="pid()">
+							<option value="1" >仅列表</option>
+							<option value="2" >左树右列表</option>
+							<option value="3" >树列表</option>
 						</select>
-						<input type="text" id="domainPId" name="domainPId" style="width: 80px;display: none;"   placeholder="树父Id字段名" ></input>
+						<input type="text" id="treeId" name="treeId" style="width: 80px;display: none;"   placeholder="树Id字段名" ></input>
+						<input type="text" id="treePid" name="treePid" style="width: 80px;display: none;"   placeholder="树ParentId字段名" ></input>
+						<input type="text" id="treeName" name="treeName" style="width: 80px;display: none;"   placeholder="树Name字段名" ></input>
+					</td>
+				</tr>
+				<tr id="treeGridTr" style="display:none;">
+					<td class="td-label">树Id字段名</td>
+					<td class="td-value">
+						<input type="text" id="treeId" name="treeId" style="width:160px;" value="id"  placeholder="树Id字段名" ></input>
+					</td>
+					<td class="td-label">树父Id字段名</td>
+					<td class="td-value">
+						<input type="text" id="treePid" name="treePid" style="width:160px;" value="pid" placeholder="树ParentId字段名" ></input>
+					</td>
+					<td class="td-label">树Name字段名</td>
+					<td class="td-value">
+						<input type="text" id="treeName" name="treeName" style="width:160px;" value="name" placeholder="树Name字段名" ></input>
 					</td>
 				</tr>
 			</tbody>
@@ -232,22 +239,40 @@ function pid(){
 					</td>
 					<td><input type="text" name="maxLength" value="${attr.maxLength }" style="width:60px;" title="[${attr.sqlName }]最大长度"/></td>
 					<td>
-						<input type="checkbox" name="isId" value="1" <c:if test="${attr.isId || (index_item.index == 0)}">checked</c:if> title="[${attr.sqlName }]是否主键" />
+						<select name="isId" title="[${attr.sqlName }]是否主键">
+							<option value="1"  <c:if test="${attr.isId || (index_item.index == 0)}">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.isId && (index_item.index != 0)}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
-						<input type="checkbox" name="isEdit" value="1" <c:if test="${attr.isEdit}"> checked </c:if> title="[${attr.sqlName }]是否可编辑" />
+						<select name="isEdit" title="[${attr.sqlName }]是否可编辑">
+							<option value="1"  <c:if test="${attr.isEdit }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.isEdit}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
-						<input type="checkbox" name="isNull" value="1" <c:if test="${attr.isNull}">checked</c:if> title="[${attr.sqlName }]是否可空" />
+						<select name="isNull" title="[${attr.sqlName }]是否可空">
+							<option value="1"  <c:if test="${attr.isNull }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.isNull}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
-						<input type="checkbox" name="isUnique" value="1" <c:if test="${attr.isUnique}">checked</c:if> title="[${attr.sqlName }]是否唯一"/>
+						<select name="isUnique" title="[${attr.sqlName }]是否唯一">
+							<option value="1"  <c:if test="${attr.isUnique }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.isUnique}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
-						<input type="checkbox" name="inList" value="1" <c:if test="${attr.inList}">checked</c:if> title="[${attr.sqlName }]列表显示"/>
+						<select name="inList" title="[${attr.sqlName }]列表显示">
+							<option value="1"  <c:if test="${attr.inList }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.inList}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
-						<input type="checkbox" name="inQuery" value="1" <c:if test="${attr.inQuery}">checked</c:if> title="[${attr.sqlName }]列表查询条件显示"/>
+						<select name="inQuery" title="[${attr.sqlName }]列表查询条件显示">
+							<option value="1"  <c:if test="${attr.inQuery }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.inQuery}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
 						<select name="queryType" >
@@ -264,7 +289,10 @@ function pid(){
                           </select>
 					</td>
 					<td>
-						<input type="checkbox" name="inForm" value="1" <c:if test="${attr.inForm}">checked</c:if> title="[${attr.sqlName }]表单显示"/>
+						<select name="inForm" title="[${attr.sqlName }]表单显示">
+							<option value="1"  <c:if test="${attr.inForm }">selected="selected"</c:if>>是</option>
+							<option value="0"  <c:if test="${!attr.inForm}">selected="selected"</c:if>>&nbsp;&nbsp;</option>
+						</select>
 					</td>
 					<td>
 						<select name="formType">

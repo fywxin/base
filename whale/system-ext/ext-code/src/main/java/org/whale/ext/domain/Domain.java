@@ -8,6 +8,7 @@ import org.whale.system.annotation.jdbc.Id;
 import org.whale.system.annotation.jdbc.Table;
 import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
+import org.whale.system.common.util.PropertiesUtil;
 
 /**
  * 实体对象
@@ -39,13 +40,22 @@ public class Domain extends BaseEntry{
 	@Column(cnName="基础包路径")
 	private String pkgName = "org.whale.system";
 	
+	//树模型
+	private Integer treeModel;
+	
+	private String treeId;
+	
+	private String treePid;
+	
+	private String treeName;
+	
 	//模板类型
 	private Integer ftlType;
 	
 	//代码路径
 	private String codePath;
 	
-	private Boolean isTree = false;
+	private String author = PropertiesUtil.getValue("author", "王金绍");
 	
 	//主键
 	private Attr idAttr;
@@ -154,13 +164,44 @@ public class Domain extends BaseEntry{
 		this.codePath = codePath;
 	}
 
-	public boolean getIsTree() {
-		return isTree;
+	public Integer getTreeModel() {
+		return treeModel;
 	}
 
-	public void setIsTree(boolean isTree) {
-		this.isTree = isTree;
+	public void setTreeModel(Integer treeModel) {
+		this.treeModel = treeModel;
 	}
 
+	public String getTreeId() {
+		return treeId;
+	}
+
+	public void setTreeId(String treeId) {
+		this.treeId = treeId;
+	}
+
+	public String getTreePid() {
+		return treePid;
+	}
+
+	public void setTreePid(String treePid) {
+		this.treePid = treePid;
+	}
+
+	public String getTreeName() {
+		return treeName;
+	}
+
+	public void setTreeName(String treeName) {
+		this.treeName = treeName;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
 	
 }

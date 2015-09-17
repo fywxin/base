@@ -23,23 +23,6 @@ public class CodeEngine {
 	private Configuration cfg;
 
 	public void createCode(Domain domain) throws IOException, TemplateException{
-		if(domain.getFtlType() == 3){
-			this.doCreateJava(domain, "Domain", domain.getCodePath()+File.separator+domain.getDomainName()+".java");
-			this.doCreateJava(domain, "Dao", domain.getCodePath()+File.separator+domain.getDomainName()+"Dao.java");
-			
-			return ;
-		}else if(domain.getFtlType() == 4){
-			this.doCreateJava(domain, "Domain", domain.getCodePath()+File.separator+domain.getDomainName()+".java");
-			this.doCreateJava(domain, "Dao", domain.getCodePath()+File.separator+domain.getDomainName()+"Dao.java");
-			this.doCreateJava(domain, "Service", domain.getCodePath()+File.separator+domain.getDomainName()+"Service.java");
-			this.doCreateJava(domain, "Controller", domain.getCodePath()+File.separator+domain.getDomainName()+"Controller.java");
-			
-			return ;
-		}else if(domain.getFtlType() == 5){
-			domain.setIsTree(true);
-		}else if(domain.getFtlType() == 6){
-			domain.setIsTree(true);
-		}
 		this.doCreateJava(domain, "Domain", domain.getCodePath()+File.separator+domain.getDomainName()+".java");
 		this.doCreateJava(domain, "Dao", domain.getCodePath()+File.separator+domain.getDomainName()+"Dao.java");
 		this.doCreateJava(domain, "Service", domain.getCodePath()+File.separator+domain.getDomainName()+"Service.java");

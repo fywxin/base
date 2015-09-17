@@ -232,11 +232,11 @@ public class CodeController extends BaseController {
 				this.codeEngine.createCode(domain);
 			}
 			
-			if(domain.getId() == null){
-				this.domainService.save(domain);
-			}else{
-				this.domainService.update(domain);
-			}
+//			if(domain.getId() == null){
+//				this.domainService.save(domain);
+//			}else{
+//				this.domainService.update(domain);
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			WebUtil.printFail(request, response, e.getMessage());

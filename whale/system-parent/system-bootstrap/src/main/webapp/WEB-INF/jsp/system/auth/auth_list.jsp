@@ -8,21 +8,20 @@
 $(function(){
 	$("#gridTable").grid({
 			url :'${ctx}/auth/doList?menuId=${menuId}',
-			colNames: ['','操作', '权限名称', '权限编码','所属菜单'],
 			colModel: [{name:'id',index:'id', width:30,fixed:true, resize:false, formatter: 
 		       		function(cellvalue, options, row){
 							return '<input type="checkbox" value="'+row.authId+'" name="chk_col">';
 		       		}
 		       	},
-	        	{name:'opt',index:'opt', width:100, fixed:true, sortable:false, resize:false, align: "center",
+	        	{name:'opt',index:'opt', width:100, fixed:true, sortable:false, resize:false, align: "center",label:'操作',
 				formatter: function(cellvalue, options, row){
 					var strArr = [];
 					strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"update('"+row.authId+"')\"><i class='fa fa-pencil'></i> 修改</button>");
 		        	return strArr.join("");
 				}},
-				{name:'authName',width:160},
-				{name:'authCode', width:160},
-				{name:'menuName', width:160}
+				{name:'authName',width:160, label:'权限名称'},
+				{name:'authCode', width:160, label:'权限编码'},
+				{name:'menuName', width:160, label:'所属菜单'}
 		]
 	});
 });

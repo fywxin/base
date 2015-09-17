@@ -31,7 +31,7 @@ public class AuthDao extends BaseDao<Auth, Long> {
 	
 	public Auth getByAuthCode(String authCode){
 		
-		return this.getBy(Cmd.newCmd(Auth.class).and("authCode", authCode));
+		return this.getBy(this.cmd().and("authCode", authCode));
 	}
 	
 	/**
