@@ -277,7 +277,10 @@ public class SimpleHttpClient {
 	 * @return
 	 */
 	private String doExecute(String url, String method, Map<String, String> header, String body, Integer contimeout, Integer readtimeout, String reqCharset, String resCharset){
-		logger.debug("url:{}, method:{}, contimeout: {}, readtimeout: {}, reqCharset:{}, resCharset: {} \nheader: {}, \nbody:{}", url, method, contimeout, readtimeout, reqCharset, resCharset, header, body);
+		if(logger.isDebugEnabled()){
+			logger.debug("url:{}, method:{}, contimeout: {}, readtimeout: {}, reqCharset:{}, resCharset: {} \nheader: {}, \nbody:{}", 
+					url, method, contimeout, readtimeout, reqCharset, resCharset, header, body);
+		}
 		
 		long start = System.currentTimeMillis();
 		try {

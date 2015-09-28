@@ -328,7 +328,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				String temp = sql.toLowerCase();
 				//出现多个from值时，采用保守方式获取总记录数，但会降低效率
 				//TODO 是否要移除order by
-				if(temp.substring((index = temp.indexOf("from"))+5).indexOf("from") == -1){
+				if(temp.substring((index = temp.lastIndexOf("from"))+5).lastIndexOf("from") == -1){
 					countSql = "select count(1) "+sql.substring(index);
 				}else{
 					countSql = "select count(1) from ("+sql+")";
@@ -337,19 +337,22 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			page.setTotal(this.jdbcTemplate.queryForLong(countSql,params.toArray()));
 		}
 		
-		if(DbKind.isMysql()){
-			sql += " LIMIT ?, ?";
-			params.add((page.getPageNo()-1) * page.getPageSize());
-			params.add(page.getPageSize());
-		}else{
-			sql = "select * from (select row_.*, rownum rownum_ from ( "+sql+" ) row_ where rownum <=?) where rownum_>=?";
-			params.add((page.getPageNo()+1) * page.getPageSize());
-			params.add(page.getPageNo() * page.getPageSize());
+		if(page.getTotal() > 0){
+			if(DbKind.isMysql()){
+				sql += " LIMIT ?, ?";
+				params.add((page.getPageNo()-1) * page.getPageSize());
+				params.add(page.getPageSize());
+			}else{
+				sql = "select * from (select row_.*, rownum rownum_ from ( "+sql+" ) row_ where rownum <=?) where rownum_>=?";
+				params.add((page.getPageNo()+1) * page.getPageSize());
+				params.add(page.getPageNo() * page.getPageSize());
+			}
+			page.setDatas(this.jdbcTemplate.queryForList(sql, params.toArray()));
 		}
+		
 		if(logger.isDebugEnabled()){
 			logger.debug(page.toString());
 		}
-		page.setDatas(this.jdbcTemplate.queryForList(sql, params.toArray()));
 		
 		//防止sql语句返回前台，导致安全问题
 		page.setCountSql(null);

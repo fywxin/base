@@ -62,7 +62,10 @@ public class HttpClientUtil {
 	 * @return
 	 */
 	public static String get(String url, Map<String, String> headers, String resCharset, Integer contimeout, Integer readtimeout) {
-		logger.debug("url: {} headers：{} resCharset: {}", url, headers, resCharset);
+		if(logger.isDebugEnabled()){
+			logger.debug("url: {} headers：{} resCharset: {}", url, headers, resCharset);
+		}
+		
 		HttpGet httpGet = new HttpGet(url);
 
 		if (headers != null && !headers.isEmpty()) {
@@ -100,7 +103,10 @@ public class HttpClientUtil {
 	 * @return
 	 */
 	public static String post(String url, Map<String, String> headers, String postStr, String reqCharset, String resCharset, Integer contimeout, Integer readtimeout) {
-		logger.info("url: {} headers：{} charset: {} postStr: {}", url, headers, postStr);
+		if(logger.isDebugEnabled()){
+			logger.debug("url: {} headers：{} charset: {} postStr: {}", url, headers, postStr);
+		}
+		
 		HttpPost httpPost = new HttpPost(url);
 
 		if (headers != null && !headers.isEmpty()) {
@@ -143,7 +149,10 @@ public class HttpClientUtil {
 	 * @return
 	 */
 	public static String post(String url, Map<String, String> params, Map<String, String> headers, String resCharset, Integer contimeout, Integer readtimeout) {
-		logger.debug("url: {} params：{} headers：{} resCharset: {}", url, params, headers, resCharset);
+		if(logger.isDebugEnabled()){
+			logger.debug("url: {} params：{} headers：{} resCharset: {}", url, params, headers, resCharset);
+		}
+		
 		HttpPost httpPost = new HttpPost(url);
 		
 		if(params != null && params.size() > 0) {
@@ -208,7 +217,10 @@ public class HttpClientUtil {
 				HttpEntity httpEntity = response.getEntity();
 				String resStr = EntityUtils.toString(httpEntity, charset);
 				EntityUtils.consume(httpEntity);  
-				logger.debug("url: {} 返回内容 :\n {}" ,url, resStr);
+				
+				if(logger.isDebugEnabled()){
+					logger.debug("url: {} 返回内容 :\n {}" ,url, resStr);
+				}
 				return resStr;
 			}
 		//http://www.blogjava.net/wangxinsh55/archive/2012/07/16/383210.html
@@ -221,7 +233,10 @@ public class HttpClientUtil {
 			request.abort();
 			throw new HttpClientException(e);
 		} 
-		logger.debug("url: {} 返回内容：空", url);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("url: {} 返回内容：空", url);
+		}
 		return null;
 	}
 	

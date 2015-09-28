@@ -107,7 +107,6 @@ public class DictCacheService implements Bootable{
 				logger.warn("缓存被禁用，采用无缓存模式运行！");
 			}else{
 				this.cacheService.mdel(CACHE_PREX, dictCodes);
-				logger.info("CACHE: 字典["+dictCodes+"]删除完成！");
 			}
 		} catch (RemoteCacheException e) {
 			logger.error("CACHE: 远程缓存不可用！", e);
@@ -130,7 +129,9 @@ public class DictCacheService implements Bootable{
 			cacheDown = true;
 		}
 		if(dict == null){
-			logger.info("CACHE: 缓存不存在字典编码["+dictCode+"]数据，开始从数据库查找...");
+			if(logger.isDebugEnabled()){
+				logger.debug("CACHE: 缓存不存在字典编码["+dictCode+"]数据，开始从数据库查找...");
+			}
 			dict = this.getByDictCodeFromDb(dictCode);
 			if(!cacheDown && dict != null && this.cacheService != null){
 				try {

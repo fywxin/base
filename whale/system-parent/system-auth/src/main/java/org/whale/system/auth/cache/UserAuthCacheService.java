@@ -71,7 +71,10 @@ public class UserAuthCacheService implements Bootable{
 					logger.warn("缓存被禁用，采用无缓存模式运行！");
 				}else{
 					this.cacheService.put(CACHE_PREX, userId.toString(), userAuth, PropertiesUtil.getValueInt("cache.auth.expTime", 2592000));
-					logger.info("AUTH: 获取用户["+userId+"]权限数据："+userAuth);
+					if(logger.isDebugEnabled()){
+						logger.debug("AUTH: 获取用户["+userId+"]权限数据："+userAuth);
+					}
+					
 				}
 			}catch(RemoteCacheException e){
 				logger.error("CACHE: 远程缓存不可用, 设值失败！userId="+userId, e);
@@ -82,15 +85,23 @@ public class UserAuthCacheService implements Bootable{
 	}
 	
 	public void clearUserAuths(){
-		logger.info("AUTH: 权限初清空开始....");
+		if(logger.isDebugEnabled()){
+			logger.debug("AUTH: 权限初清空开始....");
+		}
+		
 		List<User> users = this.userDao.queryAll();
 		if(users != null && users.size() > 0){
 			for(User user : users){
 				this.delUserAuth(user.getUserId());
-				logger.info("AUTH: 用户["+user.getUserId()+"]权限清空...");
+				if(logger.isDebugEnabled()){
+					logger.debug("AUTH: 用户["+user.getUserId()+"]权限清空...");
+				}
 			}
 		}
-		logger.info("AUTH: 权限清空完成!");
+		if(logger.isDebugEnabled()){
+			logger.debug("AUTH: 权限清空完成!");
+		}
+		
 	}
 	
 	public void delUserAuth(Long userId){
@@ -99,7 +110,10 @@ public class UserAuthCacheService implements Bootable{
 				logger.warn("缓存被禁用，采用无缓存模式运行！");
 			}else{
 				this.cacheService.del(CACHE_PREX, userId.toString());
-				logger.info("AUTH: 用户["+userId+"]权限删除完成！");
+				if(logger.isDebugEnabled()){
+					logger.debug("AUTH: 用户["+userId+"]权限删除完成！");
+				}
+				
 			}
 		}catch(RemoteCacheException e){
 			logger.error("CACHE: 远程缓存不可用！", e);
@@ -122,9 +136,14 @@ public class UserAuthCacheService implements Bootable{
 			cacheDown = true;
 		}
 		if(userAuth == null){
-			logger.info("CACHE: 缓存不存在用户["+userId+"]权限数据，开始从数据库查找...");
+			if(logger.isDebugEnabled()){
+				logger.debug("CACHE: 缓存不存在用户["+userId+"]权限数据，开始从数据库查找...");
+			}
+			
 			userAuth = this.getUserAuthFromDb(userId);
-			logger.info("CACHE: 完成用户["+userId+"]权限数据加载！");
+			if(logger.isDebugEnabled()){
+				logger.debug("CACHE: 完成用户["+userId+"]权限数据加载！");
+			}
 			if(!cacheDown && userAuth != null && this.cacheService != null){
 				try{
 					this.cacheService.put(CACHE_PREX, userId.toString(), userAuth, PropertiesUtil.getValueInt("cache.auth.expTime", 2592000));

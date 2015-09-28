@@ -149,7 +149,9 @@ public class JvmCacheService<M extends Serializable> extends AbstractCacheServic
 							if(val != null){
 								num.decrementAndGet();
 							}
-							logger.debug("JVM CACHE: 清除过期缓存 key={} value = {}",entry.getKey(), val);
+							if(logger.isDebugEnabled()){
+								logger.debug("JVM CACHE: 清除过期缓存 key={} value = {}",entry.getKey(), val);
+							}
 						}
 					}
 					

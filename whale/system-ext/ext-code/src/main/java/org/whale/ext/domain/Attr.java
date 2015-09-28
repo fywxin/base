@@ -7,6 +7,7 @@ import org.whale.system.annotation.jdbc.Table;
 import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
 
+@Table(value="sys_attr", cnName="实体属性")
 public class Attr extends BaseEntry{
 
 	private static final long serialVersionUID = -324398431L;

@@ -72,7 +72,10 @@ public class MainController extends BaseController {
 	 */
 	@RequestMapping("/login")
 	public void doLogin(HttpServletRequest request, HttpServletResponse response, String userName, String password, String encryptedPwd){
-		logger.info("用户登录[{}/{}] ：ip[{}]",userName, password, WebUtil.getIp(request));
+		if(logger.isInfoEnabled()){
+			logger.info("用户登录[{}/{}] ：ip[{}]",userName, password, WebUtil.getIp(request));
+		}
+		
 		if(Strings.isBlank(userName)){
 			WebUtil.printFail(request, response, "用户名不能为空");
 			return ;
