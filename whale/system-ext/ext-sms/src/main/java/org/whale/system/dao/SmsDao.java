@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Cmd;
 import org.whale.system.domain.Sms;
 
 @Repository
@@ -15,14 +16,8 @@ public class SmsDao extends BaseDao<Sms, Long> {
 	 * @return
 	 */
 	public List<Sms> queryWaitSendSmss(Integer size){
-		String sql = this.sqlHead()+"where t.status = ? "+this.sqlOrder();
 		
-		if(size != null && size > 0){
-			sql+=" LIMIT 0, "+size;
-		}
-
-		
-		return this.query(sql, Sms.STATUS_SEND_WAITing);
+		return this.query(Cmd.newCmd(Sms.class).eq("status", Sms.STATUS_SEND_WAITing).limit(0, size));
 	}
 	
 }

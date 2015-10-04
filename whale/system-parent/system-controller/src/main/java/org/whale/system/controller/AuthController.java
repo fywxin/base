@@ -223,7 +223,7 @@ public class AuthController extends BaseController {
 			WebUtil.printFail(request, response, "请选择记录");
 			return ;
 		}
-		this.authService.delete(authIds);
+		this.authService.deleteBatch(authIds);
 		
 		if(dictCacheService.isValue(DictConstant.DICT_SYS_CONF, DictConstant.DICT_ITEM_FLUSH_AUTH, "auto")){
 			this.userAuthCacheService.init(null);

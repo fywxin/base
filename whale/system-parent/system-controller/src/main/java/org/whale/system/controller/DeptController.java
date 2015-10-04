@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.base.BaseController;
+import org.whale.system.base.Cmd;
 import org.whale.system.base.Page;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;
@@ -108,20 +109,18 @@ public class DeptController extends BaseController {
 		}
 		
 		for(Long pid : idS){
-			List<Dept> depts = this.deptService.getByPid(pid);
-			if(depts != null && depts.size() > 0){
+			if(this.deptService.count(Cmd.newCmd(Dept.class).eq("pid", pid)) > 0){
 				WebUtil.printFail(request, response, "部门["+this.deptService.get(pid).getDeptName()+"]下存在子部门，不能删除");
 				return ;
 			}
 			
-			List<User> users = this.userService.getByDeptId(pid);
-			if(users != null && users.size() > 0){
+			if(this.userService.count(Cmd.newCmd(User.class).eq("deptId", pid)) > 0){
 				WebUtil.printFail(request, response, "部门["+this.deptService.get(pid).getDeptName()+"]下存在用户，不能删除");
 				return ;
 			}
 		}
 		
-		this.deptService.delete(idS);
+		this.deptService.deleteBatch(idS);
 		WebUtil.printSuccess(request, response);
 	}
 

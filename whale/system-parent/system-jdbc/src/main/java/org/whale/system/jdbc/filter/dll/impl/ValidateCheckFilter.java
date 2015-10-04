@@ -47,11 +47,6 @@ public class ValidateCheckFilter<T extends Serializable,PK extends Serializable>
 	}
 
 	@Override
-	public void beforeSave(List<T> objs, IOrmDao<T, PK> baseDao) {
-		this.validate(objs);
-	}
-
-	@Override
 	public void beforeSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		this.validate(objs);
 	}
@@ -59,11 +54,6 @@ public class ValidateCheckFilter<T extends Serializable,PK extends Serializable>
 	@Override
 	public void beforeUpdate(T obj, IOrmDao<T, PK> baseDao) {
 		this.validate(obj);
-	}
-
-	@Override
-	public void beforeUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
-		this.validate(objs);
 	}
 
 	@Override

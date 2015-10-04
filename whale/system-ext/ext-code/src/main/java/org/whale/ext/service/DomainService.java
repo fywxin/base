@@ -41,7 +41,7 @@ public class DomainService extends BaseService<Domain, Long> {
 	@Override
 	public void update(Domain domain) {
 		this.domainDao.update(domain);
-		this.attrDao.deleteBy(Cmd.newCmd(Attr.class).and("domainId", domain.getId()));
+		this.attrDao.delete(Cmd.newCmd(Attr.class).eq("domainId", domain.getId()));
 		
 		List<Attr> attrs = domain.getAttrs();
 		if(attrs != null && attrs.size() > 0){
@@ -55,7 +55,7 @@ public class DomainService extends BaseService<Domain, Long> {
 	@Override
 	public void delete(Long id) {
 		this.domainDao.delete(id);
-		this.attrDao.deleteBy(Cmd.newCmd(Attr.class).and("domainId", id));
+		this.attrDao.delete(Cmd.newCmd(Attr.class).eq("domainId", id));
 	}
 
 	@Override

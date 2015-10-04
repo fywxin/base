@@ -71,12 +71,12 @@ public class UserController extends BaseController {
 	public void doList(HttpServletRequest request, HttpServletResponse response, String userName, String realName, Long deptId){
 		Page page = this.newPage(request);
 		Cmd cmd = page.newCmd(User.class)
-				.selectAll()
-				.select("(select d.deptName from sys_dept d where d.id = t.deptId) as deptName")
+				.select("userId","userName","realName","deptId","email","phone")
+				.selectWrap(",(select d.deptName from sys_dept d where d.id = t.deptId) as deptName")
 				.like("userName", userName)
 				.like("realName", realName);
 		if(deptId != null && !deptId.equals(0L)){
-			cmd.and("deptId", deptId);
+			cmd.eq("deptId", deptId);
 		}
 		
 		this.userService.queryPage(page);

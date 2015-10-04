@@ -23,13 +23,9 @@ public interface BaseDaoQueryFilter<T extends Serializable,PK extends Serializab
 	
 	void afterGet(IOrmDao<T, PK> baseDao, T rs, PK id);
 	
-	void beforeGetBy(IOrmDao<T, PK> baseDao, Iquery query);
+	void beforeGet(IOrmDao<T, PK> baseDao, Iquery query);
 	
-	void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Iquery query);
-	
-	void beforeGetObject(IOrmDao<T, PK> baseDao, String sql, Object...args);
-	
-	void afterGetObject(IOrmDao<T, PK> baseDao, T rs , String sql, Object...args);
+	void afterGet(IOrmDao<T, PK> baseDao, T rs, Iquery query);
 	
 	
 	
@@ -37,13 +33,9 @@ public interface BaseDaoQueryFilter<T extends Serializable,PK extends Serializab
 	
 	void afterQueryAll(IOrmDao<T, PK> baseDao, List<T> rs);
 	
-	void beforeQuery(IOrmDao<T, PK> baseDao, String sql, Object...args);
+	void beforeQuery(IOrmDao<T, PK> baseDao, Iquery query);
 	
-	void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql, Object...args);
-	
-	void beforeQueryBy(IOrmDao<T, PK> baseDao, Iquery query);
-	
-	void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Iquery query);
+	void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, Iquery query);
 	
 	void beforeQueryPage(IOrmDao<T, PK> baseDao, Page page);
 	
@@ -51,16 +43,17 @@ public interface BaseDaoQueryFilter<T extends Serializable,PK extends Serializab
 	
 	
 	
-	void beforeQueryForNumber(IOrmDao<T, PK> baseDao, String sql, Object... args);
+	void beforeCount(IOrmDao<T, PK> baseDao, Iquery query);
 	
-	void afterQueryForNumber(IOrmDao<T, PK> baseDao, Number num, String sql, Object... args);
+	void afterCount(IOrmDao<T, PK> baseDao, Number num, Iquery query);
 	
-	void beforeQueryForList(IOrmDao<T, PK> baseDao, String sql, Object... args);
 	
-	void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, String sql, Object... args);
+	void beforeQueryForList(IOrmDao<T, PK> baseDao, Iquery query);
 	
-	void beforeQueryForMap(IOrmDao<T, PK> baseDao, String sql, Object... args);
+	void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, Iquery query);
 	
-	void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args);
+	void beforeQueryForMap(IOrmDao<T, PK> baseDao, Iquery query);
+	
+	void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, Iquery query);
 
 }

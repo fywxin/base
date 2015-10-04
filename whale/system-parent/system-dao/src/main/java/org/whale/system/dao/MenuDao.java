@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Query;
 import org.whale.system.domain.Menu;
 
 @Repository
@@ -14,27 +15,26 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	 * @return
 	 */
 	public List<Menu> getDirMenus(){
-		String sql = this.sqlHead()+"where t.menuType != 3"+this.sqlOrder();
 		
-		return this.query(sql);
+		return this.query(this.cmd().and("menuType", "!=", 3));
 	}
 	
 	public List<Menu> getByParentId(Long parentId){
 		
-		return this.queryBy(this.cmd().and("parentId", parentId));
+		return this.query(this.cmd().eq("parentId", parentId));
 	}
 	
 	public List<Menu> getMenuByType(Integer menuType){
-		return this.queryBy(this.cmd().and("menuType", menuType));
+		return this.query(this.cmd().eq("menuType", menuType));
 	}
 	
 	public List<Menu> getPublicMenus(){
-		return this.queryBy(this.cmd().and("menuType", 3).and("isPublic", 1));
+		return this.query(this.cmd().eq("menuType", 3).eq("isPublic", 1));
 	}
 	
 	public Menu getByMenuName(String menuName){
 		
-		return this.getBy(this.cmd().and("menuName", menuName));
+		return this.get(this.cmd().eq("menuName", menuName));
 	}
 	
 	
@@ -42,6 +42,6 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	@SuppressWarnings("all")
 	public Integer getCurOrder(Long parentId){
 		
-		return this.queryForInt(getCurOrder_SQL, parentId);
+		return this.count(Query.newQuery(getCurOrder_SQL, parentId));
 	}
 }

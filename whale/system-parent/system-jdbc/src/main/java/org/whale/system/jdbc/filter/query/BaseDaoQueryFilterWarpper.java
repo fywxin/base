@@ -28,25 +28,15 @@ public abstract class BaseDaoQueryFilterWarpper<T extends Serializable,PK extend
 	}
 	
 	@Override
-	public void beforeGetBy(IOrmDao<T, PK> baseDao, Iquery query) {
+	public void beforeGet(IOrmDao<T, PK> baseDao, Iquery query) {
 		
 	}
 
 	@Override
-	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Iquery query) {
+	public void afterGet(IOrmDao<T, PK> baseDao, T rs, Iquery query) {
 		
 	}
 
-
-	@Override
-	public void beforeGetObject(IOrmDao<T, PK> baseDao, String sql, Object... args) {
-		
-	}
-
-	@Override
-	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql, Object... args) {
-		
-	}
 
 	@Override
 	public void beforeQueryAll(IOrmDao<T, PK> baseDao) {
@@ -59,22 +49,12 @@ public abstract class BaseDaoQueryFilterWarpper<T extends Serializable,PK extend
 	}
 
 	@Override
-	public void beforeQueryBy(IOrmDao<T, PK> baseDao, Iquery query) {
+	public void beforeQuery(IOrmDao<T, PK> baseDao, Iquery query) {
 		
 	}
 
 	@Override
-	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Iquery query) {
-		
-	}
-
-	@Override
-	public void beforeQuery(IOrmDao<T, PK> baseDao, String sql, Object... args) {
-		
-	}
-
-	@Override
-	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql, Object... args) {
+	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, Iquery query) {
 		
 	}
 
@@ -88,32 +68,33 @@ public abstract class BaseDaoQueryFilterWarpper<T extends Serializable,PK extend
 		
 	}
 
+
 	@Override
-	public void beforeQueryForNumber(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+	public void beforeCount(IOrmDao<T, PK> baseDao, Iquery query) {
 		
 	}
 
 	@Override
-	public void afterQueryForNumber(IOrmDao<T, PK> baseDao, Number num, String sql, Object... args) {
+	public void afterCount(IOrmDao<T, PK> baseDao, Number num, Iquery query) {
 		
 	}
 
 	@Override
-	public void beforeQueryForList(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+	public void beforeQueryForList(IOrmDao<T, PK> baseDao, Iquery query) {
 		
 	}
 
 	@Override
-	public void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, String sql, Object... args) {
+	public void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, Iquery query) {
 		
 	}
 
 	@Override
-	public void beforeQueryForMap(IOrmDao<T, PK> baseDao, String sql, Object... args) {
+	public void beforeQueryForMap(IOrmDao<T, PK> baseDao, Iquery query) {
 	}
 
 	@Override
-	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
+	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, Iquery query) {
 		
 	}
 	

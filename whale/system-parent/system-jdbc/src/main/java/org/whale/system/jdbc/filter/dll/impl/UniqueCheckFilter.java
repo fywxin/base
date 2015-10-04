@@ -44,7 +44,7 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 	}
 
 	@Override
-	public void beforeSave(List<T> objs, IOrmDao<T, PK> baseDao) {
+	public void beforeSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		List<OrmColumn> cols = baseDao._getOrmTable().getUniqueCheckCols();
 		if(cols == null)
 			return ;
@@ -78,11 +78,6 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 	}
 
 	@Override
-	public void beforeSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
-		this.beforeSave(objs, baseDao);
-	}
-
-	@Override
 	public void beforeUpdate(T obj, IOrmDao<T, PK> baseDao) {
 		OrmTable ormTable = baseDao._getOrmTable();
 		List<OrmColumn> cols = ormTable.getUniqueCheckCols();
@@ -108,7 +103,7 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 	}
 
 	@Override
-	public void beforeUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
+	public void beforeUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		OrmTable ormTable = baseDao._getOrmTable();
 		List<OrmColumn> cols = ormTable.getUniqueCheckCols();
 		if(cols == null)
@@ -151,11 +146,6 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 				}
 			}
 		}
-	}
-
-	@Override
-	public void beforeUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
-		this.beforeUpdate(objs, baseDao);
 	}
 
 	@Override

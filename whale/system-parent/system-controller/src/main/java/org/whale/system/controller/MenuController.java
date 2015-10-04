@@ -45,7 +45,7 @@ public class MenuController extends BaseController {
 		
 		Cmd cmd = page.newCmd(Menu.class).like("menuName", menu.getMenuName());
 		if(menu.getParentId() != null){
-			cmd.and("parentId", menu.getParentId());
+			cmd.eq("parentId", menu.getParentId());
 		}
 		
 		this.menuService.queryPage(page);
@@ -173,7 +173,7 @@ public class MenuController extends BaseController {
 			WebUtil.printFail(request, response, info);
 			return ;
 		}
-		this.menuService.delete(menuIds);
+		this.menuService.deleteBatch(menuIds);
 		WebUtil.printSuccess(request, response);
 	}
 	

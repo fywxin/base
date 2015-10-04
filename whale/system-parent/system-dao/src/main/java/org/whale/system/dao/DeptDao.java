@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Query;
 import org.whale.system.domain.Dept;
 
 @Repository
@@ -15,7 +16,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 * @return
 	 */
     public Dept getByDeptName(String deptName) {
-    	return this.getBy(this.cmd().and("deptName", deptName));
+    	return this.get(this.cmd().eq("deptName", deptName));
     }
     /**
 	 * 按 部门编码 获取 部门
@@ -24,7 +25,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 */
     public Dept getByDeptCode(String deptCode) {
 
-    	return this.getBy(this.cmd().and("deptCode", deptCode));
+    	return this.get(this.cmd().eq("deptCode", deptCode));
     }
     
     /**
@@ -34,7 +35,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
      */
     public List<Dept> getByPid(Long pid){
     	
-    	return this.queryBy(cmd().and("pid", pid));
+    	return this.query(cmd().eq("pid", pid));
     }
 	
     /**
@@ -45,7 +46,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
     final String getNextOrder_SQL = "select max(t.orderNo) from sys_dept t where t.pid = ?";
     @SuppressWarnings("all")
     public Integer getNextOrder(Long pid){
-    	int order = this.queryForInt(getNextOrder_SQL, pid);
+    	int order = this.count(Query.newQuery(getNextOrder_SQL, pid));
     	return order+1;
     }
 }

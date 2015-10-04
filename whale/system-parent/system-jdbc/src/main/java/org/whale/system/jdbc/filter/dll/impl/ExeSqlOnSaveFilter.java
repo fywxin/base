@@ -37,19 +37,19 @@ public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> 
 		}
 	}
 
-	@Override
-	public void beforeSave(List<T> objs, IOrmDao<T, PK> baseDao) {
-		List<OrmColumn> cols = baseDao._getOrmTable().getSqlExecCols();
-		if(cols == null)
-			return ;
-		for(T obj : objs){
-			for(OrmColumn col : cols){
-				if(col.getOrmColumnSql() != null && col.getOrmColumnSql().getIsPre() && !"".equals(col.getOrmColumnSql().getSql().trim())){
-					this.execute(obj, baseDao, col);
-				}
-			}
-		}
-	}
+//	@Override
+//	public void beforeSave(List<T> objs, IOrmDao<T, PK> baseDao) {
+//		List<OrmColumn> cols = baseDao._getOrmTable().getSqlExecCols();
+//		if(cols == null)
+//			return ;
+//		for(T obj : objs){
+//			for(OrmColumn col : cols){
+//				if(col.getOrmColumnSql() != null && col.getOrmColumnSql().getIsPre() && !"".equals(col.getOrmColumnSql().getSql().trim())){
+//					this.execute(obj, baseDao, col);
+//				}
+//			}
+//		}
+//	}
 
 	@Override
 	public void beforeSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {

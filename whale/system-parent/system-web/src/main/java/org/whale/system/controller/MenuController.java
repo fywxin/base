@@ -161,7 +161,7 @@ public class MenuController extends BaseController {
 			WebUtil.printFail(request, response, info);
 			return ;
 		}
-		this.menuService.delete(menuIds);
+		this.menuService.deleteBatch(menuIds);
 		WebUtil.printSuccess(request, response);
 	}
 	

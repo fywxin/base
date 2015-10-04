@@ -6,13 +6,14 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 import org.whale.ext.domain.Domain;
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Query;
 import org.whale.system.jdbc.util.DbKind;
 @Repository
 public class DomainDao extends BaseDao<Domain, Long> {
 
 	public Domain getBySqlName(String sqlName){
 		
-		return this.getBy(this.cmd().and("domainSqlName", sqlName));
+		return this.get(this.cmd().eq("domainSqlName", sqlName));
 	}
 	
 	String queryAllTable_MYSQL =  "SELECT t.table_name AS name,"
@@ -33,9 +34,9 @@ public class DomainDao extends BaseDao<Domain, Long> {
 	 */
 	public List<Map<String, Object>> queryAllTable(){
 		if(DbKind.isMysql()){
-			return this.queryForList(queryAllTable_MYSQL);
+			return this.queryForList(Query.newQuery(queryAllTable_MYSQL));
 		}else{
-			return this.queryForList(queryAllTable_ORACLE);
+			return this.queryForList(Query.newQuery(queryAllTable_ORACLE));
 		}
 	}
 	

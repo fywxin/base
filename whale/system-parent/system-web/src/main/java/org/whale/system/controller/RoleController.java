@@ -255,7 +255,7 @@ public class RoleController extends BaseController {
 			return ;
 		}
 		
-		this.roleService.delete(roleIds);
+		this.roleService.deleteBatch(roleIds);
 		
 		if(dictCacheService.isValue(DictConstant.DICT_SYS_CONF, DictConstant.DICT_ITEM_FLUSH_AUTH, "auto")){
 			this.userAuthCacheService.init(null);

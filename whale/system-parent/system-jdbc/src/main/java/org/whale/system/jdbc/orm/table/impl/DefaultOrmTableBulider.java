@@ -462,6 +462,8 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		if(validateCols.size() > 0){
 			ormTable.setValidateCols(validateCols);
 		}
+		ormTable.setJavaAsSqlColumn(javaAsSqlColumn);
+		ormTable.setSqlAsJavaColumn(sqlAsJavaColumn);
 		
 		//读取该类存在默认值的字段集合
 		this.readValCols(ormTable);

@@ -25,7 +25,7 @@ public class AuthService extends BaseService<Auth, Long> {
 		if(authId == null){
 			return ;
 		}
-		this.roleAuthDao.deleteBy(Cmd.newCmd(RoleAuth.class).and("authId", authId));
+		this.roleAuthDao.delete(Cmd.newCmd(RoleAuth.class).eq("authId", authId));
 		
 		this.authDao.delete(authId);
 	}

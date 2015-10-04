@@ -27,16 +27,6 @@ public abstract class BaseDaoDllFilterWarpper<T extends Serializable,PK extends 
 	}
 
 	@Override
-	public void beforeSave(List<T> objs, IOrmDao<T, PK> baseDao) {
-		
-	}
-
-	@Override
-	public void afterSave(List<T> objs, IOrmDao<T, PK> baseDao) {
-		
-	}
-
-	@Override
 	public void beforeSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		
 	}
@@ -53,16 +43,6 @@ public abstract class BaseDaoDllFilterWarpper<T extends Serializable,PK extends 
 
 	@Override
 	public void afterUpdate(T obj, IOrmDao<T, PK> baseDao) {
-		
-	}
-
-	@Override
-	public void beforeUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
-		
-	}
-
-	@Override
-	public void afterUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
 		
 	}
 
@@ -87,22 +67,22 @@ public abstract class BaseDaoDllFilterWarpper<T extends Serializable,PK extends 
 	}
 
 	@Override
-	public void beforeDelete(List<PK> ids, IOrmDao<T, PK> baseDao) {
+	public void beforeDeleteBatch(List<PK> ids, IOrmDao<T, PK> baseDao) {
 		
 	}
 
 	@Override
-	public void afterDelete(List<PK> ids, IOrmDao<T, PK> baseDao) {
+	public void afterDeleteBatch(List<PK> ids, IOrmDao<T, PK> baseDao) {
 		
 	}
 
 	@Override
-	public void beforeDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
+	public void beforeDelete(Iquery query, IOrmDao<T, PK> baseDao) {
 		
 	}
 
 	@Override
-	public void afterDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
+	public void afterDelete(Iquery query, IOrmDao<T, PK> baseDao) {
 		
 	}
 

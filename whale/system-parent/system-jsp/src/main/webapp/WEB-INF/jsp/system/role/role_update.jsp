@@ -75,7 +75,7 @@ $(function() {
 						<td class="td-label" >备注</td>
 						<td class="td-value" colspan="3">
 							<textarea id="remark" name="remark" rows="5" title="最多只能输入100个字">
-								${remark }
+								${item.remark }
 							</textarea>
 						</td>
 					</tr>

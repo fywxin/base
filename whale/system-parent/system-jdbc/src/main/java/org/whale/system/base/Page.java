@@ -80,7 +80,10 @@ public class Page implements Serializable {
 		}
 		this.sql = this.cmd.getQuerySql();
 		this.countSql = this.cmd.getCountSql();
-		this.args = this.cmd.getArgs();
+		for(Object obj : this.cmd.getArgs()){
+			this.args.add(obj);
+		}
+		
 	}
 
 	// ----------------------------------------------------get set----------------------------------------

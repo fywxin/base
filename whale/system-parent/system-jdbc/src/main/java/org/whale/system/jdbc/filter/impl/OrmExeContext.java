@@ -22,8 +22,6 @@ public class OrmExeContext {
 	
 	private int order;
 	
-	public OrmExeContext(){}
-	
 	public OrmExeContext(String methodName, Object arg, IOrmDao baseDao){
 		this.methodName = methodName;
 		this.arg = arg;

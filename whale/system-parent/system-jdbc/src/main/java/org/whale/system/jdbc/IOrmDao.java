@@ -29,12 +29,6 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	void save(T t);
 	
 	/**
-	 * 循环保存多个实体
-	 * @param list
-	 */
-	void save(List<T> list);
-	
-	/**
 	 * 批量保存实体
 	 * @param list
 	 */
@@ -45,12 +39,6 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 * @param t
 	 */
 	void update(T t);
-	
-	/**
-	 * 循环更新多个实体
-	 * @param list
-	 */
-	void update(List<T> list);
 	
 	/**
 	 * 批量更新多个实体
@@ -68,13 +56,13 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 * 删除多个实体
 	 * @param ids
 	 */
-	void delete(List<PK> ids);
+	void deleteBatch(List<PK> ids);
 	
 	/**
 	 * 按照自定义条件删除
 	 * @param query
 	 */
-	void deleteBy(Iquery query);
+	void delete(Iquery query);
 	
 	/**
 	 * 获取单个对象
@@ -84,19 +72,11 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	T get(PK id);
 	
 	/**
-	 * 按sql返回单个对象
-	 * @param sql
-	 * @param args
-	 * @return
-	 */
-	T getObject(String sql, Object...args);
-	
-	/**
 	 * 按自定义条件查询对象
 	 * @param t
 	 * @return
 	 */
-	T getBy(Iquery query);
+	T get(Iquery query);
 	
 	
 	/**
@@ -106,19 +86,11 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	List<T> queryAll();
 	
 	/**
-	 * 按sql返回多个对象
-	 * @param sql
-	 * @param args
-	 * @return
-	 */
-	List<T> query(String sql, Object...args);
-	
-	/**
 	 * 按自定义条件查询
 	 * @param query
 	 * @return
 	 */
-	List<T> queryBy(Iquery query);
+	List<T> query(Iquery query);
 	
 	/**
 	 * 分页查询
@@ -126,17 +98,19 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 */
 	void queryPage(Page page);
 	
+	/**
+	 * 总记录数
+	 * @param query
+	 * @return
+	 */
+	Integer count(Iquery query);
+	
+	
+	List<Map<String, Object>> queryForList(Iquery query);
+	
+	Map<String, Object> queryForMap(Iquery query);
 	
 	//-----------------------------------代理 spring JdbcTemplate 接口---------------------------------
-	
-	Integer queryForInt(String sql, Object... args);
-	
-	Long queryForLong(String sql, Object... args);
-	
-	List<Map<String, Object>> queryForList(String sql, Object... args);
-	
-	Map<String, Object> queryForMap(String sql, Object... args);
-	
 
 	JdbcTemplate getJdbcTemplate();
 	

@@ -28,13 +28,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 
 	@Override
-	public void save(List<T> list) {
-		filter.exeBeforeSave(list, this);
-		super.save(list);
-		filter.exeAfterSave(list, this);
-	}
-
-	@Override
 	public void saveBatch(List<T> list) {
 		filter.exeBeforeSaveBatch(list, this);
 		super.saveBatch(list);
@@ -46,13 +39,6 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeBeforeUpdate(t, this);
 		super.update(t);
 		filter.exeAfterUpdate(t, this);
-	}
-
-	@Override
-	public void update(List<T> list) {
-		filter.exeBeforeUpdate(list, this);
-		super.update(list);
-		filter.exeAfterUpdate(list, this);
 	}
 
 	@Override
@@ -70,17 +56,17 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 
 	@Override
-	public void delete(List<PK> ids) {
-		filter.exeBeforeDelete(ids, this);
-		super.delete(ids);
-		filter.exeAfterDelete(ids, this);
+	public void deleteBatch(List<PK> ids) {
+		filter.exeBeforeDeleteBatch(ids, this);
+		super.deleteBatch(ids);
+		filter.exeAfterDeleteBatch(ids, this);
 	}
 
 	@Override
-	public void deleteBy(Iquery query) {
-		filter.exeBeforeDeleteBy(query, this);
-		super.deleteBy(query);
-		filter.exeAfterDeleteBy(query, this);
+	public void delete(Iquery query) {
+		filter.exeBeforeDelete(query, this);
+		super.delete(query);
+		filter.exeAfterDelete(query, this);
 	}
 
 	@Override
@@ -90,19 +76,11 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterGet(this, t, id);
 		return t;
 	}
-
-	@Override
-	public T getObject(String sql, Object... args) {
-		filter.exeBeforeGetObject(this, sql, args);
-		T t= super.getObject(sql, args);
-		filter.exeAfterGetObject(this, t, sql, args);
-		return t;
-	}
 	
-	public T getBy(Iquery query){
-		filter.exeBeforeGetBy(this, query);
-		T t= super.getBy(query);
-		filter.exeAfterGetBy(this, t, query);
+	public T get(Iquery query){
+		filter.exeBeforeGet(this, query);
+		T t= super.get(query);
+		filter.exeAfterGet(this, t, query);
 		return t;
 	}
 	
@@ -113,20 +91,12 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterQueryAll(this, rs);
 		return rs;
 	}
-	
-	@Override
-	public List<T> query(String sql, Object... args) {
-		filter.exeBeforeQuery(this, sql, args);
-		List<T> rs = super.query(sql, args);
-		filter.exeAfterQuery(this, rs, sql, args);
-		return rs;
-	}
 
 	@Override
-	public List<T> queryBy(Iquery query) {
-		filter.exeBeforeQueryBy(this, query);
-		List<T> rs = super.queryBy(query);
-		filter.exeAfterQueryBy(this, rs, query);
+	public List<T> query(Iquery query) {
+		filter.exeBeforeQuery(this, query);
+		List<T> rs = super.query(query);
+		filter.exeAfterQuery(this, rs, query);
 		return rs;
 	}
 
@@ -139,34 +109,26 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 
 	@Override
-	public Integer queryForInt(String sql, Object... args) {
-		filter.exeBeforeQueryForNumber(this, sql, args);
-		Integer rs = super.queryForInt(sql, args);
-		filter.exeAfterQueryForNumber(this, rs, sql, args);
+	public Integer count(Iquery query) {
+		filter.exeBeforeCount(this, query);
+		Integer rs = super.count(query);
+		filter.exeAfterCount(this, rs, query);
 		return rs;
 	}
 
 	@Override
-	public Long queryForLong(String sql, Object... args) {
-		filter.exeBeforeQueryForNumber(this, sql, args);
-		Long rs = super.queryForLong(sql);
-		filter.exeAfterQueryForNumber(this, rs, sql, args);
+	public List<Map<String, Object>> queryForList(Iquery query) {
+		filter.exeBeforeQueryForList(this, query);
+		List<Map<String, Object>> rs = super.queryForList(query);
+		filter.exeAfterQueryForList(this, rs, query);
 		return rs;
 	}
 
 	@Override
-	public List<Map<String, Object>> queryForList(String sql, Object... args) {
-		filter.exeBeforeQueryForList(this, sql, args);
-		List<Map<String, Object>> rs = super.queryForList(sql, args);
-		filter.exeAfterQueryForList(this, rs, sql, args);
-		return rs;
-	}
-
-	@Override
-	public Map<String, Object> queryForMap(String sql, Object... args) {
-		filter.exeBeforeQueryForMap(this, sql, args);
-		Map<String, Object> rs = super.queryForMap(sql);
-		filter.exeAfterQueryForMap(this, rs, sql, args);
+	public Map<String, Object> queryForMap(Iquery query) {
+		filter.exeBeforeQueryForMap(this, query);
+		Map<String, Object> rs = super.queryForMap(query);
+		filter.exeAfterQueryForMap(this, rs, query);
 		return rs;
 	}
 

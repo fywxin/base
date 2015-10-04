@@ -66,12 +66,6 @@ public class BaseMixDao<T extends Serializable,PK extends Serializable> extends 
 		this.put(t);
 	}
 
-	@Override
-	public void save(List<T> list) {
-		super.save(list);
-		this.mput(list);
-	}
-
 	/**
 	 * ID 必须为非自增类型
 	 */
@@ -85,12 +79,6 @@ public class BaseMixDao<T extends Serializable,PK extends Serializable> extends 
 	public void update(T t) {
 		super.update(t);
 		this.put(t);
-	}
-
-	@Override
-	public void update(List<T> list) {
-		super.update(list);
-		this.mput(list);
 	}
 
 	@Override
@@ -109,8 +97,8 @@ public class BaseMixDao<T extends Serializable,PK extends Serializable> extends 
 	}
 
 	@Override
-	public void delete(List<PK> ids) {
-		super.delete(ids);
+	public void deleteBatch(List<PK> ids) {
+		super.deleteBatch(ids);
 		MixOrmEntry mixOrm = this.getMixOrmEntry();
 		if(mixOrm != null){
 			List<String> idS = new ArrayList<String>(ids.size());
@@ -128,24 +116,6 @@ public class BaseMixDao<T extends Serializable,PK extends Serializable> extends 
 			return this.cacheService.get(mixOrm.getCacheName(), id.toString());
 		}
 		return super.get(id);
-	}
-
-
-	@Override
-	public T getObject(String sql, Object... args) {
-		T t = super.getObject(sql, args);
-		MixOrmEntry mixOrm = this.getMixOrmEntry();
-		if(t != null && mixOrm != null){
-			return this.cacheService.get(mixOrm.getCacheName(), this.getId(t));
-		}
-		return t;
-	}
-	
-	
-
-	@Override
-	public List<T> query(String sql, Object... args) {
-		return this.cacheQuery(super.query(sql, args));
 	}
 
 	@Override

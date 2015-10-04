@@ -65,31 +65,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @param t
 	 */
 	public void save(T t){
-		OrmValue ormValue = this.valueBulider.getSave(t);
-		this.doSave(ormValue, t);
-	}
-	
-	/**
-	 * 保存多个对象
-	 * @param list
-	 */
-	public void save(List<T> list){
-		if(list == null || list.size() < 1) 
-			return ;
-		
-		for(T t : list){
-			OrmValue ormValue = this.valueBulider.getSave(t);
-			this.doSave(ormValue, t);
-		}
-    }
-
-	/**
-	 * 对象保存
-	 * @param ormValue
-	 * @param t
-	 * @date 2015年5月3日 上午11:26:10
-	 */
-	private void doSave(final OrmValue ormValue, T t){
+		final OrmValue ormValue = this.valueBulider.getSave(t);
 		Object idVal = ReflectionUtil.getFieldValue(t, this._getOrmTable().getIdCol().getAttrName());
 		if(idVal == null && DbKind.isMysql()){
 			KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -156,23 +132,6 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	}
 	
 	/**
-	 * 更新多个对象
-	 * @param list
-	 */
-	public void update(List<T> list){
-		if(list == null || list.size() < 1)
-			return ;
-		
-		OrmValue ormValues = null;
-		for(T t : list){
-			ormValues = this.valueBulider.getUpdate(t);
-			if(ormValues == null) 
-				return ;
-			this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
-		}
-	}
-	
-	/**
 	 * 批量更新对象，效率更高
 	 * @param list
 	 */
@@ -212,7 +171,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 删除多个对象
 	 * @param ids
 	 */
-	public void delete(List<PK> ids) {
+	public void deleteBatch(List<PK> ids) {
 		if(ids == null || ids.size() < 1) return ;
 		if(ids.size() == 1){
 			this.delete(ids.get(0));
@@ -228,7 +187,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	/**
 	 * 按自定义条件删除
 	 */
-	public void deleteBy(Iquery query){
+	public void delete(Iquery query){
 		this.jdbcTemplate.update(query.getDelSql(), query.getArgs());
 	}
 	
@@ -245,31 +204,11 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		return list.get(0);
 	}
 	
-	
-	/**
-	 * 返回单条记录
-	 * @param sql
-	 * @param args
-	 * @return
-	 */
-	public T getObject(String sql, Object...args){
-		List<T> list = null;
-		if(args == null || args.length < 1){
-			list = this.jdbcTemplate.query(sql, this.rowMapper);
-		}else{
-			list = this.jdbcTemplate.query(sql, args, this.rowMapper);
-		}
-		
-		if(list == null || list.size() < 1)
-			return null;
-		return list.get(0);
-	}
-	
 	/**
 	 * 按自定义条件获取
 	 */
-	public T getBy(Iquery query){
-		List<T> list = this.jdbcTemplate.query(query.getGetSql(), query.getArgs().toArray(), this.rowMapper);
+	public T get(Iquery query){
+		List<T> list = this.jdbcTemplate.query(query.getGetSql(), query.getArgs(), this.rowMapper);
 		
 		if(list == null || list.size() < 1)
 			return null;
@@ -287,25 +226,11 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	}
 	
 	/**
-	 * 返回多个记录
-	 * @param sql
-	 * @param args
-	 * @return
-	 */
-	public List<T> query(String sql, Object...args){
-		if(args == null || args.length < 1){
-			return this.jdbcTemplate.query(sql, this.rowMapper);
-		}else{
-			return this.jdbcTemplate.query(sql, args, this.rowMapper);
-		}
-	}
-	
-	/**
 	 * 按自定义条件查询
 	 */
-	public List<T> queryBy(Iquery query){
+	public List<T> query(Iquery query){
 		
-		return this.jdbcTemplate.query(query.getQuerySql(), query.getArgs().toArray(), this.rowMapper);
+		return this.jdbcTemplate.query(query.getQuerySql(), query.getArgs(), this.rowMapper);
 	}
 	
 	/**
@@ -359,6 +284,12 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		page.setSql(null);
 		page.args().clear();
 		page.setCmd(null);
+	}
+
+	@Override
+	@SuppressWarnings("all")
+	public Integer count(Iquery query) {
+		return this.jdbcTemplate.queryForInt(query.getCountSql(), query.getArgs());
 	}
 	
 //--------------------------------------内部方法-----------------------------------------------
@@ -446,37 +377,20 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		return jdbcTemplate;
 	}
 
-	
 
 	@Override
-	@SuppressWarnings("all")
-	public Integer queryForInt(String sql, Object... args) {
-		if(Strings.isBlank(sql))
+	public List<Map<String, Object>> queryForList(Iquery query) {
+		if(Strings.isBlank(query.getQuerySql()))
 			return null;
-		return this.jdbcTemplate.queryForInt(sql, args);
-	}
-
-	@Override
-	@SuppressWarnings("all")
-	public Long queryForLong(String sql, Object... args) {
-		if(Strings.isBlank(sql))
-			return null;
-		return this.jdbcTemplate.queryForLong(sql, args);
-	}
-
-	@Override
-	public List<Map<String, Object>> queryForList(String sql, Object... args) {
-		if(Strings.isBlank(sql))
-			return null;
-		return this.jdbcTemplate.queryForList(sql, args);
+		return this.jdbcTemplate.queryForList(query.getQuerySql(), query.getArgs());
 	}
 
 
 	@Override
-	public Map<String, Object> queryForMap(String sql, Object... args) {
-		if(Strings.isBlank(sql))
+	public Map<String, Object> queryForMap(Iquery query) {
+		if(Strings.isBlank(query.getQuerySql()))
 			return null;
-		return this.jdbcTemplate.queryForMap(sql, args);
+		return this.jdbcTemplate.queryForMap(query.getQuerySql(), query.getArgs());
 	}
 	
 	/**
@@ -484,23 +398,25 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 
 	 * @return
 	 * 2015年6月14日 上午7:57:01
-	 */
+	 
 	public String sqlHead(){
 		return _getOrmTable().getSqlHeadPrefix();
 	}
-	
+	*/
 	/**
 	 * 取得当前对象的 order by t.x
 	 * 
 	 * @return
 	 * 2015年6月14日 上午7:57:01
-	 */
+	 
 	public String sqlOrder(){
 		return this._getOrmTable().getSqlOrderSuffix();
 	}
-
+*/
 	@Override
 	public Cmd cmd() {
 		return Cmd.newCmd(clazz);
 	}
+
+	
 }

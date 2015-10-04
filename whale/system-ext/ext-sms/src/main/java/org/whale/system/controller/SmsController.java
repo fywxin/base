@@ -27,7 +27,7 @@ public class SmsController extends BaseController {
 	public void doList(HttpServletRequest request, HttpServletResponse response, Sms sms){
 		
 		Page page = this.newPage(request);
-		page.newCmd(Sms.class).and("smsType", sms.getSmsType()).like("content", sms.getContent());
+		page.newCmd(Sms.class).eq("smsType", sms.getSmsType()).like("content", sms.getContent());
 		
 		SmsService.queryPage(page);
 		

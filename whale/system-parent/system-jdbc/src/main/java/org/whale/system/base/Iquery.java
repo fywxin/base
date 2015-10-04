@@ -1,7 +1,5 @@
 package org.whale.system.base;
 
-import java.util.List;
-
 /**
  * 单表动态sql语句
  * 
@@ -38,5 +36,5 @@ public interface Iquery {
 	 * 获取语句对应的参数
 	 * @return
 	 */
-	public List<Object> getArgs();
+	public Object[] getArgs();
 }

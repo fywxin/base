@@ -53,7 +53,7 @@ public class UserController extends BaseController {
 	@RequestMapping("/goTree")
 	public ModelAndView goTree(HttpServletRequest request, HttpServletResponse response, Long pid){
 		if(pid == null){
-			pid = -1L;
+			pid = 0L;
 		}
 		List<Map<String, Object>> depts = this.userService.queryDeptTree();
 		String nodes = "[]";
@@ -147,12 +147,12 @@ public class UserController extends BaseController {
 	public void doList(HttpServletRequest request, HttpServletResponse response, String userName, String realName, Long deptId){
 		Page page = this.newPage(request);
 		Cmd cmd = page.newCmd(User.class)
-					.selectAll()
-					.select("(select d.deptName from sys_dept d where d.id = t.deptId) as deptName")
+					.select("userId","userName","realName","deptId","email","phone" )
+					.selectWrap(",(select d.deptName from sys_dept d where d.id = t.deptId) as deptName")
 					.like("userName", userName)
 					.like("realName", realName);
 		if(deptId != null && !deptId.equals(0L)){
-			cmd.and("deptId", deptId);
+			cmd.eq("deptId", deptId);
 		}
 		
 		this.userService.queryPage(page);

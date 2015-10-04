@@ -60,7 +60,7 @@ public class DictItemController extends BaseController {
 	@RequestMapping("/doList")
 	public void doList(HttpServletRequest request, HttpServletResponse response, Long dictId, String itemName, String itemCode){
 		Page page = this.newPage(request);
-		page.newCmd(DictItem.class).and("dictId", dictId).like("itemName", itemName).like("itemCode", itemCode);
+		page.newCmd(DictItem.class).eq("dictId", dictId).like("itemName", itemName).like("itemCode", itemCode);
 		
 		this.dictItemService.queryPage(page);
 		
@@ -175,7 +175,7 @@ public class DictItemController extends BaseController {
 			WebUtil.printFail(request, response, "删除记录错误");
 			return ;
 		}
-		this.dictItemService.delete(dictItemIds);
+		this.dictItemService.deleteBatch(dictItemIds);
 		Dict dict = this.dictService.get(dictItem.getDictId());
 		this.dictCacheService.putDict(dict.getDictCode());
 		WebUtil.printSuccess(request, response);

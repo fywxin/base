@@ -34,7 +34,7 @@ import com.alibaba.fastjson.JSON;
  * @author 王金绍
  * 2015年4月26日 下午3:43:15
  */
-public class LogFilter<T extends Serializable,PK extends Serializable> extends BaseDaoFilterWarpper<T, PK> implements InitializingBean{
+public class LogFilter<T extends Serializable,PK extends Serializable> extends BaseDaoFilterWarpper<T,PK> implements InitializingBean {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LogFilter.class);
 	
@@ -78,6 +78,9 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 			return ;
 		
 		OrmExeContext ormExeContext = (OrmExeContext)ThreadContext.getContext().get(ThreadContext.KEY_OPT_CONTEXT);
+		if(ormExeContext == null){
+			return ;
+		}
 		Log log = this.newLog();
 		log.setCnName(ormTable.getTableCnName());
 		log.setTableName(ormTable.getTableDbName());
@@ -329,13 +332,6 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	@Override
-	public void afterSave(List<T> objs, IOrmDao<T, PK> baseDao) {
-		if(this.saveDllLog){
-			this.saveLog(baseDao, null);
-		}
-	}
-
-	@Override
 	public void afterSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
 			this.saveLog(baseDao, null);
@@ -344,13 +340,6 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 
 	@Override
 	public void afterUpdate(T obj, IOrmDao<T, PK> baseDao) {
-		if(this.saveDllLog){
-			this.saveLog(baseDao, null);
-		}
-	}
-
-	@Override
-	public void afterUpdate(List<T> objs, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
 			this.saveLog(baseDao, null);
 		}
@@ -371,14 +360,14 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	@Override
-	public void afterDelete(List<PK> ids, IOrmDao<T, PK> baseDao) {
+	public void afterDeleteBatch(List<PK> ids, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
 			this.saveLog(baseDao, null);
 		}
 	}
 
 	@Override
-	public void afterDeleteBy(Iquery query, IOrmDao<T, PK> baseDao) {
+	public void afterDelete(Iquery query, IOrmDao<T, PK> baseDao) {
 		if(this.saveDllLog){
 			this.saveLog(baseDao, null);
 		}
@@ -392,15 +381,7 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	@Override
-	public void afterGetBy(IOrmDao<T, PK> baseDao, T rs, Iquery query) {
-		if(this.saveFindLog){
-			this.saveLog(baseDao, rs);
-		}
-	}
-
-	@Override
-	public void afterGetObject(IOrmDao<T, PK> baseDao, T rs, String sql,
-			Object... args) {
+	public void afterGet(IOrmDao<T, PK> baseDao, T rs, Iquery query) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, rs);
 		}
@@ -414,14 +395,7 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 
 	@Override
-	public void afterQueryBy(IOrmDao<T, PK> baseDao, List<T> rs, Iquery query) {
-		if(this.saveFindLog){
-			this.saveLog(baseDao, rs);
-		}
-	}
-
-	@Override
-	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, String sql, Object... args) {
+	public void afterQuery(IOrmDao<T, PK> baseDao, List<T> rs, Iquery query) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, rs);
 		}
@@ -435,21 +409,21 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	}
 	
 	@Override
-	public void afterQueryForNumber(IOrmDao<T, PK> baseDao, Number num, String sql, Object... args) {
+	public void afterCount(IOrmDao<T, PK> baseDao, Number num, Iquery query) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, num.longValue());
 		}
 	}
 
 	@Override
-	public void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, String sql, Object... args) {
+	public void afterQueryForList(IOrmDao<T, PK> baseDao, List<Map<String, Object>> rs, Iquery query) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, rs);
 		}
 	}
 
 	@Override
-	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, String sql, Object... args) {
+	public void afterQueryForMap(IOrmDao<T, PK> baseDao, Map<String, Object> rs, Iquery query) {
 		if(this.saveFindLog){
 			this.saveLog(baseDao, rs);
 		}
@@ -498,6 +472,4 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	public void setPrintRsStr(boolean printRsStr) {
 		this.printRsStr = printRsStr;
 	}
-	
-	
 }

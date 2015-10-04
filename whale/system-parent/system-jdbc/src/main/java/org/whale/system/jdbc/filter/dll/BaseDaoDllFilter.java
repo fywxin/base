@@ -21,10 +21,6 @@ public interface BaseDaoDllFilter<T extends Serializable,PK extends Serializable
 	
 	void afterSave(T obj, IOrmDao<T, PK> baseDao);
 	
-	void beforeSave(List<T> objs, IOrmDao<T, PK> baseDao);
-	
-	void afterSave(List<T> objs, IOrmDao<T, PK> baseDao);
-	
 	void beforeSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao);
 	
 	void afterSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao);
@@ -35,10 +31,6 @@ public interface BaseDaoDllFilter<T extends Serializable,PK extends Serializable
 	
 	void afterUpdate(T obj, IOrmDao<T, PK> baseDao);
 	
-	void beforeUpdate(List<T> objs, IOrmDao<T, PK> baseDao);
-	
-	void afterUpdate(List<T> objs, IOrmDao<T, PK> baseDao);
-	
 	void beforeUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao);
 	
 	void afterUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao);
@@ -48,12 +40,12 @@ public interface BaseDaoDllFilter<T extends Serializable,PK extends Serializable
 	
 	void afterDelete(PK id, IOrmDao<T, PK> baseDao);
 	
-	void beforeDelete(List<PK> ids, IOrmDao<T, PK> baseDao);
+	void beforeDeleteBatch(List<PK> ids, IOrmDao<T, PK> baseDao);
 	
-	void afterDelete(List<PK> ids, IOrmDao<T, PK> baseDao);
+	void afterDeleteBatch(List<PK> ids, IOrmDao<T, PK> baseDao);
 	
-	void beforeDeleteBy(Iquery query, IOrmDao<T, PK> baseDao);
+	void beforeDelete(Iquery query, IOrmDao<T, PK> baseDao);
 	
-	void afterDeleteBy(Iquery query, IOrmDao<T, PK> baseDao);
+	void afterDelete(Iquery query, IOrmDao<T, PK> baseDao);
 
 }

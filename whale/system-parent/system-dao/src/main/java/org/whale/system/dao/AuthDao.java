@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
 import org.whale.system.base.Cmd;
-import org.whale.system.common.util.LangUtil;
+import org.whale.system.base.Query;
 import org.whale.system.domain.Auth;
 
 @Repository
@@ -14,24 +14,23 @@ public class AuthDao extends BaseDao<Auth, Long> {
 
 	public List<Auth> getByMenuId(Long menuId){
 		
-		return this.queryBy(Cmd.newCmd(Auth.class).and("menuId", menuId));
+		return this.query(Cmd.newCmd(Auth.class).eq("menuId", menuId));
 	}
 	
 	String getByRoleId_SQL = "SELECT a.* FROM sys_role_auth ra, sys_auth a WHERE ra.roleId = ? AND a.authId = ra.authId ";
 	public List<Auth> getByRoleId(Long roleId){
 		
-		return this.query(getByRoleId_SQL, roleId);
+		return this.query(Query.newQuery(getByRoleId_SQL, roleId));
 	}
 	
 	public List<Auth> getByAuthIds(List<Long> authIds){
-		String sql = this.sqlHead()+" where t.authId in("+LangUtil.joinIds(authIds)+")"+this.sqlOrder();
 		
-		return this.query(sql);
+		return this.query(this.cmd().and("authId", "in", authIds));
 	}
 	
 	public Auth getByAuthCode(String authCode){
 		
-		return this.getBy(this.cmd().and("authCode", authCode));
+		return this.get(this.cmd().eq("authCode", authCode));
 	}
 	
 	/**
@@ -44,6 +43,6 @@ public class AuthDao extends BaseDao<Auth, Long> {
 			+ "WHERE ura.authId = t.authId ";
 	public List<Auth> getByUserId(Long userId){
 		
-		return this.query(getByUserId_SQL, userId);
+		return this.query(Query.newQuery(getByUserId_SQL, userId));
 	}
 }
