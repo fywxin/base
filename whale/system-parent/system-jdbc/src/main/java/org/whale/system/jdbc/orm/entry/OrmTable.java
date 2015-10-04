@@ -1,5 +1,6 @@
 package org.whale.system.jdbc.orm.entry;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,11 @@ public class OrmTable extends Atable {
 	
 	/**存在默认值的字段集合，主要用于getObject(T t) 和 query(T t)的模糊查询，防止初始值污染查询条件 */
 	private List<OrmColumn> valueCols;
+	
+	/**java字段名对应数据库字段名 */
+	private Map<String, String> javaAsSqlColumn = new HashMap<String, String>();
+	/**数据库字段名对应java字段名 */
+	private Map<String, String> sqlAsJavaColumn = new HashMap<String, String>();
 	
 	
 	public OrmTable(){
@@ -247,4 +253,22 @@ public class OrmTable extends Atable {
 	public String toString() {
 		return "OrmTable [" + tableDbName + ":"+ sequence + ", ormCols=" + ormCols + ", extInfo=" + extInfo + "]";
 	}
+
+	public Map<String, String> getJavaAsSqlColumn() {
+		return javaAsSqlColumn;
+	}
+
+	public void setJavaAsSqlColumn(Map<String, String> javaAsSqlColumn) {
+		this.javaAsSqlColumn = javaAsSqlColumn;
+	}
+
+	public Map<String, String> getSqlAsJavaColumn() {
+		return sqlAsJavaColumn;
+	}
+
+	public void setSqlAsJavaColumn(Map<String, String> sqlAsJavaColumn) {
+		this.sqlAsJavaColumn = sqlAsJavaColumn;
+	}
+	
+	
 }

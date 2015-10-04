@@ -13,14 +13,13 @@ import org.whale.system.jdbc.orm.entry.OrmTable;
 
 /**
  * 单表查询构造器, AND 条件联合查询
+ * col 支持java字段和sql字段
  * 参考nutz  OR 以后加入
  * 
  * @author 王金绍
  *
  */
 public class Cmd implements Iquery{
-	
-	private Class<?> clazz;
 	
 	private StringBuilder sql = new StringBuilder();
 	
@@ -32,18 +31,21 @@ public class Cmd implements Iquery{
 	
 	private boolean selectAll = false;
 	
+	private OrmTable ormTable;
+	
 	public static Cmd newCmd(Class<?> clazz){
 		return new Cmd(clazz);
 	}
 	
 	public Cmd(Class<?> clazz) {
-        this.clazz = clazz;
+        OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
+		ormTable = ormContext.getOrmTable(clazz);
     }
 	
 	@Override
 	public String getDelSql() {
-		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
-		OrmTable ormTable = ormContext.getOrmTable(clazz);
+//		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
+//		OrmTable ormTable = ormContext.getOrmTable(clazz);
 		
 		StringBuilder strb = new StringBuilder();
 		strb.append("DELETE FROM ").append(ormTable.getTableDbName()).append(" WHERE 1=1 ").append(sql.toString().replaceAll("t.", ""));
@@ -53,8 +55,8 @@ public class Cmd implements Iquery{
 	
 	@Override
 	public String getGetSql() {
-		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
-		OrmTable ormTable = ormContext.getOrmTable(clazz);
+//		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
+//		OrmTable ormTable = ormContext.getOrmTable(clazz);
 		
 		StringBuilder strb = new StringBuilder();
 		
@@ -65,8 +67,8 @@ public class Cmd implements Iquery{
 
 	@Override
 	public String getQuerySql() {
-		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
-		OrmTable ormTable = ormContext.getOrmTable(clazz);
+//		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
+//		OrmTable ormTable = ormContext.getOrmTable(clazz);
 		
 		StringBuilder strb = new StringBuilder();
 		
@@ -94,8 +96,8 @@ public class Cmd implements Iquery{
 	
 	@Override
 	public String getCountSql() {
-		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
-		OrmTable ormTable = ormContext.getOrmTable(clazz);
+//		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
+//		OrmTable ormTable = ormContext.getOrmTable(clazz);
 		
 		StringBuilder strb = new StringBuilder();
 		strb.append("SELECT COUNT(1) FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(sql);
@@ -161,6 +163,8 @@ public class Cmd implements Iquery{
 	 */
 	@SuppressWarnings("all")
 	public Cmd and(String col, String opt, Object value){
+		col = this.fixCol(col);
+			
 		if("=".equals(opt)){
 			if(value == null){
 				sql.append(" AND t.").append(col).append(" IS NULL");
@@ -278,6 +282,7 @@ public class Cmd implements Iquery{
 		if(order == null){
 			order = new StringBuilder();
 		}
+		col = this.fixCol(col);
 		order.append(col).append(" ASC,");
 		return this;
 	}
@@ -286,9 +291,16 @@ public class Cmd implements Iquery{
 		if(order == null){
 			order = new StringBuilder();
 		}
+		col = this.fixCol(col);
 		order.append(col).append(" DESC,");
 		return this;
 	}
 
-	
+	private String fixCol(String col){
+		String newCol = this.ormTable.getJavaAsSqlColumn().get(col);
+		if(Strings.isNotBlank(newCol)){
+			col = newCol;
+		}
+		return col;
+	}
 }

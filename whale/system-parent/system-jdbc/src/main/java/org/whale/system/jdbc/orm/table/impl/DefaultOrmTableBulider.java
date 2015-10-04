@@ -5,7 +5,9 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -381,8 +383,16 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		/**带检查字段集合 */
 		List<OrmColumn> validateCols = new ArrayList<OrmColumn>();
 		
+		/**java字段名对应数据库字段名 */
+		Map<String, String> javaAsSqlColumn = new HashMap<String, String>();
+		/**数据库字段名对应java字段名 */
+		Map<String, String> sqlAsJavaColumn = new HashMap<String, String>();
+		
 		OrmColumn idCol = null;
 		for(OrmColumn col : cols){
+			javaAsSqlColumn.put(col.getAttrName(), col.getSqlName());
+			sqlAsJavaColumn.put(col.getSqlName(), col.getAttrName());
+			
 			//排序字段
 			if(col.getOrmOrder() != null){
 				orderCols.add(col);
