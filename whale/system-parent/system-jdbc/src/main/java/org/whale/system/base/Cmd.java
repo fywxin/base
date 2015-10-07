@@ -53,6 +53,26 @@ public class Cmd implements Iquery{
     }
 	
 	@Override
+	public String getSql(SqlType sqlType) {
+		if(sqlType == null){
+			return this.getQuerySql();
+		}else if(sqlType == SqlType.GET){
+			return this.getGetSql();
+		}else if(sqlType == SqlType.COUNT){
+			return this.getCountSql();
+		}else if(sqlType == SqlType.DEL){
+			return this.getDelSql();
+		}else{
+			return this.getQuerySql();
+		}
+	}
+
+	@Override
+	public Object[] getArgs() {
+		return args.toArray();
+	}
+	
+	
 	public String getDelSql() {
 		if(delSql == null){
 			StringBuilder strb = new StringBuilder();
@@ -66,7 +86,6 @@ public class Cmd implements Iquery{
 		return delSql;
 	}
 	
-	@Override
 	public String getGetSql() {
 		if(getSql == null){
 			StringBuilder strb = new StringBuilder();
@@ -80,7 +99,6 @@ public class Cmd implements Iquery{
 		return getSql;
 	}
 
-	@Override
 	public String getQuerySql() {
 		if(querySql == null){
 			StringBuilder strb = new StringBuilder();
@@ -120,7 +138,6 @@ public class Cmd implements Iquery{
 	}
 	
 	
-	@Override
 	public String getCountSql() {
 		if(countSql == null){
 			StringBuilder strb = new StringBuilder();
@@ -132,11 +149,8 @@ public class Cmd implements Iquery{
 		}
 		return countSql;
 	}
-
-	@Override
-	public Object[] getArgs() {
-		return args.toArray();
-	}
+	
+	
 	
 	/**
 	 * 加入查询返回字段
@@ -404,4 +418,6 @@ public class Cmd implements Iquery{
 		}
 		return col;
 	}
+
+	
 }

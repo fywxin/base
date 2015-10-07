@@ -58,6 +58,21 @@ public class AsynQuery implements Iquery{
         this.clazz = clazz;
     }
 	
+	@Override
+	public String getSql(SqlType sqlType) {
+		if(sqlType == null){
+			return this.getQuerySql();
+		}else if(sqlType == SqlType.GET){
+			return this.getGetSql();
+		}else if(sqlType == SqlType.COUNT){
+			return this.getCountSql();
+		}else if(sqlType == SqlType.DEL){
+			return this.getDelSql();
+		}else{
+			return this.getQuerySql();
+		}
+	}
+	
 	/**
 	 * SQL语句 参数值 列表
 	 * @return
@@ -83,7 +98,6 @@ public class AsynQuery implements Iquery{
 		return strb.toString();
 	}
 	
-	@Override
 	public String getGetSql() {
 		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
 		OrmTable ormTable = ormContext.getOrmTable(clazz);
@@ -116,7 +130,6 @@ public class AsynQuery implements Iquery{
 		return strb.toString();
 	}
 	
-	@Override
 	public String getCountSql() {
 		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
 		OrmTable ormTable = ormContext.getOrmTable(clazz);

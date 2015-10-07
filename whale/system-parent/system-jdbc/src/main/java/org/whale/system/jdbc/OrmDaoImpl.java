@@ -24,6 +24,7 @@ import org.whale.system.base.BaseDao;
 import org.whale.system.base.Cmd;
 import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
+import org.whale.system.base.Iquery.SqlType;
 import org.whale.system.common.exception.StaleObjectStateException;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.ReflectionUtil;
@@ -188,7 +189,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 按自定义条件删除
 	 */
 	public void delete(Iquery query){
-		this.jdbcTemplate.update(query.getDelSql(), query.getArgs());
+		this.jdbcTemplate.update(query.getSql(SqlType.DEL), query.getArgs());
 	}
 	
 	/**
@@ -208,7 +209,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 按自定义条件获取
 	 */
 	public T get(Iquery query){
-		List<T> list = this.jdbcTemplate.query(query.getGetSql(), query.getArgs(), this.rowMapper);
+		List<T> list = this.jdbcTemplate.query(query.getSql(SqlType.GET), query.getArgs(), this.rowMapper);
 		
 		if(list == null || list.size() < 1)
 			return null;
@@ -230,7 +231,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 */
 	public List<T> query(Iquery query){
 		
-		return this.jdbcTemplate.query(query.getQuerySql(), query.getArgs(), this.rowMapper);
+		return this.jdbcTemplate.query(query.getSql(SqlType.QUERY), query.getArgs(), this.rowMapper);
 	}
 	
 	/**
@@ -289,7 +290,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	@Override
 	@SuppressWarnings("all")
 	public Integer count(Iquery query) {
-		return this.jdbcTemplate.queryForInt(query.getCountSql(), query.getArgs());
+		return this.jdbcTemplate.queryForInt(query.getSql(SqlType.COUNT), query.getArgs());
 	}
 	
 //--------------------------------------内部方法-----------------------------------------------
@@ -380,17 +381,17 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 
 	@Override
 	public List<Map<String, Object>> queryForList(Iquery query) {
-		if(Strings.isBlank(query.getQuerySql()))
+		if(Strings.isBlank(query.getSql(SqlType.QUERY)))
 			return null;
-		return this.jdbcTemplate.queryForList(query.getQuerySql(), query.getArgs());
+		return this.jdbcTemplate.queryForList(query.getSql(SqlType.QUERY), query.getArgs());
 	}
 
 
 	@Override
 	public Map<String, Object> queryForMap(Iquery query) {
-		if(Strings.isBlank(query.getQuerySql()))
+		if(Strings.isBlank(query.getSql(SqlType.QUERY)))
 			return null;
-		return this.jdbcTemplate.queryForMap(query.getQuerySql(), query.getArgs());
+		return this.jdbcTemplate.queryForMap(query.getSql(SqlType.QUERY), query.getArgs());
 	}
 	
 	/**

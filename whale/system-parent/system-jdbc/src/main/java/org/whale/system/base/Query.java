@@ -16,22 +16,7 @@ public class Query implements Iquery {
 	}
 
 	@Override
-	public String getDelSql() {
-		return sql;
-	}
-
-	@Override
-	public String getGetSql() {
-		return sql;
-	}
-
-	@Override
-	public String getQuerySql() {
-		return sql;
-	}
-
-	@Override
-	public String getCountSql() {
+	public String getSql(SqlType sqlType) {
 		return sql;
 	}
 

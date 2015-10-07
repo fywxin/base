@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
+import org.whale.system.base.Iquery.SqlType;
 import org.whale.system.base.Page;
 import org.whale.system.base.Iquery;
 import org.whale.system.common.util.ThreadContext;
@@ -87,7 +88,7 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 
 	@Override
 	public void beforeDelete(Iquery query, IOrmDao<T, PK> baseDao) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("delete", query.getDelSql(), query.getArgs(), baseDao));
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("delete", query.getSql(SqlType.DEL), query.getArgs(), baseDao));
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 	
 	@Override
 	public void beforeGet(IOrmDao<T, PK> baseDao, Iquery query) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("get", query.getQuerySql(), query.getArgs(), baseDao));
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("get", query.getSql(SqlType.GET), query.getArgs(), baseDao));
 	}
 
 	@Override
@@ -129,7 +130,7 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 
 	@Override
 	public void beforeQuery(IOrmDao<T, PK> baseDao, Iquery query) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("query", query.getQuerySql(), query.getArgs(), baseDao));
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("query", query.getSql(SqlType.QUERY), query.getArgs(), baseDao));
 	}
 
 	@Override
@@ -155,7 +156,7 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 
 	@Override
 	public void beforeCount(IOrmDao<T, PK> baseDao, Iquery query) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryForNumber", query.getCountSql(), query.getArgs(), baseDao));
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryForNumber", query.getSql(SqlType.COUNT), query.getArgs(), baseDao));
 	}
 
 	@Override
@@ -168,7 +169,7 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 
 	@Override
 	public void beforeQueryForList(IOrmDao<T, PK> baseDao, Iquery query) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryForList", query.getQuerySql(), query.getArgs(), baseDao));
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryForList", query.getSql(SqlType.QUERY), query.getArgs(), baseDao));
 	}
 
 	@Override
@@ -178,7 +179,7 @@ public class OrmExeContextFilter<T extends Serializable,PK extends Serializable>
 
 	@Override
 	public void beforeQueryForMap(IOrmDao<T, PK> baseDao, Iquery query) {
-		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryForMap", query.getQuerySql(), query.getArgs(), baseDao));
+		ThreadContext.getContext().put(ThreadContext.KEY_OPT_CONTEXT, new OrmExeContext("queryForMap", query.getSql(SqlType.QUERY), query.getArgs(), baseDao));
 	}
 
 	@Override

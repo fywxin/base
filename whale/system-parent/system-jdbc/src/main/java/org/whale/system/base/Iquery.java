@@ -7,34 +7,31 @@ package org.whale.system.base;
  *
  */
 public interface Iquery {
-
-	/**
-	 * 获取条件删除语句
-	 * @return
-	 */
-	public String getDelSql();
 	
 	/**
 	 * 获取单条记录语句
 	 * @return
 	 */
-	public String getGetSql();
-	
-	/**
-	 * 获取 查询记录语句
-	 * @return
-	 */
-	public String getQuerySql();
-	
-	/**
-	 * 获取总记录数语句
-	 * @return
-	 */
-	public String getCountSql();
+	public String getSql(SqlType sqlType);
 	
 	/**
 	 * 获取语句对应的参数
 	 * @return
 	 */
 	public Object[] getArgs();
+	
+	
+	/**
+	 * 获取SQL语句
+	 * 
+	 * QUERY 查询语句
+	 * GET 获取单条记录语句，没有order
+	 * COUNT 获取总数语句
+	 * DEL 删除记录语句
+	 * 
+	 * @author 王金绍
+	 */
+	public static enum SqlType{
+		QUERY,GET, COUNT, DEL
+	}
 }

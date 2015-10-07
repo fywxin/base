@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.whale.system.base.Iquery.SqlType;
 import org.whale.system.common.exception.SysException;
 
 /**
@@ -78,8 +79,8 @@ public class Page implements Serializable {
 		if(this.cmd == null){
 			throw new SysException("Page 分页语句为空");
 		}
-		this.sql = this.cmd.getQuerySql();
-		this.countSql = this.cmd.getCountSql();
+		this.sql = this.cmd.getSql(SqlType.QUERY);
+		this.countSql = this.cmd.getSql(SqlType.COUNT);
 		for(Object obj : this.cmd.getArgs()){
 			this.args.add(obj);
 		}
