@@ -7,18 +7,18 @@ import org.whale.system.jdbc.util.OrmUtil;
 
 /**
  * 驼峰规则转换器
- *
+ * 
  * @author 王金绍
- * 2014年9月6日-下午2:00:16
+ * 2015年10月13日 下午11:18:34
  */
 @Component
-public class HumpTableNameParser implements ParseTableName {
+public class CamelTableNameParser implements ParseTableName {
 
 	@Override
 	public String getDbTableName(String tableName) {
 		if(Strings.isBlank(tableName))return null;
 		
-		tableName = OrmUtil.dump2SqlStyle(tableName);
+		tableName = OrmUtil.camel2SqlUpper(tableName);
 		return "TB_"+tableName;
 	}
 
@@ -26,7 +26,7 @@ public class HumpTableNameParser implements ParseTableName {
 	public String getDbSequence(String tableName) {
 		if(Strings.isBlank(tableName))return null;
 		
-		tableName = OrmUtil.dump2SqlStyle(tableName);
+		tableName = OrmUtil.camel2SqlUpper(tableName);
 		return "SEQ_"+tableName;
 	}
 

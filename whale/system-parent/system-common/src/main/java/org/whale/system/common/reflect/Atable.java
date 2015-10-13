@@ -4,10 +4,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.whale.system.annotation.jdbc.Table.ColumnFormat;
+
 public class Atable {
 
 	/** table 实体名 */
 	private String entityName;
+	
+	/** 字段到数据库的转换规则  */
+	private ColumnFormat columnFormat;
 	
 	private Class<?> clazz;
 	
@@ -64,6 +69,14 @@ public class Atable {
 
 	public void setParent(Atable parent) {
 		this.parent = parent;
+	}
+
+	public ColumnFormat getColumnFormat() {
+		return columnFormat;
+	}
+
+	public void setColumnFormat(ColumnFormat columnFormat) {
+		this.columnFormat = columnFormat;
 	}
 
 	@Override

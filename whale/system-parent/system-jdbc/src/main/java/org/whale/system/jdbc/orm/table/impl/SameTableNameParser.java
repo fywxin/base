@@ -13,7 +13,6 @@ public class SameTableNameParser implements ParseTableName {
 
 	@Override
 	public String getDbSequence(String tableName) {
-		// TODO Auto-generated method stub
 		return "seq_"+tableName;
 	}
 

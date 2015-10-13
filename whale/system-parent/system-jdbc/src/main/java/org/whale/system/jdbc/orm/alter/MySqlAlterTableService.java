@@ -92,7 +92,7 @@ public class MySqlAlterTableService extends AbstractAlterTableService {
 //					strb.append("(").append(col.getWidth()).append(",").append(col.getPrecision()).append(")");
 //				}
 			}else if(col.getType() == Types.VARCHAR){
-				strb.append("varchar");
+				strb.append("varchar(100)");
 //				if(col.getWidth() <= 0){
 //					strb.append("(1024)");
 //				}else{

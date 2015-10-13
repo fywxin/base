@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import org.whale.system.common.reflect.Atable;
 import org.whale.system.common.util.Strings;
 
@@ -20,6 +21,7 @@ public class OrmTable extends Atable {
 	private String tableDbName;
 	/** table 中文名 */
 	private String tableCnName;
+	
 	/** 序列 */
 	private String sequence;
 	/** 数据库 所对应的拥有者  */
@@ -269,6 +271,5 @@ public class OrmTable extends Atable {
 	public void setSqlAsJavaColumn(Map<String, String> sqlAsJavaColumn) {
 		this.sqlAsJavaColumn = sqlAsJavaColumn;
 	}
-	
 	
 }

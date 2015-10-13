@@ -18,11 +18,29 @@ import java.lang.annotation.Target;
 public @interface Table {
 
 	/** 数据库表名 */
-	String value() default "";
-	/** 数据库表对应的序列名 */
-	String sequence() default "";
-	/** 数据库拥有人 */
-	String schema() default "";
+	String value();
 	/** 实体中文名 */
-	String cnName();
+	String cnName() default "";
+	/** java字段转数据库字段规则 */
+	ColumnFormat colFormat() default ColumnFormat.SAME;
+	
+	/** 数据库表对应的序列名 ORACLE */
+	String sequence() default "";
+	/** 数据库拥有人 ORACLE */
+	String schema() default "";
+	
+	/**
+	 * 
+	 * 字段到数据库转换的规则
+	 * 相同规则，驼峰规则
+	 * SAME : 数据库与java属性名称一致  userName userName
+	 * CAMEL2UNDERLINE_UPPER : 驼峰规则转下划线大写  userName USER_NAME
+	 * CAMEL2UNDERLINE_LOWER : 驼峰规则转下划线小写 userName user_name
+	 * 
+	 * @author 王金绍
+	 * 2015年10月13日 下午10:31:18
+	 */
+	public static enum ColumnFormat {
+		SAME, CAMEL2UNDERLINE_UPPER, CAMEL2UNDERLINE_LOWER
+	}
 }

@@ -22,6 +22,8 @@ import org.whale.system.annotation.jdbc.OptimisticLock;
 import org.whale.system.annotation.jdbc.Order;
 import org.whale.system.annotation.jdbc.Sql;
 import org.whale.system.annotation.jdbc.Table;
+import org.whale.system.annotation.jdbc.Table.ColumnFormat;
+import org.whale.system.annotation.jdbc.UnColumn;
 import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.common.exception.OrmException;
 import org.whale.system.common.reflect.Acolumn;
@@ -40,7 +42,6 @@ import org.whale.system.jdbc.orm.event.OrmTableGenEvent;
 import org.whale.system.jdbc.orm.table.ColumnExtInfoReader;
 import org.whale.system.jdbc.orm.table.OrmTableBulider;
 import org.whale.system.jdbc.orm.table.TableExtInfoReader;
-import org.whale.system.jdbc.orm.table.UserParseColumnName;
 import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
 
@@ -56,13 +57,13 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	private static Logger logger = LoggerFactory.getLogger(DefaultOrmTableBulider.class);
 	
 	@Autowired
-	private HumpTableNameParser humpTableNameParser;
+	private CamelTableNameParser camelTableNameParser;
 	@Autowired
 	private SameTableNameParser sameTableNameParser;
 	@Autowired
-	private HumpColumnNameParser humpColumnNameParser;
+	private Camel2SqlUpperColumnNameParser camel2SqlUpperColumnNameParser;
 	@Autowired
-	private SameColumnNameParser sameColumnNameParser;
+	private Camel2SqlLowerColumnNameParser camel2SqlLowerColumnNameParser;
 	@Resource(name="entryContext")
 	private EntryContext entryContext;
 	@Autowired
@@ -71,8 +72,6 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	private OrmEventMuliter omEventMuliter;
 	
 	//------------------------------------外部扩展实现-------------------------
-	@Autowired(required=false)
-	private List<UserParseColumnName> userColParsers;
 	@Autowired(required=false)
 	private List<TableExtInfoReader> tableExtInfoReaders;
 	@Autowired(required=false)
@@ -143,7 +142,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 			if(DbKind.isMysql()){
 				ormTable.setTableDbName(this.sameTableNameParser.getDbTableName(ormTable.getEntityName()));
 			}else{
-				ormTable.setTableDbName(this.humpTableNameParser.getDbTableName(ormTable.getEntityName()));
+				ormTable.setTableDbName(this.camelTableNameParser.getDbTableName(ormTable.getEntityName()));
 			}
 		}else{
 			//TODO oracle 与 mysql 表名 大小写是否有要求
@@ -154,7 +153,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		//数据库序列
 		if(Strings.isBlank(table.sequence())){
 			//mysql 无序列
-			ormTable.setSequence(this.humpTableNameParser.getDbSequence(ormTable.getEntityName()));
+			ormTable.setSequence(this.camelTableNameParser.getDbSequence(ormTable.getEntityName()));
 		}else{
 			ormTable.setSequence(table.sequence().trim().toUpperCase());
 		}
@@ -164,6 +163,11 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		}
 		if(Strings.isNotBlank(table.cnName())){
 			ormTable.setTableCnName(table.cnName());
+		}
+		//当javabean 字段没有定义@Column是，javabean属性转为数据库字段的规则
+		ormTable.setColumnFormat(table.colFormat());
+		while (ormTable.getParent() != null) {
+			ormTable.getParent().setColumnFormat(table.colFormat());
 		}
 	}
 	
@@ -182,8 +186,10 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		List<OrmColumn> list = new ArrayList<OrmColumn>(acolumns.size());
 		OrmColumn ormColumn = null;
 		
+		boolean hasColAnnotation = this.searchColumnAnnotation(table);
+		
 		for(Acolumn acolumn : acolumns){
-			ormColumn = this.fireAndParseColumn(table, acolumn);
+			ormColumn = this.fireAndParseColumn(table, acolumn, hasColAnnotation);
 			if(ormColumn == null)
 				continue;
 			list.add(ormColumn);
@@ -201,17 +207,39 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	}
 	
 	/**
+	 * JavaBean 中所有属性 是否存在@Column 标签
+	 * 有，则  @Column 字段为数据库字段
+	 * 否，则 除 @UnColumn 外的java字段为数据库字段
+	 * @param table
+	 * @return
+	 */
+	private boolean searchColumnAnnotation(Atable table){
+		List<Acolumn> acolumns = table.getCols();
+		for(Acolumn acolumn : acolumns){
+			if(acolumn.getField().getAnnotation(Column.class) != null){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * 绑定OrmColumn创建事件
 	 * @param table
 	 * @param acolumn
 	 * @return
 	 * @Date 2015年3月9日 下午4:34:07
 	 */
-	private OrmColumn fireAndParseColumn(Atable table, Acolumn acolumn){
+	private OrmColumn fireAndParseColumn(Atable table, Acolumn acolumn, boolean hasColAnnotation){
 		OrmColumnGenEvent beforeOrmColumnGenEvent = new OrmColumnGenEvent(this, table, acolumn, null, true, false);
 		this.omEventMuliter.multicater(beforeOrmColumnGenEvent);
 		
-		OrmColumn ormColumn = this.parseColumn(table, acolumn);
+		OrmColumn ormColumn = null;
+		if(hasColAnnotation){ //存在 @Column 则采用默认规则
+			ormColumn = this.parseColumnWithAnnotation(table, acolumn);
+		}else{//不存在 则所有非 @UnColumn的都ok
+			ormColumn = this.parseColumnUnAnnotation(table, acolumn);
+		}
 		
 		OrmColumnGenEvent afterOrmColumnGenEvent = new OrmColumnGenEvent(this, table, acolumn, ormColumn, false, true);
 		this.omEventMuliter.multicater(afterOrmColumnGenEvent);
@@ -220,29 +248,57 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	}
 	
 	/**
-	 * 创建OrmColumn 对象
+	 * 创建OrmColumn 对象 JavaBean不存在 @Column 标签
+	 * @param table
+	 * @param acolumn
+	 * @return
+	 */
+	private OrmColumn parseColumnUnAnnotation(Atable table, Acolumn acolumn){
+		UnColumn unColumn = acolumn.getField().getAnnotation(UnColumn.class);
+		if(unColumn != null){
+			return null;
+		}
+		
+		OrmColumn ormColumn = new OrmColumn(acolumn);
+		
+		ormColumn.setSqlName(this.parseDbColumnName(acolumn.getAttrName(), table.getColumnFormat()));
+		ormColumn.setCnName(acolumn.getAttrName());
+		ormColumn.setUnique(false);
+		ormColumn.setUpdateAble(true);
+		//字段类型
+		ormColumn.setType(this.getFieldType(acolumn));
+
+		this.readOtherAnnotation(table, acolumn, ormColumn);
+		
+		return ormColumn;
+	}
+	
+	/**
+	 * 创建OrmColumn 对象 JavaBean存在 @Column 标签
 	 * @param table
 	 * @param acolumn
 	 * @return
 	 * @Date 2015年3月9日 下午4:34:59
 	 */
-	private OrmColumn parseColumn(Atable table, Acolumn acolumn){
+	private OrmColumn parseColumnWithAnnotation(Atable table, Acolumn acolumn){
 		Column column = acolumn.getField().getAnnotation(Column.class);
 		if(column == null) 
 			return null;
-		OrmColumn ormColumn = new OrmColumn(acolumn);
-		//主键
-		Id id = acolumn.getField().getAnnotation(Id.class);
-		if(id != null){
-			ormColumn.setIsId(true);
-			ormColumn.setIdAuto(id.auto());
+		UnColumn unColumn = acolumn.getField().getAnnotation(UnColumn.class);
+		if(unColumn != null){
+			throw new OrmException("实体 ["+table.getEntityName()+"]中字段["+acolumn.getAttrName()+"]不能同时包含 @Column 与 @UnColumn 标签");
 		}
+		
+		OrmColumn ormColumn = new OrmColumn(acolumn);
 		//字段数据库名
-		ormColumn.setSqlName(this.getDbColumnName(acolumn.getAttrName(), column, table.getEntityName()));
+		ormColumn.setSqlName(Strings.isBlank(column.name()) ? acolumn.getAttrName() : column.name().trim());
 		//字段中文名
 		if(Strings.isNotBlank(column.cnName())){
 			ormColumn.setCnName(column.cnName().replaceAll("'", "").replaceAll("\"", ""));
 			acolumn.setCnName(column.cnName().replaceAll("'", "").replaceAll("\"", ""));
+		}else{
+			ormColumn.setCnName(ormColumn.getSqlName());
+			acolumn.setCnName(ormColumn.getSqlName());
 		}
 		
 		//建表和判断数据是否超过大小时有用
@@ -254,6 +310,28 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 //		ormColumn.setNullAble(column.nullable());
 		ormColumn.setUpdateAble(column.updateable());
 		ormColumn.setDefaultValue("".equals(column.defaultValue()) ? null : column.defaultValue());
+		//字段类型
+		ormColumn.setType(this.getFieldType(acolumn));
+		
+		this.readOtherAnnotation(table, acolumn, ormColumn);
+		
+		return ormColumn;
+	}
+	
+	/**
+	 * 读取其他非 @Column 的字段元注释
+	 * 包括 @Id @Sql @Order @OrmValidate @OptimisticLock 和扩展信息读取
+	 * @param table
+	 * @param acolumn
+	 * @param ormColumn
+	 */
+	private void readOtherAnnotation(Atable table, Acolumn acolumn, OrmColumn ormColumn){
+		//主键
+		Id id = acolumn.getField().getAnnotation(Id.class);
+		if(id != null){
+			ormColumn.setIsId(true);
+			ormColumn.setIdAuto(id.auto());
+		}
 		
 		//字段附加SQL定义
 		Sql sql = acolumn.getField().getAnnotation(Sql.class);
@@ -262,9 +340,6 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 				this.setColumnSql(ormColumn, sql);
 			}
 		}
-		
-		//字段类型
-		ormColumn.setType(this.getFieldType(acolumn, column));
 		
 		//读取设置@Order
 		this.setColumnOrder(ormColumn);
@@ -295,8 +370,6 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 				throw new OrmException(table.getEntityName() +" 乐观锁 "+ormColumn.getAttrName()+" 字段类型必须为包装类型 Long 或 Integer");
 			}
 		}
-		
-		return ormColumn;
 	}
 	
 	/**
@@ -507,21 +580,14 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	 *@return String
 	 *
 	 */
-	private String getDbColumnName(String fieldName, Column column, String entryName){
-		//实体中提供数据库字段名
-		if(Strings.isNotBlank(column.name()))
-			return column.name();
-		
-		//开发人员定义的字段转换规则
-		String userParseName = this.exeUserColParsers(entryName, fieldName);
-		if(Strings.isNotBlank(userParseName))
-			return userParseName;
-		
+	private String parseDbColumnName(String fieldName, ColumnFormat columnFormat){
 		//默认驼峰字段转换规则
-		if(DbKind.isMysql()){
-			return this.sameColumnNameParser.getDbColName(fieldName);
+		if(ColumnFormat.CAMEL2UNDERLINE_LOWER.equals(columnFormat)){
+			return this.camel2SqlLowerColumnNameParser.getDbColName(fieldName);
+		}else if(ColumnFormat.CAMEL2UNDERLINE_UPPER.equals(columnFormat)){
+			return this.camel2SqlUpperColumnNameParser.getDbColName(fieldName);
 		}else{
-			return this.humpColumnNameParser.getDbColName(fieldName);
+			return fieldName;
 		}
 		
 	}
@@ -536,7 +602,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	 *@return int
 	 *
 	 */
-	private int getFieldType(Acolumn acolumn, Column column){
+	private int getFieldType(Acolumn acolumn){
 		Type type = acolumn.getAttrType();
 		String t = type.toString();
 		//System.out.println(t + col.getSqlName() + column.type());
@@ -578,25 +644,6 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		//return column.type();
 	}
 	
-	/**
-	 * 执行开发人员定义的字段转换规则
-	 * 
-	 * @param entryName
-	 * @param fieldName
-	 * @return
-	 * 2015年4月26日 上午9:17:32
-	 */
-	public String exeUserColParsers(String entryName, String fieldName){
-		doSort();
-		if(this.userColParsers != null && this.userColParsers.size() > 0){
-			for(UserParseColumnName parser : this.userColParsers){
-				if(parser.match(entryName)){
-					return parser.getDbColName(fieldName);
-				}
-			}
-		}
-		return null;
-	}
 	
 	/**
 	 * 执行读取table扩展信息获取功能
@@ -638,8 +685,6 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 			return ;
 		synchronized (this) {
 			if(!sort){
-				if(userColParsers != null)
-					Collections.sort(userColParsers, new OrderComparator());
 				if(tableExtInfoReaders != null)
 					Collections.sort(tableExtInfoReaders, new OrderComparator());
 				if(columnExtInfoReaders != null)
