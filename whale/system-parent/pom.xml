@@ -14,7 +14,7 @@
 		<module>system-cache</module>
 		<module>system-auth</module>
 		<module>system-service</module>
-		<module>system-controller</module>
+		<module>system-router</module>
 		<module>system-jsp</module>
 
 		<module>system-web</module>

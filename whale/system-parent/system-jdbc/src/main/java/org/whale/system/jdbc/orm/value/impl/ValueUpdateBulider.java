@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.whale.system.common.exception.OrmException;
-import org.whale.system.common.util.LangUtil;
+import org.whale.system.common.util.ListUtil;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmSql;
 import org.whale.system.jdbc.orm.entry.OrmTable;
@@ -125,7 +125,7 @@ public class ValueUpdateBulider {
 		
 		ormValue.setSql(sql.toString());
 		ormValue.setFields(fields);
-		ormValue.setArgTypes(LangUtil.toArray(argTypes));
+		ormValue.setArgTypes(ListUtil.toArray(argTypes));
 		ormValue.setTable(ormTable);
 		ormValue.setOpType(OrmSql.OPT_UPDATE_ONLY);
 		ormValue.setCols(sCols);

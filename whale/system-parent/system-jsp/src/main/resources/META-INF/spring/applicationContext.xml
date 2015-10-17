@@ -26,86 +26,11 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:db.properties</value>
 				<value>classpath:conf.properties</value>
 				<value>classpath:redis.properties</value>
 			</list>
 		</property>
 	</bean>
-	
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-	    <property name="url" value="${jdbcUrl}" />
-	    <property name="username" value="${user}" />
-	    <property name="password" value="${password}" />
-	    <!-- 配置初始化大小、最小、最大 -->
-	    <property name="initialSize" value="${initialSize}" />
-	    <property name="minIdle" value="${minIdle}" /> 
-	    <property name="maxActive" value="${maxActive}" />
-	 
-	    <!-- 配置获取连接等待超时的时间 -->
-	    <property name="maxWait" value="${maxWait}" />
-	 
-	    <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
-	    <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
-	 
-	    <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
-	    <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
-	  
-	    <property name="validationQuery" value="SELECT 'x'" />
-	    <property name="testWhileIdle" value="${testWhileIdle}" />
-	    <property name="testOnBorrow" value="${testOnBorrow}" />
-	    <property name="testOnReturn" value="${testOnReturn}" />
-	 
-	    <!-- 打开PSCache，并且指定每个连接上PSCache的大小 
-	    <property name="poolPreparedStatements" value="${poolPreparedStatements}" />
-	    <property name="maxPoolPreparedStatementPerConnectionSize" value="${maxPoolPreparedStatementPerConnectionSize}" />
-	 -->
-	    <!-- 配置监控统计拦截的filters -->
-	    <property name="filters" value="${filters}" /> 
-	</bean>
-	
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource">
-            <ref bean="dataSource"/>
-        </property>
-   	</bean>
-   	
-   	<bean id="defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler"/>
-
-	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter" />
-	<bean id="formHttpMessageConverter" class="org.springframework.http.converter.FormHttpMessageConverter" />
-
-	<!-- web client mock request -->
-	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
-		<property name="messageConverters">
-			<list>
-				<ref bean="stringHttpMessageConverter" />
-				<ref bean="formHttpMessageConverter" />
-			</list>
-		</property>
-	</bean>
-	
-	<!-- 定义事务管理器（声明式的事务） -->
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-	
-	
-	
-	<tx:advice id="txAdvice" transaction-manager="transactionManager">
-		<tx:attributes>
-			<tx:method name="save*"  />
-			<tx:method name="update*"  />
-			<tx:method name="delete*" />
-			<tx:method name="*" read-only="true" />
-		</tx:attributes>
-	</tx:advice>
-	<aop:config>
-		<aop:pointcut id="interceptorPointCuts"
-			expression="execution(* org.whale.*.service.*.*(..))" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />
-	</aop:config>
 	
 	<bean id="jvmCacheService" class="org.whale.system.cache.impl.JvmCacheService"></bean>
 	
@@ -156,6 +81,7 @@
 <!-- 		<property name="password" value="${mail.password}"></property> -->
 <!-- 	</bean> -->
 
+	<import resource="classpath:/META-INF/spring/applicationContext-datasource.xml" />
 	<import resource="classpath:/META-INF/spring/log.xml" />
 </beans>
 

@@ -7,7 +7,7 @@
 <script type="text/javascript">
 $(function(){
 	$("#gridTable").grid({
-			url :'${ctx}/dict2/doList',
+			url :'${ctx}/dict/doList',
 			colNames: ['操作', '字典名称', '字典编码','备注'],
 			colModel: [
 	           {name:'opt',index:'opt', width:200, fixed:true, sortable:false, resize:false, align: "center",
@@ -27,15 +27,15 @@ $(function(){
 
 
 function add(){
-	$.openWin({url: "${ctx}/dict2/goSave","title":'新增字典'});
+	$.openWin({url: "${ctx}/dict/goSave","title":'新增字典'});
 }
 
 function update(dictId){
-	$.openWin({url: "${ctx}/dict2/goUpdate?dictId="+dictId,"title":'编辑字典'});
+	$.openWin({url: "${ctx}/dict/goUpdate?dictId="+dictId,"title":'编辑字典'});
 }
 
 function del(dictId){
-	$.del({url:"${ctx}/dict2/doDelete", datas:{dictId: dictId}, onSuccess: function(){
+	$.del({url:"${ctx}/dict/doDelete", datas:{dictId: dictId}, onSuccess: function(){
 		window.parent.location.reload();
 		$.alert("删除字典成功");
 	}});

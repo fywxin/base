@@ -17,11 +17,11 @@ import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.exception.SmsException;
 import org.whale.system.common.util.Bootable;
 import org.whale.system.common.util.SimpleHttpClient;
-import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.TimeUtil;
 import org.whale.system.dao.SmsDao;
 import org.whale.system.domain.Sms;
+import org.whale.system.spring.SpringContextHolder;
 
 /**
  * 短信 管理

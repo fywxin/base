@@ -3,8 +3,6 @@ package org.whale.system.jqgrid;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.whale.system.base.Page;
 import org.whale.system.common.util.WebUtil;
 
@@ -19,9 +17,9 @@ public class Grid implements Serializable {
 	
 	private List<?> rows;
 	
-	public static Page newPage(HttpServletRequest request){
-		int pageNo = WebUtil.getInt(request, "page", 1);
-		int pageSize = WebUtil.getInt(request, "rows", 20);
+	public static Page newPage(){
+		int pageNo = fetInt("page", 1);
+		int pageSize = fetInt("rows", 20);
 		if(pageSize < 1)
 			pageSize = 20;
 		if(pageSize > 100)
@@ -32,7 +30,7 @@ public class Grid implements Serializable {
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		
-		request.setAttribute("page", page);
+		WebUtil.getRequest().setAttribute("page", page);
 		return page;
 	}
 	
@@ -44,6 +42,18 @@ public class Grid implements Serializable {
 		grid.setTotal(page.getTotalPages());
 		
 		return grid;
+	}
+	
+	private static Integer fetInt(String key, Integer defVal){
+		String obj = WebUtil.getRequest().getParameter(key);
+		if(obj == null || "".equals(obj.trim()))
+			return defVal;
+		
+		try {
+			return Integer.parseInt(obj);
+		} catch (NumberFormatException e) {
+			return defVal;
+		}
 	}
 
 	public Long getTotal() {

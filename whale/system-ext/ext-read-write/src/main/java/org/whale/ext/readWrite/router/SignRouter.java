@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.whale.ext.readWrite.ReadWriteDataSourceDecision;
-import org.whale.system.common.util.SpringContextHolder;
+import org.whale.system.spring.SpringContextHolder;
 
 /**
  * 指定路由，比如userService的操作只能使用路由1， deptService的操作只能使用路由2，非指定情况下，使用最少活跃调用数规则

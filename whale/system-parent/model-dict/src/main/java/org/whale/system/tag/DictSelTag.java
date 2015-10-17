@@ -12,9 +12,9 @@ import javax.servlet.jsp.tagext.TagSupport;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.SysConstant;
-import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.common.util.Strings;
 import org.whale.system.domain.DictItem;
+import org.whale.system.spring.SpringContextHolder;
 
 import com.alibaba.fastjson.JSON;
 

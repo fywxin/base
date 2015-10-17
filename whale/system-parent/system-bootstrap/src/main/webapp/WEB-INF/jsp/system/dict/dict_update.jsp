@@ -5,7 +5,7 @@
 <%@include file="/jsp/form.jsp" %>
 <script type="text/javascript">
 function save(){
-	$.save({'url':'${ctx}/dict2/doUpdate', onSuccess: function(){
+	$.save({'url':'${ctx}/dict/doUpdate', onSuccess: function(){
 		$.getParent().parent.location.reload();
 		$.alert("保存成功");
 		$.closeWin();

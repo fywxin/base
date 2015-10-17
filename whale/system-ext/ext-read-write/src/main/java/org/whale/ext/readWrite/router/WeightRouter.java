@@ -6,7 +6,7 @@ import java.util.Random;
 
 import javax.sql.DataSource;
 
-import org.whale.system.common.util.SpringContextHolder;
+import org.whale.system.spring.SpringContextHolder;
 
 /**
  * 随机，按权重设置随机概率。

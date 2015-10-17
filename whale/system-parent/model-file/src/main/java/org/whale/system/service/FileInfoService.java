@@ -2,11 +2,11 @@ package org.whale.system.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.FileInfoDao;
 import org.whale.system.domain.FileInfo;
 import org.whale.system.jdbc.IOrmDao;
+import org.whale.system.spring.SpringContextHolder;
 
 /**
  * 文件 管理

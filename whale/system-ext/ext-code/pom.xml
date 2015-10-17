@@ -20,7 +20,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.whale</groupId>
-			<artifactId>system-controller</artifactId>
+			<artifactId>system-router</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>

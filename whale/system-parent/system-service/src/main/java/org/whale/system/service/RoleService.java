@@ -25,12 +25,16 @@ public class RoleService extends BaseService<Role, Long> {
 	private UserRoleDao userRoleDao;
 	
 	
-	@Override
-	public void delete(Long roleId) {
-		super.delete(roleId);
+	public void transDelete(List<Long> roleIds) {
+		if(roleIds == null || roleIds.size() < 1){
+			return ;
+		}
+		for(Long roleId : roleIds){
+			this.delete(roleId);
+			this.roleAuthDao.deleteByRoleId(roleId);
+			this.userRoleDao.deleteByRoleId(roleId);
+		}
 		
-		this.roleAuthDao.deleteByRoleId(roleId);
-		this.userRoleDao.deleteByRoleId(roleId);
 	}
 	
 	public void updateStatus(Long roleId, Integer status){
@@ -43,7 +47,7 @@ public class RoleService extends BaseService<Role, Long> {
 		this.roleDao.update(role);
 	}
 	
-	public void saveRoleAuths(Long roleId, List<Long> authIds){
+	public void transSaveRoleAuths(Long roleId, List<Long> authIds){
 		if(roleId == null)
 			throw new SysException("roleId == null");
 		

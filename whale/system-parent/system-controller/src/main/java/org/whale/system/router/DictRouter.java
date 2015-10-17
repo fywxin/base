@@ -1,0 +1,176 @@
+package org.whale.system.router;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.whale.system.annotation.auth.Auth;
+import org.whale.system.annotation.auth.AuthAdmin;
+import org.whale.system.base.BaseRouter;
+import org.whale.system.base.Page;
+import org.whale.system.base.Rs;
+import org.whale.system.cache.service.DictCacheService;
+import org.whale.system.common.constant.SysConstant;
+import org.whale.system.domain.Dict;
+import org.whale.system.domain.DictItem;
+import org.whale.system.service.DictItemService;
+import org.whale.system.service.DictService;
+
+import com.alibaba.fastjson.JSON;
+
+@Controller
+@RequestMapping("/dict")
+public class DictRouter extends BaseRouter {
+
+	@Autowired
+	private DictService dictService;
+	@Autowired
+	private DictItemService dictItemService;
+	@Autowired
+	private DictCacheService dictCacheService;
+	
+	@Auth(code="DICT_LIST",name="查询字典")
+	@RequestMapping("/goTree")
+	public ModelAndView goTree(Long clkId){
+		if(clkId == null)
+			clkId = 0L;
+		List<Dict> dictList = this.dictService.queryAll();
+		List<DictItem> itemList = this.dictItemService.queryAll();
+		
+		return new ModelAndView("system/dict/dict_tree")
+				.addObject("clkId", clkId)
+				.addObject("dictNodes", JSON.toJSONString(dictList))
+				.addObject("itemNodes", JSON.toJSONString(itemList));
+	}
+	
+	/**
+	 * 跳转到列表页面
+	 * @param request
+	 * @param response
+	 * @param dictName
+	 * @param dictCode
+	 * @return
+	 */
+	@Auth(code="DICT_LIST",name="查询字典")
+	@RequestMapping("/goList")
+	public ModelAndView goList(){
+		
+		return new ModelAndView("system/dict/dict_list");
+	}
+	
+	/**
+	 * 跳转到列表页面
+	 * @param request
+	 * @param response
+	 * @param dictName
+	 * @param dictCode
+	 * @return
+	 */
+	@Auth(code="DICT_LIST",name="查询字典")
+	@ResponseBody
+	@RequestMapping("/doList")
+	public Page doList(String dictName, String dictCode){
+		Page page = this.newPage();
+		page.newCmd(Dict.class).like("dictName", dictName).like("dictCode", dictCode);
+		
+		this.dictService.queryPage(page);
+		
+		return page;
+	}
+	
+	/**
+	 * 跳转到添加页面
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@Auth(code="DICT_SAVE",name="新增字典")
+	@RequestMapping("/goSave")
+	public ModelAndView goSave(){
+		return new ModelAndView("system/dict/dict_save");
+	}
+	
+	/**
+	 * 跳转到更新页面
+	 * @param request
+	 * @param response
+	 * @param dictId
+	 * @return
+	 */
+	@Auth(code="DICT_UPDATE",name="修改字典")
+	@RequestMapping("/goUpdate")
+	public ModelAndView goUpdate(Long dictId){
+		Dict dict = this.dictService.get(dictId);
+		return new ModelAndView("system/dict/dict_update").addObject("item", dict);
+	}
+	
+
+	/**
+	 * 保存操作
+	 * @param request
+	 * @param response
+	 * @param dict
+	 */
+	@Auth(code="DICT_SAVE",name="新增字典")
+	@ResponseBody
+	@RequestMapping("/doSave")
+	public Rs doSave(Dict dict){
+		dict.setStatus(SysConstant.STATUS_NORMAL);
+		this.dictService.save(dict);
+		this.dictCacheService.putDict(dict.getDictCode());
+		return Rs.success(dict.getDictId());
+	}
+	
+	/**
+	 * 更新操作
+	 * @param request
+	 * @param response
+	 * @param dict
+	 */
+	@Auth(code="DICT_UPDATE",name="修改字典")
+	@ResponseBody
+	@RequestMapping("/doUpdate")
+	public Rs doUpdate(Dict dict){		
+		if(dict.getStatus() == null)
+			dict.setStatus(SysConstant.STATUS_NORMAL);
+		
+		this.dictService.update(dict);
+		this.dictCacheService.putDict(dict.getDictCode());
+		return Rs.success();
+	}
+	
+	/**
+	 * 删除操作
+	 * @param request
+	 * @param response
+	 * @param dictId
+	 */
+	@Auth(code="DICT_DEL",name="删除字典")
+	@ResponseBody
+	@RequestMapping("/doDelete")
+	public Rs doDelete(Long dictId){
+		if(dictId == null){
+			return Rs.fail("请选择待删除记录");
+		}
+		Dict dict = this.dictService.get(dictId);
+		this.dictService.transDelete(dictId);
+		this.dictCacheService.delDict(Arrays.asList(dict.getDictCode()));
+		return Rs.success();
+	}
+	
+	/**
+	 * 刷新字典缓存
+	 * @date 2015年2月11日 下午2:35:48
+	 */
+	@AuthAdmin
+	@ResponseBody
+	@RequestMapping("/doFlush")
+	public Rs doFlush(){
+		this.dictCacheService.init(null);
+		return Rs.success();
+	}
+}

@@ -123,7 +123,7 @@ jQuery.validator.addMethod("url2", function(value, element, param) {
 /**
  * ajaxValidate 服务端验证
  * param {url:'必填',data:'传递的数据，为空：则自动绑定当前值，非空：则合并上当前值',若为字符串：则直接拼接到url,before:前置方法,after:后置方法}
- * 服务端返回格式 {"rs":true,"msg":"","datas":{}}  可直接调用controller中的： this.outPrintSuccess(response,"")  || this.outPrintFail(response, "占用");
+ * 服务端返回格式 {"rs":true,"msg":"","datas":{}}  可直接调用router中的： this.outPrintSuccess(response,"")  || this.outPrintFail(response, "占用");
  * messages 中如果未填写 ajaxValidate:'' 属性，则错误信息为服务端返回的this.outPrintFail(response, "已存在") 的提示信息 "已存在"
  * @author wjs 20120329
  */

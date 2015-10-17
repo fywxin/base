@@ -21,8 +21,7 @@ public class DictService extends BaseService<Dict, Long> {
 	@Autowired
 	private DictCacheService dictCacheService;
 	
-	@Override
-	public void delete(Long dictId){
+	public void transDelete(Long dictId){
 		this.dictDao.delete(dictId);
 		
 		this.dictItemDao.delete(Cmd.newCmd(DictItem.class).eq("dictId", dictId));

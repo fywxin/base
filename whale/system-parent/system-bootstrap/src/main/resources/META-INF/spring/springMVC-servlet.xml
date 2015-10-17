@@ -19,7 +19,32 @@
 	<context:component-scan base-package="org.whale" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
+	
+	<!--支持@ResponseBody -->  
+    <mvc:annotation-driven conversion-service="conversionService">
+        <mvc:message-converters register-defaults="true">
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=utf-8</value>
+                        <value>text/html;charset=utf-8</value>
+                        <value>application/x-javascript;charset=utf-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
+
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="org.whale.system.spring.DateConverter"/>
+                <bean class="org.whale.system.spring.StringConverter"/>
+            </set>
+        </property>
+    </bean>
+    
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
 		<property name="prefix" value="/WEB-INF/jsp/" />
@@ -35,7 +60,7 @@
 		</mvc:interceptor>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-			<bean class="org.whale.system.controller.LogInterceptor" />
+			<bean class="org.whale.system.spring.LogInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 	 
@@ -49,7 +74,7 @@
 		
 	
 	<bean id="exceptionResolver"
-		class="org.whale.system.controller.expReslover.WhaleLogExceptionResolver">
+		class="org.whale.system.spring.WhaleLogExceptionResolver">
 		<property name="defaultErrorView" value="system/exception/error" />
 		<property name="exceptionMappings">
 			<props>
@@ -60,10 +85,10 @@
 		</property>
 	</bean>
 	
-	<aop:config>
-		<aop:pointcut id="interceptorPointCuts"
-			expression="execution(* org.whale.*.service.*.*(..))" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />
-	</aop:config>
+<!-- 	<aop:config> -->
+<!-- 		<aop:pointcut id="interceptorPointCuts" -->
+<!-- 			expression="execution(* org.whale.*.service.*.*(..))" /> -->
+<!-- 		<aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" /> -->
+<!-- 	</aop:config> -->
 
 </beans>

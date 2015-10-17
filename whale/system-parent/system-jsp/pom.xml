@@ -13,7 +13,7 @@
   <dependencies>
     	<dependency>
 			<groupId>org.whale</groupId>
-			<artifactId>system-controller</artifactId>
+			<artifactId>system-router</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
@@ -29,11 +29,6 @@
 		<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>ext-session</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.whale</groupId>
-			<artifactId>ext-sms</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

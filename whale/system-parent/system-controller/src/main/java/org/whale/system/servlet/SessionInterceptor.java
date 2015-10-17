@@ -19,6 +19,8 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		ThreadContext.getContext().put(ThreadContext.KEY_REQUEST, request);
+		ThreadContext.getContext().put(ThreadContext.KEY_RESPONSE, response);
 		if(SysConstant.isRefreshAuth){
 			int time = 5;
 			while(SysConstant.isRefreshAuth){

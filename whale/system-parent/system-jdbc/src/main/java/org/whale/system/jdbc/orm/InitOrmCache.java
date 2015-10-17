@@ -11,10 +11,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import org.whale.system.common.constant.OrderNumConstant;
 import org.whale.system.common.util.Bootable;
-import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.base.BaseDao;
 import org.whale.system.jdbc.orm.alter.DbInfoFetcher;
 import org.whale.system.jdbc.orm.entry.OrmClass;
+import org.whale.system.spring.SpringContextHolder;
 
 /**
  * 初始化所有所有的orm实体

@@ -10,6 +10,7 @@ import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Service;
 import org.whale.system.base.BaseCrudEvent;
 import org.whale.system.common.constant.SysConstant;
+import org.whale.system.common.encrypt.SaltEncrypt;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
@@ -119,7 +120,7 @@ public class UserService extends BaseService<User, Long> {
 		this.userDao.update(user);
 	}
 	
-	public void saveUserRole(Long userId, List<Long> roleIds){
+	public void transSaveUserRole(Long userId, List<Long> roleIds){
 		if(userId == null)
 			throw new SysException("userId == null");
 		
@@ -186,11 +187,11 @@ public class UserService extends BaseService<User, Long> {
 	}
 	
 	public String getEncryptedPwd(String passwd){
-		return Strings.encrypt(passwd);
+		return SaltEncrypt.encrypt(passwd);
 	}
 	
 	public boolean validPasswd(String passwd, String dbPasswd){
-		return Strings.decrypt(passwd, dbPasswd);
+		return SaltEncrypt.decrypt(passwd, dbPasswd);
 	}
 	
 	public List<Map<String, Object>> queryDeptTree(){

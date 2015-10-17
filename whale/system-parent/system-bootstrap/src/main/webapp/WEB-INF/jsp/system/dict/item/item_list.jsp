@@ -9,7 +9,7 @@ var statusObj = {1:"<button type='button' class='btn btn-primary btn-ss'><i clas
 		2:"<button type='button' class='btn btn-gray btn-ss'><i class='fa fa-lock'></i> 禁用</button>"};
 $(function(){
 	$("#gridTable").grid({
-			url :'${ctx}/dictItem2/doList?dictId=${dictId}',
+			url :'${ctx}/dictItem/doList?dictId=${dictId}',
 			colNames: ['操作', '元素名称', '元素编码','元素值','备注', '状态'],
 			colModel: [
 	            {name:'opt',index:'opt', width:250, fixed:true, sortable:false, resize:false, align: "center",
@@ -43,25 +43,25 @@ $(function(){
 
 
 function add(){
-	$.openWin({url: "${ctx}/dictItem2/goSave?dictId=${dictId}","title":'新增元素'});
+	$.openWin({url: "${ctx}/dictItem/goSave?dictId=${dictId}","title":'新增元素'});
 }
 
 function update(dictItemId){
-	$.openWin({url: "${ctx}/dictItem2/goUpdate?view=0&dictItemId="+dictItemId,"title":'编辑元素'});
+	$.openWin({url: "${ctx}/dictItem/goUpdate?view=0&dictItemId="+dictItemId,"title":'编辑元素'});
 }
 
 function del(id){
-	$.del({url:"${ctx}/dictItem2/doDelete", datas:{ids: id}, onSuccess: function(){
+	$.del({url:"${ctx}/dictItem/doDelete", datas:{ids: id}, onSuccess: function(){
 		$.alert("删除字典元素成功");
-		window.parent.location.href="${ctx}/dict2/goTree?clkId=${dictId}";
+		window.parent.location.href="${ctx}/dict/goTree?clkId=${dictId}";
 	}});
 }
 
 function setStatus(id,name,type){
-	var url = "${ctx}/dictItem2/doChangeState?status=1&dictItemId="+id;
+	var url = "${ctx}/dictItem/doChangeState?status=1&dictItemId="+id;
 	var opt = "启用";
 	if(type == 2){
-		url = "${ctx}/dictItem2/doChangeState?status=2&dictItemId="+id;
+		url = "${ctx}/dictItem/doChangeState?status=2&dictItemId="+id;
 		opt = "禁用";
 	}
 	

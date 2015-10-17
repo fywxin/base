@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmTable;
+import org.whale.system.spring.SpringContextHolder;
 
 /**
  * 单表查询构造器, AND 条件联合查询

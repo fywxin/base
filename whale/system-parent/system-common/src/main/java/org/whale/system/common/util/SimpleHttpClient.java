@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.exception.HttpClientException;
 import org.whale.system.common.exception.HttpClientIOException;
+import org.whale.system.spring.SpringContextHolder;
 
 /**
  * 基于JDK的HTTP 请求

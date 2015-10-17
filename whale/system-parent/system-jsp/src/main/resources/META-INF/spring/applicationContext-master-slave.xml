@@ -17,7 +17,7 @@
 	<aop:aspectj-autoproxy/>  
 	
 	<!-- 自动搜索@Component , @Service , @Repository等标注的类 不搜索@Controller的类 -->
-	<!-- 自动扫描组件，这里要把web下面的 controller去除，他们是在springMVC-servlet.xml中配置的，如果不去除会影响事务管理的。 -->
+	<!-- 自动扫描组件，这里要把web下面的 router去除，他们是在springMVC-servlet.xml中配置的，如果不去除会影响事务管理的。 -->
 	<context:component-scan base-package="org.whale" annotation-config="true">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>

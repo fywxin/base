@@ -23,7 +23,7 @@
 			<exclusions>
 				<exclusion>
 					<groupId>org.whale</groupId>
-					<artifactId>system-controller</artifactId>
+					<artifactId>system-router</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -34,7 +34,7 @@
 			<exclusions>
 				<exclusion>
 					<groupId>org.whale</groupId>
-					<artifactId>system-controller</artifactId>
+					<artifactId>system-router</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -50,7 +50,7 @@
 			<exclusions>
 				<exclusion>
 					<groupId>org.whale</groupId>
-					<artifactId>system-controller</artifactId>
+					<artifactId>system-router</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -61,7 +61,7 @@
 			<exclusions>
 				<exclusion>
 					<groupId>org.whale</groupId>
-					<artifactId>system-controller</artifactId>
+					<artifactId>system-router</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

@@ -20,14 +20,14 @@ public class AuthService extends BaseService<Auth, Long> {
 	@Autowired
 	private RoleAuthDao roleAuthDao;
 
-	@Override
-	public void delete(Long authId) {
-		if(authId == null){
+	public void transDelete(List<Long> authIds) {
+		if(authIds == null || authIds.size() <1){
 			return ;
 		}
-		this.roleAuthDao.delete(Cmd.newCmd(RoleAuth.class).eq("authId", authId));
-		
-		this.authDao.delete(authId);
+		for(Long authId : authIds){
+			this.roleAuthDao.delete(Cmd.newCmd(RoleAuth.class).eq("authId", authId));
+			this.authDao.delete(authId);
+		}
 	}
 
 	@Override

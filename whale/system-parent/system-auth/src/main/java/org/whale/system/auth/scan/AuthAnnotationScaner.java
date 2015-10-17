@@ -25,7 +25,7 @@ public class AuthAnnotationScaner {
 	private static Logger logger = LoggerFactory.getLogger(AuthAnnotationScaner.class);
 
 	/**
-	 * 扫描系统所有的controller 类
+	 * 扫描系统所有的Router 类
 	 * 
 	 * @date 2014年12月23日 下午10:09:34
 	 */

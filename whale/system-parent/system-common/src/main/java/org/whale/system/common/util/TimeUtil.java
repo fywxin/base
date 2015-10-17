@@ -123,17 +123,18 @@ public class TimeUtil {
 		return df.format(date);
 	}
 	
-	public static Date parseTime(String time, String format){
-		DateFormat df = new SimpleDateFormat(format);
+	public static Date parseTime(String time){
+		DateFormat df =  null;
+		if(time.length() > 10){
+			df = new SimpleDateFormat(COMMON_FORMAT);
+		}else{
+			df = new SimpleDateFormat(DAY_FORMAT);
+		}
 		try {
 			return df.parse(time);
 		} catch (ParseException e) {
-			throw new RuntimeException("时间 "+time +" 与格式 "+format+" 不匹配！");
+			throw new RuntimeException("时间 "+time +" 与格式不匹配！");
 		}
-	}
-	
-	public static Date parseTime(String time){
-		return parseTime(time, COMMON_FORMAT);
 	}
 	
 	public static Integer countDay(Long time){
@@ -154,5 +155,7 @@ public class TimeUtil {
 	public static Long countSecond(Long time){
 		return time / 1000;
 	}
+	
+	
 
 }

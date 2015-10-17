@@ -7,8 +7,13 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,57 +23,27 @@ import com.alibaba.fastjson.JSON;
 public class WebUtil {
 	public static final Logger logger = LoggerFactory.getLogger(WebUtil.class);
 	
-	//-- Content Type 定义 --//
-	public static final String TEXT_TYPE = "text/plain";
-	public static final String JSON_TYPE = "application/json";
-	public static final String XML_TYPE = "text/xml";
-	public static final String HTML_TYPE = "text/html";
-	public static final String JS_TYPE = "text/javascript";
-	public static final String EXCEL_TYPE = "application/vnd.ms-excel";
+	private static final String DEFAULT_SUCCESS_MSG = "成功";
+	private static final String DEFAULT_FAIL_MSG = "失败";
 	
-	private static final String DEFAULT_SUCCESS_MSG = "操作成功";
-	private static final String DEFAULT_FAIL_MSG = "操作失败";
-	
-	public static Integer getInt(HttpServletRequest request, String key, Integer defVal){
-		String obj = request.getParameter(key);
-		if(obj == null || "".equals(obj.trim()))
-			return defVal;
-		
-		try {
-			return Integer.parseInt(obj);
-		} catch (NumberFormatException e) {
-			return defVal;
-		}
+	public static HttpServletRequest getRequest(){
+		return (HttpServletRequest)ThreadContext.getContext().get(ThreadContext.KEY_REQUEST);
 	}
 	
-	public static Long getLong(HttpServletRequest request, String key, Long defVal){
-		String obj = request.getParameter(key);
-		if(obj == null || "".equals(obj.trim()))
-			return defVal;
-		
-		try {
-			return Long.parseLong(obj);
-		} catch (NumberFormatException e) {
-			return defVal;
-		}
+	public static HttpServletResponse getResponse(){
+		return (HttpServletResponse)ThreadContext.getContext().get(ThreadContext.KEY_RESPONSE);
 	}
 	
-	
-	/**
-	 * 判断是否是ajax请求	
-	 * @param request
-	 * @return
-	 */
-	public static boolean isAjaxRequest(HttpServletRequest request) {
-		return request.getHeader("X-Requested-With") == null;			
+	public static HttpSession getSession(){
+		return getRequest().getSession();
 	}
 
 	/**
 	 * 将处理成功结果(默认提示信息）返回给客服端ajax脚本
 	 * @param response
 	 */
-	public static void printSuccess(HttpServletRequest request, HttpServletResponse response) {
-		printSuccess(request, response, DEFAULT_SUCCESS_MSG, null);
+	public static void success(HttpServletResponse response) {
+		success(response, DEFAULT_SUCCESS_MSG, null);
 	}
 	
 	/**
@@ -76,8 +51,8 @@ public class WebUtil {
 	 * @param response
 	 * @param msg
 	 */
-	public static void printSuccess(HttpServletRequest request, HttpServletResponse response, String msg) {
-		printSuccess(request, response, msg, null);
+	public static void success(HttpServletResponse response, String msg) {
+		success(response, msg, null);
 	}
 	
 	/**
@@ -85,8 +60,8 @@ public class WebUtil {
 	 * @param response
 	 * @param map 用户返回的数据
 	 */
-	public static void printSuccess(HttpServletRequest request, HttpServletResponse response, Object obj) {
-		printSuccess(request, response, DEFAULT_SUCCESS_MSG, obj);
+	public static void success(HttpServletResponse response, Object obj) {
+		success(response, DEFAULT_SUCCESS_MSG, obj);
 	}
 	
 	/**
@@ -95,8 +70,8 @@ public class WebUtil {
 	 * @param msg  用户设置提示信息
 	 * @param map  用户返回的数据
 	 */
-	public static void printSuccess(HttpServletRequest request, HttpServletResponse response, String msg, Object obj) {
-		doPrint(request, response, buildRs(true, msg, obj));
+	public static void success(HttpServletResponse response, String msg, Object obj) {
+		doPrint(response, buildRs(true, msg, obj));
 	}
 	
 	/**
@@ -104,8 +79,8 @@ public class WebUtil {
 	 * @param response
 	 * @param msg  用户设置失败提示信息
 	 */
-	public static void printFail(HttpServletRequest request, HttpServletResponse response, String msg) {
-		printFail(request, response, msg, null);
+	public static void fail(HttpServletResponse response, String msg) {
+		fail(response, msg, null);
 	}
 	
 	/**
@@ -113,8 +88,8 @@ public class WebUtil {
 	 * @param response
 	 * @param map  用户返回失败相关数据
 	 */
-	public static void printFail(HttpServletRequest request, HttpServletResponse response, Object obj) {
-		printFail(request, response, DEFAULT_FAIL_MSG, obj);
+	public static void fail(HttpServletResponse response, Object obj) {
+		fail(response, DEFAULT_FAIL_MSG, obj);
 	}
 	
 	/**
@@ -123,8 +98,8 @@ public class WebUtil {
 	 * @param msg  用户设置失败提示信息
 	 * @param map  用户返回失败相关数据
 	 */
-	public static void printFail(HttpServletRequest request, HttpServletResponse response, String msg, Object obj) {
-		doPrint(request, response, buildRs(false, msg, obj));
+	public static void fail(HttpServletResponse response, String msg, Object obj) {
+		doPrint(response, buildRs(false, msg, obj));
 	}
 	
 	/**
@@ -134,8 +109,8 @@ public class WebUtil {
 	 * @param msg
 	 * @param code 编码
 	 */
-	public static void printFail(HttpServletRequest request, HttpServletResponse response, String msg, String code) {
-		doPrint(request, response, new Result(false, msg, code).toString());
+	public static void fail(HttpServletResponse response, String msg, String code) {
+		doPrint(response, new Result(false, msg, code).toString());
 	}
 	
 	/**
@@ -146,10 +121,19 @@ public class WebUtil {
 	 * @param code 编码
 	 * @param obj 数据
 	 */
-	public static void printFail(HttpServletRequest request, HttpServletResponse response, String msg, String code, Object obj) {
-		doPrint(request, response, new Result(false, msg, obj, code).toString());
+	public static void fail(HttpServletResponse response, String msg, String code, Object obj) {
+		doPrint(response, new Result(false, msg, obj, code).toString());
 	}
 	
+	
+	/**
+	 * 将用户数据返回给相应的客服端请求ajax页面
+	 * @param response
+	 * @param str
+	 */
+	public static void print(HttpServletResponse response, Object obj){
+		doPrint(response, JSON.toJSONString(obj));
+	}
 	
 	/**
 	 * 返回信息最后JSON格式
@@ -159,14 +143,6 @@ public class WebUtil {
 	 * @return
 	 */
 	private static String buildRs(boolean success, String msg, Object datas){
-//		Result result = new Result(success, msg, datas);
-		
-//		StringBuilder strb = new StringBuilder("{\"rs\":");
-//		strb.append(success ? "true" : "false")
-//			.append(",\"msg\":\"").append(null == msg ? "" : msg)
-//			.append("\",\"datas\":").append(null == obj ? "{}" : JSON.toJSONString(obj))
-//			.append("}");
-		
 		return new Result(success, msg, datas).toString();
 	}
 	
@@ -175,18 +151,11 @@ public class WebUtil {
 	 * @param response
 	 * @param str
 	 */
-	public static void print(HttpServletRequest request, HttpServletResponse response, Object obj){
-		doPrint(request, response, JSON.toJSONString(obj));
-	}
-	
-	/**
-	 * 将用户数据返回给相应的客服端请求ajax页面
-	 * @param response
-	 * @param str
-	 */
-	public static void doPrint(HttpServletRequest request, HttpServletResponse response, String str){
-		setDisableCacheHeader(response);
-		response.setHeader("Content-type", JSON_TYPE);  
+	public static void doPrint(HttpServletResponse response, String str){
+		response.setDateHeader("Expires", 1L);
+		response.addHeader("Pragma", "no-cache");
+		response.setHeader("Cache-Control", "no-cache, no-store, max-age=0");
+		response.setHeader("Content-type", "application/json");  
 		response.setContentType("text/xml;charset=utf-8");
 		
 		PrintWriter out = null;
@@ -195,7 +164,7 @@ public class WebUtil {
 			out.print(str);
 			out.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("AJAX返回数据异常", e);
 		}finally{
 			if(null != out){
 				out.close();
@@ -204,15 +173,26 @@ public class WebUtil {
 	}
 	
 	/**
+	 * 判断是否是ajax请求	
+	 * @param request
+	 * @return
+	 */
+	public static boolean isAjaxRequest(HttpServletRequest request) {
+		return request.getHeader("X-Requested-With") == null;			
+	}
+	
+	/**
 	 * 如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值，
 	 * 那么真正的用户端的真实IP则是取X-Forwarded-For中第一个非unknown的有效IP字符串。
 	 * @param request
 	 * @return
 	 */
-	public static String getIp(HttpServletRequest request){
+	public static String getIp(){
+		HttpServletRequest request = getRequest();
 		try {
 			request.setCharacterEncoding("UTF-8");
 		} catch (UnsupportedEncodingException e) {
+			logger.error("获取IP异常，编码不支持", e);
 		}
 		
 		String ip = request.getHeader("X-Forwarder-For");
@@ -233,47 +213,30 @@ public class WebUtil {
 		if((Strings.isBlank(ip)) || "unknown".equalsIgnoreCase(ip)){
 			ip = request.getRemoteAddr();
 		}
-		if("0:0:0:0:0:0:0:1".equals(ip) || "localhost".equals(ip) || "0.0.0.1".equals(ip))
+		if("0:0:0:0:0:0:0:1".equals(ip) || "localhost".equals(ip) || "0.0.0.1".equals(ip)){
 			ip="127.0.0.1";
+		}
 		return ip;
 	}
 	
-	//--------------------------------------------------------------------------------------
-	
 	/**
-	 * 设置客户端缓存过期时间 的Header.
+	 * 将request的Attribute转化为map
+	 * @param request
+	 * @return
+	 * @author yangz
+	 * @date 2013-1-23 上午10:09:59
 	 */
-	public static void setExpiresHeader(HttpServletResponse response, long expiresSeconds) {
-		//Http 1.0 header
-		response.setDateHeader("Expires", System.currentTimeMillis() + expiresSeconds * 1000);
-		//Http 1.1 header
-		response.setHeader("Cache-Control", "private, max-age=" + expiresSeconds);
-	}
-
-	/**
-	 * 设置禁止客户端缓存的Header.
-	 */
-	public static void setDisableCacheHeader(HttpServletResponse response) {
-		//Http 1.0 header
-		response.setDateHeader("Expires", 1L);
-		response.addHeader("Pragma", "no-cache");
-		//Http 1.1 header
-		response.setHeader("Cache-Control", "no-cache, no-store, max-age=0");
-	}
-	
-	/**
-	 * 设置让浏览器弹出下载对话框的Header.
-	 * 
-	 * @param fileName 下载后的文件名.
-	 */
-	public static void setFileDownloadHeader(HttpServletResponse response, String fileName) {
-		try {
-			//中文文件名支持
-			String encodedfileName = new String(fileName.getBytes(), "ISO8859-1");
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedfileName + "\"");
-		} catch (UnsupportedEncodingException e) {
+	@SuppressWarnings("all")
+	public static Map<String, Object> toAttributeMap(HttpServletRequest request){
+		Map<String, Object> result = new HashMap<String, Object>();
+		Enumeration<String> enumeration = request.getAttributeNames();
+		while(enumeration.hasMoreElements()){
+			String key = enumeration.nextElement();
+			result.put(key, request.getAttribute(key));
 		}
+		return result;
 	}
+	
 	
 	public static void downLoad(HttpServletRequest request, HttpServletResponse response, String fileName, InputStream is){
 		OutputStream os = null;
@@ -285,24 +248,26 @@ public class WebUtil {
             response.reset();
 			response.setContentType("application/octet-stream");// 设置为下载application/x-download
 			response.setCharacterEncoding("UTF-8");
-			response.setHeader("Content-Disposition", "attachment;filename="
-					+ URLEncoder.encode(fileName,"utf-8")); // 这个很重要
+			response.setHeader("Content-Disposition", "attachment;filename="+ URLEncoder.encode(fileName,"utf-8")); // 这个很重要
 			response.addHeader("Content-Length", "" + length);
 			os = new BufferedOutputStream(response.getOutputStream());
 			os.write(b);
 			os.flush();
 		} catch (Exception e) {
+			logger.error("下载出现异常", e);
 		}finally{
 			if(is!=null){
 				try {
 					is.close();
 				} catch (IOException e) {
+					logger.error("流关闭异常", e);
 				}
 			}
 			if(os!=null){
 				try {
 					os.close();
 				} catch (IOException e) {
+					logger.error("流关闭异常", e);
 				}
 			}
 		}

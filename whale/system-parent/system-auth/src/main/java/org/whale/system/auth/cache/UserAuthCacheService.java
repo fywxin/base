@@ -15,13 +15,13 @@ import org.whale.system.common.constant.OrderNumConstant;
 import org.whale.system.common.exception.RemoteCacheException;
 import org.whale.system.common.util.Bootable;
 import org.whale.system.common.util.PropertiesUtil;
-import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.dao.AuthDao;
 import org.whale.system.dao.MenuDao;
 import org.whale.system.dao.UserDao;
 import org.whale.system.domain.Auth;
 import org.whale.system.domain.Menu;
 import org.whale.system.domain.User;
+import org.whale.system.spring.SpringContextHolder;
 
 /**
  * 用户权限数据

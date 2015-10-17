@@ -26,7 +26,7 @@ public class CodeEngine {
 		this.doCreateJava(domain, "Domain", domain.getCodePath()+File.separator+domain.getDomainName()+".java");
 		this.doCreateJava(domain, "Dao", domain.getCodePath()+File.separator+domain.getDomainName()+"Dao.java");
 		this.doCreateJava(domain, "Service", domain.getCodePath()+File.separator+domain.getDomainName()+"Service.java");
-		this.doCreateJava(domain, "Controller", domain.getCodePath()+File.separator+domain.getDomainName()+"Controller.java");
+		this.doCreateJava(domain, "Router", domain.getCodePath()+File.separator+domain.getDomainName()+"Router.java");
 		this.doCreateJsp(domain, "tree", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_tree.jsp");
 		this.doCreateJsp(domain, "list", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_list.jsp");
 		this.doCreateJsp(domain, "save", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_save.jsp");

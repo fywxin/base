@@ -17,12 +17,12 @@ import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.exception.RemoteCacheException;
 import org.whale.system.common.util.Bootable;
 import org.whale.system.common.util.PropertiesUtil;
-import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.DictDao;
 import org.whale.system.dao.DictItemDao;
 import org.whale.system.domain.Dict;
 import org.whale.system.domain.DictItem;
+import org.whale.system.spring.SpringContextHolder;
 
 import com.alibaba.fastjson.JSON;
 

@@ -2,8 +2,6 @@ package org.whale.system.jdbc.orm.entry;
 
 import java.util.Map;
 
-import org.whale.system.common.reflect.Acolumn;
-
 
 /**
  * 字段orm属性

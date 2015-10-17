@@ -5,7 +5,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.whale.system.cache.ICacheService;
-import org.whale.system.common.util.SpringContextHolder;
+import org.whale.system.spring.SpringContextHolder;
 
 /**
  * session缓存保存器

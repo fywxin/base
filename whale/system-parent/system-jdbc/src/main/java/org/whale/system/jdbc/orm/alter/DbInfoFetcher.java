@@ -12,10 +12,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.PropertiesUtil;
-import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.util.DbKind;
+import org.whale.system.spring.SpringContextHolder;
 
 @Component
 public class DbInfoFetcher {

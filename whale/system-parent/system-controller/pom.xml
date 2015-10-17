@@ -6,10 +6,10 @@
 		<artifactId>system-parent</artifactId>
 		<version>1.0.0</version>
 	</parent>
-  <artifactId>system-controller</artifactId>
+  <artifactId>system-router</artifactId>
   <packaging>jar</packaging>
 
-  <name>system-controller</name>
+  <name>system-router</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -30,6 +30,11 @@
 		<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>model-dict</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.whale</groupId>
+			<artifactId>model-log</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

@@ -15,7 +15,7 @@ var rsStatus = {1:"<button type='button' class='btn btn-primary btn-ss'><i class
 var time = new Date();
 $(function (){
 	$("#gridTable").grid({
-		url: "${ctx}/log2/doList",
+		url: "${ctx}/log/doList",
 		colNames: ['操作', '对象名称', '表名称', 'uri', '操作类型', '方法耗时(ms)','调用耗时(ms)', 'ip地址', '创建时间', '操作人', '结果'],
 		colModel: [{name:'id',index:'', width:80, fixed:true, sortable:false, resize:false, align: "center",
 					formatter: function(cellvalue, options, rowObject){
@@ -42,7 +42,7 @@ $(function (){
 });
 
 function view(id){
-	$.openWin({title: '查看日志',content: '${ctx}/log2/goView?id='+id});
+	$.openWin({title: '查看日志',content: '${ctx}/log/goView?id='+id});
 }
 </script>
 </head>

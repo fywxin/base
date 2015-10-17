@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whale.system.common.exception.HttpClientException;
 import org.whale.system.common.exception.HttpClientIOException;
+import org.whale.system.spring.SpringContextHolder;
 
 
 /**

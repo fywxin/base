@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.SysConstant;
-import org.whale.system.common.util.SpringContextHolder;
 import org.whale.system.common.util.Strings;
 import org.whale.system.domain.DictItem;
+import org.whale.system.spring.SpringContextHolder;
 
 /**
  * 字典控件,用户需提供字典编码，或查询sql，获取数据集

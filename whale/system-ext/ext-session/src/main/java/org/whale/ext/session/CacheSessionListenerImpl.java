@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSessionListener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.whale.system.common.util.SpringContextHolder;
+import org.whale.system.spring.SpringContextHolder;
 
 @Component
 public class CacheSessionListenerImpl {

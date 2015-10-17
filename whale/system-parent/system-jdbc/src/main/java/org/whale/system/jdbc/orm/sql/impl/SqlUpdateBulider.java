@@ -7,7 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.whale.system.common.util.LangUtil;
+import org.whale.system.common.util.ListUtil;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmSql;
 import org.whale.system.jdbc.orm.entry.OrmTable;
@@ -61,7 +61,7 @@ public class SqlUpdateBulider {
 		
 		ormSql.setSql(sql.toString());
 		ormSql.setFields(fields);
-		ormSql.setArgTypes(LangUtil.toArray(argTypes));
+		ormSql.setArgTypes(ListUtil.toArray(argTypes));
 		ormSql.setTable(ormTable);
 		ormSql.setOpType(OrmSql.OPT_UPDATE);
 		ormSql.setCols(sCols);

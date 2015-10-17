@@ -1,4 +1,4 @@
-package ${domain.pkgName!"org.whale.system"}.controller;
+package ${domain.pkgName!"org.whale.system"}.router;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import org.whale.system.base.Page;
-import org.whale.system.base.BaseController;
+import org.whale.system.base.BaseRouter;
 import org.whale.system.common.exception.OrmException;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;
@@ -33,7 +33,7 @@ import ${domain.pkgName!"org.whale.system"}.domain.${domain.domainName};
  */
 @Controller
 @RequestMapping("/${domain.domainName?uncap_first}")
-public class ${domain.domainName}Controller extends BaseController {
+public class ${domain.domainName}Router extends BaseRouter {
 
 	@Autowired
 	private ${domain.domainName}Service ${domain.domainName?uncap_first}Service;
