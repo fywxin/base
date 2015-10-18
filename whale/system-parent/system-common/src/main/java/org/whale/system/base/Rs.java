@@ -1,5 +1,7 @@
 package org.whale.system.base;
 
+import com.alibaba.fastjson.JSON;
+
 public class Rs {
 	
 	private static final String DEFAULT_SUCCESS_MSG = "成功";
@@ -143,5 +145,13 @@ public class Rs {
 		this.datas = datas;
 	}
 	
-	
+	@Override
+	public String toString() {
+		StringBuilder strb = new StringBuilder("{\"rs\":");
+		strb.append(rs ? "true" : "false").append(",\"code\":\"").append(code)
+			.append("\",\"msg\":\"").append(null == msg ? "" : msg)
+			.append("\",\"datas\":").append(null == datas ? "{}" : JSON.toJSONString(datas))
+			.append("}");
+		return strb.toString();
+	}
 }

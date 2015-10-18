@@ -36,7 +36,7 @@ public class ValidationUtils {
 								            +"(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$"; 
 	
 	
-	public static boolean valid(Object obj, Field field, ValidateErrors validateErrors){
+	public static boolean valid(Object obj, Field field, ValidRs validRs){
 		// 检查该字段是否声明了需要验证
 		Validate vals = field.getAnnotation(Validate.class);
 		
@@ -46,31 +46,31 @@ public class ValidationUtils {
 
 		boolean pass = true;
 		if (vals.required()) {
-			pass =required(fieldName, value, validateErrors) ? pass : false;
+			pass =required(fieldName, value, validRs) ? pass : false;
 		}
 		if (vals.account()) {
-			pass = account(fieldName, value, validateErrors) ? pass : false;
+			pass = account(fieldName, value, validRs) ? pass : false;
 		}
 		if (vals.mobile()) {
-			pass = mobile(fieldName, value, validateErrors) ? pass : false;
+			pass = mobile(fieldName, value, validRs) ? pass : false;
 		}
 		if (vals.email()) {
-			pass = email(fieldName, value, validateErrors) ? pass : false;
+			pass = email(fieldName, value, validRs) ? pass : false;
 		}
 		if (vals.qq()) {
-			pass = qq(fieldName, value, validateErrors) ? pass : false;
+			pass = qq(fieldName, value, validRs) ? pass : false;
 		}
 		if (vals.chinese()) {
-			pass = chinese(fieldName, value, validateErrors) ? pass : false;
+			pass = chinese(fieldName, value, validRs) ? pass : false;
 		}
 		if (vals.post()) {
-			pass = post(fieldName, value, validateErrors) ? pass : false;
+			pass = post(fieldName, value, validRs) ? pass : false;
 		}
 		if (!Strings.isBlank(vals.regex())) {
-			pass = regex(fieldName, value, vals.regex(), "值错误", validateErrors) ? pass : false;
+			pass = regex(fieldName, value, vals.regex(), "值错误", validRs) ? pass : false;
 		}
 		if (vals.strLen().length > 0) {
-			pass = stringLength(fieldName, value, vals.strLen(), validateErrors) ? pass : false;
+			pass = stringLength(fieldName, value, vals.strLen(), validRs) ? pass : false;
 		}
 		if (Strings.isNotBlank(vals.repeat())) {
 			Field repeatField = null;
@@ -84,59 +84,59 @@ public class ValidationUtils {
 			
 			Object repeatValue = AnnotationUtil.getFieldValue(obj, repeatField);
 			
-			pass = repeat(fieldName, value, repeatValue, validateErrors) ? pass : false;
+			pass = repeat(fieldName, value, repeatValue, validRs) ? pass : false;
 		}
 		if (vals.limit().length > 0) {
-			pass = limit(fieldName, value, vals.limit(), validateErrors) ? pass : false;
+			pass = limit(fieldName, value, vals.limit(), validRs) ? pass : false;
 		}
 		if (Strings.isNotBlank(vals.el())) {
-			pass = el(fieldName, value, vals.el(), validateErrors) ? pass : false;
+			pass = el(fieldName, value, vals.el(), validRs) ? pass : false;
 		}
 		if (Strings.isNotBlank(vals.custom())) {
-			pass = custom(fieldName, obj, vals.custom(), validateErrors) ? pass : false;
+			pass = custom(fieldName, obj, vals.custom(), validRs) ? pass : false;
 		}
-		if(!pass){
-			validateErrors.addDefErrMsg(fieldName, defErrMsg);
+		if(!pass && Strings.isNotBlank(defErrMsg)){
+			validRs.putFinal(fieldName, defErrMsg);
 		}
 		
 		return pass;
 	}
 	
 	
-	public static boolean valid(Object obj, OrmValidate ormValidate, ValidateErrors validateErrors){
+	public static boolean valid(Object obj, OrmValidate ormValidate, ValidRs validRs){
 		String fieldName = ormValidate.getOrmColumn().getCnName();
 		String defErrMsg = ormValidate.getErrorMsg();
 		Object value = AnnotationUtil.getFieldValue(obj, ormValidate.getOrmColumn().getField());
 		
 		boolean pass = true;
 		if(ormValidate.isAccount())
-			pass = account(fieldName, value, validateErrors) ? pass : false;
+			pass = account(fieldName, value, validRs) ? pass : false;
 		if(ormValidate.isChinese())
-			pass = chinese(fieldName, value, validateErrors) ? pass : false;
+			pass = chinese(fieldName, value, validRs) ? pass : false;
 		if(ormValidate.isEmail())
-			pass = email(fieldName, value, validateErrors) ? pass : false;
+			pass = email(fieldName, value, validRs) ? pass : false;
 		if(ormValidate.isIp())
-			pass = ip(fieldName, value, validateErrors) ? pass : false;
+			pass = ip(fieldName, value, validRs) ? pass : false;
 		if(ormValidate.isMobile())
-			pass = mobile(fieldName, value, validateErrors) ? pass : false;
+			pass = mobile(fieldName, value, validRs) ? pass : false;
 		if(ormValidate.isPost())
-			pass = post(fieldName, value, validateErrors) ? pass : false;
+			pass = post(fieldName, value, validRs) ? pass : false;
 		if(ormValidate.isQq())
-			pass = qq(fieldName, value, validateErrors) ? pass : false;
+			pass = qq(fieldName, value, validRs) ? pass : false;
 		if(ormValidate.isRequired())
-			pass = required(fieldName, value, validateErrors) ? pass : false;
+			pass = required(fieldName, value, validRs) ? pass : false;
 		if(ormValidate.isUrl())
-			pass = url(fieldName, value, validateErrors) ? pass : false;
+			pass = url(fieldName, value, validRs) ? pass : false;
 		if(Strings.isNotBlank(ormValidate.getCustom()))
-			pass = custom(fieldName, obj, ormValidate.getCustom(), validateErrors) ? pass : false;
+			pass = custom(fieldName, obj, ormValidate.getCustom(), validRs) ? pass : false;
 		if(Strings.isNotBlank(ormValidate.getEl()))
-			pass = el(fieldName, obj, ormValidate.getEl(), validateErrors) ? pass : false;
+			pass = el(fieldName, obj, ormValidate.getEl(), validRs) ? pass : false;
 		if(ormValidate.getEnums() != null && ormValidate.getEnums().length > 0)
-			pass = enmus(fieldName, value, validateErrors, ormValidate.getEnums()) ? pass : false;
+			pass = enmus(fieldName, value, validRs, ormValidate.getEnums()) ? pass : false;
 		if(ormValidate.getLimit() != null && ormValidate.getLimit().length > 0)
-			pass = limit(fieldName, value, ormValidate.getLimit(), validateErrors) ? pass : false;
+			pass = limit(fieldName, value, ormValidate.getLimit(), validRs) ? pass : false;
 		if(Strings.isNotBlank(ormValidate.getRegex()))
-			pass = regex(fieldName, value, ormValidate.getRegex(), "值错误", validateErrors) ? pass : false;
+			pass = regex(fieldName, value, ormValidate.getRegex(), "值错误", validRs) ? pass : false;
 		if(Strings.isNotBlank(ormValidate.getRepeat())){
 			Field repeatField = null;
 			Field[] fields = obj.getClass().getDeclaredFields();
@@ -147,13 +147,13 @@ public class ValidationUtils {
 				}
 			}
 			Object repeatValue = AnnotationUtil.getFieldValue(obj, repeatField);
-			pass = repeat(fieldName, value, repeatValue, validateErrors) ? pass : false;
+			pass = repeat(fieldName, value, repeatValue, validRs) ? pass : false;
 		}
 		if(ormValidate.getStrLen() != null && ormValidate.getStrLen().length > 0)
-			pass = stringLength(fieldName, value, ormValidate.getStrLen(), validateErrors) ? pass : false;
+			pass = stringLength(fieldName, value, ormValidate.getStrLen(), validRs) ? pass : false;
 		
-		if(!pass){
-			validateErrors.addDefErrMsg(fieldName, defErrMsg);
+		if(!pass && Strings.isNotBlank(defErrMsg)){
+			validRs.putFinal(fieldName, defErrMsg);
 		}
 		
 		return pass;
@@ -166,12 +166,12 @@ public class ValidationUtils {
 	 * @param fieldName
 	 * @param value
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param ValidRs
 	 * @param enums
 	 * @return
 	 * @Date 2015年3月9日 下午5:23:17
 	 */
-	public static boolean enmus(String fieldName, Object value, ValidateErrors validateErrors, String[] enums){
+	public static boolean enmus(String fieldName, Object value, ValidRs validRs, String[] enums){
 		boolean notIn = true;
 		if (null == value) {
 			for(String str : enums){
@@ -190,7 +190,7 @@ public class ValidationUtils {
 		}
 		
 		if(notIn){
-			validateErrors.add(fieldName, "非法枚举值");
+			validRs.add(fieldName, "非法枚举值");
 			return false;
 		}
 		return true;
@@ -201,11 +201,11 @@ public class ValidationUtils {
 	 * @param fieldName
 	 * @param value
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 * @Date 2015年3月9日 下午5:36:49
 	 */
-	public static boolean url(String fieldName, Object value, ValidateErrors ValidateErrors){
+	public static boolean url(String fieldName, Object value, ValidRs validRs){
 		if (null != value) {
 			String valueStr = value.toString();
 			if (valueStr.startsWith("https://"))
@@ -213,7 +213,7 @@ public class ValidationUtils {
 			try {
 				new URL(valueStr);
 			} catch (MalformedURLException e) {
-				ValidateErrors.add(fieldName, "非法URL");
+				validRs.add(fieldName, "非法URL");
 				return false;
 			}
 		}
@@ -226,12 +226,12 @@ public class ValidationUtils {
 	 * @param fieldName
 	 * @param value
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 * @Date 2015年3月9日 下午5:00:51
 	 */
-	public static boolean ip(String fieldName, Object value, ValidateErrors ValidateErrors){
-		return regex(fieldName, value, ipv4_regex, "非法ip", ValidateErrors);
+	public static boolean ip(String fieldName, Object value, ValidRs validRs){
+		return regex(fieldName, value, ipv4_regex, "非法ip", validRs);
 	}
 
 	/**
@@ -243,17 +243,17 @@ public class ValidationUtils {
 	 *            待验证对象
 	 * @param errorMsg
 	 *            验证错误后的提示语
-	 * @param ValidateErrors
+	 * @param validRs
 	 *            存储错误信息的对象
 	 * @return 返回是否通过验证
 	 */
-	public static boolean required(String fieldName, Object value, ValidateErrors ValidateErrors) {
+	public static boolean required(String fieldName, Object value, ValidRs validRs) {
 		if (null == value) {
-			ValidateErrors.add(fieldName, "值不能为空");
+			validRs.add(fieldName, "值不能为空");
 			return false;
 		}
 		if (value instanceof String && Strings.isBlank((String) value)) {
-			ValidateErrors.add(fieldName, "值不能为空");
+			validRs.add(fieldName, "值不能为空");
 			return false;
 		}
 		return true;
@@ -266,17 +266,17 @@ public class ValidationUtils {
 	 * @param obj
 	 * @param regex
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean regex(String fieldName, Object value, String regex, String errorMsg, ValidateErrors ValidateErrors) {
+	public static boolean regex(String fieldName, Object value, String regex, String errorMsg, ValidRs validRs) {
 		if (null == value || !(value instanceof String)) {
 			return true;
 		}
 
 		final Matcher m = Pattern.compile(regex, Pattern.MULTILINE + Pattern.DOTALL).matcher((String) value);
 		if (!m.matches()) {
-			ValidateErrors.add(fieldName, errorMsg);
+			validRs.add(fieldName, errorMsg);
 			return false;
 		}
 		return true;
@@ -288,11 +288,11 @@ public class ValidationUtils {
 	 * @param fieldName
 	 * @param obj
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean mobile(String fieldName, Object value, ValidateErrors ValidateErrors) {
-		return regex(fieldName, value, mobile_regex, "非法手机号码", ValidateErrors);
+	public static boolean mobile(String fieldName, Object value, ValidRs validRs) {
+		return regex(fieldName, value, mobile_regex, "非法手机号码", validRs);
 	}
 
 	/**
@@ -301,11 +301,11 @@ public class ValidationUtils {
 	 * @param fieldName
 	 * @param value
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean post(String fieldName, Object value, ValidateErrors ValidateErrors) {
-		return regex(fieldName, value, post_regex, "非法邮政编码", ValidateErrors);
+	public static boolean post(String fieldName, Object value, ValidRs validRs) {
+		return regex(fieldName, value, post_regex, "非法邮政编码", validRs);
 	}
 
 	/**
@@ -314,11 +314,11 @@ public class ValidationUtils {
 	 * @param fieldName
 	 * @param obj
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean email(String fieldName, Object value, ValidateErrors ValidateErrors) {
-		return regex(fieldName, value, email_regex, "非法邮箱", ValidateErrors);
+	public static boolean email(String fieldName, Object value, ValidRs validRs) {
+		return regex(fieldName, value, email_regex, "非法邮箱", validRs);
 	}
 
 	/**
@@ -327,11 +327,11 @@ public class ValidationUtils {
 	 * @param fieldName
 	 * @param obj
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean chinese(String fieldName, Object value, ValidateErrors ValidateErrors) {
-		return regex(fieldName, value, chinese_regex, "非中文", ValidateErrors);
+	public static boolean chinese(String fieldName, Object value, ValidRs validRs) {
+		return regex(fieldName, value, chinese_regex, "非中文", validRs);
 	}
 
 	/**
@@ -340,11 +340,11 @@ public class ValidationUtils {
 	 * @param fieldName
 	 * @param obj
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean qq(String fieldName, Object value, ValidateErrors ValidateErrors) {
-		return regex(fieldName, value, qq_regex, "非法qq", ValidateErrors);
+	public static boolean qq(String fieldName, Object value, ValidRs validRs) {
+		return regex(fieldName, value, qq_regex, "非法qq", validRs);
 	}
 
 	/**
@@ -353,11 +353,11 @@ public class ValidationUtils {
 	 * @param fieldName
 	 * @param value
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean account(String fieldName, Object value, ValidateErrors ValidateErrors) {
-		return regex(fieldName, value, account_regex, "非法账号", ValidateErrors);
+	public static boolean account(String fieldName, Object value, ValidRs validRs) {
+		return regex(fieldName, value, account_regex, "非法账号", validRs);
 	}
 
 	/**
@@ -367,19 +367,19 @@ public class ValidationUtils {
 	 * @param value
 	 * @param repeatValue
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
 	public static boolean repeat(String fieldName,
 									Object value,
 									Object repeatValue,
-									ValidateErrors ValidateErrors) {
+									ValidRs validRs) {
 		if (!(null == value) && !value.equals(repeatValue)) {
-			ValidateErrors.add(fieldName, "值不一致");
+			validRs.add(fieldName, "值不一致");
 			return false;
 		}
 		if (!(null == repeatValue) && !repeatValue.equals(value)) {
-			ValidateErrors.add(fieldName, "值不一致");
+			validRs.add(fieldName, "值不一致");
 			return false;
 		}
 		return true;
@@ -393,13 +393,13 @@ public class ValidationUtils {
 	 * @param interval
 	 *            长度限定区间，如果传空的数组也不会报错，但验证将总是会通过
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
 	public static boolean stringLength(	String fieldName,
 										Object value,
 										int[] interval,
-										ValidateErrors ValidateErrors) {
+										ValidRs validRs) {
 		int minLength = 0;
 		int maxLength = Integer.MAX_VALUE;
 		
@@ -409,7 +409,7 @@ public class ValidationUtils {
 		if (interval.length >= 2) {
 			maxLength = interval[1];
 		}
-		return stringLength(fieldName, value, minLength, maxLength,  ValidateErrors);
+		return stringLength(fieldName, value, minLength, maxLength,  validRs);
 	}
 
 	/**
@@ -420,14 +420,14 @@ public class ValidationUtils {
 	 * @param minLength
 	 * @param maxLength
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
 	public static boolean stringLength(	String fieldName,
 										Object value,
 										int minLength,
 										int maxLength,
-										ValidateErrors ValidateErrors) {
+										ValidRs validRs) {
 		if (null == value || !(value instanceof String)) return true;
 		String errorMsg = null;
 		String str = (String) value;
@@ -438,7 +438,7 @@ public class ValidationUtils {
 			errorMsg = "超过最大长度["+maxLength+"]";
 		}
 		if(errorMsg != null){
-			ValidateErrors.add(fieldName, errorMsg);
+			validRs.add(fieldName, errorMsg);
 			return false;
 		}
 		return true;
@@ -451,10 +451,10 @@ public class ValidationUtils {
 	 * @param value
 	 * @param interval
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean limit(String fieldName, Object value,	double[] interval,	ValidateErrors ValidateErrors) {
+	public static boolean limit(String fieldName, Object value,	double[] interval,	ValidRs validRs) {
 		double minLength = 0;
 		double maxLength = Double.MAX_VALUE;
 		if (interval.length >= 1) {
@@ -463,7 +463,7 @@ public class ValidationUtils {
 		if (interval.length >= 2) {
 			maxLength = interval[1];
 		}
-		return limit(fieldName, value, minLength, maxLength, ValidateErrors);
+		return limit(fieldName, value, minLength, maxLength, validRs);
 	}
 
 	/**
@@ -473,10 +473,10 @@ public class ValidationUtils {
 	 * @param value
 	 * @param interval
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean limit(String fieldName, Object value,	double minValue, double maxValue, ValidateErrors ValidateErrors) {
+	public static boolean limit(String fieldName, Object value,	double minValue, double maxValue, ValidRs validRs) {
 		if (null == value) return true;
 		Double d = null;
 		if (value instanceof Double) {
@@ -496,7 +496,7 @@ public class ValidationUtils {
 			errorMsg ="大于最大值["+d+"]";
 		}
 		if(errorMsg != null){
-			ValidateErrors.add(fieldName, errorMsg);
+			validRs.add(fieldName, errorMsg);
 			return false;
 		}
 		return true;
@@ -508,17 +508,17 @@ public class ValidationUtils {
 	 * @param obj
 	 * @param el 表达式
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean el(String fieldName, Object obj, String el, ValidateErrors ValidateErrors) {
+	public static boolean el(String fieldName, Object obj, String el, ValidRs validRs) {
 		ExpressionParser parser = new SpelExpressionParser();
 		EvaluationContext context = new StandardEvaluationContext();
 		context.setVariable("field", fieldName);
 		context.setVariable("value", obj);
 		
 		if(!parser.parseExpression(el).getValue(context, Boolean.class)){
-			ValidateErrors.add(fieldName, "表达式校验不通过");
+			validRs.add(fieldName, "表达式校验不通过");
 			return false;
 		}
 		return true;
@@ -532,10 +532,10 @@ public class ValidationUtils {
 	 * @param customFunction
 	 *            自定义验证方法名称，注意该方法必须在 obj 里用 public 声明，且返回值为 boolean 型，否则会抛出异常
 	 * @param errorMsg
-	 * @param ValidateErrors
+	 * @param validRs
 	 * @return
 	 */
-	public static boolean custom(String fieldName, Object obj, String customFunction, ValidateErrors ValidateErrors) {
+	public static boolean custom(String fieldName, Object obj, String customFunction, ValidRs validRs) {
 		Method[] mds = obj.getClass().getDeclaredMethods();
 		boolean find = false;
 		for (Method md : mds) {
@@ -544,11 +544,11 @@ public class ValidationUtils {
 				try {
 					boolean ret = (Boolean) md.invoke(obj);
 					if (!ret) {
-						ValidateErrors.add(fieldName, "校验不通过");
+						validRs.add(fieldName, "校验不通过");
 						return false;
 					}
 				}catch (Exception e) {
-					ValidateErrors.add(fieldName, "执行自定义校验方法"+customFunction+"()出错");
+					validRs.add(fieldName, "执行自定义校验方法"+customFunction+"()出错");
 					e.printStackTrace();
 					return false;
 				}
@@ -556,27 +556,27 @@ public class ValidationUtils {
 		}
 		// 没有找到指定的方法
 		if (!find) {
-			ValidateErrors.add(fieldName, "没有找到自定义校验方法"+customFunction+"()");
+			validRs.add(fieldName, "没有找到自定义校验方法"+customFunction+"()");
 			return false;
 		}
 		return true;
 	}
 
 	/**
-	 * 检查方法的参数中是否存在 ValidateErrors 的对象，没有则返回空
+	 * 检查方法的参数中是否存在 validRs 的对象，没有则返回空
 	 * 
 	 * @param argsClass
 	 * @param args
 	 * @return
 	 */
-	public static ValidateErrors checkArgs(Class<?>[] argsClass, Object... args) {
-		ValidateErrors es = null;
+	public static ValidRs checkArgs(Class<?>[] argsClass, Object... args) {
+		ValidRs es = null;
 		for (int i = 0; i < argsClass.length; i++) {
-			if (argsClass[i] == ValidateErrors.class) {
+			if (argsClass[i] == ValidRs.class) {
 				if (args[i] == null) {
-					args[i] = es = new ValidateErrors();
+					args[i] = es = new ValidRs();
 				} else {
-					es = (ValidateErrors) args[i];
+					es = (ValidRs) args[i];
 				}
 				break;
 			}

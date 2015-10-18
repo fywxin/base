@@ -2,8 +2,9 @@ package org.whale.system.validation;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 
 import org.whale.system.common.util.Strings;
 
@@ -13,30 +14,25 @@ import org.whale.system.common.util.Strings;
  * @author 王金绍
  *
  */
-public class ValidateErrors {
+public class ValidRs {
 
 	/**
 	 * 存放错误信息的 map
 	 */
-	private Map<String, String> errorMap = new TreeMap<String, String>();
+	private Map<String, String> errorMap = new HashMap<String, String>();
 	
-	/**
-	 * 字段有用户定义的错误信息？
-	 */
-	private Map<String, String> defErrMsgMap = new HashMap<String, String>();
+	private transient Set<String> defColErrorSet = new HashSet<String>();
 	
-	public void addDefErrMsg(String fieldName, String defErrMsg){
-		if(Strings.isNotBlank(defErrMsg)){
-			defErrMsgMap.put(fieldName, defErrMsg);
-		}
-	}
-	
-	public String getDefErrMsg(String fieldName){
-		return defErrMsgMap.get(fieldName);
-	}
-	
-	public void putFinal(String fieldName, String errorMsg){
+		
+	public ValidRs put(String fieldName, String errorMsg){
 		errorMap.put(fieldName, errorMsg);
+		return this;
+	}
+	
+	public ValidRs putFinal(String fieldName, String errorMsg){
+		defColErrorSet.add(fieldName);
+		errorMap.put(fieldName, errorMsg);
+		return this;
 	}
 
 	/**
@@ -61,14 +57,15 @@ public class ValidateErrors {
 	 * @param errorMessage
 	 *            错误的详细信息
 	 */
-	public void add(String fieldName, String errorMessage) {
-		if(defErrMsgMap.containsKey(fieldName))
-			return ;
+	public ValidRs add(String fieldName, String errorMessage) {
+		if(defColErrorSet.contains(fieldName))
+			return this;
 		String oldErrorMessage = errorMap.get(fieldName);
 		if(Strings.isNotBlank(oldErrorMessage)){
 			errorMessage += ", "+oldErrorMessage;
 		}
 		errorMap.put(fieldName, errorMessage);
+		return this;
 	}
 	
 	public String get(String fieldName){
