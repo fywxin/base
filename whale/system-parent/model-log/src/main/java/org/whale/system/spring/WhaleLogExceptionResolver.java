@@ -19,7 +19,7 @@ import org.whale.system.filter.LogFilter;
 
 public class WhaleLogExceptionResolver extends SimpleMappingExceptionResolver {
 
-private static final Logger logger = LoggerFactory.getLogger(WhaleLogExceptionResolver.class);
+	private static final Logger logger = LoggerFactory.getLogger(WhaleLogExceptionResolver.class);
 	
 	@SuppressWarnings("all")
 	@Autowired

@@ -8,11 +8,11 @@ package org.whale.system.common.constant;
  */
 public final class SysConstant {
 	//状态
-	/**逻辑删除 */
+	/**逻辑删除 0 */
 	public static final int STATUS_DEL = 0;
-	/**正常状态 */
+	/**正常状态 1 */
 	public static final int STATUS_NORMAL = 1;
-	/**禁用状态 */
+	/**禁用状态  2 */
 	public static final int STATUS_UNUSE = 2;
 	
 	
@@ -42,15 +42,6 @@ public final class SysConstant {
 	public static final String CACHE_AUTH_KEY = "AR_";
 	/**用户权限key */
 	public static final String CACHE_USER_AUTH_KEY = "UA_";
-	
-	
-	/* 告警相关常量  -- start*/
-	public static final int MESSAGE_SOURCE_LOG = 1;//消息来源--日志采编
-	public static final int MESSAGE_SOURCE_STATUS = 2;//消息来源-状态采编
-	
-	public static final int FAULT_TYPE_BUSINESS_EXCEPTION = 1;//故障类型--业务异常
-	public static final int FAULT_TYPE_ERROR = 2;//故障类型--错误
-	public static final int FAULT_TYPE_CHECK_STATUS_WARNING = 3;//故障类型--状态检查警告
 	/* 告警相关常量 -- end */
 	
 	/**是否正在刷新权限 */
