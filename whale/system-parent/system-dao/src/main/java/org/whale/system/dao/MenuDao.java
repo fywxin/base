@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Query;
 import org.whale.system.domain.Menu;
 
 @Repository
@@ -42,6 +41,6 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	@SuppressWarnings("all")
 	public Integer getCurOrder(Long parentId){
 		
-		return this.count(Query.newQuery(getCurOrder_SQL, parentId));
+		return this.count(getCurOrder_SQL, parentId);
 	}
 }

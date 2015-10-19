@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
 import org.whale.system.base.Cmd;
-import org.whale.system.base.Query;
 import org.whale.system.domain.Auth;
 
 @Repository
@@ -20,7 +19,7 @@ public class AuthDao extends BaseDao<Auth, Long> {
 	String getByRoleId_SQL = "SELECT a.* FROM sys_role_auth ra, sys_auth a WHERE ra.roleId = ? AND a.authId = ra.authId ";
 	public List<Auth> getByRoleId(Long roleId){
 		
-		return this.query(Query.newQuery(getByRoleId_SQL, roleId));
+		return this.query(getByRoleId_SQL, roleId);
 	}
 	
 	public List<Auth> getByAuthIds(List<Long> authIds){
@@ -43,6 +42,6 @@ public class AuthDao extends BaseDao<Auth, Long> {
 			+ "WHERE ura.authId = t.authId ";
 	public List<Auth> getByUserId(Long userId){
 		
-		return this.query(Query.newQuery(getByUserId_SQL, userId));
+		return this.query(getByUserId_SQL, userId);
 	}
 }

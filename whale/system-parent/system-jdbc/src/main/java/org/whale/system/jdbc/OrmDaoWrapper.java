@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
+import org.whale.system.base.Query;
 import org.whale.system.jdbc.filter.BaseDaoFilterService;
 
 /**
@@ -61,6 +62,10 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		super.deleteBatch(ids);
 		filter.exeAfterDeleteBatch(ids, this);
 	}
+	
+	public void delete(String sql, Object... objs){
+		this.delete(Query.newQuery(sql, objs));
+	}
 
 	@Override
 	public void delete(Iquery query) {
@@ -77,6 +82,10 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return t;
 	}
 	
+	public T get(String sql, Object... objs){
+		return this.get(Query.newQuery(sql, objs));
+	}
+	
 	public T get(Iquery query){
 		filter.exeBeforeGet(this, query);
 		T t= super.get(query);
@@ -90,6 +99,10 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		List<T> rs = super.queryAll();
 		filter.exeAfterQueryAll(this, rs);
 		return rs;
+	}
+	
+	public List<T> query(String sql, Object... objs) {
+		return this.query(Query.newQuery(sql, objs));
 	}
 
 	@Override
@@ -107,6 +120,10 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		super.queryPage(page);
 		filter.exeAfterQueryPage(this, page);
 	}
+	
+	public Integer count(String sql, Object... objs) {
+		return this.count(Query.newQuery(sql, objs));
+	}
 
 	@Override
 	public Integer count(Iquery query) {
@@ -115,6 +132,10 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterCount(this, rs, query);
 		return rs;
 	}
+	
+	public List<Map<String, Object>> queryForList(String sql, Object... objs) {
+		return this.queryForList(Query.newQuery(sql, objs));
+	}
 
 	@Override
 	public List<Map<String, Object>> queryForList(Iquery query) {
@@ -122,6 +143,10 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		List<Map<String, Object>> rs = super.queryForList(query);
 		filter.exeAfterQueryForList(this, rs, query);
 		return rs;
+	}
+	
+	public Map<String, Object> queryForMap(String sql, Object... objs) {
+		return this.queryForMap(Query.newQuery(sql, objs));
 	}
 
 	@Override

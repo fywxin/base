@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Query;
 import org.whale.system.domain.Dept;
 
 @Repository
@@ -46,7 +45,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
     final String getNextOrder_SQL = "select max(t.orderNo) from sys_dept t where t.pid = ?";
     @SuppressWarnings("all")
     public Integer getNextOrder(Long pid){
-    	int order = this.count(Query.newQuery(getNextOrder_SQL, pid));
+    	int order = this.count(getNextOrder_SQL, pid);
     	return order+1;
     }
 }
