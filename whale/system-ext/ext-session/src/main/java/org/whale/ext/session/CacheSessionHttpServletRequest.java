@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * session 获取器
+ * TODO COOKIE 加密
  *
  * @author 王金绍
  * @date 2015年1月16日 下午4:19:20
@@ -46,6 +47,7 @@ public class CacheSessionHttpServletRequest extends HttpServletRequestWrapper {
 			}else{
 				this.session.setLastAccessedTime(System.currentTimeMillis());
 				//TODO 因为是分布式，所以servletContext 要重新设置
+				//TODO spring 容器需要修改为 ContextLoader.getCurrentWebApplicationContext().getServletContext()；
 				this.session.setServletContext(super.getSession().getServletContext());
 			}
 			if(logger.isDebugEnabled()){

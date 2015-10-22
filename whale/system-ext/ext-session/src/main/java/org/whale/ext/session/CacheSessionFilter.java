@@ -25,13 +25,15 @@ public class CacheSessionFilter implements Filter {
 
 	private String cookieValuePrefix = "session_";
 	private String cookieName = "JSESSIONID";
-	private String cookiePath = "/";
+	private String cookiePath;
 	private int cookieMaxAge = -1;
 	private String domain;
 	private int sessionTimeOut = 30;
 	
 	//静态资源，不需要session，直接返回
 	private Set<String> ignoreUrlSuffix = new HashSet<String>();
+	
+	private boolean isServlet3Plus = isServlet3();
 
 	@Override
 	public void destroy() {
@@ -69,10 +71,19 @@ public class CacheSessionFilter implements Filter {
 		if ((cookie == null) || "".equals((uuidCookieValue = cookie.getValue()))) {
 			uuidCookieValue = this.cookieValuePrefix+ UUID.randomUUID().toString();
 			Cookie uuidSessionCookie = new Cookie(this.cookieName, uuidCookieValue);
+			if(isServlet3Plus) {
+				uuidSessionCookie.setHttpOnly(true);
+			}
+			uuidSessionCookie.setSecure(request.isSecure());
 			if (this.domain != null) {
 				uuidSessionCookie.setDomain(this.domain);
 			}
-			uuidSessionCookie.setPath(this.cookiePath);
+			if(this.cookiePath != null){
+				uuidSessionCookie.setPath(this.cookiePath);
+			}else{
+				uuidSessionCookie.setPath(httpRequest.getContextPath() + "/");
+			}
+			
 			uuidSessionCookie.setMaxAge(this.cookieMaxAge);
 			((HttpServletResponse) response).addCookie(uuidSessionCookie);
 			if(logger.isDebugEnabled()){
@@ -139,6 +150,8 @@ public class CacheSessionFilter implements Filter {
 		
 		//TODO 直接从servlet容器获取 HttpSessionListener
 	}
+	
+	
 
 	@Override
 	public String toString() {
@@ -149,4 +162,12 @@ public class CacheSessionFilter implements Filter {
 				+ ignoreUrlSuffix + "]";
 	}
 
+	
+	private boolean isServlet3() {
+		try {
+			ServletRequest.class.getMethod("startAsync");
+			return true;
+		} catch(NoSuchMethodException e) {}
+		return false;
+	}
 }
