@@ -141,13 +141,13 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 	 */
 	protected byte[] getByteKey(String cacheName, Object key) throws UnsupportedEncodingException{
 		StringBuilder strb = new StringBuilder();
-		String k = strb.append(cacheName).append("_").append(key.toString()).toString();
+		String k = strb.append(cacheName).append(":").append(key.toString()).toString();
 		return k.getBytes("UTF-8");
 	}
 
 	protected String getKey(String cacheName, Object key){
 		StringBuilder strb = new StringBuilder();
-		return strb.append(cacheName).append("_").append(key.toString()).toString();
+		return strb.append(cacheName).append(":").append(key.toString()).toString();
 	}
 	
 }
