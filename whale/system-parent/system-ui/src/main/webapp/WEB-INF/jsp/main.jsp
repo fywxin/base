@@ -23,11 +23,11 @@
     <![endif]-->
 </head>
 
-<body class=" theme-blue">
-	<!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
-  	<!--[if IE 7 ]> <body class="ie ie7 "> <![endif]-->
-  	<!--[if IE 8 ]> <body class="ie ie8 "> <![endif]-->
-  	<!--[if IE 9 ]> <body class="ie ie9 "> <![endif]-->
+<body class=" theme-blue" style="overflow: hidden;">
+	<!--[if lt IE 7 ]> <body class="ie ie6" style="overflow: hidden;"> <![endif]-->
+  	<!--[if IE 7 ]> <body class="ie ie7 " style="overflow: hidden;"> <![endif]-->
+  	<!--[if IE 8 ]> <body class="ie ie8 " style="overflow: hidden;"> <![endif]-->
+  	<!--[if IE 9 ]> <body class="ie ie9 " style="overflow: hidden;"> <![endif]-->
   	<!--[if (gt IE 9)|!(IE)]><!--> 
   	<!--<![endif]-->
 
@@ -59,17 +59,18 @@
 
         </div>
       </div>
-    <div class="sidebar-nav" >
+    <div class="sidebar-nav" id="menuDiv" style="overflow: auto;">
     	<ul>${uc.customDatas.menuStr }</ul>
     </div>
     <div class="content" style="padding: 5px 5px 0px 5px;overflow: hidden;">
-        <iframe id="mainFrame" name="mainFrame" src="${ctx }/main" style="overflow:hidden;" scrolling="no" frameborder="no" width="100%" height="650"></iframe>
+        <iframe id="mainFrame" name="mainFrame" src="" style="overflow:hidden;" scrolling="no" frameborder="no" width="100%" height="650"></iframe>
     </div>
     
 <script src="${html }/js/jquery-1.11.1.min.js"></script>
 <script src="${html }/ui/bootstrap/js/bootstrap.js"></script>
 <script src="${html }/js/fun.js"></script>
 <script type="text/javascript">
+var mainHeight = $.h();
 function openUrl(url){
 	$("#mainFrame").attr("src", "${ctx}"+url);
 	return false;
@@ -78,17 +79,18 @@ function openUrl(url){
 function accordionClk(t){
 	$("ul[tabul='1']").each(function(){
 		if($(this).attr("clk") == "1"){
-			$(this).collapse('toggle').removeAttr("clk");
+			$(this).collapse('hide').removeAttr("clk");
 		}
 	});
 	$(t).next().children("ul").attr("clk", "1");
 }
 
 $(window).resize(function(){
-	$("#mainFrame").height($.h()-65);
+	$("#mainFrame, #content, #menuDiv").height($.h()-65);
+	mainHeight = $.h();
 });
 $(function() {
-	$("#mainFrame").height($.h()-65);
+	$("#mainFrame, #menuDiv").height($.h()-65);
 });
 
 function loginOut(){

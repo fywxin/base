@@ -10,6 +10,18 @@
 .fixed-table-toolbar .bars, .fixed-table-toolbar .columns, .fixed-table-toolbar .search {margin: 5px 0px;}
 </style>
 <script type="text/javascript">
+$(window).resize(function(){
+	setGridDivHeight();
+});
+
+$(function(){
+	setGridDivHeight();
+});
+
+function setGridDivHeight(){
+	$("#gridDiv").height(window.top.mainHeight-$("#queryForm").height()-85);
+}
+
 function search(){
 	try{
 		var datas = $("#queryForm").serializeArray();

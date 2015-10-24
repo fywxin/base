@@ -72,7 +72,8 @@
 			    paginationPreText: "上一页",
 			    paginationNextText: "下一页",
 			    paginationLastText: "尾页",
-			    height: $.h()-$("#queryForm").height()-45,
+			    pageList: [10, 15, 50, 100],
+			    height: (window.top.winHeight-$("#queryForm").height()-45)+"px",
 			    cache: false
 		}
 		var opts = $.extend(defaults, param);

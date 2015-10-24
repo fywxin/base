@@ -9,12 +9,11 @@
 $(function(){
 	grid = $("#gridTable").grid({
 	    url: '${ctx}/dept/doList?pid=${pid}',
-	    search: true,
 	    columns: [
 		{
 	        field: 'opt',
 	        title: '操作',
-	        width: '25%',
+	        width: '30%',
 	        align: 'center',
 	        formatter: function(value, row, index){
 				var strArr = [];
@@ -57,7 +56,7 @@ function add(){
 </script>
 </head>
     
-<body>
+<body style="overflow: hidden;">
 	<ul class="nav nav-tabs" id="topTab">
     	<li class="active"><a href="${ctx}/dept/goList">机构列表</a></li>
 	</ul>
@@ -81,7 +80,9 @@ function add(){
 		<div id="mytoolbar">
 			<button type="button" class="btn btn-primary btn-sm" onclick="add()"><i class="fa fa-plus"></i> 新  增 </button>
 		</div>
+		<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
 		<table id="gridTable" ></table>
+		</div>
 	</div>
 </body>
 </html>
