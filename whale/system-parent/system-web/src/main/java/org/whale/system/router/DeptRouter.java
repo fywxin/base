@@ -15,13 +15,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.base.Cmd;
+import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;
+import org.whale.system.common.util.TreeUtil;
 import org.whale.system.service.DeptService;
 import org.whale.system.service.UserService;
 import org.whale.system.domain.Dept;
 import org.whale.system.domain.User;
+import org.whale.system.jqgrid.Grid;
 
 import com.alibaba.fastjson.JSON;
 
@@ -34,60 +37,37 @@ public class DeptRouter extends BaseRouter {
 	@Autowired
 	private UserService userService;
 	
+	@Auth(code="DEPT_LIST", name="查询部门")
+	@RequestMapping("/goTree")
+	public ModelAndView goTree(){
+		String nodes = "[]";
+		List<Dept> depts = this.deptService.queryAll();
+		if(depts != null){
+			nodes = JSON.toJSONString(depts);
+		}
+		return new ModelAndView("system/dept/dept_tree").addObject("nodes", nodes);
+	}
 	
 	@Auth(code="DEPT_LIST", name="查询部门")
 	@RequestMapping("/goList")
-	public ModelAndView goList(){
-		return new ModelAndView("system/dept/dept_list");
+	public ModelAndView goList(Long pid){
+		return new ModelAndView("system/dept/dept_list").addObject("pid", pid);
 	}
 	
 	@Auth(code="DEPT_LIST", name="查询部门")
 	@ResponseBody
 	@RequestMapping("/doList")
-	public Rs doList(HttpServletResponse response){
-		Map<String, Object> map = new HashMap<String, Object>();
-		//获取所有部门数据
-		List<Dept> depts = this.deptService.queryAll();
-		//部门转为树节点集合
-		List<Map<String, Object>> rs = new ArrayList<Map<String,Object>>(depts.size());
-		if(depts != null && depts.size() > 0){
-			//父Id，子列表
-			Map<Long, List<Map<String, Object>>> pMap = new HashMap<Long, List<Map<String,Object>>>();
-			//Id, 节点树对象
-			Map<Long, Map<String, Object>> idMap = new HashMap<Long, Map<String, Object>>();
-			
-			//转换Temp
-			List<Map<String, Object>> tmpList = null;
-			Map<String, Object> tmp = null;
-			for(Dept dept : depts){//pMap、idMap构造
-				tmp = new HashMap<String, Object>();
-				tmp.put("name", dept.getDeptName());
-				tmp.put("id", dept.getId());
-				tmp.put("pid", dept.getPid());
-				tmp.put("deptAddr", dept.getDeptAddr());
-				tmp.put("deptTel", dept.getDeptTel());
-				tmp.put("remark", dept.getRemark());
-				tmp.put("deptCode", dept.getDeptCode());
-				idMap.put(dept.getId(), tmp);
-				
-				tmpList = pMap.get(dept.getPid());
-				if(tmpList == null){
-					tmpList = new ArrayList<Map<String,Object>>();
-					pMap.put(dept.getPid(), tmpList);
-				}
-				tmpList.add(tmp);
-			}
-			
-			//获取根节点集合
-			List<Map<String, Object>> rootList = pMap.get(0L);
-			int num=0;
-			for(Map<String, Object> root : rootList){//从根节点循环获取树结构对象类别
-				num = loop(rs, root, pMap, idMap, num, 0);
-			}
-			
+	public Page doList(Long pid, String deptName, String deptCode, Integer limit){
+		Page page = this.newPage();
+		Cmd cmd = page.newCmd(Dept.class);
+		if(pid != null){
+			cmd.eq("pid", pid);
 		}
-		map.put("rows", rs);
-		return Rs.success(map);
+		cmd.like("deptName", deptName);
+		cmd.like("deptCode", deptCode);
+		this.deptService.queryPage(page);
+		
+		return page;
 	}
 	
 	/**

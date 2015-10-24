@@ -1,5 +1,7 @@
 package org.whale.system.base;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.exception.NotLoginException;
 import org.whale.system.common.util.WebUtil;
@@ -12,8 +14,9 @@ public abstract class BaseRouter {
 	 * @return
 	 */
 	protected Page newPage(){
-		int pageNo = getInt("page", 1);
-		int pageSize = getInt("pageSize", 20);
+		HttpServletRequest request = WebUtil.getRequest();
+		int pageNo = getInt(request, "page", 1);
+		int pageSize = getInt(request, "limit", 20);
 		if(pageSize < 1)
 			pageSize = 20;
 		if(pageSize > 100)
@@ -23,13 +26,14 @@ public abstract class BaseRouter {
 		Page page = new Page();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
+		page.setOffset(getInt(request, "offset"));
 		
 		WebUtil.getRequest().setAttribute("page", page);
 		return page;
 	}
 	
-	private Integer getInt(String key, Integer defVal){
-		String obj = WebUtil.getRequest().getParameter(key);
+	private Integer getInt(HttpServletRequest request, String key, Integer defVal){
+		String obj = request.getParameter(key);
 		if(obj == null || "".equals(obj.trim()))
 			return defVal;
 		
@@ -38,6 +42,17 @@ public abstract class BaseRouter {
 		} catch (NumberFormatException e) {
 			return defVal;
 		}
+	}
+	
+	private Integer getInt(HttpServletRequest request, String key){
+		String obj = request.getParameter(key);
+		if(obj != null){
+			try {
+				return Integer.parseInt(obj);
+			} catch (NumberFormatException e) {
+			}
+		}
+		return null;
 	}
 	
 	/**

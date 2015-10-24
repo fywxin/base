@@ -404,7 +404,7 @@ public class LogFilter<T extends Serializable,PK extends Serializable> extends B
 	@Override
 	public void afterQueryPage(IOrmDao<T, PK> baseDao, Page page) {
 		if(this.saveFindLog){
-			this.saveLog(baseDao, page.getDatas());
+			this.saveLog(baseDao, page.getData());
 		}
 	}
 	

@@ -19,6 +19,8 @@ public class Page implements Serializable {
 
 	private int pageNo = 1;
 	
+	private Integer offset;
+	
 	/**
 	 *  total >0 ，则不执行sql总数查询，直接返回用户设置的total值, 有两个好处： 1. 减少总数sql查询， 2.
 	 *	有限度防止被恶意翻页（如爬虫） 
@@ -26,7 +28,7 @@ public class Page implements Serializable {
 	private Long total;
 	
 	/** 返回结果 */
-	private List<?> datas;
+	private List<?> data;
 	
 	/** 分页sql */
 	private String sql;
@@ -149,17 +151,25 @@ public class Page implements Serializable {
 		return args;
 	}
 
-	public List<?> getDatas() {
-		return datas;
+	public List<?> getData() {
+		return data;
 	}
 
-	public void setDatas(List<?> datas) {
-		this.datas = datas;
+	public void setData(List<?> data) {
+		this.data = data;
+	}
+
+	public Integer getOffset() {
+		return offset;
+	}
+
+	public void setOffset(Integer offset) {
+		this.offset = offset;
 	}
 
 	@Override
 	public String toString() {
 		return "Page [\nsql   = " + sql + "\ncount = " + countSql + "\nargs  = "
-				+ args + "\ndatas = " + datas  + "\n]";
+				+ args + "\ndata = " + data  + "\n]";
 	}
 }

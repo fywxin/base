@@ -38,7 +38,7 @@ public class Grid implements Serializable {
 		Grid grid = new Grid();
 		grid.setPage(new Long(page.getPageNo()));
 		grid.setRecords(page.getTotal());
-		grid.setRows(page.getDatas());
+		grid.setRows(page.getData());
 		grid.setTotal(page.getTotalPages());
 		
 		return grid;

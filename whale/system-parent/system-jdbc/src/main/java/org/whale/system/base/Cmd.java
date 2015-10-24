@@ -285,21 +285,29 @@ public class Cmd implements Iquery{
 
 	/**
 	 * 创建 and = 条件语句
+	 * null 不查询
 	 * @param col
 	 * @param value
 	 * @return
 	 */
 	public Cmd eq(String col, Object value){
+		if(value == null){
+			return this;
+		}
 		return this.and(col, "=", value);
 	}
 	
 	/**
 	 * 创建 and like 条件语句
+	 * null 不查询
 	 * @param col
 	 * @param value
 	 * @return
 	 */
 	public Cmd like(String col, Object value){
+		if(value == null){
+			return this;
+		}
 		return this.and(col, "like", value);
 	}
 	

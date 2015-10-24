@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -266,14 +267,26 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		if(page.getTotal() > 0){
 			if(DbKind.isMysql()){
 				sql += " LIMIT ?, ?";
-				params.add((page.getPageNo()-1) * page.getPageSize());
+				if(page.getOffset() == null){
+					params.add((page.getPageNo()-1) * page.getPageSize());
+				}else{
+					params.add(page.getOffset());
+				}
 				params.add(page.getPageSize());
 			}else{
 				sql = "select * from (select row_.*, rownum rownum_ from ( "+sql+" ) row_ where rownum <=?) where rownum_>=?";
-				params.add((page.getPageNo()+1) * page.getPageSize());
-				params.add(page.getPageNo() * page.getPageSize());
+				if(page.getOffset() == null){
+					params.add((page.getPageNo()+1) * page.getPageSize());
+					params.add(page.getPageNo() * page.getPageSize());
+				}else{
+					params.add(page.getOffset()+page.getPageSize());
+					params.add(page.getOffset());
+				}
+				
 			}
-			page.setDatas(this.jdbcTemplate.queryForList(sql, params.toArray()));
+			page.setData(this.jdbcTemplate.queryForList(sql, params.toArray()));
+		}else{
+			page.setData(new ArrayList(0));
 		}
 		
 		if(logger.isDebugEnabled()){

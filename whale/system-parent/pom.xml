@@ -19,6 +19,7 @@
 
 		<module>system-web</module>
 		<module>system-bootstrap</module>
+		<module>system-ui</module>
 		
 		<module>model-dict</module>
 		<module>model-file</module>

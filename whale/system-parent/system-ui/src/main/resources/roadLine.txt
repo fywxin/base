@@ -1,0 +1,54 @@
+0.0.6 ： 增加部门管理 和 日志查看 功能
+
+0.0.7:
+2014-09-18
+	1. 统一异常处理，记录异常日志，ajax异常按统一错误json编码返回
+		org.whale.system.controller.expReslover.WhaleExceptionResolver
+		
+	2. BaseDao 增加 deleteBy 方法，动态按字段删除，方便收集动态删除的日志信息
+		org.whale.system.dao.BaseDao::deleteBy(T t)
+		org.whale.system.jdbc.orm.value.impl.ValueDelBulider::getDeleteBy
+	
+	3. 完善日志信息，增加方法处理时间，链顺序，结果类型。
+		org.whale.system.domain.Log
+		
+	4. 改变日志保存方式为异步模式
+		org.whale.system.jdbc.orm.addon.LogAddon
+		
+	5. 过滤链结尾完善日志信息，总调用时间
+		org.whale.system.controller.login.LoginInterceptor
+		
+	6. 修改日志展示界面
+		log/log_list.jsp
+		log/log_view.jsp
+		
+	7. 增加代码对象数据库清除功能
+		org.whale.system.controller.CodeController::doClear
+		code/code_list.jsp
+		
+
+0.0.8 ： 增加权限扫描功能，URI 与 权限编码 自动扫描支持, 缓存重构
+2014-09-22
+	1. 增加权限URI自动扫描功能，完善URI访问控制
+		org.whale.system.auth.annotation.AuthUri
+		org.whale.system.auth.annotation.AuthEnum
+		org.whale.system.auth.domain.AuthUriBean
+		org.whale.system.auth.scan.AuthUriStore
+		org.whale.system.auth.scan.AuthUriScaner
+		
+	2. 修改权限模型，将URI资源区分为 受控，开发，管理员 三种模式
+		org.whale.system.domain.Resource
+		org.whale.system.controller.ResourceController
+		org.whale.system.controller.AdminController
+		org.whale.system.controller.login.LoginInterceptor
+		views/framework/resource/*.jsp
+		
+	3. 重构权限缓存，支持缓存可插拔，增加业务缓存支持功能
+		org.whale.system.auth.domain.UserAuth
+		org.whale.system.cache.service.DictCacheService
+		org.whale.system.cache.service.UserAuthCacheService
+
+0.0.9 ： 重构 system-jdbc, 完成oracle 的支持
+
+
+
