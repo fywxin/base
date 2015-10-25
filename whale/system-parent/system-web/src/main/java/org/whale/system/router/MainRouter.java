@@ -431,7 +431,7 @@ public class MainRouter extends BaseRouter {
 			}
 			strb.append("</ul></li>");
 		}else{//leaf
-			strb.append("<li ><a style='cursor: pointer;' onclick=\"openUrl('"+node.getMenuUrl()+"')\"><span class='fa ").append(Strings.isBlank(node.getInco()) ? "fa-caret-right" : node.getInco()).append(" ' style='padding-left:").append(level>2 ? 15 : 0).append("px'></span> "+node.getMenuName()+"</a></li>");
+			strb.append("<li ><a style='cursor: pointer;' onclick=\"goMain('"+node.getMenuName()+"','"+node.getMenuUrl()+"')\"><span class='fa ").append(Strings.isBlank(node.getInco()) ? "fa-caret-right" : node.getInco()).append(" ' style='padding-left:").append(level>2 ? 15 : 0).append("px'></span> "+node.getMenuName()+"</a></li>");
 		}
 		return strb.toString();
 	}

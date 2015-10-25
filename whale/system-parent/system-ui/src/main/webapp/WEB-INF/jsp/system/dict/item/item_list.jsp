@@ -24,7 +24,7 @@ $(function(){
 	        align: 'center',
 	        formatter: function(value, row, index){
 	        	var strArr = [];
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"go('${ctx}/dictItem/goUpdate?dictItemId="+row.dictItemId+"')\"><i class='fa fa-pencil'></i> 修改</button>");
+				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"go('修改字典元素','${ctx}/dictItem/goUpdate?dictItemId="+row.dictItemId+"')\"><i class='fa fa-pencil'></i> 修改</button>");
 				strArr.push("<button type='button' class='btn btn-default btn-ss' title='删除' onclick=\"del('"+row.dictItemId+"')\"><i class='fa fa-trash-o'></i> 删除</button>");
 
         		if(row.status == 2){
@@ -85,9 +85,6 @@ function setStatus(id,name,type){
 </head>
 
 <body style="overflow: hidden;">
-	<ul class="nav nav-tabs" id="topTab">
-    	<li class="active"><a href="#">查询字典元素</a></li>
-	</ul>
 	<div class="my_gridBox">
 		<form id="queryForm" >
 			<table class="query">
@@ -98,14 +95,14 @@ function setStatus(id,name,type){
 						<td class="td-label">元素编码</td>
 						<td class="td-value">
 							<input type="text" id="itemCode" name="itemCode" style="width:160px;" value="${itemCode }" />
-							<button type="button" class="btn btn-success btn-sm" onclick="search()" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
+							<button type="button" class="btn btn-info btn-sm" onclick="search()" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</form>
 		<div id="mytoolbar" style="margin-left:5px;">
-			<button type="button" class="btn btn-primary btn-sm" onclick="go('${ctx}/dictItem/goSave?dictId=${dictId}')"><i class="fa fa-plus"></i> 新  增 </button>
+			<button type="button" class="btn btn-primary btn-sm" onclick="go('新增字典元素','${ctx}/dictItem/goSave?dictId=${dictId}')"><i class="fa fa-plus"></i> 新  增 </button>
 		</div>
 		<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
 			<table id="gridTable" ></table>

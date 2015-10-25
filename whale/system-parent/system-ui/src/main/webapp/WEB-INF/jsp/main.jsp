@@ -63,7 +63,12 @@
     	<ul>${uc.customDatas.menuStr }</ul>
     </div>
     <div class="content" style="padding: 5px 5px 0px 5px;overflow: hidden;">
-        <iframe id="mainFrame" name="mainFrame" src="" style="overflow:hidden;" scrolling="no" frameborder="no" width="100%" height="650"></iframe>
+    	<ul class="nav nav-tabs" id="topTab">
+    		<li id="liMain" onclick="goTab(1)" class="active"><a href="#"></a></li>
+    		<li id="liSub" onclick="goTab(2)" style="display:none;"><a href="#"></a></li>
+		</ul>
+        <iframe id="frameMain" src="" style="overflow:hidden;" scrolling="no" frameborder="no" width="100%" ></iframe>
+        <iframe id="frameSub" src="" style="overflow:hidden;display: none;" scrolling="no" frameborder="no" width="100%" ></iframe>
     </div>
     
 <script src="${html }/js/jquery-1.11.1.min.js"></script>
@@ -72,9 +77,45 @@
 <script src="${html }/js/fun.js"></script>
 <script type="text/javascript">
 var mainHeight = $.h();
-function openUrl(url){
-	$("#mainFrame").attr("src", "${ctx}"+url);
+function goMain(name, url){
+	if($("#liMain a").html() != name){
+		$("#liMain a").html(name);
+		$("#liSub a").html("");
+		$("#liSub").hide(name);
+		$("#frameSub").attr("src", "");
+	}else{
+		$("#frameSub").hide();
+	}
+	$("#liMain").addClass("active");
+	$("#liSub").removeClass("active");
+	$("#frameMain").show().attr("src", "${ctx}"+url+"?"+new Date().getTime());
 	return false;
+}
+
+function goTab(index){
+	if(index == 1){
+		$("#liMain").addClass("active");
+		$("#liSub").removeClass("active");
+		$("#frameSub").hide();
+		$("#frameMain").show();
+	}else{
+		$("#liMain").removeClass("active");
+		$("#liSub").addClass("active");
+		$("#frameSub").show();
+		$("#frameMain").hide();
+	}
+}
+
+
+function goSub(name, url){
+	$("#frameMain").hide();
+	$("#liSub, #frameSub").show();
+	$("#liMain").removeClass("active");
+	$("#liSub").addClass("active");
+	if($("#frameSub").attr("src") != url){
+		$("#liSub a").html(name);
+		$("#frameSub").attr("src", url);
+	}
 }
 
 function accordionClk(t){
@@ -87,11 +128,11 @@ function accordionClk(t){
 }
 
 $(window).resize(function(){
-	$("#mainFrame, #content, #menuDiv").height($.h()-65);
+	$("#frameMain, #frameSub, #menuDi").height($.h()-65);
 	mainHeight = $.h();
 });
 $(function() {
-	$("#mainFrame, #menuDiv").height($.h()-65);
+	$("#frameMain, #frameSub, #menuDiv").height($.h()-65);
 });
 
 function loginOut(){

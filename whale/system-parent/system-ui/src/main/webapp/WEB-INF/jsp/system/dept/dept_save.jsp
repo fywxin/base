@@ -41,12 +41,7 @@ $(function() {
 </script>
 </head>
     
-<body style="overflow-x: hidden;"> 
-	<ul class="nav nav-tabs" id="topTab">
-    	<li><a href="#" onclick="go('${ctx}/dept/goList')">查询机构</a></li>
-    	<li class="active"><a href="#"><i class="fa fa-plus"></i> 新增机构</a></li>
-	</ul>
-	
+<body style="overflow-x: hidden;">
 	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 	<div class="row" style="margin:10px 20px;">
         <form class="form-horizontal m-t" id="dataForm">
