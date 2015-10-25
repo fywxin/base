@@ -49,7 +49,7 @@ function del(dictId){
    
 <body style="overflow: hidden;">
 	<ul class="nav nav-tabs" id="topTab">
-    	<li class="active"><a href="#">字典列表</a></li>
+    	<li class="active"><a href="#">查询字典</a></li>
 	</ul>
 	<div class="my_gridBox">
 		<form id="queryForm" >

@@ -48,7 +48,7 @@ function filterSelf(){
 <body style="overflow-x: hidden;"> 
 	<ul class="nav nav-tabs" id="topTab">
     	<li><a href="#" onclick="go('${ctx}/dept/goList')">查询机构</a></li>
-    	<li class="active"><a href="#"><i class="fa fa-pencil"></i> 新增机构</a></li>
+    	<li class="active"><a href="#"><i class="fa fa-pencil"></i> 编辑机构</a></li>
 	</ul>
 	
 	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>

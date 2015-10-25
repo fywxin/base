@@ -76,9 +76,10 @@ public class DictItemRouter extends BaseRouter {
 	@Auth(code="ITEM_SAVE",name="新增元素")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(Long dictId){
-		
+		Dict dict = this.dictService.get(dictId);
 		return new ModelAndView("system/dict/item/item_save")
 				.addObject("dictId", dictId)
+				.addObject("dictName", dict.getDictName())
 				.addObject("nextNum", this.dictItemService.getCurOrder(dictId)+1);
 	}
 
@@ -117,9 +118,10 @@ public class DictItemRouter extends BaseRouter {
 	 */
 	@Auth(code="ITEM_UPDATE",name="修改元素")
 	@RequestMapping("/goUpdate")
-	public ModelAndView goUpdate(Long dictItemId, Integer view){
+	public ModelAndView goUpdate(Long dictItemId){
 		DictItem dictItem = this.dictItemService.get(dictItemId);
-		return new ModelAndView("system/dict/item/item_update").addObject("item", dictItem).addObject("view", view);
+		Dict dict = this.dictService.get(dictItem.getDictId());
+		return new ModelAndView("system/dict/item/item_update").addObject("item", dictItem).addObject("dictName", dict.getDictName());
 	}
 	
 	/**
