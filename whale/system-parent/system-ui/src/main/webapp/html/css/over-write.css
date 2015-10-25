@@ -1,0 +1,6 @@
+/** bootstrap-table */
+.fixed-table-toolbar .bars, .fixed-table-toolbar .columns, .fixed-table-toolbar .search {margin: 5px 0px;}
+
+/** form 页面 */
+.form-control{border-radius:1px;}
+label{font-weight: normal;}

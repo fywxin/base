@@ -6,9 +6,7 @@
 <script src="${html}/plugins/grid/src/colResizable-1.5.source.js"></script>
 <script src="${html}/plugins/grid/src/bootstrap-table-editable.js"></script>
 <script src="${html}/plugins/grid/src/bootstrap-editable.js"></script>
-<style>
-.fixed-table-toolbar .bars, .fixed-table-toolbar .columns, .fixed-table-toolbar .search {margin: 5px 0px;}
-</style>
+<link href="${html}/css/over-write.css" rel="stylesheet">
 <script type="text/javascript">
 $(window).resize(function(){
 	setGridDivHeight();

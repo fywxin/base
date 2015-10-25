@@ -19,4 +19,5 @@
 <script src="${html }/js/fun.js"></script>
 <!--[if lt IE 9]>
 <script src="${html }/js/html5shiv.min.js"></script>
+<script src="${html }/js/respond.min.js"></script>
 <![endif]-->

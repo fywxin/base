@@ -68,6 +68,7 @@
     
 <script src="${html }/js/jquery-1.11.1.min.js"></script>
 <script src="${html }/ui/bootstrap/js/bootstrap.js"></script>
+<script src="${html }/plugins/layer/layer.min.js"></script>
 <script src="${html }/js/fun.js"></script>
 <script type="text/javascript">
 var mainHeight = $.h();

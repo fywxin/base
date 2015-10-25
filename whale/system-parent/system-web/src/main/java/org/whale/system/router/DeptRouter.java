@@ -69,51 +69,14 @@ public class DeptRouter extends BaseRouter {
 		
 		return page;
 	}
-	
-	/**
-	 * 构造树结构 lft rgt level
-	 * @param rs  返回结果集合
-	 * @param node 当前节点
-	 * @param pMap 父Id，子列表
-	 * @param idMap Id, 节点树对象
-	 * @param index 当前index值
-	 * @param level 
-	 * @return
-	 */
-	public static Integer loop(List<Map<String, Object>> rs, Map<String, Object> node, Map<Long, List<Map<String, Object>>> pMap, Map<Long, Map<String, Object>> idMap, Integer index, Integer level){
-		//进入节点前，先+1，做为上个节点的次节点
-		int lft = index+1;
-		rs.add(node);
-		node.put("level", level);
-		node.put("lft", lft);
 		
-		List<Map<String, Object>> subNodes = pMap.get(node.get("id"));
-		if(subNodes != null && subNodes.size() > 0){
-			node.put("uiicon", "ui-icon-image");
-			node.put("expanded", true);
-			level++;
-			int num = lft;
-			for(Map<String, Object> sub : subNodes){
-				num = loop(rs, sub, pMap, idMap, num, level);
-			}
-			lft = num+1;
-		}else{
-			node.put("expanded", false);
-			node.put("uiicon", "ui-icon-document");
-			lft = lft+1;
-		}
-		node.put("rgt", lft);
-		return lft;
-	}
-	
 	@Auth(code="DEPT_SAVE", name="新增部门")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(Long pid){
-		
 		return new ModelAndView("system/dept/dept_save")
 				.addObject("nodes", JSON.toJSONString(this.deptService.queryAll()))
 				.addObject("pid", pid)
-				.addObject("nextOrderNo", this.deptService.getNextOrder(pid));
+				.addObject("orderNo", this.deptService.getNextOrder(pid));
 	}
 	
 	@Auth(code="DEPT_SAVE", name="新增部门")

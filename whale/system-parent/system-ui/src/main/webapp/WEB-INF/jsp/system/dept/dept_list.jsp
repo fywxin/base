@@ -17,8 +17,8 @@ $(function(){
 	        align: 'center',
 	        formatter: function(value, row, index){
 				var strArr = [];
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"update('"+row.id+"')\"><i class='fa fa-pencil'></i> 添加子机构</button>");
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"update('"+row.id+"')\"><i class='fa fa-pencil'></i> 修改</button>");
+				strArr.push("<button type='button' class='btn btn-default btn-ss' title='添加子机构' onclick=\"go('${ctx}/dept/goSave?pid="+row.id+"')\"><i class='fa fa-pencil'></i> 添加子机构</button>");
+				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"go('${ctx}/dept/goUpdate?id="+row.id+"')\"><i class='fa fa-pencil'></i> 修改</button>");
 				strArr.push("<button type='button' class='btn btn-default btn-ss' title='删除' onclick=\"del('"+row.id+"')\"><i class='fa fa-trash-o'></i> 删除</button>");
 	        	return strArr.join("");
 			}
@@ -50,9 +50,6 @@ $(function(){
 	});
 });
 
-function add(){
-	
-}
 </script>
 </head>
     
@@ -75,13 +72,12 @@ function add(){
 					</tr>
 				</tbody>
 			</table>
-			
 		</form>
-		<div id="mytoolbar">
-			<button type="button" class="btn btn-primary btn-sm" onclick="add()"><i class="fa fa-plus"></i> 新  增 </button>
+		<div id="mytoolbar" style="margin-left:5px;">
+			<button type="button" class="btn btn-primary btn-sm" onclick="go('${ctx}/dept/goSave')"><i class="fa fa-plus"></i> 新  增 </button>
 		</div>
 		<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
-		<table id="gridTable" ></table>
+			<table id="gridTable" ></table>
 		</div>
 	</div>
 </body>

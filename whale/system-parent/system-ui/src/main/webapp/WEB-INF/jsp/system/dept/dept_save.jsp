@@ -7,11 +7,7 @@
 <%@include file="/jsp/ztree.jsp" %>
 <script type="text/javascript">
 function save(){
-	$.save({'url':'${ctx}/dept/doSave', onSuccess: function(){
-		$.getParent().location.reload();
-		$.alert("保存成功");
-		$.closeWin();
-	}}); 
+	$.save({'url':'${ctx}/dept/doSave'}); 
 }
 
 //校验函数
@@ -25,8 +21,7 @@ $(function() {
 			},
 			"deptCode": {
 				validIllegalChar: true,
-				maxlength: 32,
-				required: true
+				maxlength: 32
 			},
 			"orderNo": {
 				maxlength: 4
@@ -44,64 +39,66 @@ $(function() {
 });
 
 </script>
-
 </head>
     
-<body class="my_formBody"> 
-	<div class="navbar-fixed-bottom my_toolbar" >
-		<button type="button" class="btn btn-primary btn-sm" onclick="save()"><i class="fa fa-hdd-o" ></i> 保存</button>
-		<button type="button" class="btn btn-info btn-sm" onclick="$.closeWin();"><i class="fa fa-times" ></i> 关闭</button>
-	</div>
-	<div id="formBoxDiv" class="my_formBox" >
-		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
-		<form action="" method="post" id="dataForm">
-			<table class="query">
-				<col width="15%"/>
-				<col width="35%"/>
-				<col width="15%"/>
-				<col width="35%"/>
-				<tbody>
-					<tr>
-						<td class="td-label">父部门</td>
-						<td class="td-value">
-							<tag:tree nodeName="deptName" nodeId="id" id="pid" nodes="${nodes }" nodePId="pid" value="${pid }"></tag:tree>
-						</td>
-						<td class="td-label"><span class="required">*</span>部门名称</td>
-						<td class="td-value">
-							<input type="text" id="deptName" name="deptName" style="width:160px;" value="${item.deptName}" maxlength="64" title="最多64个字"/>
-						</td>
-						
-					</tr>
-					<tr>
-						<td class="td-label"><span class="required">*</span>部门编码</td>
-						<td class="td-value">
-							<input type="text" id="deptCode" name="deptCode" style="width:160px;" value="${item.deptCode}" maxlength="32" title="最多32个字"/>
-						</td>
-						<td class="td-label">联系电话</td>
-						<td class="td-value">
-							<input type="text" id="deptTel" name="deptTel" style="width:160px;" value="${item.deptTel}" maxlength="32" title="最多32字"  />
-						</td>
-						
-					</tr>
-					<tr>
-						<td class="td-label">联系地址</td>
-						<td class="td-value">
-							<input type="text" id="deptAddr" name="deptAddr" style="width:160px;" value="${item.deptAddr}" maxlength="128" title="最多128字"  />
-						</td>
-						<td class="td-label">排序</td>
-						<td class="td-value">
-							<input type="text" id="orderNo" name="orderNo" style="width:160px;" value="${nextOrderNo}" maxlength="4" onkeyup="value=value.replace(/[^\d]/g,'')"/>
-						</td>
-					</tr>
-					<tr>
-						<td class="td-label">备注</td>
-						<td class="td-value" colspan="3">
-							<textarea rows="4" cols="99" name="remark" id="remark" title="最多只能输入256个字"></textarea>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
-	</div>
+<body style="overflow-x: hidden;"> 
+	<ul class="nav nav-tabs" id="topTab">
+    	<li><a href="#" onclick="go('${ctx}/dept/goList')">机构列表</a></li>
+    	<li class="active"><a href="${ctx}/dept/goSave"><i class="fa fa-plus"></i> 新增机构</a></li>
+	</ul>
+	
+	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
+	<div class="row" style="margin:10px 20px;">
+        <form class="form-horizontal m-t" id="dataForm">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">父部门：</label>
+                <div class="input-group col-sm-4 ">
+                    <tag:tree nodeName="deptName" nodeId="id" id="pid" nodes="${nodes }" nodePId="pid" afterLoadTree="filterSelf" value="${item.pid }"></tag:tree>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="required">*</span>部门名称：</label>
+                <div class="col-sm-4">
+                    <input id="deptName" name="deptName" class="form-control" required="" aria-required="true" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">部门编码：</label>
+                <div class="col-sm-4">
+                    <input id="deptCode" name="deptCode" class="form-control" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">联系电话：</label>
+                <div class="col-sm-4">
+                    <input id="deptTel" name="deptTel" class="form-control" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">联系地址：</label>
+                <div class="col-sm-4">
+                    <input id="deptAddr" name="deptAddr" class="form-control" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序：</label>
+                <div class="col-sm-4">
+                    <input id="orderNo" name="orderNo" value="${orderNo }" onkeyup="value=value.replace(/[^\d]/g,'')" class="form-control" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">备注：</label>
+                <div class="col-sm-4">
+                    <textarea id="remark" name="remark" rows="3" cols="58" ></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 col-sm-offset-2">
+                    <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 提 交</button>
+                    <button class="btn btn-success" type="button" id="continueBut" onclick="go('${ctx}/dept/goSave');" style="display: none;"><i class='fa fa-thumbs-up'></i> 继续添加</button>
+                </div>
+            </div>
+        </form>
+     </div>
 </body>
 </html>

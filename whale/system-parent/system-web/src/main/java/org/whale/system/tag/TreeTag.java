@@ -24,7 +24,7 @@ public class TreeTag extends TagSupport {
 	private String nodeId = "id";
 	private String nodePId = "pId";
 	private String nodeName = "name";
-	private String width = "160px";
+	private String width = "260px";
 	private String height = "250px";
 	private String mulitSel = "false";
 	private String beforeClick = "";
@@ -383,7 +383,7 @@ public class TreeTag extends TagSupport {
 	
 	private String bulidInputHtml(){
 		StringBuilder strb = new StringBuilder();
-		strb.append("<input type='text' id='"+id+"_NAME' name='"+id+"_NAME' onclick=\"showMenu_"+id+"(); return false;\" style=\"width: "+width+";\"  readonly=readonly />\n<a href='#' class='i-btn-clear' title='清空' onclick='clear_"+id+"();'>&nbsp;</a>\n")
+		strb.append("<input type='text' id='"+id+"_NAME' name='"+id+"_NAME' onclick=\"showMenu_"+id+"(); return false;\" class=\"form-control\" style=\"margin-left:15px;\" readonly=readonly /><span class=\"input-group-btn\" onclick='clear_"+id+"();'><button type=\"button\" class=\"btn btn-warning\" style=\"margin-left:20px;\">清空</button></span>\n")
 			.append("<input type='hidden' id='"+id+"' name='"+id+"' value='"+value+"' />\n");
 		return strb.toString();
 	}
@@ -392,7 +392,7 @@ public class TreeTag extends TagSupport {
 		StringBuilder strb = new StringBuilder();
 		String maxWidth = width;
 		if(Integer.parseInt(maxWidth.substring(0,maxWidth.length()-2)) > 200)
-			maxWidth = "200px";
+			maxWidth = "300px";
 
 		strb.append("	$(\"body\").append('<div id=\"menuContent_"+id+"\" style=\"display:none; position: absolute;z-index:9999;\">");
 		if(search)

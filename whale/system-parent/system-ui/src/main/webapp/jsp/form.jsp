@@ -2,16 +2,17 @@
 <script src="${html}/plugins/validate/jquery.validate.min.js"></script>
 <script src="${html}/plugins/validate/messages_zh.min.js"></script>
 <script src="${html}/plugins/validate/addon.js"></script>
+<link href="${html}/css/over-write.css" rel="stylesheet">
 
-<style type="text/css">
-::-webkit-scrollbar{width: 12px;background-color: #F5F5F5;}
-.table>tbody>tr>td, .table>tbody>tr>th {padding: 7px;}
-</style>
 <script type="text/javascript">
-$(function(){
-	$("#formBoxDiv").height($.h()-58);
-});
-function closeWin(){
-	$.closeWin();
-}
+	$.validator.setDefaults({
+	    highlight: function (element) {
+	        $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+	    },
+	    success: function (element) {
+	        element.closest('.form-group').removeClass('has-error').addClass('has-success');
+	    },
+	    errorElement: "span",
+	    errorClass: "help-block m-b-none"
+	});
 </script>
