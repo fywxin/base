@@ -100,13 +100,13 @@ public class DictRouter extends BaseRouter {
 	@Auth(code="DICT_LIST",name="查询字典")
 	@ResponseBody
 	@RequestMapping("/doList")
-	public Grid doList(String dictName, String dictCode){
-		Page page = Grid.newPage();
+	public Page doList(String dictName, String dictCode){
+		Page page = this.newPage();
 		page.newCmd(Dict.class).like("dictName", dictName).like("dictCode", dictCode);
 		
 		this.dictService.queryPage(page);
 		
-		return Grid.grid(page);
+		return page;
 	}
 	
 	/**

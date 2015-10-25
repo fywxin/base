@@ -7,11 +7,7 @@
 <%@include file="/jsp/ztree.jsp" %>
 <script type="text/javascript">
 function save(){
-	$.save({'url':'${ctx}/dept/doUpdate', onSuccess: function(){
-		$.getParent().location.reload();
-		$.alert("保存成功");
-		$.closeWin();
-	}}); 
+	$.save({'url':'${ctx}/dept/doUpdate'}); 
 }
 
 //校验函数
@@ -49,9 +45,9 @@ function filterSelf(){
 
 </head>
     
-<body> 
+<body style="overflow-x: hidden;"> 
 	<ul class="nav nav-tabs" id="topTab">
-    	<li><a href="#" onclick="go('${ctx}/dept/goList')">机构列表</a></li>
+    	<li><a href="#" onclick="go('${ctx}/dept/goList')">查询机构</a></li>
     	<li class="active"><a href="#"><i class="fa fa-pencil"></i> 新增机构</a></li>
 	</ul>
 	
@@ -104,7 +100,6 @@ function filterSelf(){
             <div class="form-group">
                 <div class="col-sm-12 col-sm-offset-2">
                     <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保 存</button>
-                    <button class="btn btn-success" type="button" id="continueBut" onclick="go('${ctx}/dept/goSave');" style="display: none;"><i class='fa fa-thumbs-up'></i> 继续添加</button>
                 </div>
             </div>
         </form>

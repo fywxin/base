@@ -11,7 +11,7 @@ $(window).resize(function(){
 
 $(function () {
 	$("#treeDiv, #listFrame").height($.h());
-	$('#deptTree').btree({
+	$('#tree').btree({
 		nodes: ${nodes},
 		idKey: 'id',
 		pidKey: 'pid',
@@ -28,7 +28,7 @@ $(function () {
 	<div class="container-fluid">
 		<div class="row">
 		  <div class="col-xs-2" id="treeDiv" style="padding: 0px 5px 0px 0px;overflow: auto;">
-		  		<div id="deptTree"></div>
+		  		<div id="tree"></div>
 		  </div>
 		  <div class="col-xs-10" id="frameDiv" style="padding: 0px;overflow: hidden;">
 		  	<iframe id="listFrame" name="listFrame" frameborder=0 scrolling=auto width=100% src="${ctx }/dept/goList"></iframe>

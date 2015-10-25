@@ -7,7 +7,7 @@
 <%@include file="/jsp/grid.jsp" %>
 <script type="text/javascript">
 $(function(){
-	grid = $("#gridTable").grid({
+	$("#gridTable").grid({
 	    url: '${ctx}/dept/doList?pid=${pid}',
 	    columns: [
 		{
@@ -55,7 +55,7 @@ $(function(){
     
 <body style="overflow: hidden;">
 	<ul class="nav nav-tabs" id="topTab">
-    	<li class="active"><a href="${ctx}/dept/goList">机构列表</a></li>
+    	<li class="active"><a href="#">查询机构</a></li>
 	</ul>
 	<div class="my_gridBox">
 		<form id="queryForm" >

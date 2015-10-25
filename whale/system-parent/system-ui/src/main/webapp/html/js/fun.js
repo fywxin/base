@@ -63,9 +63,10 @@
 			    	window.saving = false;
 			    	window.top.layer.close(loadId);
 			    	if(obj.rs){
-			    		$("#"+formId+" input, #"+formId+" select").attr("readonly", "readonly");
-			    		$("#"+formId+" textarea").attr("disabled", "disabled");
-				    	$("#continueBut").show();
+			    		if($("#continueBut").length > 0){
+			    			$("#"+formId+" input, #"+formId+" select").attr("readonly", "readonly");
+					    	$("#continueBut").show();
+			    		}
 			    		if($.isFunction(param.onSuccess)){
 			    			param.onSuccess(obj);
 			    		}else{
@@ -211,7 +212,7 @@
 			    paginationNextText: "下一页",
 			    paginationLastText: "尾页",
 			    pageList: [10, 20, 50, 100],
-			    height: (window.top.winHeight-$("#queryForm").height()-45)+"px",
+			    height: (window.top.mainHeight-$("#queryForm").height()-95),
 			    cache: false
 		}
 		var opts = $.extend(defaults, param);

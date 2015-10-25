@@ -58,13 +58,13 @@ public class DictItemRouter extends BaseRouter {
 	@Auth(code="ITEM_LIST",name="查询元素")
 	@ResponseBody
 	@RequestMapping("/doList")
-	public Grid doList(Long dictId, String itemName, String itemCode){
-		Page page = Grid.newPage();
+	public Page doList(Long dictId, String itemName, String itemCode){
+		Page page = this.newPage();
 		page.newCmd(DictItem.class).eq("dictId", dictId).like("itemName", itemName).like("itemCode", itemCode);
 		
 		this.dictItemService.queryPage(page);
 		
-		return Grid.grid(page);
+		return page;
 	}
 	
 	/**

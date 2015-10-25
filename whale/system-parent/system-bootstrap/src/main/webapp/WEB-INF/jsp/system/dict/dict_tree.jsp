@@ -42,7 +42,7 @@ $(function () {
 		  		<div id="tree"></div>
 		  </div>
 		  <div class="col-xs-10" id="frameDiv" style="padding: 0px;overflow: hidden;">
-		  		<iframe id="listFrame" name="listFrame" frameborder=0 scrolling=auto width=100% src="${ctx }/auth/goList"></iframe>
+		  		<iframe id="listFrame" name="listFrame" frameborder=0 scrolling=auto width=100% src="${ctx }/dict/goList"></iframe>
 		  </div>
 		</div>
 	</div>
