@@ -28,7 +28,6 @@ public class Dept extends BaseEntry {
   	@Column(name="deptName", cnName="部门名称", unique=true)
 	private String deptName;
 	
-	@Validate(required=true)
   	@Column(name="deptCode", cnName="部门编码", unique=true)
 	private String deptCode;
 	

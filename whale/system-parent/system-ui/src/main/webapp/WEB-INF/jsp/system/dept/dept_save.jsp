@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>新增 部门</title>
+	<title>新增 机构</title>
 <%@include file="/jsp/form.jsp" %>
 <%@include file="/jsp/ztree.jsp" %>
 <script type="text/javascript">
@@ -44,26 +44,26 @@ $(function() {
 <body style="overflow-x: hidden;"> 
 	<ul class="nav nav-tabs" id="topTab">
     	<li><a href="#" onclick="go('${ctx}/dept/goList')">机构列表</a></li>
-    	<li class="active"><a href="${ctx}/dept/goSave"><i class="fa fa-plus"></i> 新增机构</a></li>
+    	<li class="active"><a href="#"><i class="fa fa-plus"></i> 新增机构</a></li>
 	</ul>
 	
 	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 	<div class="row" style="margin:10px 20px;">
         <form class="form-horizontal m-t" id="dataForm">
             <div class="form-group">
-                <label class="col-sm-2 control-label">父部门：</label>
+                <label class="col-sm-2 control-label">父机构：</label>
                 <div class="input-group col-sm-4 ">
-                    <tag:tree nodeName="deptName" nodeId="id" id="pid" nodes="${nodes }" nodePId="pid" afterLoadTree="filterSelf" value="${item.pid }"></tag:tree>
+                    <tag:tree nodeName="deptName" nodeId="id" id="pid" nodes="${nodes }" nodePId="pid" afterLoadTree="filterSelf" value="${pid }"></tag:tree>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label"><span class="required">*</span>部门名称：</label>
+                <label class="col-sm-2 control-label"><span class="required">*</span>机构名称：</label>
                 <div class="col-sm-4">
                     <input id="deptName" name="deptName" class="form-control" required="" aria-required="true" >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">部门编码：</label>
+                <label class="col-sm-2 control-label">机构编码：</label>
                 <div class="col-sm-4">
                     <input id="deptCode" name="deptCode" class="form-control" >
                 </div>
@@ -94,8 +94,8 @@ $(function() {
             </div>
             <div class="form-group">
                 <div class="col-sm-12 col-sm-offset-2">
-                    <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 提 交</button>
-                    <button class="btn btn-success" type="button" id="continueBut" onclick="go('${ctx}/dept/goSave');" style="display: none;"><i class='fa fa-thumbs-up'></i> 继续添加</button>
+                    <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保 存</button>
+                    <button class="btn btn-success" type="button" id="continueBut" onclick="go('${ctx}/dept/goSave?pid=${pid }');" style="display: none;"><i class='fa fa-thumbs-up'></i> 继续添加</button>
                 </div>
             </div>
         </form>

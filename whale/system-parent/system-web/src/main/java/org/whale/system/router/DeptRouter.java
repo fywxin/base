@@ -94,11 +94,10 @@ public class DeptRouter extends BaseRouter {
 		if(id == null || (dept = this.deptService.get(id)) == null){
 			throw new SysException("查找不到 部门 id="+id);
 		}
-		List<Dept> depts = this.deptService.queryAll();
 		
 		return new ModelAndView("system/dept/dept_update")
 				.addObject("item", dept)
-				.addObject("depts", JSON.toJSONString(depts));
+				.addObject("nodes", JSON.toJSONString(this.deptService.queryAll()));
 	}
 	
 	@Auth(code="DEPT_UPDATE", name="修改部门")
