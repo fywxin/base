@@ -407,14 +407,14 @@ public class MainRouter extends BaseRouter {
 		if(node.getMenuType() != 3){//tab | folder
 			if(node.getMenuType() == 1){//tab
 				strb.append("<li onclick='accordionClk(this)'>")
-					.append("	<a href='#' data-target='.menu-").append(node.getMenuId()).append("' class='nav-header' data-toggle='collapse' ").append(activce? "" : "class='collapsed'").append(" >")
+					.append("	<a href='javascript:;' data-target='.menu-").append(node.getMenuId()).append("' class='nav-header' data-toggle='collapse' ").append(activce? "" : "class='collapsed'").append(" >")
 					.append("		<i class='fa fa-fw ").append(Strings.isBlank(node.getInco()) ? "fa-dashboard" : node.getInco()).append("'></i> "+node.getMenuName()+"<i class='fa fa-collapse'></i>")
 					.append("	</a>")
 					.append("</li><li>")
 					.append("	<ul class='menu-"+node.getMenuId()+" nav nav-list collapse ").append(activce? "in' clk='1'" : "'").append(" tabul='1'>");
 			}else{//folder
 				strb.append("<li>")
-					.append("	<a href='#' data-target='.menu-").append(node.getMenuId()).append("' data-toggle='collapse' class='collapsed'>")
+					.append("	<a href='javascript:;' data-target='.menu-").append(node.getMenuId()).append("' data-toggle='collapse' class='collapsed'>")
 					.append("		<span class='fa fa-folder' style='padding-left:").append(level>2 ? 15 : 0).append("px'></span> "+node.getMenuName()).append("<i class='fa fa-collapse'></i>")
 					.append("	</a>")
 					.append("	<ul class='menu-"+node.getMenuId()+" nav nav-list collapse' style='border:0px;padding-left:").append(level>2 ? 15 : 0).append("px'>");
@@ -431,7 +431,7 @@ public class MainRouter extends BaseRouter {
 			}
 			strb.append("</ul></li>");
 		}else{//leaf
-			strb.append("<li ><a style='cursor: pointer;' onclick=\"goMain('"+node.getMenuName()+"','"+node.getMenuUrl()+"')\"><span class='fa ").append(Strings.isBlank(node.getInco()) ? "fa-caret-right" : node.getInco()).append(" ' style='padding-left:").append(level>2 ? 15 : 0).append("px'></span> "+node.getMenuName()+"</a></li>");
+			strb.append("<li ><a href='javascript:;' onclick=\"goMain('"+node.getMenuName()+"','"+node.getMenuUrl()+"')\"><span class='fa ").append(Strings.isBlank(node.getInco()) ? "fa-caret-right" : node.getInco()).append(" ' style='padding-left:").append(level>2 ? 15 : 0).append("px'></span> "+node.getMenuName()+"</a></li>");
 		}
 		return strb.toString();
 	}
