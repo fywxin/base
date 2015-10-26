@@ -111,23 +111,20 @@ public class DeptRouter extends BaseRouter {
 	@Auth(code="DEPT_DEL", name="删除部门")
 	@ResponseBody
 	@RequestMapping("/doDelete")
-	public Rs doDelete(String ids){
-		List<Long> idS = LangUtil.splitIds(ids);
-		if(idS == null || idS.size() < 1 || (idS.size() == 1 && idS.get(0) == 0l)){
+	public Rs doDelete(Long id){
+		if(id == null){
 			return Rs.fail("请选择要删除的记录");
 		}
 		
-		for(Long pid : idS){
-			if(this.deptService.count(Cmd.newCmd(Dept.class).eq("pid", pid)) > 0){
-				return Rs.fail("部门["+this.deptService.get(pid).getDeptName()+"]下存在子部门，不能删除");
-			}
-			
-			if(this.userService.count(Cmd.newCmd(User.class).eq("deptId", pid)) > 0){
-				return Rs.fail("部门["+this.deptService.get(pid).getDeptName()+"]下存在用户，不能删除");
-			}
+		if(this.deptService.count(Cmd.newCmd(Dept.class).eq("pid", id)) > 0){
+			return Rs.fail("部门["+this.deptService.get(id).getDeptName()+"]下存在子部门，不能删除");
 		}
 		
-		this.deptService.deleteBatch(idS);
+		if(this.userService.count(Cmd.newCmd(User.class).eq("deptId", id)) > 0){
+			return Rs.fail("部门["+this.deptService.get(id).getDeptName()+"]下存在用户，不能删除");
+		}
+		
+		this.deptService.delete(id);
 		return Rs.success();
 	}
 

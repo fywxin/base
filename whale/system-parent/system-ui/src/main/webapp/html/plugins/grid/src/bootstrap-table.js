@@ -362,6 +362,9 @@
         onUncheckSome: function (rows) {
             return false;
         },
+        onBeforeLoad: function(data){
+        	return false;
+        },
         onLoadSuccess: function (data) {
             return false;
         },
@@ -482,7 +485,8 @@
         'uncheck-all.bs.table': 'onUncheckAll',
         'check-some.bs.table': 'onCheckSome',
         'uncheck-some.bs.table': 'onUncheckSome',
-        'load-success.bs.table': 'onLoadSuccess',
+        'before-load.bs.table': 'onBeforeLoad',
+        'load-success.bs.table': 'onLoadSuccess',//wjs
         'load-error.bs.table': 'onLoadError',
         'column-switch.bs.table': 'onColumnSwitch',
         'page-change.bs.table': 'onPageChange',
@@ -551,6 +555,7 @@
             '</div>'
         ].join(''));
 
+        //$el 
         this.$container.insertAfter(this.$el);
         this.$tableContainer = this.$container.find('.fixed-table-container');
         this.$tableHeader = this.$container.find('.fixed-table-header');
@@ -1447,8 +1452,9 @@
                 style = sprintf('style="%s"', csses.concat(that.header.styles[j]).join('; '));
 
                 value = calculateObjectValue(column,
-                    that.header.formatters[j], [value, item, i], value);
+                    that.header.formatters[j], [value, item, i], value); 
 
+                
                 // handle td's id and class
                 if (item['_' + field + '_id']) {
                     id_ = sprintf(' id="%s"', item['_' + field + '_id']);
@@ -1504,7 +1510,7 @@
                         that.header.formatters[j] && typeof value === 'string' ? value : '',
                         that.options.cardView ? '</div>' : '</td>'
                     ].join('');
-
+                    
                     item[that.header.stateField] = value === true || (value && value.checked);
                 } else {
                     value = typeof value === 'undefined' || value === null ?
@@ -1713,6 +1719,8 @@
         if (!silent) {
             this.$tableLoading.show();
         }
+        
+        that.trigger('before-load', data);//wjs
         request = $.extend({}, calculateObjectValue(null, this.options.ajaxOptions), {
             type: this.options.method,
             url: this.options.url,
@@ -1722,7 +1730,7 @@
             contentType: this.options.contentType,
             dataType: this.options.dataType,
             success: function (res) {
-            	alert(JSON.stringify(res))
+            	//alert(JSON.stringify(res))
                 res = calculateObjectValue(that.options, that.options.responseHandler, [res], res);
                 that.load(res);
                 that.trigger('load-success', res);
@@ -2287,6 +2295,21 @@
             return row[that.header.stateField];
         });
     };
+    
+    //wjs 增加获取选择框id值
+    BootstrapTable.prototype.getSelIds = function (chkFiled) {
+    	chkFiled = chkFiled || 'chk';
+    	var ids = [];
+    	var datas = this.getSelections();
+    	if(datas.length){
+    		for(var i=0; i<datas.length; i++){
+        		if(datas[i][chkFiled]){
+        			ids.push(datas[i][this.getOptions().idField]);
+        		}
+        	}
+    	}
+    	return ids;
+    }
 
     BootstrapTable.prototype.getAllSelections = function () {
         var that = this;
@@ -2562,6 +2585,7 @@
     // =======================
 
     var allowedMethods = [
+        'getSelIds',//wjs
         'getOptions',
         'getSelections', 'getAllSelections', 'getData',
         'load', 'append', 'prepend', 'remove', 'removeAll',

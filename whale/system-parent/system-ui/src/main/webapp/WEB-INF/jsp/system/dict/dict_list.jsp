@@ -58,7 +58,7 @@ function del(dictId){
 						<td class="td-label">字典编码</td>
 						<td class="td-value">
 							<input type="text" id="dictCode" name="dictCode" style="width:160px;" value="${dictCode }" />
-							<button type="button" class="btn btn-info btn-sm" onclick="search()" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
+							<button type="button" class="btn btn-info btn-sm" onclick="search(1)" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
 						</td>
 					</tr>
 				</tbody>

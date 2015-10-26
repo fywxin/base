@@ -70,7 +70,7 @@
 			    		if($.isFunction(param.onSuccess)){
 			    			param.onSuccess(obj);
 			    		}else{
-			    			window.top.layer.msg(obj.msg, {time: 2000});
+			    			$.msg(obj.msg);
 			    		}
 			    	}else{
 			    		$("#infoBoxDiv").html(obj.msg).show();
@@ -85,15 +85,7 @@
 		
 		del : function(param){
 			if(param.datas == null){
-				var chks = $("#gridTable input:checkbox:checked[name='chk_col']");
-				if(chks.length < 1){
-					$.alert('请选择需要删除的记录');
-					return ;
-				}
-				var idArr = [];
-				chks.each(function(){
-					idArr.push($(this).val());
-				});
+				var idArr = $('#gridTable').bootstrapTable('getSelIds');
 				
 				param.datas = {ids: idArr.join(',')};
 			}
@@ -135,8 +127,10 @@
 					    		if($.isFunction(param.onSuccess)){
 					    			param.onSuccess(obj);
 					    		}else{
-									$.alert(obj.msg);
-									reGrid();
+					    			$.msg(obj.msg);
+									try{
+										search();
+									}catch(e){}
 					    		}
 					    	}else{
 					    		if($.isFunction(param.onFail)){
@@ -156,7 +150,7 @@
 		},
 		
 		msg: function(str){
-			
+			window.top.layer.msg(str, {time: 2000});
 		},
 		
 		tip: function(str){
@@ -194,8 +188,8 @@
 				idField: 'id',
 				search: false,
 				silentSort: false,
-				showColumns: true,
-			    showRefresh: true,
+				showColumns: false,
+			    showRefresh: false,
 			    detailView: false,
 			    singleSelect: false,
 			    resizable: true,
@@ -213,16 +207,31 @@
 			    paginationLastText: "尾页",
 			    pageList: [10, 20, 50, 100],
 			    height: (window.top.mainHeight-$("#queryForm").height()-95),
-			    cache: false
+			    cache: false,
+			    onBeforeLoad: function(queryDatas){//加入搜索参数
+			    	var datas = $("#queryForm").serializeArray();
+					var param = {};
+//					if(pageNo != null && typeof(pageNo) != "undefined" && pageNo > 0){
+//						queryDatas.offset = (pageNo-1) * queryDatas.limit;
+//					}
+					
+					for(var i=0; i<datas.length; i++){
+						if(datas[i].value != null && $.trim(datas[i].value) != ""){
+							queryDatas[datas[i].name] = $.trim(datas[i].value);
+						}
+					}
+					
+			    },
 		}
 		var opts = $.extend(defaults, param);
+		opts.columns.splice(0, 0, {field: 'index',width: '2%', align: 'center', formatter:function(value, row, index){return index+1;}});
 		return $(this).bootstrapTable(opts);
     };
     
 })(jQuery);
 
-function go(url){
-	window.location.href=url;
+function go(name, url){
+	window.top.goSub(name, url);
 }
 
 function list2Tree(nodes, idKey, pidKey, textCol, orderCol, orderAsc){

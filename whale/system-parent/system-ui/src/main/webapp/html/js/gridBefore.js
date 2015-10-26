@@ -6,20 +6,22 @@ $(window).resize(function(){
 
 $(function(){
 	$("#gridDiv").height(getGridDivHeight());
+	$("#queryForm input, #queryForm select").keydown(function(event){
+		if(event.keyCode==13){
+			search(1);
+		}
+	});
 });
 
 function getGridDivHeight(){
 	return window.top.mainHeight-$("#queryForm").height()-95;
 }
 
-function search(){
+function search(pageNo){
 	try{
-		var datas = $("#queryForm").serializeArray();
 		var param = {};
-		for(var i=0; i<datas.length; i++){
-			if(datas[i].value != null && $.trim(datas[i].value) != ""){
-				param[datas[i].name] = $.trim(datas[i].value);
-			}
+		if(pageNo != null && typeof(pageNo) != "undefined" && pageNo > 0){
+			param.offset = (pageNo-1) * 10;
 		}
 		$("#gridTable").bootstrapTable('refresh', {query: param});
 	}catch(e){}

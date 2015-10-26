@@ -50,6 +50,12 @@ $(function(){
 	});
 });
 
+function del(id){
+	$.del({url:"${ctx}/dept/doDelete", datas:{id: id}, onSuccess: function(){
+		window.parent.location.reload();
+		$.alert("删除部门成功");
+	}});
+}
 </script>
 </head>
     
@@ -64,7 +70,7 @@ $(function(){
 						<td class="td-label">机构编码</td>
 						<td class="td-value">
 							<input type="text" id="deptCode" name="deptCode" value="${deptCode }" />
-							<button type="button" class="btn btn-info btn-sm" onclick="search()" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
+							<button type="button" class="btn btn-info btn-sm" onclick="search(1)" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
 						</td>
 					</tr>
 				</tbody>
