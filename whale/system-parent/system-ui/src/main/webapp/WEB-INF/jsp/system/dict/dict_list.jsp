@@ -8,6 +8,7 @@
 $(function(){
 	$("#gridTable").grid({
 	    url: '${ctx}/dict/doList',
+	    idField: 'dictId',
 	    columns: [
 		{
 	        field: 'opt',

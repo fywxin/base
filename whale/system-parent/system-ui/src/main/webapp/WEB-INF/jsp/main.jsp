@@ -67,92 +67,18 @@
     		<li id="liMain" onclick="goTab(1)" class="active"><a href="#"></a></li>
     		<li id="liSub" onclick="goTab(2)" style="display:none;"><a href="#"></a></li>
 		</ul>
-        <iframe id="frameMain" src="" style="overflow:hidden;" scrolling="no" frameborder="no" width="100%" ></iframe>
-        <iframe id="frameSub" src="" style="overflow:hidden;display: none;" scrolling="no" frameborder="no" width="100%" ></iframe>
+        <iframe id="frameMain" name="frameMain" src="" style="overflow:hidden;" scrolling="no" frameborder="no" width="100%" ></iframe>
+        <iframe id="frameSub" name="frameSub" src="" style="overflow:hidden;display: none;" scrolling="no" frameborder="no" width="100%" ></iframe>
     </div>
     
 <script src="${html }/js/jquery-1.11.1.min.js"></script>
+<script src="${html }/js/cookie.js"></script>
 <script src="${html }/ui/bootstrap/js/bootstrap.js"></script>
 <script src="${html }/plugins/layer/layer.min.js"></script>
 <script src="${html }/js/fun.js"></script>
+<script src="${html }/js/main/index.js"></script>
 <script type="text/javascript">
-var mainHeight = $.h();
-function goMain(name, url){
-	if($("#liMain a").html() != name){
-		$("#liMain a").html(name);
-		$("#liSub a").html("");
-		$("#liSub").hide(name);
-		$("#frameSub").attr("src", "");
-	}else{
-		$("#frameSub").hide();
-	}
-	$("#liMain").addClass("active");
-	$("#liSub").removeClass("active");
-	$("#frameMain").show().attr("src", "${ctx}"+url+"?"+new Date().getTime());
-	return false;
-}
-
-function goTab(index){
-	if(index == 1){
-		$("#liMain").addClass("active");
-		$("#liSub").removeClass("active");
-		$("#frameSub").hide();
-		$("#frameMain").show();
-	}else{
-		$("#liMain").removeClass("active");
-		$("#liSub").addClass("active");
-		$("#frameSub").show();
-		$("#frameMain").hide();
-	}
-}
-
-
-function goSub(name, url){
-	$("#frameMain").hide();
-	$("#liSub, #frameSub").show();
-	$("#liMain").removeClass("active");
-	$("#liSub").addClass("active");
-	if($("#frameSub").attr("src") != url){
-		$("#liSub a").html(name);
-		$("#frameSub").attr("src", url);
-	}
-}
-
-function accordionClk(t){
-	$("ul[tabul='1']").each(function(){
-		if($(this).attr("clk") == "1"){
-			$(this).collapse('hide').removeAttr("clk");
-		}
-	});
-	$(t).next().children("ul").attr("clk", "1");
-}
-
-$(window).resize(function(){
-	$("#frameMain, #frameSub, #menuDi").height($.h()-65);
-	mainHeight = $.h();
-});
-$(function() {
-	$("#frameMain, #frameSub, #menuDiv").height($.h()-65);
-});
-
-function loginOut(){
-	$.ajax({
-		    url: "${ctx}/loginOut",
-		    type: 'post',
-		    error: function(){
-		        window.location.href="${ctx}";
-		    },
-		    success: function(obj){
-		    	$.cookie("userName", null);
-	    		$.cookie("encryptedPwd", null); 
-		    	window.location.href="${ctx}";
-			}
-		});
-}
-
-function changePassword(){
-	$.openWin({url:"${ctx }/user/goChangePassword", width: 600, height: 300});
-}
+var ctx="${ctx}";
 </script>
 </body>
 </html>

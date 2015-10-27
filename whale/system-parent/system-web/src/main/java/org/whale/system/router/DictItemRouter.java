@@ -16,7 +16,6 @@ import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.domain.Dict;
 import org.whale.system.domain.DictItem;
-import org.whale.system.jqgrid.Grid;
 import org.whale.system.service.DictItemService;
 import org.whale.system.service.DictService;
 

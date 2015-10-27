@@ -26,3 +26,9 @@ function search(pageNo){
 		$("#gridTable").bootstrapTable('refresh', {query: param});
 	}catch(e){}
 }
+
+function refresh(){
+	try{
+		$("#gridTable").bootstrapTable('refresh', {});
+	}catch(e){}
+}

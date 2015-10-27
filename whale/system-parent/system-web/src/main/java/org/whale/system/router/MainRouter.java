@@ -39,8 +39,6 @@ import org.whale.system.service.MenuService;
 import org.whale.system.service.UserService;
 import org.whale.system.servlet.MySessionContext;
 
-import com.alibaba.fastjson.JSON;
-
 @Controller
 public class MainRouter extends BaseRouter {
 	

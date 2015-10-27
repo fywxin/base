@@ -6,7 +6,7 @@
 <%@include file="/jsp/grid.jsp" %>
 <script type="text/javascript">
 var statusObj = {1:"<button type='button' class='btn btn-success btn-ss'><i class='fa fa-check'></i> 正常</button>",
-		2:"<button type='button' class='btn btn-danger btn-ss'><i class='fa fa-lock'></i> 禁用</button>"};
+		2:"<button type='button' class='btn btn-default btn-ss'><i class='fa fa-lock'></i> 禁用</button>"};
 		
 $(function(){
 	$("#gridTable").grid({
@@ -29,7 +29,7 @@ $(function(){
         		if(row.status == 2){
         			strArr.push("<button type='button' class='btn btn-success btn-ss' title='启用' onclick=\"setStatus('"+row.dictItemId+"','"+row.itemName+"',1); return false;\"><i class='fa fa-unlock'></i> 启用</button>");
         		}else{
-        			strArr.push("<button type='button' class='btn btn-danger btn-ss' title='禁用' onclick=\"setStatus('"+row.dictItemId+"','"+row.itemName+"',2); return false;\"><i class='fa fa-lock'></i> 禁用</button>");
+        			strArr.push("<button type='button' class='btn btn-default btn-ss' title='禁用' onclick=\"setStatus('"+row.dictItemId+"','"+row.itemName+"',2); return false;\"><i class='fa fa-lock'></i> 禁用</button>");
         		}
         		return strArr.join("");
 			}

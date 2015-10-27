@@ -27,7 +27,6 @@ import org.whale.system.common.util.LangUtil;
 import org.whale.system.domain.Auth;
 import org.whale.system.domain.Menu;
 import org.whale.system.domain.Role;
-import org.whale.system.jqgrid.Grid;
 import org.whale.system.service.AuthService;
 import org.whale.system.service.MenuService;
 import org.whale.system.service.RoleService;
@@ -74,13 +73,13 @@ public class RoleRouter extends BaseRouter {
 	@org.whale.system.annotation.auth.Auth(code="ROLE_LIST",name="查询角色")
 	@ResponseBody
 	@RequestMapping("/doList")
-	public Grid doList(HttpServletResponse response, String roleName, String roleCode){
-		Page page = Grid.newPage();
+	public Page doList(HttpServletResponse response, String roleName, String roleCode){
+		Page page = this.newPage();
 		page.newCmd(Role.class).like("roleName", roleName).like("roleCode", roleCode);
 		
 		this.roleService.queryPage(page);
 		
-		return Grid.grid(page);
+		return page;
 	}
 	
 	

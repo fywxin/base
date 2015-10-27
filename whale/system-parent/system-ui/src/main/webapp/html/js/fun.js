@@ -70,6 +70,7 @@
 			    		if($.isFunction(param.onSuccess)){
 			    			param.onSuccess(obj);
 			    		}else{
+			    			try{getMain().refresh();}catch(e){getMain().location.reload();}
 			    			$.msg(obj.msg);
 			    		}
 			    	}else{
@@ -232,6 +233,14 @@
 
 function go(name, url){
 	window.top.goSub(name, url);
+}
+
+function getMain(){
+	return window.top.frames["frameMain"];
+}
+
+function getSub(){
+	return window.top.frames["frameMain"];
 }
 
 function list2Tree(nodes, idKey, pidKey, textCol, orderCol, orderAsc){

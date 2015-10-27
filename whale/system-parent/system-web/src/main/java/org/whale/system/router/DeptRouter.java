@@ -1,11 +1,6 @@
 package org.whale.system.router;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,13 +13,10 @@ import org.whale.system.base.Cmd;
 import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
 import org.whale.system.common.exception.SysException;
-import org.whale.system.common.util.LangUtil;
-import org.whale.system.common.util.TreeUtil;
 import org.whale.system.service.DeptService;
 import org.whale.system.service.UserService;
 import org.whale.system.domain.Dept;
 import org.whale.system.domain.User;
-import org.whale.system.jqgrid.Grid;
 
 import com.alibaba.fastjson.JSON;
 

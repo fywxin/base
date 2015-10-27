@@ -9,6 +9,7 @@
 $(function(){
 	$("#gridTable").grid({
 	    url: '${ctx}/dept/doList?pid=${pid}',
+	    idField: 'id',
 	    columns: [
 		{
 	        field: 'opt',
