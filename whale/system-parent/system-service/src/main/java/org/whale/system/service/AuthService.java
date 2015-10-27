@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.whale.system.base.Cmd;
-import org.whale.system.common.util.Strings;
 import org.whale.system.dao.AuthDao;
 import org.whale.system.dao.RoleAuthDao;
 import org.whale.system.domain.Auth;
@@ -37,11 +36,6 @@ public class AuthService extends BaseService<Auth, Long> {
 		return this.authDao.get(authId);
 	}
 	
-	public Auth getByAuthCode(String authCode, boolean loadResource){
-		if(Strings.isBlank(authCode))
-			return null;
-		return this.authDao.getByAuthCode(authCode);
-	}
 	
 	public List<Auth> getByMenuId(Long menuId){
 		if(menuId == null)
