@@ -105,6 +105,9 @@ public class ValidationUtils {
 	
 	public static boolean valid(Object obj, OrmValidate ormValidate, ValidRs validRs){
 		String fieldName = ormValidate.getOrmColumn().getCnName();
+		if(Strings.isNotBlank(fieldName)){
+			fieldName = ormValidate.getOrmColumn().getAttrName();
+		}
 		String defErrMsg = ormValidate.getErrorMsg();
 		Object value = AnnotationUtil.getFieldValue(obj, ormValidate.getOrmColumn().getField());
 		

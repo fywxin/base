@@ -14,7 +14,6 @@ import org.whale.system.base.Page;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.TimeUtil;
 import org.whale.system.domain.Log;
-import org.whale.system.jqgrid.Grid;
 import org.whale.system.service.LogServiceAdapter;
 
 @Controller
@@ -42,8 +41,8 @@ public class LogRouter extends BaseRouter {
 	@Auth(code="LOG_LIST",name="日志查询")
 	@ResponseBody
 	@RequestMapping("/doList")
-	public Grid doList(Log log, String startTime, String endTime){
-		Page page = Grid.newPage();
+	public Page doList(Log log, String startTime, String endTime){
+		Page page = this.newPage();
 		
 		StringBuilder strb = new StringBuilder();
 		StringBuilder param = new StringBuilder();
@@ -122,7 +121,7 @@ public class LogRouter extends BaseRouter {
 		
 		this.LogServiceAdapter.queryPage(page);
 		
-		return Grid.grid(page);
+		return page;
 	}
 	
 	@Auth(code="LOG_LIST",name="日志查询")

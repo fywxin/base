@@ -36,7 +36,7 @@ var setting = {
 			if (treeNode.isParent) {
 				zTree.expandNode(treeNode, true);
 			}
-			$("#listFrame").attr("src", "${ctx}/dept/goList?pid="+treeNode.id);
+			$("#listFrame").attr("src", "${ctx}/user/goList?deptId="+treeNode.id);
 			return true;
 		}
 	}
@@ -49,6 +49,7 @@ $(document).ready(function(){
 	zTree = $.fn.zTree.init($("#tree"), setting, zNodes);
 	var root = zTree.getNodesByFilter(function (node) { return node.level == 0 }, true);
 	zTree.expandNode(root, true);
+	$("#listFrame").attr("src", "${ctx}/user/goList?deptId="+root.id);
 });
 
 function getNode(id){
@@ -56,14 +57,14 @@ function getNode(id){
 }
 </script>
 </head>
-<body>
+<body class="my_gridBody gray-bg">
 	<div class="container-fluid">
 		<div class="row">
-		  <div class="col-xs-2" id="treeDiv" style="padding: 0px 5px 0px 0px;overflow: auto;">
+		  <div class="col-xs-2" id="treeDiv" style="padding: 0px;overflow: auto;">
 		  		<div id="tree" class="ztree"></div>
 		  </div>
 		  <div class="col-xs-10" id="frameDiv" style="padding: 0px;overflow: hidden;">
-		  		<iframe id="listFrame" name="listFrame" frameborder=0 scrolling=auto width=100% src="${ctx }/dept/goList"></iframe>
+		  	<iframe id="listFrame" name="listFrame" frameborder=0 scrolling=auto width=100% src="${ctx }/user/goList?deptId=${deptId}"></iframe>
 		  </div>
 		</div>
 	</div>

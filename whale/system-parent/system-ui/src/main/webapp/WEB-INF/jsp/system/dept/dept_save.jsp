@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>新增 机构</title>
+	<title>新增 组织</title>
 <%@include file="/jsp/form.jsp" %>
 <%@include file="/jsp/ztree.jsp" %>
 <script type="text/javascript">
@@ -46,19 +46,19 @@ $(function() {
 	<div class="row" style="margin:10px 20px;">
         <form class="form-horizontal m-t" id="dataForm">
             <div class="form-group">
-                <label class="col-sm-2 control-label">父机构：</label>
-                <div class="input-group col-sm-4 ">
+                <label class="col-sm-2 control-label">父组织：</label>
+                <div class="col-sm-4 input-group">
                     <tag:tree nodeName="deptName" nodeId="id" id="pid" nodes="${nodes }" nodePId="pid" afterLoadTree="filterSelf" value="${pid }"></tag:tree>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label"><span class="required">*</span>机构名称：</label>
+                <label class="col-sm-2 control-label"><span class="required">*</span>组织名称：</label>
                 <div class="col-sm-4">
                     <input id="deptName" name="deptName" class="form-control" required="" aria-required="true" >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">机构编码：</label>
+                <label class="col-sm-2 control-label">组织编码：</label>
                 <div class="col-sm-4">
                     <input id="deptCode" name="deptCode" class="form-control" >
                 </div>

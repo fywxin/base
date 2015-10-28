@@ -10,7 +10,12 @@ function goMain(name, url){
 	}
 	$("#liMain").addClass("active");
 	$("#liSub").removeClass("active");
-	$("#frameMain").show().attr("src", ctx+url+"?"+new Date().getTime());
+	if(url.indexOf('?') == -1){
+		$("#frameMain").show().attr("src", ctx+url+"?"+new Date().getTime());
+	}else{
+		$("#frameMain").show().attr("src", ctx+url+"&"+new Date().getTime());
+	}
+	
 	return false;
 }
 
@@ -34,9 +39,11 @@ function goSub(name, url){
 	$("#liSub, #frameSub").show();
 	$("#liMain").removeClass("active");
 	$("#liSub").addClass("active");
-	if($("#frameSub").attr("src") != url){
-		$("#liSub a").html(name);
-		$("#frameSub").attr("src", url);
+	$("#liSub a").html(name);
+	if(url.indexOf('?') == -1){
+		$("#frameSub").attr("src", url+"?"+new Date().getTime());
+	}else{
+		$("#frameSub").attr("src", url+"&"+new Date().getTime());
 	}
 }
 

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>更新 机构</title>
+	<title>更新 组织</title>
 <%@include file="/jsp/form.jsp" %>
 <%@include file="/jsp/ztree.jsp" %>
 <script type="text/javascript">
@@ -51,19 +51,19 @@ function filterSelf(){
         <form class="form-horizontal m-t" id="dataForm">
         	<input type="hidden" id="id" name="id" value="${item.id}" />
             <div class="form-group">
-                <label class="col-sm-2 control-label">父机构：</label>
+                <label class="col-sm-2 control-label">父组织：</label>
                 <div class="input-group col-sm-4 ">
                     <tag:tree nodeName="deptName" nodeId="id" id="pid" nodes="${nodes }" nodePId="pid" afterLoadTree="filterSelf" value="${item.pid }"></tag:tree>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label"><span class="required">*</span>机构名称：</label>
+                <label class="col-sm-2 control-label"><span class="required">*</span>组织名称：</label>
                 <div class="col-sm-4">
                     <input id="deptName" name="deptName" value="${item.deptName }" class="form-control" required="" aria-required="true" >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">机构编码：</label>
+                <label class="col-sm-2 control-label">组织编码：</label>
                 <div class="col-sm-4">
                     <input id="deptCode" name="deptCode" value="${item.deptCode }" class="form-control" >
                 </div>

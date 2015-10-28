@@ -9,15 +9,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.base.BaseRouter;
+import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
-import org.whale.system.common.util.TreeUtil;
 import org.whale.system.domain.Menu;
 import org.whale.system.service.MenuService;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 
 @Controller
@@ -28,17 +27,30 @@ public class MenuRouter extends BaseRouter {
 	private MenuService menuService;
 	
 	@Auth(code="MENU_LIST",name="查询菜单")
-	@RequestMapping("/goList")
-	public ModelAndView goList(){
+	@RequestMapping("/goTree")
+	public ModelAndView goTree(Long parentId){
 		
-		return new ModelAndView("system/menu/menu_list");
+		return new ModelAndView("system/menu/menu_tree")
+		.addObject("nodes", JSON.toJSONString(this.menuService.queryAll()))
+		.addObject("parentId", parentId);
+	}
+	
+	@Auth(code="MENU_LIST",name="查询菜单")
+	@RequestMapping("/goList")
+	public ModelAndView goList(Long parentId){
+		
+		return new ModelAndView("system/menu/menu_list").addObject("parentId", parentId);
 	}
 	
 	@Auth(code="MENU_LIST",name="查询菜单")
 	@ResponseBody
 	@RequestMapping("/doList")
-	public JSONObject doList(){
-		return TreeUtil.jqGridTree(this.menuService.queryAll(), 0L);
+	public Page doList(Long parentId){
+		Page page = this.newPage();
+		page.newCmd(Menu.class);
+		this.menuService.queryPage(page);
+		
+		return page;
 	}
 	
 	@Auth(code="MENU_SAVE",name="新增菜单")

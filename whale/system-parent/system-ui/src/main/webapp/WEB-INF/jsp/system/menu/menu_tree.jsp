@@ -2,11 +2,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>菜单树</title>
-    
-<script src="${html }/js/jquery-1.11.1.min.js"></script>
+    <title>部门 树</title>
+<%@include file="/jsp/base.jsp" %>
 <%@include file="/jsp/ztree.jsp" %>
 <script type="text/javascript">
+$(window).resize(function(){
+	$("#treeDiv, #listFrame").height($.h());
+});
+
 var zTree;
 
 var setting = {
@@ -42,21 +45,32 @@ var setting = {
 var zNodes =${nodes};
 
 $(document).ready(function(){
+	$("#treeDiv, #listFrame").height($.h());
 	for(var i=0; i<zNodes.length; i++){
 		zNodes[i].isParent = (zNodes[i].menuType != 3);
 		zNodes[i].open = (zNodes[i].menuType != 3);
 	}
-	zNodes.push({"menuId": "-99", "parentId": 0, "isParent": false, "menuType": 4, menuName: "未分配菜单权限"})
 	zTree = $.fn.zTree.init($("#tree"), setting, zNodes);
 });
 
 
 function clickTree(treeNode){
-	window.parent.goAuth(treeNode.menuId)
+	$("#listFrame").attr("src", "${ctx }/menu/goList?parentId="+treeNode.menuId);
 }
 </script>
 </head>
-<body>
-	<div id="tree" class="ztree" ></div>
+<body class="my_gridBody gray-bg">
+	<div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-2" id="treeDiv" style="padding: 0px;overflow: auto;">
+		  		<div id="tree" class="ztree"></div>
+		  </div>
+		  <div class="col-xs-10" id="frameDiv" style="padding: 0px;overflow: hidden;">
+		  	<iframe id="listFrame" name="listFrame" frameborder=0 scrolling=auto width=100% src="${ctx }/menu/goList?parentId=${parentId}"></iframe>
+		  </div>
+		</div>
+	</div>
 </body>
 </html>
+
+

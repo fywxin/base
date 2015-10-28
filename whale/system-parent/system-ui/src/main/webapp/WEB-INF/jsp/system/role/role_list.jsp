@@ -47,8 +47,8 @@ $(function(){
 	        field: 'status',
 	        title: '状态',
 	        width: '5%',
-	        formatter: function(cellvalue, options, rowObject){
-				return statusObj[cellvalue];
+	        formatter: function(value, row, index){
+				return statusObj[value];
 			}
 	    }
 	   ]

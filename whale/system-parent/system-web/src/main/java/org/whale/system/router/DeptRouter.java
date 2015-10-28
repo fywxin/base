@@ -75,6 +75,9 @@ public class DeptRouter extends BaseRouter {
 	@ResponseBody
 	@RequestMapping("/doSave")
 	public Rs doSave(Dept dept){
+		if(dept.getPid() == null){
+			dept.setPid(0L);
+		}
 		this.deptService.save(dept);
 		return Rs.success();
 	}

@@ -3,51 +3,79 @@
 <html>
 <head>
 <%@include file="/jsp/grid.jsp" %>
-
 <title>日志</title>
 <script type="text/javascript">
-var rsStatus = {1:"<button type='button' class='btn btn-primary btn-ss'><i class='fa fa-check'></i> 成功</button>",
+var rsStatus = {1:"<button type='button' class='btn btn-success btn-ss'><i class='fa fa-check'></i> 成功</button>",
 				2:"<button type='button' class='btn btn-warning btn-ss'><i class='fa fa-exclamation'></i> 系统异常</button>",
 				3:"<button type='button' class='btn btn-warning btn-ss'><i class='fa fa-check'></i> OrmException</button>",
 				4:"<button type='button' class='btn btn-info btn-ss'<i class='fa fa-minus'></i>> 运行时异常</button>",
 				5:"<button type='button' class='btn btn-danger btn-ss'><i class='fa fa-times'></i> 业务异常</button>",
 				6:"<button type='button' class='btn btn-info btn-ss'><i class='fa fa-info'></i> 未知异常</button>"};
 var time = new Date();
-$(function (){
+$(function(){
 	$("#gridTable").grid({
-		url: "${ctx}/log/doList",
-		colNames: ['操作', '对象名称', '表名称', 'uri', '操作类型', '方法耗时(ms)','调用耗时(ms)', 'ip地址', '创建时间', '操作人', '结果'],
-		colModel: [{name:'id',index:'', width:80, fixed:true, sortable:false, resize:false, align: "center",
-					formatter: function(cellvalue, options, rowObject){
-						return "<button type='button' class='btn btn-default btn-ss' title='查看' onclick=\"view('"+cellvalue+"')\"><i class='fa fa-info'></i> 查看</button>";
-					
-					}},
-					{name:'cnName',index:'cnName', width:60},
-					{name:'tableName',index:'tableName', width:60},
-					{name:'uri',index:'uri', width:60},
-					{name:'opt',index:'opt', width:60},
-					{name:'methodCostTime',index:'methodCostTime', width:60},
-					{name:'costTime',index:'costTime', width:60},
-					{name:'ip',index:'ip', width:60},
-					{name:'createTime',index:'createTime', width:60},
-					{name:'userName',index:'userName', width:60},
-					{name:'rsType',index:'rsType', width:40,
-						formatter: function(cellvalue, options, rowObject){
-							return rsStatus[cellvalue];
-						}	
-					}
-			]
+	    url: '${ctx}/log/doList',
+	    idField: 'id',
+	    columns: [
+		{
+	        field: 'opt',
+	        title: '操作',
+	        width: '8%',
+	        align: 'center',
+	        formatter: function(value, row, index){
+	        	return "<button type='button' class='btn btn-default btn-ss' title='查看' onclick=\"go('查看日志','${ctx}/log/goView?id="+row.id+"')\"><i class='fa fa-info'></i> 查看</button>";
+			}
+	    }, {
+	        field: 'cnName',
+	        width: '10%',
+	        title: '对象名称'
+	    }, {
+	        field: 'tableName',
+	        title: '表名称',
+	        width: '10%'
+	    }, {
+	        field: 'uri',
+	        title: 'uri',
+	        width: '20%'
+	    }, {
+	        field: 'opt',
+	        title: '操作类型',
+	        width: '5%'
+	    }, {
+	        field: 'methodCostTime',
+	        title: '方法耗时(ms)',
+	        width: '5%'
+	    }, {
+	        field: 'costTime',
+	        title: '调用耗时(ms)',
+	        width: '5%'
+	    }, {
+	        field: 'ip',
+	        title: 'ip地址',
+	        width: '8%'
+	    }, {
+	        field: 'createTime',
+	        title: '创建时间',
+	        width: '8%'
+	    }, {
+	        field: 'userName',
+	        title: '操作人',
+	        width: '5%'
+	    }, {
+	        field: 'rsType',
+	        title: '结果',
+	        width: '5%',
+	        formatter: function(value, row, index){
+				return rsStatus[value];
+			}
+	    }
+	   ]
 	});
-	
 });
-
-function view(id){
-	$.openWin({title: '查看日志',content: '${ctx}/log/goView?id='+id});
-}
 </script>
 </head>
-<body class="my_gridBody gray-bg" >
-        <div class="my_gridBox">
+<body style="overflow: hidden;">
+	<div class="my_gridBox">
 		<form id="queryForm" >
 			<table class="query">
 				<col width="8%" />
@@ -143,17 +171,14 @@ function view(id){
 					</tr>
 				</tbody>
 			</table>
-				<div class="my_gridToolBar">
-				  <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> 新  增</button>
-				  <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> 修  改</button>
-				  <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> 删  除</button>
-				</div>
+				
 			</form>
-				<table id="gridTable" ></table>
-				<div id="gridPager"></div>
-			</div>
+				<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
+			<table id="gridTable" ></table>
+		</div>
+	</div>
 </body>
-<script src="${html }/w3/js/plugins/layer/laydate/laydate.js"></script>
+<script src="${html }/plugins/layer/laydate/laydate.js"></script>
 <script>
     //日期范围限制
     var start = {

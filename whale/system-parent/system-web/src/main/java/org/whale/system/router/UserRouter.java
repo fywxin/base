@@ -1,9 +1,6 @@
 package org.whale.system.router;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +25,6 @@ import org.whale.system.common.util.WebUtil;
 import org.whale.system.domain.Dept;
 import org.whale.system.domain.Role;
 import org.whale.system.domain.User;
-import org.whale.system.jqgrid.Grid;
 import org.whale.system.service.DeptService;
 import org.whale.system.service.RoleService;
 import org.whale.system.service.UserService;
@@ -50,88 +46,16 @@ public class UserRouter extends BaseRouter {
 	
 	@Auth(code="USER_LIST",name="查询用户")
 	@RequestMapping("/goTree")
-	public ModelAndView goTree(Long pid){
-		if(pid == null){
-			pid = 0L;
-		}
-		List<Map<String, Object>> depts = this.userService.queryDeptTree();
+	public ModelAndView goTree(){
 		String nodes = "[]";
-		if(depts != null){
-			//pid, children
-			Map<Long, List<Map<String, Object>>> pMap = new HashMap<Long, List<Map<String,Object>>>();
-			//id, node
-			Map<Long, Map<String, Object>> idMap = new HashMap<Long, Map<String,Object>>();
-			
-			List<Map<String, Object>> tmp = null;
-			
-			for(Map<String, Object> map : depts){
-				idMap.put((Long)map.get("id"), map);
-				tmp = pMap.get((Long)map.get("pid"));
-				if(tmp == null){
-					tmp = new ArrayList<Map<String,Object>>();
-					pMap.put((Long)map.get("pid"), tmp);
-				}
-				tmp.add(map);
-			}
-			List<Map<String, Object>> rootDepts = pMap.get(pid);
-			
-			List<Map<String, Object>> rs = new ArrayList<Map<String,Object>>();
-			if(rootDepts != null){
-				for(Map<String, Object> root : rootDepts){
-					rs.add(this.createDeptTree(root, pMap, idMap));
-				}
-				
-//				Map<String, Object> state = new HashMap<String, Object>();
-//				state.put("selected", true);
-//				rs.get(0).put("state", state);
-				nodes = JSON.toJSONString(rs);
-			}
+		List<Dept> list = this.deptService.queryAll();
+		if(list != null && list.size() > 0){
+			nodes = JSON.toJSONString(list);
 		}
-		
 		return new ModelAndView("system/user/dept_tree")
-				.addObject("nodes", nodes);
-	}
-	
-	/**
-	 * 构建部门树
-	 * @param map
-	 * @param pMap
-	 * @param idMap
-	 * @return
-	 */
-	@SuppressWarnings("all")
-	private Map<String, Object> createDeptTree(Map<String, Object> map, Map<Long, List<Map<String, Object>>> pMap, Map<Long, Map<String, Object>> idMap){
-		Map<String, Object> node = new HashMap<String, Object>();
-		Long userNum = (Long)map.get("userNum");
-		node.put("id", map.get("id"));
-		node.put("text", map.get("deptName"));
-		node.put("tags", new Long[]{userNum});
-		map.put("node", node); //与转换后的节点简历关联关系，方便更新userNum值
-		
-		//向上递归至根节点，上级节点userNum值加上本节点值, 
-		Map<String, Object> parentNode = null;//父节点
-		Map<String, Object> tmpNode = null;//父节点对应转换后的树节点
-		Long pid = (Long)map.get("pid");
-		while(pid != null && pid != -1L && (parentNode = idMap.get(pid)) != null){
-			tmpNode = (Map<String, Object>)parentNode.get("node");
-			Long[] tags = (Long[])tmpNode.get("tags");
-			tmpNode.put("tags", new Long[]{(tags[0]+userNum)});
-			pid = (Long)parentNode.get("pid");
-		}
-		
-		//递归建立nodes
-		List<Map<String, Object>> subNodes = pMap.get(map.get("id"));
-		if(subNodes != null && subNodes.size() > 0){
-			List<Map<String, Object>> subs = new ArrayList<Map<String,Object>>();
-			
-			for(Map<String, Object> sub : subNodes){
-				subs.add(this.createDeptTree(sub, pMap, idMap));
-			}
-			node.put("nodes", subs);
-		}
-		return node;
-	}
-	
+				.addObject("nodes", nodes)
+				.addObject("rootName", DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "ITEM_DEPT_ROOT"));
+	}	
 	
 	@Auth(code="USER_LIST",name="查询用户")
 	@RequestMapping("/goList")
@@ -144,10 +68,10 @@ public class UserRouter extends BaseRouter {
 	@Auth(code="USER_LIST",name="查询用户")
 	@ResponseBody
 	@RequestMapping("/doList")
-	public Grid doList(String userName, String realName, Long deptId){
-		Page page = Grid.newPage();
+	public Page doList(String userName, String realName, Long deptId){
+		Page page = this.newPage();
 		Cmd cmd = page.newCmd(User.class)
-					.select("userId","userName","realName","deptId","email","phone" )
+					.select("userId","userName","realName","deptId","email","phone","status" )
 					.selectWrap(",(select d.deptName from sys_dept d where d.id = t.deptId) as deptName")
 					.like("userName", userName)
 					.like("realName", realName);
@@ -157,7 +81,7 @@ public class UserRouter extends BaseRouter {
 		
 		this.userService.queryPage(page);
 		
-		return Grid.grid(page);
+		return page;
 	}
 	
 	@Auth(code="USER_SAVE",name="新增用户")

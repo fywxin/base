@@ -383,7 +383,7 @@ public class TreeTag extends TagSupport {
 	
 	private String bulidInputHtml(){
 		StringBuilder strb = new StringBuilder();
-		strb.append("<input type='text' id='"+id+"_NAME' name='"+id+"_NAME' onclick=\"showMenu_"+id+"(); return false;\" class=\"form-control\" style=\"margin-left:15px;\" readonly=readonly /><span class=\"input-group-btn\" onclick='clear_"+id+"();'><button type=\"button\" class=\"btn btn-warning\" style=\"margin-left:20px;\">清空</button></span>\n")
+		strb.append("<input type='text' id='"+id+"_NAME' name='"+id+"_NAME' onclick=\"showMenu_"+id+"(); return false;\" class=\"form-control\" style='margin-left:15px;' readonly=readonly /><span class=\"input-group-btn\" onclick='clear_"+id+"();'><button type=\"button\" class=\"btn btn-warning\" style='margin-left:15px;' >清空</button></span>\n")
 			.append("<input type='hidden' id='"+id+"' name='"+id+"' value='"+value+"' />\n");
 		return strb.toString();
 	}

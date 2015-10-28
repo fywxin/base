@@ -53,13 +53,13 @@ function changeMenuIcon(){
         <form class="form-horizontal m-t" id="dataForm">
         	<div class="form-group">
                 <label class="col-sm-2 control-label">权限名称：</label>
-                <div class="input-group col-sm-4 ">
+                <div class="col-sm-4 ">
                     <input id="authName" name="authName" value="${item.authName }" class="form-control" >
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">权限编码：</label>
-                <div class="input-group col-sm-4 ">
+                <div class="col-sm-4 ">
                     <input id="authCode" name="authCode" value="${item.authCode }" class="form-control" readonly="readonly" >
                 </div>
             </div>

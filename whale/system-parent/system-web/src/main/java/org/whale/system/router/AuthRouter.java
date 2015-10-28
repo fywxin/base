@@ -39,15 +39,6 @@ public class AuthRouter extends BaseRouter {
 	@org.whale.system.annotation.auth.Auth(code="AUTH_LIST",name="查询权限")
 	@RequestMapping("/goTree")
 	public ModelAndView goTree(Long clkId){
-		
-		return new ModelAndView("system/auth/auth_tree")
-			.addObject("clkId", clkId);
-	}
-	
-	@org.whale.system.annotation.auth.Auth(code="AUTH_LIST",name="查询权限")
-	@RequestMapping("/goMenuTree")
-	public ModelAndView goMenuTree(Long clkId){
-		
 		List<Menu> menus = this.menuService.queryAll();
 		if(menus == null)
 			menus = new ArrayList<Menu>(1);
@@ -57,11 +48,11 @@ public class AuthRouter extends BaseRouter {
 			else
 				clkId = 0L;
 		}
-		
-		return new ModelAndView("system/auth/menu_tree")
-			.addObject("nodes", MenuRouter.toMenuJson(menus))
-			.addObject("clkId", clkId);
+		return new ModelAndView("system/auth/auth_tree")
+		.addObject("nodes", MenuRouter.toMenuJson(menus))
+		.addObject("clkId", clkId);
 	}
+	
 	
 	/**
 	 * 跳转到列表页面

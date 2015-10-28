@@ -31,13 +31,13 @@ public class DeptRouter extends BaseRouter {
 	private UserService userService;
 	
 	
-	@Auth(code="DEPT_LIST", name="查询部门")
+	@Auth(code="DEPT_LIST", name="查询组织")
 	@RequestMapping("/goList")
 	public ModelAndView goList(){
 		return new ModelAndView("system/dept/dept_list");
 	}
 	
-	@Auth(code="DEPT_LIST", name="查询部门")
+	@Auth(code="DEPT_LIST", name="查询组织")
 	@ResponseBody
 	@RequestMapping("/doList")
 	public Page doList(Dept dept){
@@ -50,14 +50,14 @@ public class DeptRouter extends BaseRouter {
 		return page;
 	}
 	
-	@Auth(code="DEPT_SAVE", name="新增部门")
+	@Auth(code="DEPT_SAVE", name="新增组织")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(Long pid){
 		String pName = "";
 		if(pid != null){
 			Dept pDept = this.deptService.get(pid);
 			if(pDept == null){
-				throw new SysException("查找不到 父部门pid="+pid);
+				throw new SysException("查找不到 父组织pid="+pid);
 			}
 			pName = pDept.getDeptName();
 		}
@@ -68,7 +68,7 @@ public class DeptRouter extends BaseRouter {
 				.addObject("nextOrderNo", this.deptService.getNextOrder(pid));
 	}
 	
-	@Auth(code="DEPT_SAVE", name="新增部门")
+	@Auth(code="DEPT_SAVE", name="新增组织")
 	@ResponseBody
 	@RequestMapping("/doSave")
 	public Rs doSave(Dept dept){
@@ -77,12 +77,12 @@ public class DeptRouter extends BaseRouter {
 		return Rs.success();
 	}
 	
-	@Auth(code="DEPT_UPDATE", name="修改部门")
+	@Auth(code="DEPT_UPDATE", name="修改组织")
 	@RequestMapping("/goUpdate")
 	public ModelAndView goUpdate(Long id){
 		Dept dept = null;
 		if(id == null || (dept = this.deptService.get(id)) == null){
-			throw new SysException("查找不到 部门 id="+id);
+			throw new SysException("查找不到 组织 id="+id);
 		}
 		List<Dept> depts = this.deptService.queryAll();
 		
@@ -91,7 +91,7 @@ public class DeptRouter extends BaseRouter {
 				.addObject("depts", JSON.toJSONString(depts));
 	}
 	
-	@Auth(code="DEPT_UPDATE", name="修改部门")
+	@Auth(code="DEPT_UPDATE", name="修改组织")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
 	public Rs doUpdate(Dept dept){
@@ -100,7 +100,7 @@ public class DeptRouter extends BaseRouter {
 		return Rs.success();
 	}
 	
-	@Auth(code="DEPT_DEL", name="删除部门")
+	@Auth(code="DEPT_DEL", name="删除组织")
 	@ResponseBody
 	@RequestMapping("/doDelete")
 	public Rs doDelete(String ids){
@@ -111,11 +111,11 @@ public class DeptRouter extends BaseRouter {
 		
 		for(Long pid : idS){
 			if(this.deptService.count(Cmd.newCmd(Dept.class).eq("pid", pid)) > 0){
-				return Rs.fail("部门["+this.deptService.get(pid).getDeptName()+"]下存在子部门，不能删除");
+				return Rs.fail("组织["+this.deptService.get(pid).getDeptName()+"]下存在子组织，不能删除");
 			}
 			
 			if(this.userService.count(Cmd.newCmd(User.class).eq("deptId", pid)) > 0){
-				return Rs.fail("部门["+this.deptService.get(pid).getDeptName()+"]下存在用户，不能删除");
+				return Rs.fail("组织["+this.deptService.get(pid).getDeptName()+"]下存在用户，不能删除");
 			}
 		}
 		
