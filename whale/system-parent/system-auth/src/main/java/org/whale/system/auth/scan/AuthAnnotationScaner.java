@@ -7,6 +7,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.auth.domain.AuthBean;
@@ -20,6 +21,7 @@ import org.whale.system.common.util.Strings;
  * @author 王金绍
  * @date 2014年12月23日 下午10:09:18
  */
+@Component
 public class AuthAnnotationScaner {
 	
 	private static Logger logger = LoggerFactory.getLogger(AuthAnnotationScaner.class);
@@ -72,6 +74,7 @@ public class AuthAnnotationScaner {
 					ms = new HashSet<String>(4);
 					ms.add(className+"#"+method.getName());
 					authBean.setMethods(ms);
+					authBean.setController(controller);
 					
 					AuthBean.put(authBean);
 					logger.info("@Auth: 扫描方法注释 : "+authBean);
@@ -89,6 +92,7 @@ public class AuthAnnotationScaner {
 							ms = new HashSet<String>(4);
 							ms.add(className+"#"+method.getName());
 							authBean.setMethods(ms);
+							authBean.setController(controller);
 							AuthBean.put(authBean);
 							logger.info("@Auth: 扫描方法注释 : "+authBean);
 						}

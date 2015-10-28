@@ -31,6 +31,7 @@
 	var allMenus = ${allMenus}
 	
 	$(document).ready(function(){
+		$("#treeDiv").height($.h()-150);
 		zNodes.push({"id": 0, "pId": null, "name": "设置权限", "isParent": true,"open":true});
 		
 		for(var i=0; i<allMenus.length; i++){
@@ -47,11 +48,11 @@
 					break;
 				}
 			}
-			zNodes.push({"id": "A_"+totalAuths[i].authId, "pId": totalAuths[i].menuId, "name": totalAuths[i].authName, "isParent": false,"checked": checked});
+			zNodes.push({"id": totalAuths[i].authCode, "pId": totalAuths[i].menuId, "name": totalAuths[i].authName, "isParent": false,"checked": checked});
 		}
 		
 		for(var i=0; i<hasAuths.length; i++){
-			zNodes.push({"id": "A_"+hasAuths[i].authId, "pId": totalAuths[i].menuId, "name": hasAuths[i].authName, "isParent": false,"checked": true,"chkDisabled":true});
+			zNodes.push({"id": hasAuths[i].authCode, "pId": totalAuths[i].menuId, "name": hasAuths[i].authName, "isParent": false,"checked": true,"chkDisabled":true});
 		}
 		
 		$.fn.zTree.init($("#tree"), setting, zNodes);
@@ -67,35 +68,34 @@
 		if(nodes != null && nodes.length > 0){
 			for(var i=0;i<nodes.length;i++){
 				if(!nodes[i].isParent){
-					id = nodes[i].id;
-					id=id.substring(2,id.length);
-					idArr.push(id);
+					idArr.push(nodes[i].id);
 				}
 			}
 		}
 		for(var i=0; i<hasAuths.length; i++){
-			if(idArr.indexOf(hasAuths[i].authId) == -1){
-				idArr.push(hasAuths[i].authId);
+			if(idArr.indexOf(hasAuths[i].authCode) == -1){
+				idArr.push(hasAuths[i].authCode);
 			}
 		}
 		
-		$.save({url: "${ctx}/role/doSetRoleAuth?roleId=${roleId}",datas:{authIdS: idArr.join(',')}, onSuccess: function(){
-			$.alert('设置角色权限成功！');
+		$.save({url: "${ctx}/role/doSetRoleAuth?roleId=${roleId}",datas:{authCodeS: idArr.join(',')}, onSuccess: function(){
+			$.msg('设置角色权限成功！');
 		}});
 	}
     </script>
 </head>
 <body class="my_formBody"> 
-	<div class="navbar-fixed-bottom my_toolbar" >
-		<button type="button" class="btn btn-primary btn-sm" onclick="save()"><i class="fa fa-hdd-o" ></i> 保存</button>
-		<button type="button" class="btn btn-info btn-sm" onclick="$.closeWin();"><i class="fa fa-times" ></i> 关闭</button>
-	</div>
 	<div id="formBoxDiv" class="my_formBox" >
 		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 		<div style="flow:left;height:410px;overflow:auto;" id="treeDiv">
 			<ul id="tree" class="ztree"></ul>
 		</div>
 	</div>
+	<div class="form-group">
+                <div class="col-sm-12 ">
+                    <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保 存</button>
+                </div>
+            </div>
 </body>
 </html>
 

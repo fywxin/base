@@ -14,9 +14,9 @@ public class RoleAuthDao extends BaseDao<RoleAuth, Long> {
 		return this.query(this.cmd().eq("roleId", roleId));
 	}
 		
-	public List<RoleAuth> getByAuthId(Long authId){
+	public List<RoleAuth> getByAuthCode(String authCode){
 		
-		return this.query(this.cmd().eq("authId", authId));
+		return this.query(this.cmd().eq("authCode", authCode));
 	}
 	
 	public void deleteByRoleId(Long roleId){
@@ -24,8 +24,8 @@ public class RoleAuthDao extends BaseDao<RoleAuth, Long> {
 		this.delete(this.cmd().eq("roleId", roleId));
 	}
 	
-	public void deleteByAuthId(Long authId){
+	public void deleteByAuthCode(String authCode){
 		
-		this.delete(this.cmd().eq("authId", authId));
+		this.delete(this.cmd().eq("authCode", authCode));
 	}
 }

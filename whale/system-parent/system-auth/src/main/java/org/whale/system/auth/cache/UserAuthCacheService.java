@@ -1,6 +1,5 @@
 package org.whale.system.auth.cache;
 
- import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -160,16 +159,14 @@ public class UserAuthCacheService implements Bootable{
 		UserAuth userAuth = new UserAuth();
 		userAuth.setUserId(userId);
 		
-		List<Auth> auths = this.authDao.getByUserId(userId);
+		List<Auth> auths = this.authDao.queryByUserId(userId);
 		if(auths != null){
-			List<Long> authIds = new ArrayList<Long>(auths.size());
 			Set<String> authCodes = new HashSet<String>(auths.size() * 2);
 			Set<Long> leafMenuIds = new HashSet<Long>(auths.size());
 			Set<Long> menuIds = new HashSet<Long>(auths.size() * 2);
 			
 			Menu menu = null;
 			for(Auth auth : auths){
-				authIds.add(auth.getAuthId());
 				authCodes.add(auth.getAuthCode());
 				leafMenuIds.add(auth.getMenuId());
 				
@@ -182,7 +179,6 @@ public class UserAuthCacheService implements Bootable{
 					}
 				}
 			}
-			userAuth.setAuthIds(authIds);
 			userAuth.setLeafMenuIds(leafMenuIds);
 			userAuth.setAuthCodes(authCodes);
 			userAuth.setMenuIds(menuIds);

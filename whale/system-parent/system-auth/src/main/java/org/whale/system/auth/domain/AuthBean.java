@@ -1,6 +1,7 @@
 package org.whale.system.auth.domain;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,12 +18,18 @@ public class AuthBean {
 	
 	//系统注册的权限 <authCode, AuthBean>
 	public static final Map<String, AuthBean> AUTH_HOLDER = new HashMap<String, AuthBean>();
+	//建立类与权限的关系
+	public static final Set<Class<?>> CONTROLLER_Set= new HashSet<Class<?>>();
 
 	private String authCode;
 	
 	private String authName;
 	//类#方法
 	private Set<String> methods;
+	//所属类
+	private Class<?> controller;
+	
+	
 	
 	/**
 	 * 放入权限实体
@@ -52,6 +59,7 @@ public class AuthBean {
 				}
 			}
 		}
+		CONTROLLER_Set.add(auth.getController());
 	}
 	
 	public static AuthBean get(String key){
@@ -59,6 +67,7 @@ public class AuthBean {
 	}
 	
 	public static void clear(){
+		CONTROLLER_Set.clear();
 		AUTH_HOLDER.clear();
 	}
 
@@ -88,8 +97,42 @@ public class AuthBean {
 
 	@Override
 	public String toString() {
-		return "AuthBean [authCode=" + authCode + ", authName=" + authName
-				+ ", methods=" + methods + "]";
+		return "[" + authCode + " | " + authName+ " | "+controller.getName()+ "]";
 	}
+
+	public Class<?> getController() {
+		return controller;
+	}
+
+	public void setController(Class<?> controller) {
+		this.controller = controller;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((authCode == null) ? 0 : authCode.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AuthBean other = (AuthBean) obj;
+		if (authCode == null) {
+			if (other.authCode != null)
+				return false;
+		} else if (!authCode.equals(other.authCode))
+			return false;
+		return true;
+	}
+	
 	
 }

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;
-import org.whale.system.common.util.Strings;
 import org.whale.system.dao.RoleAuthDao;
 import org.whale.system.dao.RoleDao;
 import org.whale.system.dao.UserRoleDao;
@@ -47,28 +46,21 @@ public class RoleService extends BaseService<Role, Long> {
 		this.roleDao.update(role);
 	}
 	
-	public void transSaveRoleAuths(Long roleId, List<Long> authIds){
+	public void transSaveRoleAuths(Long roleId, String[] authCodes){
 		if(roleId == null)
 			throw new SysException("roleId == null");
 		
 		this.roleAuthDao.deleteByRoleId(roleId);
 		
-		if(authIds != null && authIds.size() > 0){
+		if(authCodes != null && authCodes.length > 0){
 			RoleAuth roleAuth = null;
-			for(Long authId : authIds){
-				//TODO check duplicate
+			for(String authCode : authCodes){
 				roleAuth = new RoleAuth();
-				roleAuth.setAuthId(authId);
+				roleAuth.setAuthCode(authCode);
 				roleAuth.setRoleId(roleId);
 				this.roleAuthDao.save(roleAuth);
 			}
 		}
-	}
-
-	public Role getByRoleCode(String roleCode){
-		if(Strings.isBlank(roleCode))
-			return null;
-		return this.roleDao.getByRoleCode(roleCode.trim());
 	}
 	
 	public List<Role> getByUserId(Long userId){

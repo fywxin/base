@@ -22,6 +22,7 @@ import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.DictConstant;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.util.LangUtil;
+import org.whale.system.common.util.Strings;
 import org.whale.system.domain.Auth;
 import org.whale.system.domain.Menu;
 import org.whale.system.domain.Role;
@@ -160,7 +161,7 @@ public class RoleRouter extends BaseRouter {
 			allMenus = totalMenus;
 			totalAuths = this.authService.queryAll();
 		}else{
-			totalAuths = this.authService.getByUserId(uc.getUserId());
+			totalAuths = this.authService.queryByUserId(uc.getUserId());
 			
 			List<Auth> temp = new ArrayList<Auth>(totalAuths.size()*2);
 			temp.addAll(totalAuths);
@@ -168,7 +169,7 @@ public class RoleRouter extends BaseRouter {
 			for(Auth auth : hasAuths){
 				flag = true;
 				for(Auth auth2 : totalAuths){
-					if(auth2.getAuthId() == auth.getAuthId()){
+					if(auth2.getAuthCode().equals(auth.getAuthCode())){
 						flag=false;
 						break;
 					}
@@ -225,9 +226,10 @@ public class RoleRouter extends BaseRouter {
 		if(roleId == null) {
 			return Rs.fail("数据错误");
 		}
-		
-		List<Long> authIds = LangUtil.splitIds(authIdS);
-		
+		String[] authIds = null;
+		if(Strings.isNotBlank(authIdS)){
+			authIds = authIdS.split(",");
+		}
 		//TODO check out law
 		
 		this.roleService.transSaveRoleAuths(roleId, authIds);

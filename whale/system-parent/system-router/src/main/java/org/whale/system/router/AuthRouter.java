@@ -118,7 +118,7 @@ public class AuthRouter extends BaseRouter {
 		}
 		
 		page.setCountSql("SELECT count(1) "+strb.toString());
-		page.setSql("SELECT t.*,(select m.menuName from sys_menu m where m.menuId = t.menuId) as menuName "+strb.toString()+" ORDER BY t.authId");
+		page.setSql("SELECT t.*,(select m.menuName from sys_menu m where m.menuId = t.menuId) as menuName "+strb.toString()+" ORDER BY t.authCode");
 		
 		this.authService.queryPage(page);
 		return page;
@@ -176,8 +176,8 @@ public class AuthRouter extends BaseRouter {
 	 */
 	@org.whale.system.annotation.auth.Auth(code="AUTH_UPDATE",name="修改权限")
 	@RequestMapping("/goUpdate")
-	public ModelAndView goUpdate(Long authId){
-		Auth auth = this.authService.get(authId);
+	public ModelAndView goUpdate(String authCode){
+		Auth auth = this.authService.get(authCode);
 		return new ModelAndView("system/auth/auth_update")
 			.addObject("nodes", MenuRouter.toMenuJson(this.menuService.queryAll()))
 			.addObject("item", auth);
@@ -215,12 +215,15 @@ public class AuthRouter extends BaseRouter {
 	@org.whale.system.annotation.auth.Auth(code="AUTH_DEL",name="删除权限")
 	@ResponseBody
 	@RequestMapping("/doDelete")
-	public Rs doDelete(String ids){
-		List<Long> authIds = LangUtil.splitIds(ids);
-		if(authIds == null || authIds.size() < 1){
+	public Rs doDelete(String authCodes){
+		if(Strings.isBlank(authCodes)){
 			return Rs.fail("请选择记录");
 		}
-		this.authService.transDelete(authIds);
+		String[] authCodeS = authCodes.split(",");
+		if(authCodeS == null || authCodeS.length < 1){
+			return Rs.fail("请选择记录");
+		}
+		this.authService.transDelete(authCodeS);
 		
 		if(dictCacheService.isValue(DictConstant.DICT_SYS_CONF, DictConstant.DICT_ITEM_FLUSH_AUTH, "auto")){
 			this.userAuthCacheService.init(null);

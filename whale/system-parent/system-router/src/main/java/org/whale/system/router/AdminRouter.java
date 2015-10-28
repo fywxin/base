@@ -67,10 +67,10 @@ public class AdminRouter extends BaseRouter{
 	@ResponseBody
 	@RequestMapping("/doFlushAuthUris")
 	public Rs doFlushAuthUris(){
-		this.authBeanStore.doStore();
+		String warn = this.authBeanStore.doStore();
 		
 		this.userAuthCacheService.init(null);
-		return Rs.success();
+		return Rs.success(warn);
 	}
 	 
 	

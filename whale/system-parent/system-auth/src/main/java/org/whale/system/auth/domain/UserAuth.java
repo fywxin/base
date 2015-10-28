@@ -9,8 +9,6 @@ public class UserAuth implements Serializable {
 	private static final long serialVersionUID = -232121242583411L;
 
 	private Long userId;
-
-	private List<Long> authIds;
 	
 	private Set<String> authCodes;
 	
@@ -25,14 +23,6 @@ public class UserAuth implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	public List<Long> getAuthIds() {
-		return authIds;
-	}
-
-	public void setAuthIds(List<Long> authIds) {
-		this.authIds = authIds;
 	}
 
 	public Set<Long> getLeafMenuIds() {

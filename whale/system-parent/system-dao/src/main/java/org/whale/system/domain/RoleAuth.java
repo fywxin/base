@@ -14,7 +14,7 @@ public class RoleAuth extends BaseEntry {
 	
 	private Long roleId;
 	
-	private Long authId;
+	private String authCode;
 
 	public Long getRoleAuthId() {
 		return roleAuthId;
@@ -32,13 +32,13 @@ public class RoleAuth extends BaseEntry {
 		this.roleId = roleId;
 	}
 
-	public Long getAuthId() {
-		return authId;
+	public String getAuthCode() {
+		return authCode;
 	}
 
-	public void setAuthId(Long authId) {
-		this.authId = authId;
+	public void setAuthCode(String authCode) {
+		this.authCode = authCode;
 	}
-	
+
 	
 }

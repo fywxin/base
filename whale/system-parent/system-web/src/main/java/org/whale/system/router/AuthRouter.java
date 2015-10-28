@@ -20,7 +20,6 @@ import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.TreeUtil;
 import org.whale.system.domain.Auth;
 import org.whale.system.domain.Menu;
-import org.whale.system.jqgrid.Grid;
 import org.whale.system.service.AuthService;
 import org.whale.system.service.MenuService;
 
@@ -40,6 +39,14 @@ public class AuthRouter extends BaseRouter {
 	@org.whale.system.annotation.auth.Auth(code="AUTH_LIST",name="查询权限")
 	@RequestMapping("/goTree")
 	public ModelAndView goTree(Long clkId){
+		
+		return new ModelAndView("system/auth/auth_tree")
+			.addObject("clkId", clkId);
+	}
+	
+	@org.whale.system.annotation.auth.Auth(code="AUTH_LIST",name="查询权限")
+	@RequestMapping("/goMenuTree")
+	public ModelAndView goMenuTree(Long clkId){
 		
 		List<Menu> menus = this.menuService.queryAll();
 		if(menus == null)
@@ -84,8 +91,8 @@ public class AuthRouter extends BaseRouter {
 	@org.whale.system.annotation.auth.Auth(code="AUTH_LIST",name="查询权限")
 	@ResponseBody
 	@RequestMapping("/doList")
-	public Grid doList(String authName, String authCode, Long menuId){
-		Page page = Grid.newPage();
+	public Page doList(String authName, String authCode, Long menuId){
+		Page page = this.newPage();
 		StringBuilder strb = new StringBuilder();
 		strb.append(" FROM sys_auth t WHERE 1=1 ");
 		
@@ -107,6 +114,10 @@ public class AuthRouter extends BaseRouter {
 				}
 			}
 			strb.append(" AND t.menuId in(").append(LangUtil.joinIds(menuIds)).append(")");
+		}else{
+			if(menuId != null && menuId.equals(-99L)){
+				strb.append(" AND t.menuId IS NULL");
+			}
 		}
 		
 		if(Strings.isNotBlank(authName)){
@@ -119,11 +130,10 @@ public class AuthRouter extends BaseRouter {
 		}
 		
 		page.setCountSql("SELECT count(1) "+strb.toString());
-		page.setSql("SELECT t.*,(select m.menuName from sys_menu m where m.menuId = t.menuId) as menuName "+strb.toString()+" ORDER BY t.authId");
-		
+		page.setSql("SELECT t.*,(select m.menuName from sys_menu m where m.menuId = t.menuId) as menuName "+strb.toString()+" ORDER BY t.authCode");
 		
 		this.authService.queryPage(page);
-		return Grid.grid(page);
+		return page;
 	}
 	
 	/**
@@ -178,8 +188,8 @@ public class AuthRouter extends BaseRouter {
 	 */
 	@org.whale.system.annotation.auth.Auth(code="AUTH_UPDATE",name="修改权限")
 	@RequestMapping("/goUpdate")
-	public ModelAndView goUpdate(Long authId){
-		Auth auth = this.authService.get(authId);
+	public ModelAndView goUpdate(String authCode){
+		Auth auth = this.authService.get(authCode);
 		return new ModelAndView("system/auth/auth_update")
 			.addObject("nodes", MenuRouter.toMenuJson(this.menuService.queryAll()))
 			.addObject("item", auth);
@@ -217,12 +227,15 @@ public class AuthRouter extends BaseRouter {
 	@org.whale.system.annotation.auth.Auth(code="AUTH_DEL",name="删除权限")
 	@ResponseBody
 	@RequestMapping("/doDelete")
-	public Rs doDelete(String ids){
-		List<Long> authIds = LangUtil.splitIds(ids);
-		if(authIds == null || authIds.size() < 1){
+	public Rs doDelete(String authCodes){
+		if(Strings.isBlank(authCodes)){
 			return Rs.fail("请选择记录");
 		}
-		this.authService.transDelete(authIds);
+		String[] authCodeS = authCodes.split(",");
+		if(authCodeS == null || authCodeS.length < 1){
+			return Rs.fail("请选择记录");
+		}
+		this.authService.transDelete(authCodeS);
 		
 		if(dictCacheService.isValue(DictConstant.DICT_SYS_CONF, DictConstant.DICT_ITEM_FLUSH_AUTH, "auto")){
 			this.userAuthCacheService.init(null);

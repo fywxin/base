@@ -4,36 +4,24 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.whale.system.base.Cmd;
 import org.whale.system.dao.AuthDao;
 import org.whale.system.dao.RoleAuthDao;
 import org.whale.system.domain.Auth;
-import org.whale.system.domain.RoleAuth;
 import org.whale.system.jdbc.IOrmDao;
 
 @Service
-public class AuthService extends BaseService<Auth, Long> {
+public class AuthService extends BaseService<Auth, String> {
 	
 	@Autowired
 	private AuthDao authDao;
 	@Autowired
 	private RoleAuthDao roleAuthDao;
 
-	public void transDelete(List<Long> authIds) {
-		if(authIds == null || authIds.size() <1){
-			return ;
+	public void transDelete(String[] authCodeS) {
+		for(String authCode : authCodeS){
+			this.roleAuthDao.deleteByAuthCode(authCode);
+			this.authDao.delete(authCode);
 		}
-		for(Long authId : authIds){
-			this.roleAuthDao.delete(Cmd.newCmd(RoleAuth.class).eq("authId", authId));
-			this.authDao.delete(authId);
-		}
-	}
-
-	@Override
-	public Auth get(Long authId) {
-		if(authId == null)
-			return null;
-		return this.authDao.get(authId);
 	}
 	
 	
@@ -49,21 +37,22 @@ public class AuthService extends BaseService<Auth, Long> {
 		return this.authDao.getByRoleId(roleId);
 	}
 	
-	public List<Auth> getByAuthIds(List<Long> authIds){
-		if(authIds == null || authIds.size() < 1)
-			return null;
-		return this.authDao.getByAuthIds(authIds);
-	}
-	
-	public List<Auth> getByUserId(Long userId){
+	public List<String> queryAuthCodeByUserId(Long userId){
 		if(userId == null){
 			return null;
 		}
-		return this.authDao.getByUserId(userId);
+		return this.authDao.queryAuthCodeByUserId(userId);
+	}
+	
+	public List<Auth> queryByUserId(Long userId){
+		if(userId == null){
+			return null;
+		}
+		return this.authDao.queryByUserId(userId);
 	}
 
 	@Override
-	public IOrmDao<Auth, Long> getDao() {
+	public IOrmDao<Auth, String> getDao() {
 		return authDao;
 	}
 

@@ -20,6 +20,12 @@ import org.whale.system.common.util.TreeNode;
 public class Menu extends BaseEntry implements TreeNode{
 
 	private static final long serialVersionUID = -122342341L;
+	
+	public static final Integer MENU_TAB = 1;
+	
+	public static final Integer MENU_FOLDER = 2;
+	
+	public static final Integer MENU_URL = 3;
 
 	@Id
 	@Column(cnName="id")
