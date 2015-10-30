@@ -26,6 +26,32 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("all")
 public final class LangUtil {
 	private static final Logger logger = LoggerFactory.getLogger(LangUtil.class);
+	
+	/**
+     * 判断一个对象是否为空。它支持如下对象类型：
+     * <ul>
+     * <li>null : 一定为空
+     * <li>数组
+     * <li>集合
+     * <li>Map
+     * <li>其他对象 : 一定不为空
+     * </ul>
+     * 
+     * @param obj
+     *            任意对象
+     * @return 是否为空
+     */
+    public static boolean isEmpty(Object obj) {
+        if (obj == null)
+            return true;
+        if (obj.getClass().isArray())
+            return Array.getLength(obj) == 0;
+        if (obj instanceof Collection<?>)
+            return ((Collection<?>) obj).isEmpty();
+        if (obj instanceof Map<?, ?>)
+            return ((Map<?, ?>) obj).isEmpty();
+        return false;
+    }
 
 	/**
 	 * 将以多个ID组成的字符串，分割组装成List<Long> 

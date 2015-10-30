@@ -14,31 +14,16 @@ import java.util.regex.Pattern;
  */
 public class Strings {
 	
-	/**
-     * 判断一个对象是否为空。它支持如下对象类型：
-     * <ul>
-     * <li>null : 一定为空
-     * <li>数组
-     * <li>集合
-     * <li>Map
-     * <li>其他对象 : 一定不为空
-     * </ul>
-     * 
-     * @param obj
-     *            任意对象
-     * @return 是否为空
-     */
-    public static boolean isEmpty(Object obj) {
-        if (obj == null)
-            return true;
-        if (obj.getClass().isArray())
-            return Array.getLength(obj) == 0;
-        if (obj instanceof Collection<?>)
-            return ((Collection<?>) obj).isEmpty();
-        if (obj instanceof Map<?, ?>)
-            return ((Map<?, ?>) obj).isEmpty();
-        return false;
-    }
+	public static boolean isEmpty(String str)
+	  {
+	    return (str == null) || (str.length() == 0);
+	  }
+
+	  public static boolean isNotEmpty(String str)
+	  {
+	    return !isEmpty(str);
+	  }
+
 	
 	public static boolean hasChinese(String str) {
 		if(Strings.isBlank(str))
@@ -52,6 +37,11 @@ public class Strings {
 		}
 		return false;
 	}
+	
+	public static boolean equals(String str1, String str2)
+	  {
+	    return str1 == null ? false : str2 == null ? true : str1.equals(str2);
+	  }
 
 	public static boolean isBlank(CharSequence cs) {
         int strLen;

@@ -24,8 +24,8 @@ public class AESUtil {
 
     public static void main(String[] args) {
 
-        String content = "/provide/commodity/visual?id=1&s2=32";
-        String password = "VAEFSA";
+        String content = "/proviasdfasdfasdfasdfde/commodity/visual?id=1&s2=32";
+        String password = "VAEFdsfasdSA";
         String encryptResult = encrypt(content, password);//加密
         String decryptResult = decrypt(encryptResult, password);//解密
         System.out.println("加密后：" + encryptResult);
@@ -54,17 +54,7 @@ public class AESUtil {
             cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
             byte[] result = cipher.doFinal(byteContent);
             return Base64.encodeBase64String(result); // 加密
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
