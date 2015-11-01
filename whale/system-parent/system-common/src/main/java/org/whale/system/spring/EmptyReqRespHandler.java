@@ -37,7 +37,14 @@ public class EmptyReqRespHandler implements ReqRespHandler {
 	}
 
 	@Override
-	public void onHandleReturnValue(Object returnValue,
+	public void beforeHandleReturnValue(Object returnValue,
+			MethodParameter returnType, ModelAndViewContainer mavContainer,
+			NativeWebRequest webRequest) {
+		System.out.println("------------onHandleReturnValue---------------");
+	}
+	
+	@Override
+	public void afterHandleReturnValue(Object returnValue,
 			MethodParameter returnType, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest) {
 		System.out.println("------------onHandleReturnValue---------------");

@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -144,6 +145,28 @@ public class WebUtil {
 	 */
 	private static String buildRs(boolean success, String msg, Object datas){
 		return new Result(success, msg, datas).toString();
+	}
+	
+	public static void doPrint(HttpServletResponse response, byte[] datas){
+		response.setDateHeader("Expires", 1L);
+		response.addHeader("Pragma", "no-cache");
+		response.setHeader("Cache-Control", "no-cache, no-store, max-age=0");
+		response.setHeader("Content-type", "application/json");  
+		response.setContentType("text/xml;charset=utf-8");
+		ServletOutputStream out = null;
+		try {
+			out = response.getOutputStream();
+			out.write(datas);
+			out.flush();
+		}catch (IOException e) {
+			logger.error("AJAX返回数据异常", e);		
+		}finally{
+			if(null != out){
+				try {
+					out.close();
+				} catch (IOException e) {}
+			}
+		}
 	}
 	
 	/**

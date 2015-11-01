@@ -1,9 +1,11 @@
 package org.whale.system.common.encrypt;
 
 import org.apache.commons.codec.binary.Base64;
+import org.whale.system.common.exception.SysException;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -31,7 +33,7 @@ public class AESUtil {
         System.out.println("加密后：" + encryptResult);
         System.out.println("解密后：" + decryptResult);
     }
-
+    
     /**
      * 加密
      *
@@ -43,58 +45,55 @@ public class AESUtil {
      * @since v1.0
      */
     public static String encrypt(String content, String password) {
-        try {
-            KeyGenerator kgen = KeyGenerator.getInstance("AES");
-            kgen.init(128, new SecureRandom(password.getBytes()));
+    	try {
+			return new String(encrypt(content.getBytes("utf-8"), password.getBytes("utf-8")));
+		} catch (UnsupportedEncodingException e) {
+			throw new SysException("AES加密字符编码转换异常", e);
+		}
+    }
+
+    
+    public static byte[] encrypt(byte[] content, byte[] password){
+    	try{
+    		KeyGenerator kgen = KeyGenerator.getInstance("AES");
+            kgen.init(128, new SecureRandom(password));
             SecretKey secretKey = kgen.generateKey();
             byte[] enCodeFormat = secretKey.getEncoded();
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
             Cipher cipher = Cipher.getInstance("AES");// 创建密码器
-            byte[] byteContent = content.getBytes("utf-8");
             cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
-            byte[] result = cipher.doFinal(byteContent);
-            return Base64.encodeBase64String(result); // 加密
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+            byte[] result = cipher.doFinal(content);
+            return Base64.encodeBase64(result); // 加密
+    	}catch(Exception e){
+    		throw new SysException("AES加密异常", e);
+    	}
     }
-
-    /**
-     * 解密
-     *
-     * @param content  待解密内容
-     * @param password 解密密钥
-     * @return
-     * @throws
-     * @method decrypt
-     * @since v1.0
-     */
+    
     public static String decrypt(String content, String password) {
-        try {
-            KeyGenerator kgen = KeyGenerator.getInstance("AES");
-            kgen.init(128, new SecureRandom(password.getBytes()));
+    	try {
+			return new String(decrypt(content.getBytes("utf-8"), password.getBytes("utf-8")));
+		} catch (UnsupportedEncodingException e) {
+			throw new SysException("AES解密异常编码错误", e);
+		}
+    }
+    
+    
+    public static byte[] decrypt(byte[] content, byte[] password) {
+    	try{
+    		KeyGenerator kgen = KeyGenerator.getInstance("AES");
+            kgen.init(128, new SecureRandom(password));
             SecretKey secretKey = kgen.generateKey();
             byte[] enCodeFormat = secretKey.getEncoded();
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
             Cipher cipher = Cipher.getInstance("AES");// 创建密码器
             cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
-            byte[] result = cipher.doFinal(Base64.decodeBase64(content));
-            return new String(result); // 解密
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+            return cipher.doFinal(Base64.decodeBase64(content));// 解密
+    	}catch(Exception e){
+    		throw new SysException("AES解密异常 ", e);
+    	}
+    	 
     }
+          
 
     /**
      * 将二进制转换成16进制

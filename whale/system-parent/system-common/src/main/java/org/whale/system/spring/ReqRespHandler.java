@@ -56,7 +56,18 @@ public interface ReqRespHandler {
 	 * @param mavContainer
 	 * @param webRequest
 	 */
-	public void onHandleReturnValue(Object returnValue,
+	public void beforeHandleReturnValue(Object returnValue,
+			MethodParameter returnType, ModelAndViewContainer mavContainer,
+			NativeWebRequest webRequest);
+	
+	/**
+	 * @ResBody 执行时执行
+	 * @param returnValue
+	 * @param returnType
+	 * @param mavContainer
+	 * @param webRequest
+	 */
+	public void afterHandleReturnValue(Object returnValue,
 			MethodParameter returnType, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest);
 	

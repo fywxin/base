@@ -22,4 +22,10 @@ public @interface ReqBody {
 	 * @return
 	 */
 	boolean required() default true;
+	
+	/**
+	 * 是否加密
+	 * @return
+	 */
+	boolean secure() default false;
 }

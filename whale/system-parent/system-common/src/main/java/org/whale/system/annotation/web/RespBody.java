@@ -17,4 +17,9 @@ import java.lang.annotation.Target;
 @Documented
 public @interface RespBody {
 
+	/**
+	 * 是否加密
+	 * @return
+	 */
+	boolean secure() default false;
 }

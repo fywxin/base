@@ -1,5 +1,6 @@
 package org.whale.system.spring;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,6 @@ public class ReqRespBodyProcessorProxy implements HandlerMethodArgumentResolver,
 	private ReqRespHandler reqRespHandler;
 
 	public ReqRespBodyProcessorProxy(){
-		
 	}
 	
 	@Override
@@ -44,7 +44,16 @@ public class ReqRespBodyProcessorProxy implements HandlerMethodArgumentResolver,
 	
 	@Override
 	public boolean supportsReturnType(MethodParameter returnType) {
-		return returnType.getMethodAnnotation(RespBody.class) != null;
+		Annotation[] anns = returnType.getMethodAnnotations();
+		if(anns != null){
+			for(Annotation ann : anns){
+				if (RespBody.class.isInstance(ann)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -86,11 +95,14 @@ public class ReqRespBodyProcessorProxy implements HandlerMethodArgumentResolver,
 		mavContainer.setRequestHandled(true);
 		
 		if(this.reqRespHandler != null){//返回处理
-			this.reqRespHandler.onHandleReturnValue(returnValue, returnType, mavContainer, webRequest);
+			this.reqRespHandler.beforeHandleReturnValue(returnValue, returnType, mavContainer, webRequest);
 		}
 		if (returnValue != null) {
 			//返回加密
 			reqRespBodyProcessor.writeWithMessageConverters(returnValue, returnType, webRequest);
+			if(this.reqRespHandler != null){//返回处理
+				this.reqRespHandler.afterHandleReturnValue(returnValue, returnType, mavContainer, webRequest);
+			}
 		}
 	}
 
