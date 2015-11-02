@@ -31,6 +31,10 @@ public interface BaseDaoDllFilter<T extends Serializable,PK extends Serializable
 	
 	void afterUpdate(T obj, IOrmDao<T, PK> baseDao);
 	
+	void beforeUpdateNotNull(T obj, IOrmDao<T, PK> baseDao);
+	
+	void afterUpdateNotNull(T obj, IOrmDao<T, PK> baseDao);
+	
 	void beforeUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao);
 	
 	void afterUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao);

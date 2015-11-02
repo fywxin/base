@@ -130,7 +130,18 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		if(this._getOrmTable().getOptimisticLockCol() != null && col == 0){
 			throw new StaleObjectStateException("乐观锁，当前版本 ["+AnnotationUtil.getFieldValue(t, this._getOrmTable().getOptimisticLockCol().getField())+"] 已过期，更新失败！");
 		}
-		
+	}
+	
+	@Override
+	public void updateNotNull(T t) {
+		OrmValue ormValue = this.valueBulider.getUpdateNotNull(t);
+		if(ormValue == null)
+			return ;
+		int col = this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
+		//乐观锁， 锁已过期，更新记录数为0，抛出异常
+		if(this._getOrmTable().getOptimisticLockCol() != null && col == 0){
+			throw new StaleObjectStateException("乐观锁，当前版本 ["+AnnotationUtil.getFieldValue(t, this._getOrmTable().getOptimisticLockCol().getField())+"] 已过期，更新失败！");
+		}
 	}
 	
 	/**
@@ -431,6 +442,8 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	public Cmd cmd() {
 		return Cmd.newCmd(clazz);
 	}
+
+	
 
 	
 }

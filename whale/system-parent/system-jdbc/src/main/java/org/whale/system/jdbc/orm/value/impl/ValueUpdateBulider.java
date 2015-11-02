@@ -60,7 +60,7 @@ public class ValueUpdateBulider {
 		return ormValues;
 	}
 	
-	public OrmValue getUpdateOnly(Object obj, OrmTable ormTable) {
+	public OrmValue getUpdateNotNull(Object obj, OrmTable ormTable) {
 		OrmValue ormValue = new OrmValue();
 		List<OrmColumn> cols = ormTable.getOrmCols();
 		

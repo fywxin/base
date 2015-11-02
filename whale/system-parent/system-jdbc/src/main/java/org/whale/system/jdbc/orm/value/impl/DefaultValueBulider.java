@@ -108,10 +108,10 @@ public class DefaultValueBulider implements ValueBulider {
 	}
 	
 	@Override
-	public OrmValue getUpdateOnly(Object obj) {
+	public OrmValue getUpdateNotNull(Object obj) {
 		if(obj == null) return null;
 		OrmTable ormTable = ormContext.getOrmTable(obj.getClass());
-		return this.valueUpdateBulider.getUpdateOnly(obj, ormTable);
+		return this.valueUpdateBulider.getUpdateNotNull(obj, ormTable);
 	}
 
 	@Override

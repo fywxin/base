@@ -41,6 +41,13 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	void update(T t);
 	
 	/**
+	 * 更新非空字段, id字段必须有值
+	 * 
+	 * @param t
+	 */
+	void updateNotNull(T t);
+	
+	/**
 	 * 批量更新多个实体
 	 * @param list
 	 */

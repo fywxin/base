@@ -41,6 +41,10 @@ public abstract class BaseService<T extends Serializable, PK extends Serializabl
 		getDao().update(t);
 	}
 	
+	public void updateNotNull(T t){
+		getDao().updateNotNull(t);
+	}
+	
 	public void updateBatch(List<T> list){
 		if(list == null)
 			throw new NullPointerException();

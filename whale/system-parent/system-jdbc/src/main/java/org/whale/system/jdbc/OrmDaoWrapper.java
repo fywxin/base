@@ -41,6 +41,13 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		super.update(t);
 		filter.exeAfterUpdate(t, this);
 	}
+	
+	@Override
+	public void updateNotNull(T t) {
+		filter.exeBeforeUpdateNotNull(t, this);
+		super.updateNotNull(t);
+		filter.exeAfterUpdateNotNull(t, this);
+	}
 
 	@Override
 	public void updateBatch(List<T> list) {

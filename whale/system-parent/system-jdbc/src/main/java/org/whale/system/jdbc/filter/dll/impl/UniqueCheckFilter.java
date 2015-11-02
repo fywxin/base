@@ -86,20 +86,27 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 		
 		for(OrmColumn col : cols){
 			Object val = AnnotationUtil.getFieldValue(obj, col.getField());
-			String queryObjectSql = "select "+col.getSqlName()+" AS oldValue from "+ormTable.getTableDbName()+" where "+ormTable.getIdCol().getSqlName()+"=?";
-			List<Map<String, Object>> list = baseDao.getJdbcTemplate().queryForList(queryObjectSql, AnnotationUtil.getFieldValue(obj, ormTable.getIdCol().getField()));
-			if(list == null || list.size() < 1)
-				throw new BusinessException("找不到 Id["+val+"] 的记录");
-			if(list.get(0).get("oldValue").equals(val)){
-				continue;
+			if(val != null){
+				String queryObjectSql = "select "+col.getSqlName()+" AS oldValue from "+ormTable.getTableDbName()+" where "+ormTable.getIdCol().getSqlName()+"=?";
+				List<Map<String, Object>> list = baseDao.getJdbcTemplate().queryForList(queryObjectSql, AnnotationUtil.getFieldValue(obj, ormTable.getIdCol().getField()));
+				if(list == null || list.size() < 1)
+					throw new BusinessException("找不到 Id["+val+"] 的记录");
+				if(list.get(0).get("oldValue").equals(val)){
+					continue;
+				}
+				
+				String sql = "select count(1) from "+ormTable.getTableDbName()
+						+" where "+col.getSqlName()+"=?";
+				if(baseDao.getJdbcTemplate().queryForInt(sql, val) > 0){
+					throw new BusinessException(col.getCnName()+"["+val+"] 已存在值");
+				}
 			}
 			
-			String sql = "select count(1) from "+ormTable.getTableDbName()
-					+" where "+col.getSqlName()+"=?";
-			if(baseDao.getJdbcTemplate().queryForInt(sql, val) > 0){
-				throw new BusinessException(col.getCnName()+"["+val+"] 已存在值");
-			}
 		}
+	}
+	
+	public void beforeUpdateNotNull(T obj, org.whale.system.jdbc.IOrmDao<T,PK> baseDao) {
+		this.beforeUpdate(obj, baseDao);
 	}
 
 	@Override

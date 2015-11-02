@@ -45,6 +45,16 @@ public abstract class BaseDaoDllFilterWarpper<T extends Serializable,PK extends 
 	public void afterUpdate(T obj, IOrmDao<T, PK> baseDao) {
 		
 	}
+	
+	@Override
+	public void beforeUpdateNotNull(T obj, IOrmDao<T, PK> baseDao) {
+		
+	}
+
+	@Override
+	public void afterUpdateNotNull(T obj, IOrmDao<T, PK> baseDao) {
+		
+	}
 
 	@Override
 	public void beforeUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao) {

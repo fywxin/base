@@ -91,6 +91,18 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 			dllFilters.get(i).afterUpdate(obj, baseDao);
 		}
 	}
+	
+	public void exeBeforeUpdateNotNull(T obj, IOrmDao<T, PK> baseDao) {
+		for(BaseDaoDllFilter<T, PK> filter : dllFilters){
+			filter.beforeUpdateNotNull(obj, baseDao);
+		}
+	}
+
+	public void exeAfterUpdateNotNull(T obj, IOrmDao<T, PK> baseDao) {
+		for(int i=dllFilters.size()-1; i>=0; i--){
+			dllFilters.get(i).afterUpdateNotNull(obj, baseDao);
+		}
+	}
 
 	public void exeBeforeUpdateBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
 		for(BaseDaoDllFilter<T, PK> filter : dllFilters){

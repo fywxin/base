@@ -33,7 +33,7 @@ public interface ValueBulider {
 	
 	//------------------------------------动态判断----------------------------
 	
-	OrmValue getUpdateOnly(Object obj);
+	OrmValue getUpdateNotNull(Object obj);
 	
 	OrmValue getQuery(Object obj);
 	
