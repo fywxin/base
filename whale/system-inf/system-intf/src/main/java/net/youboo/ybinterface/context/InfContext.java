@@ -85,14 +85,6 @@ public class InfContext {
 		this.argument = argument;
 	}
 
-	@Override
-	public String toString() {
-		return "InfContext [uri=" + uri 
-				+ ", reqSecure=" + reqSecure + ", resSecure=" + resSecure + ", appSession=" + appSession
-				+ ", clientVersion=" + clientVersion + ", reqParam=" + reqParam
-				+ "]";
-	}
-
 	public String getSignKey() {
 		return signKey;
 	}
@@ -123,6 +115,16 @@ public class InfContext {
 
 	public void setIsLogin(boolean isLogin) {
 		this.isLogin = isLogin;
+	}
+
+	@Override
+	public String toString() {
+		return "InfContext [isLogin=" + isLogin + ", uri=" + uri
+				+ ", reqSecure=" + reqSecure + ", resSecure=" + resSecure
+				+ ", signKey=" + signKey + ", appSession=" + appSession
+				+ ", clientVersion=" + clientVersion + ", reqParam=" + reqParam
+				+ ", argument=" + argument + ", reqStr=" + reqStr + ", resStr="
+				+ resStr + "]";
 	}
 	
 	

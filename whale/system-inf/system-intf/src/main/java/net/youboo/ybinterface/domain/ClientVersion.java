@@ -210,4 +210,10 @@ public class ClientVersion extends BaseEntry {
 		this.appKey = appKey;
 	}
 
+	@Override
+	public String toString() {
+		return "ClientVersion [appKey=" + appKey + ", clientVer=" + clientVer
+				+ ", signKey=" + signKey + ", loginKey=" + loginKey + "]";
+	}
+
 }

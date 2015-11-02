@@ -25,16 +25,13 @@ public class IntfExceptionResolver extends SimpleMappingExceptionResolver {
 	@Override
 	protected ModelAndView doResolveException(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex) {
-
 		logger.error(ex.getMessage(), ex);
-
 		String viewName = determineViewName(ex, request);
 		if (viewName != null) {// JSP格式返回
-			if (!(request.getHeader("accept").indexOf("application/json") > -1 || (request
-					.getHeader("X-Requested-With") != null && request
-					.getHeader("X-Requested-With").indexOf("XMLHttpRequest") > -1))) {
-				// 如果不是异步请求
-				Integer statusCode = determineStatusCode(request, viewName);
+			if (!(request.getHeader("accept").indexOf("application/json") > -1 
+					|| (request.getHeader("X-Requested-With") != null && request.getHeader("X-Requested-With").indexOf("XMLHttpRequest") > -1))) {
+				
+				Integer statusCode = determineStatusCode(request, viewName);// 如果不是异步请求
 				if (statusCode != null) {
 					applyStatusCodeIfPossible(request, response, statusCode);
 				}
@@ -44,7 +41,6 @@ public class IntfExceptionResolver extends SimpleMappingExceptionResolver {
 				if (ex instanceof InfException) {
 					InfException infException = (InfException)ex;
 					rs = Result.fail(infException.getCode(), infException.getMessage());
-					
  				} else {
  					rs = Result.fail(ErrorCode.UNKNOW_ERROR);
 				}
@@ -52,8 +48,8 @@ public class IntfExceptionResolver extends SimpleMappingExceptionResolver {
 				InfContext context = (InfContext)ThreadContext.getContext().get(InfContext.THREAD_KEY);
 				response.addHeader("reqno", context.getReqParam().getReqno());
 				if(Strings.isNotBlank(context.getResSecure())){
+					response.addHeader("encrypt", "1");
 					try {
-						response.addHeader("encrypt", "1");
 						WebUtil.print(response, AESUtil.encrypt(json.getBytes("utf-8"), context.getResSecure().getBytes("utf-8")));
 					} catch (UnsupportedEncodingException e) {
 						logger.error("编码错误", e);
