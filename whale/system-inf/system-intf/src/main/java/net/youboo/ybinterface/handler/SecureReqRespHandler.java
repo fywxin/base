@@ -30,6 +30,7 @@ import org.whale.system.annotation.web.ReqBody;
 import org.whale.system.common.encrypt.AESUtil;
 import org.whale.system.common.encrypt.EncryptUtil;
 import org.whale.system.common.exception.SysException;
+import org.whale.system.common.util.PropertiesUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.spring.ReqRespHandler;
@@ -74,7 +75,9 @@ public class SecureReqRespHandler implements ReqRespHandler {
 		
 		context.setReqParam(this.getReqParam(webRequest));
 		context.setUri(this.getUri(webRequest));
-		context.setIsLogin("/login".equals(context.getUri()));
+		String useLoginKeyUris = ","+PropertiesUtil.getValue("login.key", "/login,/restpwd");
+		
+		context.setIsLoginKey(useLoginKeyUris.indexOf(","+context.getUri()) != -1);
 		
 		//获取客户端对应的签名与登录解密key
 		ClientVersion clientVersion = this.clientVersionService.getByAppKeyAndVersion(context.getReqParam().getAppKey(), context.getReqParam().getVersion());
@@ -90,7 +93,7 @@ public class SecureReqRespHandler implements ReqRespHandler {
 		
 		//客户端加密与解密key一致
 		//来自登录接口
-		if(context.getIsLogin()){
+		if(context.getIsLoginKey()){
 			context.setReqSecure(clientVersion.getLoginKey());
 			context.setResStr(clientVersion.getLoginKey());
 		}else{//非登录接口
@@ -163,7 +166,7 @@ public class SecureReqRespHandler implements ReqRespHandler {
 			MethodParameter returnParam, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest) {
 		InfContext context = (InfContext)ThreadContext.getContext().get(InfContext.THREAD_KEY);
-		if(context.getIsLogin()){
+		if(context.getIsLoginKey()){
 			if(returnValue != null && (returnValue instanceof Result)){
 				Result<?> result = (Result<?>)returnValue;
 				if(result.getCode().equals(0)){
@@ -172,7 +175,7 @@ public class SecureReqRespHandler implements ReqRespHandler {
 					appSession.setSessionId(webRequest.getSessionId());
 					appSession.setCreateTime(System.currentTimeMillis());
 					appSession.setStatus(1);
-					appSession.setUserName(loginInfoParam.getUserName());
+					appSession.setUserName(loginInfoParam.getLogin_name());
 					appSession.setDeadTime(appSession.getCreateTime()+AppSession.CACHE_EXPRIE_TIME * 1000);
 					this.appSessionService.save(appSession);
 				}
@@ -288,7 +291,7 @@ public class SecureReqRespHandler implements ReqRespHandler {
 	}
 	
 	private boolean chkReqParam(ReqParam reqParam){
-		if(Strings.isBlank(reqParam.getTimestamp()) || reqParam.getTimestamp().length() != 12){
+		if(Strings.isBlank(reqParam.getTimestamp()) || reqParam.getTimestamp().length() != 14){
 			logger.error("接口-请求-参数：时间戳错误 "+reqParam.getTimestamp());
 			return false;
 		}

@@ -1,6 +1,7 @@
 package net.youboo.ybinterface.router;
 
-import net.youboo.ybinterface.constant.ErrorCode;
+import java.util.Random;
+
 import net.youboo.ybinterface.context.Result;
 import net.youboo.ybinterface.param.EmptyBodyParam;
 import net.youboo.ybinterface.param.LoginInfoParam;
@@ -18,30 +19,28 @@ public class TestRouter {
 	@RespBody(secure=true)
 	@RequestMapping("/login")
 	public Result<LoginInfoVo> login(@ReqBody(secure=true) LoginInfoParam loginInfo){
-		if(loginInfo.getUserName().equals("admin") && loginInfo.getPassword().equals("1")){
+		if(loginInfo.getLogin_name().equals("18650365658") && loginInfo.getPassword().equals("123456")){
 			LoginInfoVo loginInfoVo = new LoginInfoVo();
-			loginInfoVo.setName("admin");
-			loginInfoVo.setUserId("1");
+			loginInfoVo.setName("18650365658");
+			loginInfoVo.setUserId("123456");
 			return Result.success(loginInfoVo);
 		}else{
-			return Result.fail(ErrorCode.DATA_ERROR);
+			throw new RuntimeException("用户名密码错误");
 		}
 	}
 	
 	@RespBody
 	@RequestMapping("/empty")
-	public Result<LoginInfoVo> login(@ReqBody EmptyBodyParam emptyBodyParam){
-		LoginInfoVo loginInfoVo = new LoginInfoVo();
-		loginInfoVo.setName("admin");
-		loginInfoVo.setUserId("1");
-		return Result.success(loginInfoVo);
+	public Result<String> login(@ReqBody EmptyBodyParam emptyBodyParam){
+		
+		return Result.success("空对象！！");
 	}
 	
 	@RespBody
 	@RequestMapping("/code")
-	private Result<String> code(@ReqBody OneBodyParam phone){
+	private Result<Integer> code(@ReqBody OneBodyParam phone){
 		System.out.println("phone : "+phone.getValue());
-		return Result.success("2152");
+		return Result.success(new Random().nextInt(5000));
 	}
 	
 }

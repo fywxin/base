@@ -12,19 +12,19 @@ public class LoginInfoParam implements Serializable{
 
 	private static final long serialVersionUID = 1384272389L;
 
-	private String userName;
+	private String login_name;
 	
 	private String password;
 	
-	/** 1: 家长版   2：教师版  3：园长版 */
-	private Integer clientType;
+	/** 0: 家长版  1：教师版  2：园长版 */
+	private Integer login_type;
 
-	public String getUserName() {
-		return userName;
+	public String getLogin_name() {
+		return login_name;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setLogin_name(String login_name) {
+		this.login_name = login_name;
 	}
 
 	public String getPassword() {
@@ -35,12 +35,12 @@ public class LoginInfoParam implements Serializable{
 		this.password = password;
 	}
 
-	public Integer getClientType() {
-		return clientType;
+	public Integer getLogin_type() {
+		return login_type;
 	}
 
-	public void setClientType(Integer clientType) {
-		this.clientType = clientType;
+	public void setLogin_type(Integer login_type) {
+		this.login_type = login_type;
 	}
 	
 	

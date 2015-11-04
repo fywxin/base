@@ -7,7 +7,7 @@ public class InfContext {
 	
 	public static final String THREAD_KEY = "infContext";
 	
-	private boolean isLogin;
+	private boolean isLoginKey;
 	
 	private String uri;
 
@@ -109,17 +109,18 @@ public class InfContext {
 		this.resStr = resStr;
 	}
 
-	public boolean getIsLogin() {
-		return isLogin;
+	
+	public boolean getIsLoginKey() {
+		return isLoginKey;
 	}
 
-	public void setIsLogin(boolean isLogin) {
-		this.isLogin = isLogin;
+	public void setIsLoginKey(boolean isLoginKey) {
+		this.isLoginKey = isLoginKey;
 	}
 
 	@Override
 	public String toString() {
-		return "InfContext [isLogin=" + isLogin + ", uri=" + uri
+		return "InfContext [isLoginKey=" + isLoginKey + ", uri=" + uri
 				+ ", reqSecure=" + reqSecure + ", resSecure=" + resSecure
 				+ ", signKey=" + signKey + ", appSession=" + appSession
 				+ ", clientVersion=" + clientVersion + ", reqParam=" + reqParam
