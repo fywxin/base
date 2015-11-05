@@ -5,6 +5,26 @@
 	<title>新增 组织</title>
 <%@include file="/jsp/form.jsp" %>
 <%@include file="/jsp/ztree.jsp" %>
+<style type="text/css">
+body, label, input, button, select, textarea, .uneditable-input, .navbar-search .search-query {
+font-family: Helvetica,Georgia,Arial,sans-serif,宋体;
+font-size: 13px;
+_font-size: 12px;
+}
+.form-group {
+padding-top: 4px;
+padding-bottom: 6px;
+margin-bottom: 0px;
+border-bottom: 1px dotted #f1f1f1;
+}
+.form-group input, textarea, .uneditable-input {
+width: 206px;
+}
+
+.form-group .col-sm-2 {
+padding-right: 0px;
+}
+</style>
 <script type="text/javascript">
 function save(){
 	$.save({'url':'${ctx}/dept/doSave'}); 

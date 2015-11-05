@@ -13,7 +13,7 @@ import net.youboo.ybinterface.context.Result;
 import net.youboo.ybinterface.domain.AppSession;
 import net.youboo.ybinterface.domain.ClientVersion;
 import net.youboo.ybinterface.exceptions.InfException;
-import net.youboo.ybinterface.param.LoginInfoParam;
+import net.youboo.ybinterface.request.LoginReq;
 import net.youboo.ybinterface.service.AppSessionService;
 import net.youboo.ybinterface.service.ClientVersionService;
 
@@ -107,6 +107,7 @@ public class SecureReqRespHandler implements ReqRespHandler {
 				context.setReqSecure(appSession.getUserName());
 				context.setResSecure(appSession.getUserName());
 			}
+			this.setSession(webRequest, appSession);
 		}
 		
 	}
@@ -166,18 +167,20 @@ public class SecureReqRespHandler implements ReqRespHandler {
 			MethodParameter returnParam, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest) {
 		InfContext context = (InfContext)ThreadContext.getContext().get(InfContext.THREAD_KEY);
-		if(context.getIsLoginKey()){
+		if(context.getIsLoginKey() && "/login".equals(context.getUri())){
 			if(returnValue != null && (returnValue instanceof Result)){
 				Result<?> result = (Result<?>)returnValue;
 				if(result.getCode().equals(0)){
-					LoginInfoParam loginInfoParam = (LoginInfoParam)context.getArgument();
+					LoginReq loginReq = (LoginReq)context.getArgument();
 					AppSession appSession = new AppSession();
 					appSession.setSessionId(webRequest.getSessionId());
 					appSession.setCreateTime(System.currentTimeMillis());
-					appSession.setStatus(1);
-					appSession.setUserName(loginInfoParam.getLogin_name());
-					appSession.setDeadTime(appSession.getCreateTime()+AppSession.CACHE_EXPRIE_TIME * 1000);
+					appSession.setStatus(AppSession.STATUS_ALIVE);
+					appSession.setUserName(loginReq.getLoginName());
+					appSession.setDeadTime(appSession.getCreateTime()+PropertiesUtil.getValueInt("appSession.exprie.time", AppSession.CACHE_EXPRIE_TIME) * 1000);
+					
 					this.appSessionService.save(appSession);
+					this.setSession(webRequest, appSession);
 				}
 			}
 		}
@@ -290,6 +293,11 @@ public class SecureReqRespHandler implements ReqRespHandler {
 		return request.getRequestURI();
 	}
 	
+	private void setSession(NativeWebRequest webRequest, AppSession appSession){
+		HttpServletRequest request = (HttpServletRequest)webRequest.getNativeRequest();
+		request.getSession().setAttribute(AppSession.CACHE_KEY, appSession);
+	}
+	
 	private boolean chkReqParam(ReqParam reqParam){
 		if(Strings.isBlank(reqParam.getTimestamp()) || reqParam.getTimestamp().length() != 14){
 			logger.error("接口-请求-参数：时间戳错误 "+reqParam.getTimestamp());
@@ -317,7 +325,4 @@ public class SecureReqRespHandler implements ReqRespHandler {
 		reqParam.setSign(request.getParameter("sign"));
 		return reqParam;
 	}
-
-	
-
 }

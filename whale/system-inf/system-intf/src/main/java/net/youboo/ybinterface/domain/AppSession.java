@@ -22,6 +22,10 @@ public class AppSession extends BaseEntry {
 	/** 过期时间，30分钟 */
 	public static final Integer CACHE_EXPRIE_TIME = 60 * 30;
 	
+	public static final Integer STATUS_ALIVE = 1;
+	
+	public static final Integer STATUS_DEAD = 2;
+	
 	@Id
 	@Column(name="ID", cnName="id")
 	private Long id;

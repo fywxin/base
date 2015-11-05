@@ -1,17 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
 		<groupId>org.whale</groupId>
 		<artifactId>system-parent</artifactId>
 		<version>1.0.0</version>
 	</parent>
-  <artifactId>system-jsp</artifactId>
-  <packaging>war</packaging>
-  <name>system-jsp Maven Webapp</name>
-  <url>http://maven.apache.org</url>
-  <dependencies>
-    	<dependency>
+	<artifactId>system-jsp</artifactId>
+	<packaging>war</packaging>
+	<name>system-jsp Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+		<dependency>
 			<groupId>org.whale</groupId>
 			<artifactId>system-router</artifactId>
 			<version>${project.parent.version}</version>
@@ -56,8 +56,8 @@
 			<version>4.0.7</version>
 		</dependency>
 		
-  </dependencies>
-  <build>
-    <finalName>system-jsp</finalName>
-  </build>
+	</dependencies>
+	<build>
+		<finalName>system-jsp</finalName>
+	</build>
 </project>

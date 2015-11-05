@@ -90,6 +90,7 @@ public class CodeRouter extends BaseRouter {
 					attr.setInOrder(col.get("sort") == null ? 0 : Integer.parseInt(col.get("sort").toString()));
 					
 					attr.setName(OrmUtil.sql2Camel(attr.getSqlName()));
+					//attr.setName(attr.getSqlName());
 					
 					if(dbType.equalsIgnoreCase("tinyint") || dbType.equalsIgnoreCase("smallint") || dbType.equalsIgnoreCase("mediumint")){
 						attr.setType("Integer");

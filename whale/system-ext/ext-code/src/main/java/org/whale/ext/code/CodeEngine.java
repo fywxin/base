@@ -24,14 +24,14 @@ public class CodeEngine {
 
 	public void createCode(Domain domain) throws IOException, TemplateException{
 		this.doCreateJava(domain, "Domain", domain.getCodePath()+File.separator+domain.getDomainName()+".java");
-		this.doCreateJava(domain, "Dao", domain.getCodePath()+File.separator+domain.getDomainName()+"Dao.java");
-		this.doCreateJava(domain, "Service", domain.getCodePath()+File.separator+domain.getDomainName()+"Service.java");
-		this.doCreateJava(domain, "Router", domain.getCodePath()+File.separator+domain.getDomainName()+"Router.java");
-		this.doCreateJsp(domain, "tree", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_tree.jsp");
-		this.doCreateJsp(domain, "list", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_list.jsp");
-		this.doCreateJsp(domain, "save", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_save.jsp");
-		this.doCreateJsp(domain, "update", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_update.jsp");
-		this.doCreateJsp(domain, "view", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"_view.jsp");
+		this.doCreateJava(domain, "Dao", domain.getCodePath()+File.separator+domain.getDomainName()+"DaoImpl.java");
+		this.doCreateJava(domain, "Service", domain.getCodePath()+File.separator+domain.getDomainName()+"ServiceImpl.java");
+		this.doCreateJava(domain, "Router", domain.getCodePath()+File.separator+domain.getDomainName()+"Action.java");
+		this.doCreateJsp(domain, "tree", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"Tree.jsp");
+		this.doCreateJsp(domain, "list", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"List.jsp");
+		this.doCreateJsp(domain, "save", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+"add"+domain.getDomainName()+".jsp");
+		this.doCreateJsp(domain, "update", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+"edit"+domain.getDomainName()+".jsp");
+		this.doCreateJsp(domain, "view", domain.getCodePath()+File.separator+Strings.capitalize(domain.getDomainName())+File.separator+Strings.capitalize(domain.getDomainName())+"View.jsp");
 	}
 	
 	
@@ -85,6 +85,6 @@ public class CodeEngine {
 	
 	public String getFltPath(){
 		return DictCacheService.getThis().getItemValue("DICT_SYS_CONF", "FTL_PATH", this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()
-																+File.separator+"templates"+File.separator+"hplus"+File.separator);
+																+File.separator+"templates"+File.separator+"shop"+File.separator);
 	}
 }

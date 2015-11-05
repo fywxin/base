@@ -31,7 +31,7 @@
   	<!--[if (gt IE 9)|!(IE)]><!--> 
   	<!--<![endif]-->
 
-    <div class="navbar navbar-default" role="navigation">
+    <div class="navbar navbar-default" role="navigation" >
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -59,10 +59,10 @@
 
         </div>
       </div>
-    <div class="sidebar-nav" id="menuDiv" style="overflow: auto;">
+    <div class="sidebar-nav" id="menuDiv" style="width: 220px;overflow: auto;">
     	<ul>${uc.customDatas.menuStr }</ul>
     </div>
-    <div class="content" style="padding: 5px 5px 0px 5px;overflow: hidden;">
+    <div class="content" style="padding: 3px 5px 0px 3px;overflow: hidden;margin-left: 220px;">
     	<ul class="nav nav-tabs" id="topTab">
     		<li id="liMain" onclick="goTab(1)" class="active"><a href="#"></a></li>
     		<li id="liSub" onclick="goTab(2)" style="display:none;"><a href="#"></a></li>
