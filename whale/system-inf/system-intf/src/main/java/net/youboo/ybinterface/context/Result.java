@@ -18,7 +18,7 @@ public class Result<T> {
 		return rs;
 	}
 	
-	public static <M> Result<M> fail(Integer code, String message){
+	public static <M> Result<M> fail(String code, String message){
 		Result<M> rs = new Result<M>();
 		rs.setCode(code);
 		rs.setMessage(message);
@@ -26,17 +26,17 @@ public class Result<T> {
 	}
 
 	/** 成功 */
-	private Integer code = 0;
+	private String code = "0000";
 	
 	private String message;
 	
 	private T data;
 
-	public Integer getCode() {
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(Integer code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 

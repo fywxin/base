@@ -3,7 +3,7 @@ package net.youboo.ybinterface.exceptions;
 import net.youboo.ybinterface.constant.ErrorCode;
 
 public class InfException extends RuntimeException{
-	private Integer code;
+	private String code;
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -18,9 +18,14 @@ public class InfException extends RuntimeException{
 	public InfException(String message, Throwable cause) {
 		super(message, cause);
 	}
+	
+	public InfException(String code, String message) {
+		super(message);
+		this.code = code;
+	}
 
 	
-	public InfException(Integer code, String message, Throwable cause) {
+	public InfException(String code, String message, Throwable cause) {
 		super(message, cause);
 		this.code = code;
 	}
@@ -36,10 +41,10 @@ public class InfException extends RuntimeException{
 	}
 	
 	
-	public Integer getCode() {
+	public String getCode() {
 		return code;
 	}
-	public void setCode(Integer code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 }
