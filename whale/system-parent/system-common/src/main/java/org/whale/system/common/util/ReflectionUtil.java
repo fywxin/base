@@ -11,13 +11,16 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+import org.whale.system.common.exception.SysException;
 
 /**
  * 反射工具类.
@@ -633,6 +636,47 @@ public class ReflectionUtil {
             return null;
         }
         return (Class<T>) actualTypeArguments[0];
+    }
+    
+    /**
+     * Map 转对象
+     * TODO 
+     * @param map
+     * @param clazz
+     * @return
+     */
+    public static <M> M map2Clazz(Map<String, Object> map, Class<M> clazz){
+    	if(map == null){
+    		return null;
+    	}
+    	M m = null;
+    	try {
+			m = clazz.newInstance();
+		} catch (Exception e) {
+			throw new SysException("实例化类"+clazz+"出现异常", e);
+		}
+    	Map<String, Field> fieldMap = new HashMap<String, Field>();
+    	for(Field field : clazz.getDeclaredFields()){
+    		fieldMap.put(field.getName(), field);
+    	}
+    	Field field = null;
+    	try {
+	    	for(Map.Entry<String, Object> entry : map.entrySet()){
+	    		field = fieldMap.get(entry.getKey());
+	    		if(field == null){
+	    			if(entry.getKey().indexOf("_") != -1){
+	    				field = fieldMap.get(Strings.sql2Camel(entry.getKey()));
+	    				if(field == null){
+	    					continue;
+	    				}
+	    			}
+	    		}
+	    		writeField(fieldMap.get(entry.getKey()), m, entry.getValue(), true);
+	    	}
+    	} catch (Exception e) {
+			throw new SysException("类["+clazz+"]写入字段["+field+"]值异常", e);
+		}
+    	return m;
     }
 	
 }

@@ -1,6 +1,7 @@
 package org.whale.system.jdbc;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
 import org.whale.system.base.Query;
+import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.jdbc.filter.BaseDaoFilterService;
 
 /**
@@ -93,6 +95,8 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return this.get(Query.newQuery(sql, objs));
 	}
 	
+	
+	
 	public T get(Iquery query){
 		filter.exeBeforeGet(this, query);
 		T t= super.get(query);
@@ -142,6 +146,29 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	
 	public List<Map<String, Object>> queryForList(String sql, Object... objs) {
 		return this.queryForList(Query.newQuery(sql, objs));
+	}
+	
+	public <M> List<M> query(Class<M> clazz, String sql, Object... objs){
+		List<Map<String, Object>> rs = this.queryForList(Query.newQuery(sql, objs).setClazz(clazz));
+		if(rs == null || rs.size() < 1){
+			return null;
+		}
+		List<M> list = new ArrayList<M>(rs.size());
+		
+		for(Map<String, Object> map : rs){
+			list.add(ReflectionUtil.map2Clazz(map, clazz));
+		}
+		return list;
+	}
+	
+	
+	public <M> M get(Class<M> clazz, String sql, Object... objs){
+		List<Map<String, Object>> rs = this.queryForList(Query.newQuery(sql, objs).setClazz(clazz));
+		if(rs == null || rs.size() < 1){
+			return null;
+		}
+		List<M> list = this.query(clazz, sql, objs);
+		return list.get(0);
 	}
 
 	@Override

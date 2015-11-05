@@ -20,6 +20,8 @@ public interface Iquery {
 	 */
 	public Object[] getArgs();
 	
+	public Class<?> rsClazz();
+	
 	
 	/**
 	 * 获取SQL语句

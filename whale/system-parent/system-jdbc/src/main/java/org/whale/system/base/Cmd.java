@@ -427,5 +427,10 @@ public class Cmd implements Iquery{
 		return col;
 	}
 
+	@Override
+	public Class<?> rsClazz() {
+		return null;
+	}
+
 	
 }

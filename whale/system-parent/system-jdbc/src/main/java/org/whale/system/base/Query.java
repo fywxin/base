@@ -6,6 +6,8 @@ public class Query implements Iquery {
 	
 	private Object[] args;
 	
+	private Class<?> clazz;
+	
 	public static Query newQuery(String sql, Object... args){
 		return new Query(sql, args);
 	}
@@ -23,6 +25,16 @@ public class Query implements Iquery {
 	@Override
 	public Object[] getArgs() {
 		return args;
+	}
+
+	@Override
+	public Class<?> rsClazz() {
+		return clazz;
+	}
+
+	public Query setClazz(Class<?> clazz) {
+		this.clazz = clazz;
+		return this;
 	}
 
 }

@@ -224,4 +224,28 @@ public class Strings {
             return re.intValue();
         return re;
     }
+    
+    /**
+	 * 将数据库大写_ 转为驼峰原则
+	 * @param str
+	 * @return
+	 */
+	public static String sql2Camel(String str){
+		if(Strings.isBlank(str)) return null;
+		str = str.trim();
+		char[] chars = str.toCharArray();
+		StringBuilder strb = new StringBuilder();
+		strb.append(Character.toLowerCase(chars[0]));
+		
+		for(int i=1; i<chars.length; i++){
+			if(chars[i] == ' ') continue;
+			if(chars[i] == '_'){
+				i++;
+				strb.append(Character.toUpperCase(chars[i]));
+			}else{
+				strb.append(Character.toLowerCase(chars[i]));
+			}
+		}
+		return strb.toString();
+	}
 }

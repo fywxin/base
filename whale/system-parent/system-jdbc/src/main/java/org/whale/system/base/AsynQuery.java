@@ -440,5 +440,11 @@ public class AsynQuery implements Iquery{
 			return col;
 		}
 	}
+
+	@Override
+	public Class<?> rsClazz() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
