@@ -179,7 +179,8 @@ public class WebUtil {
 		response.addHeader("Pragma", "no-cache");
 		response.setHeader("Cache-Control", "no-cache, no-store, max-age=0");
 		response.setHeader("Content-type", "application/json");  
-		response.setContentType("text/xml;charset=utf-8");
+		//response.setContentType("text/xml;charset=utf-8");
+		response.setContentType("application/json;charset=UTF-8");
 		
 		PrintWriter out = null;
 		try {
