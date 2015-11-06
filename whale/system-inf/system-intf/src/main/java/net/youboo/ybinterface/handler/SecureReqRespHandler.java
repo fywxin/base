@@ -98,7 +98,10 @@ public class SecureReqRespHandler implements ReqRespHandler {
 			context.setResStr(clientVersion.getLoginKey());
 		}else{//非登录接口
 			AppSession appSession = this.appSessionService.getBySessionId(context.getReqParam().getSession());
-			if(appSession == null || Strings.isBlank(appSession.getUserName())){
+			if(appSession == null 
+					|| Strings.isBlank(appSession.getUserName()) 
+					|| appSession.getDeadTime() <= System.currentTimeMillis() 
+					|| AppSession.STATUS_DEAD.equals(appSession.getStatus())){
 				logger.warn("接口-请求-参数：应用登录过期");
 				throw new InfException(ErrorCode.SESSION_INVAIAL);
 			}

@@ -4,6 +4,15 @@ import net.youboo.ybinterface.constant.ErrorCode;
 
 public class Result<T> {
 	
+	public static final String SUCCESS_CODE = "0000";
+	
+	public static final String SUCCESS_MSG = "success";
+	
+	@SuppressWarnings("all")
+	public static Result<?> success(){
+		return new Result();
+	}
+	
 	public static <M> Result<M> success(M data){
 		Result<M> rs = new Result<M>();
 		rs.setData(data);
@@ -26,9 +35,9 @@ public class Result<T> {
 	}
 
 	/** 成功 */
-	private String code = "0000";
+	private String code = SUCCESS_CODE;
 	
-	private String message;
+	private String message = SUCCESS_MSG;
 	
 	private T data;
 
