@@ -173,7 +173,7 @@ public class SecureReqRespHandler implements ReqRespHandler {
 		if(context.getIsLoginKey() && "/login".equals(context.getUri())){
 			if(returnValue != null && (returnValue instanceof Result)){
 				Result<?> result = (Result<?>)returnValue;
-				if(result.getCode().equals(0)){
+				if(Result.SUCCESS_CODE.equals(result.getCode())){
 					LoginReq loginReq = (LoginReq)context.getArgument();
 					AppSession appSession = new AppSession();
 					appSession.setSessionId(webRequest.getSessionId());
