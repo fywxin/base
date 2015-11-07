@@ -9,8 +9,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -677,6 +680,31 @@ public class ReflectionUtil {
 			throw new SysException("类["+clazz+"]写入字段["+field+"]值异常", e);
 		}
     	return m;
+    }
+    
+    /**
+     * 判断一个类是否基础类型
+     * @param clazz
+     * @return
+     * @throws Exception
+     */
+    public static boolean isBaseDataType(Class<?> clazz) {   
+        return 
+        (   
+            clazz.equals(String.class) ||   
+            clazz.equals(Integer.class)||   
+            clazz.equals(Byte.class) ||   
+            clazz.equals(Long.class) ||   
+            clazz.equals(Double.class) ||   
+            clazz.equals(Float.class) ||   
+            clazz.equals(Character.class) ||   
+            clazz.equals(Short.class) ||   
+            clazz.equals(BigDecimal.class) ||   
+            clazz.equals(BigInteger.class) ||   
+            clazz.equals(Boolean.class) ||   
+            clazz.equals(Date.class) ||   
+            clazz.isPrimitive()   
+        );   
     }
 	
 }

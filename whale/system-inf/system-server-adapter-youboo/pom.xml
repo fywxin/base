@@ -7,10 +7,10 @@
 		<artifactId>system-parent</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>inf-api-test</artifactId>
+	<artifactId>system-server-adapter-youboo</artifactId>
 	<packaging>jar</packaging>
 
-	<name>inf-api-test</name>
+	<name>system-server-adapter-youboo</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -20,8 +20,20 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.whale</groupId>
-			<artifactId>system-interface</artifactId>
+			<artifactId>system-server</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.whale</groupId>
+			<artifactId>system-jdbc</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.whale</groupId>
+			<artifactId>system-cache</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		
 	</dependencies>
+	
 </project>

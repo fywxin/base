@@ -7,10 +7,11 @@
 		<artifactId>system-parent</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>inf-api-test</artifactId>
+	<artifactId>system-client</artifactId>
+
 	<packaging>jar</packaging>
 
-	<name>inf-api-test</name>
+	<name>system-client</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -23,5 +24,6 @@
 			<artifactId>system-interface</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+
 	</dependencies>
 </project>
