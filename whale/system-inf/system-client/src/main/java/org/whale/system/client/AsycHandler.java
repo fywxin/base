@@ -11,5 +11,5 @@ public interface AsycHandler {
 
 	void onSuccess(ClientContext context);
 	
-	void onFail(ClientContext context, ClientException ex);
+	void onFail(ClientContext context);
 }

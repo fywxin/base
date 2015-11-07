@@ -118,11 +118,22 @@ public class CallInterfaceTask implements Runnable {
 			if(logger.isDebugEnabled()){
 				logger.debug("HTTP-response:{}", resStr);
 			}
+			
+			if(context.getIsAsyc()){
+				context.getAsycHandler().onSuccess(context);
+			}
+			
 		}catch(Exception e){
+			if(context.getIsAsyc()){
+				context.getAsycHandler().onFail(context);
+			}
 			throw new HttpClientException("HTTP接口执行异常", e);
 		}
 		
 		if(resCode > 300){
+			if(context.getIsAsyc()){
+				context.getAsycHandler().onFail(context);
+			}
 			throw new HttpClientException("HTTP接口请求返回状态码错误");
 		}
 	}

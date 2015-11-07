@@ -61,6 +61,9 @@ public class ClientContext {
 	//是否异步
 	private boolean isAsyc;
 	
+	//异步回调处理类
+	private AsycHandler asycHandler;
+	
 	private Map<String, Object> attachment = new HashMap<String, Object>();
 
 	public String getUrl() {
@@ -199,6 +202,16 @@ public class ClientContext {
 
 	public void setIsAsyc(boolean isAsyc) {
 		this.isAsyc = isAsyc;
+	}
+	
+	
+
+	public AsycHandler getAsycHandler() {
+		return asycHandler;
+	}
+
+	public void setAsycHandler(AsycHandler asycHandler) {
+		this.asycHandler = asycHandler;
 	}
 
 	@Override
