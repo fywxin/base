@@ -20,7 +20,7 @@
 		<File>../logs/run.log</File>
 		<append>true</append>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>run.%d{yyyy-MM-dd}.log</FileNamePattern>
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 		<encoder>
@@ -33,7 +33,7 @@
 		<File>../logs/orm.log</File>
 		<append>true</append>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>orm.%d{yyyy-MM-dd}.log</FileNamePattern>
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 		<encoder>
@@ -46,7 +46,20 @@
 		<File>c://whale.log</File>
 		<append>true</append>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>whale.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="intfLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>c://intf.log</File>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>intf.%d{yyyy-MM-dd}.log</FileNamePattern>
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 		<encoder>
@@ -96,9 +109,14 @@
 		<appender-ref ref="ormLog" />
 	</logger>
 	<logger name="org.whale" additivity="false">
-		<level value="debug" />
+		<level value="INFO" />
 		<appender-ref ref="consoleAppender" />
 		<appender-ref ref="whaleLog" />
+	</logger>
+	<logger name="net.youboo.ybinterface" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="intfLog" />
 	</logger>
 	<root>
 		<level value="WARN" />

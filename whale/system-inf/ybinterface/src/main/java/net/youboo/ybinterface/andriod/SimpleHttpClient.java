@@ -20,7 +20,7 @@ public class SimpleHttpClient {
 	
 	public static final Set<String> useLoginKeyUriSet = new HashSet<String>();
 	
-	public static String host = "http://127.0.0.1:7040/ybinterface";
+	public static String host = "http://4203ab35.nat123.net:19079/ybinterface";
 	
 	static{
 		useLoginKeyUriSet.add("/login");
@@ -53,6 +53,8 @@ public class SimpleHttpClient {
 			signStr += postStr;
 		}
 		
+		
+		
 		String sign = EncryptUtil.md5(signStr.getBytes("utf-8"));//签名
 		String urlParam = reqParam.formatUrlStr(sign);//系统参数拼接成url参数
 		
@@ -69,9 +71,9 @@ public class SimpleHttpClient {
 		con.setUseCaches(false);
 		con.setInstanceFollowRedirects(true); //设置此 HttpURLConnection 实例是否应该自动执行 HTTP 重定向（响应代码为 3xx 的请求）。
 		con.setRequestMethod("POST");
-		//重点！！
 		con.setRequestProperty("content-type", "application/json");
 		con.setRequestProperty("accept", "application/json");
+		con.setRequestProperty("Connection", "keep-alive");
 		
 		con.connect();
 		OutputStream ops = con.getOutputStream();

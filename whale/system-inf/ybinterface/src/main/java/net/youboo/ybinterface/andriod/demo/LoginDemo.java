@@ -7,6 +7,7 @@ import net.youboo.ybinterface.andriod.EncryKey;
 import net.youboo.ybinterface.andriod.ReqParam;
 import net.youboo.ybinterface.andriod.SimpleHttpClient;
 import net.youboo.ybinterface.param.LoginInfoParam;
+import net.youboo.ybinterface.request.LoginReq;
 
 public class LoginDemo {
 
@@ -17,21 +18,14 @@ public class LoginDemo {
 		encryKey.setLoginKey("123456");
 		encryKey.setSignKey("111111");
 		
-		LoginInfoParam loginParam = new LoginInfoParam();
-		loginParam.setPassword("123456");
-		loginParam.setLogin_name("18650365658");
-		loginParam.setLogin_type(0);
+		LoginReq loginParam = new LoginReq();
+		loginParam.setPassword("111111");
+		loginParam.setLoginName("15960108233");
+		loginParam.setLoginType(1);
 		
 		String rs = SimpleHttpClient.post("/login", reqParam, encryKey, loginParam);
 		System.out.println(rs);
 		
-		loginParam = new LoginInfoParam();
-		loginParam.setPassword("");
-		loginParam.setLogin_name("18650365658");
-		loginParam.setLogin_type(0);
-		
-		rs = SimpleHttpClient.post("/login", reqParam, encryKey, loginParam);
-		System.out.println(rs);
 		
 	}
 }

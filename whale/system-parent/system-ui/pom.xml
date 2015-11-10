@@ -19,41 +19,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>
-			<artifactId>model-log</artifactId>
-			<version>${project.parent.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.whale</groupId>
-					<artifactId>system-router</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.whale</groupId>
-			<artifactId>model-file</artifactId>
-			<version>${project.parent.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.whale</groupId>
-					<artifactId>system-router</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.whale</groupId>
 			<artifactId>ext-session</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.whale</groupId>
-			<artifactId>ext-sms</artifactId>
-			<version>${project.parent.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.whale</groupId>
-					<artifactId>system-router</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>
@@ -70,10 +37,6 @@
 			<groupId>org.whale</groupId>
 			<artifactId>ext-read-write</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
