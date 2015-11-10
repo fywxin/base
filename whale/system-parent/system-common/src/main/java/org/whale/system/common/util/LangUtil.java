@@ -156,13 +156,8 @@ public final class LangUtil {
 			if(fields != null && fields.length > 0){
 				for(Field field : fields){
 					if(field.getName().equals(attrName)){
-						Object val;
-						try {
-							val = ReflectionUtil.readField(field, obj, true);
-						} catch (IllegalAccessException e) {
-							e.printStackTrace();
-							throw new RuntimeException("读取属性 ["+attrName+"] 值出错");
-						}
+						Object val= ReflectionUtil.readField(field, obj, true);
+						
 						if(val != null && Strings.isNotBlank(val.toString()))
 							strb.append(joinStr).append(val.toString().trim());
 					}
@@ -200,13 +195,8 @@ public final class LangUtil {
 			if(fields != null && fields.length > 0){
 				for(Field field : fields){
 					if(field.getName().equals(idColName)){
-						Object val;
-						try {
-							val = ReflectionUtil.readField(field, obj, true);
-						} catch (IllegalAccessException e) {
-							e.printStackTrace();
-							throw new RuntimeException("读取属性 ["+idColName+"] 值出错");
-						}
+						Object val = ReflectionUtil.readField(field, obj, true);
+						
 						if(val != null && Strings.isNotBlank(val.toString()))
 							idList.add(Long.valueOf(val.toString()));
 					}

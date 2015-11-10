@@ -25,16 +25,22 @@ public class Result<T> {
 	}
 	
 	public static <M> Result<M> fail(ErrorCode errorCode){
-		Result<M> rs = new Result<M>();
-		rs.setCode(errorCode.getCode());
-		rs.setMessage(errorCode.getDescripter());
-		return rs;
+		return fail(errorCode, null);
+	}
+	
+	public static <M> Result<M> fail(ErrorCode errorCode, M data){
+		return fail(errorCode.getCode(), errorCode.getDescripter(), data);
 	}
 	
 	public static <M> Result<M> fail(String code, String message){
+		return fail(code, message, null);
+	}
+	
+	public static <M> Result<M> fail(String code, String message, M data){
 		Result<M> rs = new Result<M>();
 		rs.setCode(code);
 		rs.setMessage(message);
+		rs.setData(data);
 		return rs;
 	}
 

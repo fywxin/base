@@ -16,7 +16,8 @@ public enum ErrorCode {
 	PARAM_ERROR("1004", "请求参数错误"),
 	SIGN_ERROR("1005", "签名错误"),
 	UNKNOW_ERROR("1006", "未知错误"),
-	SESSION_INVAIAL("1010", "Session过期");
+	SESSION_INVAIAL("1010", "Session过期"),
+	FIELD_VALID_ERROR("1011", "字段参数校验错误");
 	
 	private String code;
 	private String descripter;

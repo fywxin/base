@@ -1,6 +1,7 @@
 package org.whale.system.server.adapter;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,13 +10,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.whale.system.common.encrypt.EncryptUtil;
+import org.whale.system.common.exception.FieldValidErrorException;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.PropertiesUtil;
 import org.whale.system.common.util.ThreadContext;
+import org.whale.system.common.util.ValidUtil;
 import org.whale.system.inf.ErrorCode;
 import org.whale.system.server.EmptyReqRespHandler;
 import org.whale.system.server.ServerException;
@@ -72,6 +76,18 @@ public class WspzReqRespHandler extends EmptyReqRespHandler{
 	}
 
 	
+
+	@Override
+	public void validateArgument(MethodParameter parameter,
+			ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
+			WebDataBinderFactory binderFactory, WebDataBinder binder,
+			Object argument) {
+		
+		Map<String, String> error = ValidUtil.valid(argument);
+		if(error != null && error.size() > 0){
+			throw new FieldValidErrorException(error);
+		}
+	}
 
 	@Override
 	public void afterHandleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer, NativeWebRequest webRequest) {

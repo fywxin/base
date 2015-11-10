@@ -23,6 +23,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+import org.whale.system.common.exception.BaseException;
 import org.whale.system.common.exception.SysException;
 
 /**
@@ -340,8 +341,8 @@ public class ReflectionUtil {
      * @throws IllegalArgumentException if the field is null
      * @throws IllegalAccessException if the field is not accessible
      */
-    public static Object readField(Field field, Object target) throws IllegalAccessException {
-        return readField(field, target, false);
+    public static Object readField(Field field, Object target)  {
+        return readField(field, target, true);
     }
 
     /**
@@ -354,7 +355,7 @@ public class ReflectionUtil {
      * @throws IllegalArgumentException if the field is null
      * @throws IllegalAccessException if the field is not made accessible
      */
-    public static Object readField(Field field, Object target, boolean forceAccess) throws IllegalAccessException {
+    public static Object readField(Field field, Object target, boolean forceAccess) {
         if (field == null) {
             throw new IllegalArgumentException("The field must not be null");
         }
@@ -363,7 +364,11 @@ public class ReflectionUtil {
         } else {
             setAccessibleWorkaround(field);
         }
-        return field.get(target);
+        try {
+			return field.get(target);
+		} catch (Exception e) {
+			throw new BaseException(e);
+		}
     }
     
     

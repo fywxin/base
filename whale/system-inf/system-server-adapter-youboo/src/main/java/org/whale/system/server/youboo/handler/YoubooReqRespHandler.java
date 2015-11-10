@@ -20,10 +20,12 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.whale.system.annotation.web.ReqBody;
 import org.whale.system.common.encrypt.AESUtil;
 import org.whale.system.common.encrypt.EncryptUtil;
+import org.whale.system.common.exception.FieldValidErrorException;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.PropertiesUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.ThreadContext;
+import org.whale.system.common.util.ValidUtil;
 import org.whale.system.inf.ErrorCode;
 import org.whale.system.inf.Result;
 import org.whale.system.server.ServerException;
@@ -121,6 +123,10 @@ public class YoubooReqRespHandler implements ReqRespHandler {
 			WebDataBinderFactory binderFactory, WebDataBinder binder,
 			Object argument) {
 		
+		Map<String, String> error = ValidUtil.valid(argument);
+		if(error != null && error.size() > 0){
+			throw new FieldValidErrorException(error);
+		}
 	}
 
 	/**
@@ -172,7 +178,7 @@ public class YoubooReqRespHandler implements ReqRespHandler {
 		YoubooContext context = (YoubooContext)ThreadContext.getContext().get(YoubooContext.THREAD_KEY);
 		if(context.getIsLoginKey() && "/login".equals(context.getUri())){
 			if(returnValue != null && (returnValue instanceof Result)){
-				Result result = (Result)returnValue;
+				Result<?> result = (Result<?>)returnValue;
 				if(Result.SUCCESS_CODE.equals(result.getCode())){
 					LoginReq loginReq = (LoginReq)context.getArgument();
 					AppSession appSession = new AppSession();

@@ -1,8 +1,5 @@
 package org.whale.system.common.util;
 
-import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

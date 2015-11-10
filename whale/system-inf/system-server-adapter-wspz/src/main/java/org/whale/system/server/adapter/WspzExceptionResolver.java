@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
+import org.whale.system.common.exception.FieldValidErrorException;
 import org.whale.system.common.util.WebUtil;
 import org.whale.system.inf.ErrorCode;
 import org.whale.system.inf.Result;
@@ -37,6 +38,9 @@ public class WspzExceptionResolver extends SimpleMappingExceptionResolver {
 				if (ex instanceof ServerException) {
 					ServerException ServerException = (ServerException)ex;
 					rs = Result.fail(ServerException.getCode(), ServerException.getMessage());
+ 				} else if(ex instanceof FieldValidErrorException){
+ 					FieldValidErrorException fieldEx = (FieldValidErrorException)ex;
+ 					rs = Result.fail(ErrorCode.FIELD_VALID_ERROR, fieldEx.getError());
  				} else {
  					rs = Result.fail(ErrorCode.UNKNOW_ERROR);
 				}

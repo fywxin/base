@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.whale.system.common.encrypt.AESUtil;
+import org.whale.system.common.exception.FieldValidErrorException;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.common.util.WebUtil;
@@ -37,10 +38,13 @@ public class YoubooExceptionResolver extends SimpleMappingExceptionResolver {
 				}
 				return getModelAndView(viewName, ex, request);
 			} else {
-				Result rs = null;
+				Result<?> rs = null;
 				if (ex instanceof ServerException) {
 					ServerException ServerException = (ServerException)ex;
 					rs = Result.fail(ServerException.getCode(), ServerException.getMessage());
+ 				} else if(ex instanceof FieldValidErrorException){
+ 					FieldValidErrorException fieldEx = (FieldValidErrorException)ex;
+ 					rs = Result.fail(ErrorCode.FIELD_VALID_ERROR, fieldEx.getError());
  				} else {
  					rs = Result.fail(ErrorCode.UNKNOW_ERROR);
 				}
