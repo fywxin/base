@@ -37,14 +37,14 @@ public class ReqParam implements Serializable{
 	
 	public ReqParam(String appKey, String reqno, String version){
 		this.appKey = appKey;
-		this.timestamp = sdf.format(new Date());
+		this.timestamp = "20151111111111";
 		this.reqno = reqno;
 		this.version = version;
 	}
 	
 	public ReqParam(String appKey, String reqno, String version, String session) {
 		this.appKey = appKey;
-		this.timestamp = sdf.format(new Date());
+		this.timestamp = "20151111111111";
 		this.reqno = reqno;
 		this.version = version;
 		this.session = session;

@@ -11,6 +11,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.common.exception.FieldValidErrorException;
+import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.common.util.ValidUtil;
 
 /**
@@ -45,9 +46,19 @@ public class VaildRouterParamAop {
 			}
 			for(Annotation ann : anns){
 				if(ann.annotationType() == Validate.class){
-					map = ValidUtil.valid(obj);
-					if(map != null && map.size() > 0){
-						throw new FieldValidErrorException(ValidUtil.formatMsg(map, "</br>"), map);
+					if(ann.annotationType() == Validate.class){
+						Validate vals = (Validate)ann;
+						if(ReflectionUtil.isBaseDataType(obj.getClass())){
+							String msg = ValidUtil.valid(obj, vals);
+							if(msg != null){
+								throw new FieldValidErrorException(msg);
+							}
+						}else{
+							Map<String, String> error = ValidUtil.valid(obj);
+							if(error != null && error.size() > 0){
+								throw new FieldValidErrorException(ValidUtil.formatMsg(map, "</br>"), map);
+							}
+						}
 					}
 				}
 			}

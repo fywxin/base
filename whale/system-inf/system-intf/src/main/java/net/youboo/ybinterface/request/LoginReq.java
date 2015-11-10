@@ -2,6 +2,8 @@ package net.youboo.ybinterface.request;
 
 import java.io.Serializable;
 
+import org.whale.system.annotation.jdbc.Validate;
+
 public class LoginReq implements Serializable {
 
 	private static final long serialVersionUID = 23239893911L;

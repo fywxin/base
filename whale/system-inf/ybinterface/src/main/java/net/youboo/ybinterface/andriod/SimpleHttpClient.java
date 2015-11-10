@@ -11,8 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
-import org.whale.system.common.encrypt.AESUtil;
-import org.whale.system.common.encrypt.EncryptUtil;
+import org.whale.system.common.encrypt.AES;
+import org.whale.system.common.encrypt.Digest;
 
 import com.alibaba.fastjson.JSON;
 
@@ -20,7 +20,8 @@ public class SimpleHttpClient {
 	
 	public static final Set<String> useLoginKeyUriSet = new HashSet<String>();
 	
-	public static String host = "http://4203ab35.nat123.net:19079/ybinterface";
+	//public static String host = "http://4203ab35.nat123.net:19079/ybinterface";
+	public static String host = "http://127.0.0.1:8080/ybinterface";
 	
 	static{
 		useLoginKeyUriSet.add("/login");
@@ -52,12 +53,12 @@ public class SimpleHttpClient {
 			postStr = JSON.toJSONString(datas);
 			signStr += postStr;
 		}
+		System.out.println("postStr:"+postStr);
+		System.out.println("signStr:"+signStr);
 		
-		
-		
-		String sign = EncryptUtil.md5(signStr.getBytes("utf-8"));//签名
+		String sign = Digest.signMD5(signStr);//签名
 		String urlParam = reqParam.formatUrlStr(sign);//系统参数拼接成url参数
-		
+		System.out.println("sign:"+sign);
 		String url = host + uri +"?" + urlParam;
 		System.out.println(url);
 		
@@ -81,7 +82,7 @@ public class SimpleHttpClient {
 			if(datas != null){
 				byte[] bytes = null;
 				if(encryStr != null){
-					bytes = AESUtil.encrypt(postStr.getBytes("UTF-8"), encryStr.getBytes("UTF-8"));
+					bytes = AES.encrypt(postStr.getBytes("UTF-8"), encryStr.getBytes("UTF-8"));
 				}else{
 					bytes = postStr.getBytes("UTF-8");
 				}
@@ -99,7 +100,7 @@ public class SimpleHttpClient {
 		try{
 			bytes = IOUtils.toByteArray(ips);
 			if(encryStr != null && "1".equals(con.getRequestProperty("encrypt"))){
-				bytes = AESUtil.decrypt(bytes, encryStr.getBytes("UTF-8"));
+				bytes = AES.decrypt(bytes, encryStr.getBytes("UTF-8"));
 			}
 		}finally{
 			ips.close();
@@ -130,7 +131,9 @@ public class SimpleHttpClient {
 		return null;
 	}
 
-	
+	public static void main(String[] args) {
+		
+	}
 	
 	
 }

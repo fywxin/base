@@ -49,9 +49,10 @@ public class ValidUtil {
 	public static Map<String, String> valid(Object obj, boolean append){
 		Map<String, String> map = new HashMap<String, String>();
 		Class<?> clazz = obj.getClass();
+		vaild(obj, append, clazz, map);
 		while(!(clazz.getSuperclass() instanceof Object)){
-			vaild(obj, append, clazz, map);
 			clazz = clazz.getSuperclass();
+			vaild(obj, append, clazz, map);
 		}
 		return map;
 	}
@@ -70,6 +71,8 @@ public class ValidUtil {
 	public static String valid(Object obj, Field field){
 		return valid(obj, field, false);
 	}
+	
+	
 	
 	public static String valid(Object obj, Field field, boolean append){
 		Validate vals = field.getAnnotation(Validate.class);
@@ -90,109 +93,127 @@ public class ValidUtil {
 		
 		if (vals.required()) {
 			msg = required(value);
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (vals.account()) {
 			msg = account(value);
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (vals.mobile()) {
 			msg = mobile(value);
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (vals.email()) {
 			msg = email(value);
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (vals.qq()) {
 			msg = qq(value);
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (vals.chinese()) {
 			msg = chinese(value);
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (vals.post()) {
 			msg = post(value);
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (!Strings.isBlank(vals.regex())) {
 			msg = regex(value, vals.regex(), "值错误");
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (vals.strLen().length > 0) {
 			msg = stringLength(value, vals.strLen());
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
@@ -209,49 +230,57 @@ public class ValidUtil {
 			Object repeatValue = ReflectionUtil.readField(repeatField, obj);
 			
 			msg = repeat(value, repeatValue);
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (vals.limit().length > 0) {
 			msg = limit(value, vals.limit());
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (Strings.isNotBlank(vals.el())) {
 			msg = el(field.getName(), value, vals.el());
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
 		if (Strings.isNotBlank(vals.custom())) {
 			msg = custom(obj, vals.custom());
-			if(useDefErrMsg){
-				return defErrMsg;
-			}else{
-				if(append){
-					errors.add(msg);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
 				}else{
-					return msg;
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
 				}
 			}
 		}
@@ -262,7 +291,182 @@ public class ValidUtil {
 		return null;
 	}
 	
+	public static String valid(Object value, Validate vals){
+		return valid(value, vals, false);
+	}
 	
+	public static String valid(Object value, Validate vals, boolean append){
+		String defErrMsg = vals.errorMsg();
+		boolean useDefErrMsg = Strings.isNotBlank(defErrMsg);
+		
+		
+		List<String> errors = null;
+		if(append && !useDefErrMsg){
+			errors = new ArrayList<String>();
+		}
+		String msg = null;
+		if (vals.required()) {
+			msg = required(value);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		if (vals.account()) {
+			msg = account(value);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		if (vals.mobile()) {
+			msg = mobile(value);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		if (vals.email()) {
+			msg = email(value);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		if (vals.qq()) {
+			msg = qq(value);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		if (vals.chinese()) {
+			msg = chinese(value);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		if (vals.post()) {
+			msg = post(value);
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		if (!Strings.isBlank(vals.regex())) {
+			msg = regex(value, vals.regex(), "值错误");
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		if (vals.strLen().length > 0) {
+			msg = stringLength(value, vals.strLen());
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		
+		if (vals.limit().length > 0) {
+			msg = limit(value, vals.limit());
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		
+		if (Strings.isNotBlank(vals.custom())) {
+			msg = custom(value, vals.custom());
+			if(msg != null){
+				if(useDefErrMsg){
+					return defErrMsg;
+				}else{
+					if(append){
+						errors.add(msg);
+					}else{
+						return msg;
+					}
+				}
+			}
+		}
+		if(errors != null && errors.size() > 0){
+			return ListUtil.join(errors, ",");
+		}
+		
+		return null;
+	}
 	
 	/**
 	 * 

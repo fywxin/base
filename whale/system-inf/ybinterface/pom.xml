@@ -10,7 +10,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.whale</groupId>
-			<artifactId>system-intf</artifactId>
+			<artifactId>system-server-adapter-youboo</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 

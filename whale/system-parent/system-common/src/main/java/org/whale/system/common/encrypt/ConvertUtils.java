@@ -106,6 +106,7 @@ public abstract class ConvertUtils {
     public static String toHex(byte input[]){
         if(input == null)
             return null;
+        System.out.println(input.length);
         StringBuffer output = new StringBuffer(input.length * 2);
         for(int i = 0; i < input.length; i++){
             int current = input[i] & 0xff;

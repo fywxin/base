@@ -18,9 +18,10 @@
 
 	<context:component-scan base-package="org.whale,net.youboo" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
 	
-	<bean class="net.youboo.ybinterface.handler.SecureReqRespHandler" id="secureReqRespHandler"></bean>
+	<bean class="org.whale.system.server.youboo.handler.YoubooReqRespHandler" id="youbooReqRespHandler"></bean>
 	
 	<!--支持@ResponseBody -->  
     <mvc:annotation-driven conversion-service="conversionService">
@@ -37,12 +38,12 @@
         </mvc:message-converters>
         <mvc:argument-resolvers>
             <bean id="reqBodyProcessor" class="org.whale.system.spring.ReqRespBodyProcessorProxy" >
-	        	<property name="reqRespHandler" ref="secureReqRespHandler"></property>
+	        	<property name="reqRespHandler" ref="youbooReqRespHandler"></property>
 		    </bean>
         </mvc:argument-resolvers>
         <mvc:return-value-handlers>
             <bean id="respBodyProcessor" class="org.whale.system.spring.ReqRespBodyProcessorProxy" >
-	        	<property name="reqRespHandler" ref="secureReqRespHandler"></property>	
+	        	<property name="reqRespHandler" ref="youbooReqRespHandler"></property>	
 		    </bean>
         </mvc:return-value-handlers>
     </mvc:annotation-driven>
@@ -67,17 +68,17 @@
 	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="10" />
 	
 		
-	<bean id="exceptionResolver"
-		class="net.youboo.ybinterface.context.IntfExceptionResolver">
-		<property name="defaultErrorView" value="system/exception/error" />
-		<property name="exceptionMappings">
-			<props>
-				<prop key="org.whale.system.common.exception.ForbidVisitException">system/exception/ForbidVisitException</prop>
-				<prop key="org.whale.system.common.exception.NotLoginException">system/exception/NotLoginException</prop>
-				<prop key="java.lang.RuntimeException">system/exception/error</prop>
-			</props>
-		</property>
-	</bean>
+<!-- 	<bean id="exceptionResolver" -->
+<!-- 		class="net.youboo.ybinterface.context.IntfExceptionResolver"> -->
+<!-- 		<property name="defaultErrorView" value="system/exception/error" /> -->
+<!-- 		<property name="exceptionMappings"> -->
+<!-- 			<props> -->
+<!-- 				<prop key="org.whale.system.common.exception.ForbidVisitException">system/exception/ForbidVisitException</prop> -->
+<!-- 				<prop key="org.whale.system.common.exception.NotLoginException">system/exception/NotLoginException</prop> -->
+<!-- 				<prop key="java.lang.RuntimeException">system/exception/error</prop> -->
+<!-- 			</props> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
 	
 <!-- 	<aop:config> -->
 <!-- 		<aop:pointcut id="interceptorPointCuts" -->

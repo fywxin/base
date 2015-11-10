@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.whale.system.common.encrypt.AESUtil;
+import org.whale.system.common.exception.FieldValidErrorException;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.common.util.WebUtil;
@@ -41,6 +42,9 @@ public class IntfExceptionResolver extends SimpleMappingExceptionResolver {
 				if (ex instanceof InfException) {
 					InfException infException = (InfException)ex;
 					rs = Result.fail(infException.getCode(), infException.getMessage());
+				} else if(ex instanceof FieldValidErrorException){
+ 					FieldValidErrorException fieldEx = (FieldValidErrorException)ex;
+ 					rs = Result.fail(ErrorCode.FIELD_VALID_ERROR, fieldEx.getError());
  				} else {
  					rs = Result.fail(ErrorCode.UNKNOW_ERROR);
 				}

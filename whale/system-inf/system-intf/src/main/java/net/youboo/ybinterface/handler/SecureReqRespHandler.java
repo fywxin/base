@@ -1,6 +1,6 @@
 package net.youboo.ybinterface.handler;
 
-import java.io.UnsupportedEncodingException;
+import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,14 +26,20 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.annotation.web.ReqBody;
-import org.whale.system.common.encrypt.AESUtil;
-import org.whale.system.common.encrypt.EncryptUtil;
+import org.whale.system.common.encrypt.AES;
+import org.whale.system.common.encrypt.Digest;
+import org.whale.system.common.exception.FieldValidErrorException;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.PropertiesUtil;
+import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.ThreadContext;
+import org.whale.system.common.util.ValidUtil;
 import org.whale.system.spring.ReqRespHandler;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * 安全校验处理类
@@ -67,7 +73,7 @@ public class SecureReqRespHandler implements ReqRespHandler {
 	 */
 	public void beforeResolveArgument(MethodParameter methodParam, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 		if(logger.isDebugEnabled()){
-			logger.debug("接口-请求-参数-开始：{}", this.getParameterMap(webRequest));
+			logger.debug("接口-请求-参数-开始：{}", JSON.toJSONString(this.getParameterMap(webRequest)));
 		}
 		
 		InfContext context = new InfContext();
@@ -121,6 +127,26 @@ public class SecureReqRespHandler implements ReqRespHandler {
 			WebDataBinderFactory binderFactory, WebDataBinder binder,
 			Object argument) {
 		
+		
+		Annotation[] annotations = parameter.getParameterAnnotations();
+		if(annotations != null && annotations.length > 0){
+			for (Annotation ann : annotations) {
+				if(ann.annotationType() == Validate.class){
+					Validate vals = (Validate)ann;
+					if(ReflectionUtil.isBaseDataType(argument.getClass())){
+						String msg = ValidUtil.valid(argument, vals);
+						if(msg != null){
+							throw new FieldValidErrorException(msg);
+						}
+					}else{
+						Map<String, String> error = ValidUtil.valid(argument);
+						if(error != null && error.size() > 0){
+							throw new FieldValidErrorException(error);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -141,20 +167,15 @@ public class SecureReqRespHandler implements ReqRespHandler {
 			strb.append(context.getReqStr());
 		}
 		
-		try {
-			String calSign = EncryptUtil.md5(strb.toString().getBytes("utf-8"));
-			if(logger.isDebugEnabled()){
-				logger.debug("接口-请求-参数-sign校验: {}!, 客户端 {}，服务端 {}\n signBody：{}", 
-						calSign.equals(context.getReqParam().getSign()) ? "成功":"失败",
-								context.getReqParam().getSign(), 
-								calSign,
-								strb.toString());
-			}
-			if(!calSign.equals(context.getReqParam().getSign())){
-				throw new InfException(ErrorCode.SIGN_ERROR);
-			}
-		} catch (UnsupportedEncodingException e) {
-			logger.error("接口-请求-参数：参数签名md5错误", e);
+		String calSign = Digest.signMD5(strb.toString());
+		if(logger.isDebugEnabled()){
+			logger.debug("接口-请求-参数-sign校验: {}, 客户端 {}，服务端 {}\n signBody：{}", 
+					calSign.equals(context.getReqParam().getSign()) ? "成功":"失败",
+							context.getReqParam().getSign(), 
+							calSign,
+							strb.toString());
+		}
+		if(!calSign.equals(context.getReqParam().getSign())){
 			throw new InfException(ErrorCode.SIGN_ERROR);
 		}
 		
@@ -234,7 +255,7 @@ public class SecureReqRespHandler implements ReqRespHandler {
 				logger.debug("接口-请求-解密：密钥 {}", context.getReqSecure());
 			}
 			try{
-				datas = AESUtil.decrypt(datas, context.getReqSecure().getBytes());
+				datas = AES.decrypt(datas, context.getReqSecure().getBytes());
 			}catch(Exception e){
 				logger.error("接口-请求-解密：密钥 "+context.getReqSecure(), e);
 				throw new InfException(ErrorCode.ENCRYPT_ERROR);
@@ -267,7 +288,7 @@ public class SecureReqRespHandler implements ReqRespHandler {
 				logger.debug("接口-返回-加密：密钥 {}", context.getResSecure());
 			}
 			try{
-				datas = AESUtil.encrypt(datas, context.getResSecure().getBytes());
+				datas = AES.encrypt(datas, context.getResSecure().getBytes());
 			}catch(Exception e){
 				logger.error("接口-返回-加密：密钥 " + context.getResSecure(), e);
 				throw new InfException(ErrorCode.ENCRYPT_ERROR);

@@ -8,6 +8,10 @@ import java.util.Arrays;
 public class Digest {
 	public static final String ENCODE = "UTF-8"; 
 	
+	public static String signMD5(String aValue) {
+		return signMD5(aValue, ENCODE);
+	}
+	
 	public static String signMD5(String aValue, String encoding) {
 		try {
 			byte[] input = aValue.getBytes(encoding);
@@ -161,4 +165,8 @@ public class Digest {
 		}
 	}
 
+	
+	public static void main(String[] args) {
+		System.out.println(Digest.signMD5("asd", "UTF-8"));
+	}
 }

@@ -48,7 +48,10 @@ public class InitOrmCache implements Bootable {
 		logger.info("ORM：初始化ORM实体配置信息开始...");
 		// 获取所有baseDao子类
 		List<BaseDao> daos = SpringContextHolder.getAutowiredClasses(BaseDao.class);
-		
+		if(daos == null || daos.size() < 1){
+			logger.warn("ORM: ORM容器初始化没有找到任何DAO类 !!!");
+			return null;
+		}
 		
 		Method getClazz = null;
 		Method setRowMapper = null;

@@ -2,24 +2,25 @@ package net.youboo.ybinterface.router;
 
 import java.util.Random;
 
-import net.youboo.ybinterface.context.Result;
 import net.youboo.ybinterface.param.EmptyBodyParam;
-import net.youboo.ybinterface.param.LoginInfoParam;
 import net.youboo.ybinterface.param.OneBodyParam;
+import net.youboo.ybinterface.request.LoginReq;
 import net.youboo.ybinterface.vo.LoginInfoVo;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.annotation.web.ReqBody;
 import org.whale.system.annotation.web.RespBody;
+import org.whale.system.inf.Result;
 
 @Controller
 public class TestRouter {
 
 	@RespBody(secure=true)
 	@RequestMapping("/login")
-	public Result<LoginInfoVo> login(@ReqBody(secure=true) LoginInfoParam loginInfo){
-		if(loginInfo.getLogin_name().equals("18650365658") && loginInfo.getPassword().equals("123456")){
+	public Result<LoginInfoVo> login(@ReqBody(secure=true) @Validate LoginReq loginReq){
+		if(loginReq.getLoginName().equals("18650365658") && loginReq.getPassword().equals("123456")){
 			LoginInfoVo loginInfoVo = new LoginInfoVo();
 			loginInfoVo.setName("18650365658");
 			loginInfoVo.setUserId("123456");
