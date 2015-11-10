@@ -615,6 +615,14 @@ public class ValidUtil {
 		}
 		return null;
 	}
+	
+	public static String formatMsg(Map<String, String> map, String split){
+		StringBuilder strb = new StringBuilder();
+		for(Map.Entry<String, String> entry : map.entrySet()){
+			strb.append(entry.getKey()).append(" : ").append(entry.getValue()).append(split);
+		}
+		return strb.toString();
+	}
 
 	/**
 	 * 检查方法的参数中是否存在 validRs 的对象，没有则返回空

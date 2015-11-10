@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 import org.whale.system.common.exception.FieldValidErrorException;
+import org.whale.system.common.util.ValidUtil;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.jdbc.filter.dll.BaseDaoDllFilterWarpper;
 import org.whale.system.validation.ValidOrmUtil;
@@ -22,11 +23,7 @@ public class ValidateCheckFilter<T extends Serializable,PK extends Serializable>
 	private void validate(T obj){
 		Map<String, String> map = ValidOrmUtil.valid(obj);
 		if(map != null && map.size() > 0){
-			StringBuilder strb = new StringBuilder();
-			for(Map.Entry<String, String> entry : map.entrySet()){
-				strb.append(entry.getKey()).append(" : ").append(entry.getValue()).append("</br>");
-			}
-			throw new FieldValidErrorException(strb.toString(), map);
+			throw new FieldValidErrorException(ValidUtil.formatMsg(map, "</br>"), map);
 		}
 	}
 	
