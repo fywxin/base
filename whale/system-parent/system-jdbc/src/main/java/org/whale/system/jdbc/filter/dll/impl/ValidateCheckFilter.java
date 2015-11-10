@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
 import org.whale.system.common.exception.FieldValidErrorException;
 import org.whale.system.common.util.ValidUtil;
 import org.whale.system.jdbc.IOrmDao;
@@ -17,7 +16,7 @@ import org.whale.system.validation.ValidOrmUtil;
  * @author 王金绍
  * 2015年3月9日 下午7:34:24
  */
-@Component
+
 public class ValidateCheckFilter<T extends Serializable,PK extends Serializable> extends BaseDaoDllFilterWarpper<T, PK> {
 	
 	private void validate(T obj){
