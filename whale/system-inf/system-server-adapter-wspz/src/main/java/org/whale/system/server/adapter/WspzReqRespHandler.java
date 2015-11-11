@@ -1,6 +1,7 @@
 package org.whale.system.server.adapter;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.common.encrypt.EncryptUtil;
 import org.whale.system.common.exception.FieldValidErrorException;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.PropertiesUtil;
+import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.common.util.ValidUtil;
 import org.whale.system.inf.ErrorCode;
@@ -75,17 +78,30 @@ public class WspzReqRespHandler extends EmptyReqRespHandler{
 		}
 	}
 
-	
-
 	@Override
 	public void validateArgument(MethodParameter parameter,
 			ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
 			WebDataBinderFactory binderFactory, WebDataBinder binder,
 			Object argument) {
 		
-		Map<String, String> error = ValidUtil.valid(argument);
-		if(error != null && error.size() > 0){
-			throw new FieldValidErrorException(error);
+		Annotation[] annotations = parameter.getParameterAnnotations();
+		if(annotations != null && annotations.length > 0){
+			for (Annotation ann : annotations) {
+				if(ann.annotationType() == Validate.class){
+					Validate vals = (Validate)ann;
+					if(ReflectionUtil.isBaseDataType(argument.getClass())){
+						String msg = ValidUtil.valid(argument, vals);
+						if(msg != null){
+							throw new FieldValidErrorException(msg);
+						}
+					}else{
+						Map<String, String> error = ValidUtil.valid(argument);
+						if(error != null && error.size() > 0){
+							throw new FieldValidErrorException(error);
+						}
+					}
+				}
+			}
 		}
 	}
 
