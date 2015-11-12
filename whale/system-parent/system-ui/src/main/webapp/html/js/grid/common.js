@@ -23,7 +23,7 @@ function search(pageNo){
 		if(pageNo != null && typeof(pageNo) != "undefined" && pageNo > 0){
 			param.offset = (pageNo-1) * 10;
 		}
-		$("#gridTable").bootstrapTable('refresh', {query: param});
+		$("#gridTable").bootstrapTable('refresh', {query: param, pageNumber: pageNo});
 	}catch(e){}
 }
 

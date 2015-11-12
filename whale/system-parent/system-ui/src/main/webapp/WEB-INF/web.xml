@@ -104,6 +104,15 @@
 	</filter-mapping>
 	
 <!-- 	<filter> -->
+<!-- 		<filter-name>bodyFilter</filter-name> -->
+<!-- 		<filter-class>org.whale.system.servlet.BodyHttpFilter</filter-class> -->
+<!-- 	</filter> -->
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>bodyFilter</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 	</filter-mapping> -->
+	
+<!-- 	<filter> -->
 <!-- 		<filter-name>cacheSessionFilter</filter-name> -->
 <!-- 		<filter-class>org.whale.ext.session.CacheSessionFilter</filter-class> -->
 <!-- 		<init-param> -->

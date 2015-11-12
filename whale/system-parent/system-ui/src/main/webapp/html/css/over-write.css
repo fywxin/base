@@ -3,6 +3,8 @@
 
 /** form 页面 */
 label{font-weight: normal;}
+
+/**挖坑 CSS 会导致页面上所有input 的长度都变为206px; 导致table 有checkbox 时变形
 input, textarea, .uneditable-input {
 width: 206px;
-}
+} */

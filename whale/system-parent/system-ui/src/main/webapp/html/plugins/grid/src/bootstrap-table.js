@@ -699,7 +699,6 @@
                 style = sprintf('vertical-align: %s; ', column.valign);
                 style += sprintf('width: %s; ', (column.checkbox || column.radio) && !width ?
                     '36px' : (width ? width + unitWidth : undefined));
-
                 if (typeof column.fieldIndex !== 'undefined') {
                     that.header.fields[column.fieldIndex] = column.field;
                     that.header.styles[column.fieldIndex] = align + style;
@@ -1480,7 +1479,6 @@
                     }
                     style = sprintf('style="%s"', csses_.concat(that.header.styles[j]).join('; '));
                 }
-
                 if (item['_' + field + '_data'] && !$.isEmptyObject(item['_' + field + '_data'])) {
                     $.each(item['_' + field + '_data'], function (k, v) {
                         // ignore data-index
@@ -1549,7 +1547,7 @@
                     this.$header.find('th').length, this.options.formatNoMatches()),
                 '</tr>');
         }
-
+        
         this.$body.html(html.join(''));
 
         if (!fixedScroll) {
@@ -1838,7 +1836,6 @@
             getScrollBarWidth() : 0;
 
         this.$el.css('margin-top', -this.$header.outerHeight());
-
         focused = $(':focus');
         if (focused.length > 0) {
             var $th = focused.parents('th');
@@ -1860,7 +1857,6 @@
         }).find('table').css('width', this.$el.outerWidth())
             .html('').attr('class', this.$el.attr('class'))
             .append(this.$header_);
-
 
         focusedTemp = $('.focus-temp:visible:eq(0)');
         if (focusedTemp.length > 0) {
@@ -1885,7 +1881,6 @@
                 }
                 index = i - 1;
             }
-
             that.$header_.find(sprintf('th[data-field="%s"]', visibleFields[index]))
                 .find('.fht-cell').width($this.innerWidth());
         });
@@ -2421,6 +2416,11 @@
             this.options.url = params.url;
             this.options.pageNumber = 1;
         }
+        /**wjs from 2015-11-12*/
+        if(params.pageNumber){
+        	this.options.pageNumber = params.pageNumber;
+        }
+        /**wjs to 2015-11-12*/
         this.initServer(params && params.silent, params && params.query);
     };
 

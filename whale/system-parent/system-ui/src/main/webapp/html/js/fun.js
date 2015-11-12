@@ -225,7 +225,7 @@
 			    },
 		}
 		var opts = $.extend(defaults, param);
-		opts.columns.splice(0, 0, {field: 'index',width: '2%', align: 'center', formatter:function(value, row, index){return index+1;}});
+		opts.columns.splice(0, 0, {field: 'index',width: '3%', align: 'center', formatter:function(value, row, index){return index+1;}});
 		return $(this).bootstrapTable(opts);
     };
     

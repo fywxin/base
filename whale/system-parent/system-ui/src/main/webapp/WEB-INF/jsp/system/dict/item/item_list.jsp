@@ -16,40 +16,41 @@ $(function(){
 		{
 		    field: 'chk',
 		    checkbox: true,
-		    width: '2%',
+		    width: '4%',
 		    align: 'center'
 		}, {
 	        field: 'opt',
 	        title: '操作',
-	        width: '18%',
+	        width: '14%',
 	        align: 'center',
 	        formatter: function(value, row, index){
-	        	var strArr = [];
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"go('修改字典元素','${ctx}/dictItem/goUpdate?dictItemId="+row.dictItemId+"')\"><i class='fa fa-pencil'></i> 修改</button>");
-        		if(row.status == 2){
-        			strArr.push("<button type='button' class='btn btn-success btn-ss' title='启用' onclick=\"setStatus('"+row.dictItemId+"','"+row.itemName+"',1); return false;\"><i class='fa fa-unlock'></i> 启用</button>");
-        		}else{
-        			strArr.push("<button type='button' class='btn btn-default btn-ss' title='禁用' onclick=\"setStatus('"+row.dictItemId+"','"+row.itemName+"',2); return false;\"><i class='fa fa-lock'></i> 禁用</button>");
-        		}
+        		var strArr = [];
+	            strArr.push('<a href="javascript:;" class="link" onclick=go("修改字典元素","${ctx}/dictItem/goUpdate?dictItemId='+row.dictItemId+'") >修改</a>');
+	            strArr.push('<span class="link-sep">|</span>');
+	            if(row.status == 2){
+	              strArr.push('<a href="javascript:;" class="link" onclick=setStatus('+row.dictItemId+',"'+row.itemName+'",1) >启用</a>');
+	            }else{
+	              strArr.push('<a href="javascript:;" class="link" onclick=setStatus('+row.dictItemId+',"'+row.itemName+'",2) >禁用</a>');
+	            }
         		return strArr.join("");
 			}
 	    }, {
 	        field: 'itemName',
-	        width: '18%',
+	        width: '15%',
 	        title: '元素名称',
 	        sortable: true
 	    }, {
 	        field: 'itemCode',
 	        title: '元素编码',
-	        width: '18%',
+	        width: '15%',
 	        sortable: true
 	    }, {
 	        field: 'itemVal',
 	        title: '元素值',
-	        width: '20%',
 	        sortable: true
 	    }, {
 	        field: 'remark',
+	        width: '15%',
 	        title: '备注'
 	    }, {
 	        field: 'status',

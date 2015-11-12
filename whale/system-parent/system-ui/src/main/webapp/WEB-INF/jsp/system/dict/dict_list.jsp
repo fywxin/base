@@ -13,23 +13,23 @@ $(function(){
 		{
 	        field: 'opt',
 	        title: '操作',
-	        width: '30%',
+	        width: '12%',
 	        align: 'center',
 	        formatter: function(value, row, index){
 				var strArr = [];
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"go('修改字典', '${ctx}/dict/goUpdate?dictId="+row.dictId+"')\"><i class='fa fa-pencil'></i> 修改</button>");
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='删除' onclick=\"del('"+row.dictId+"')\"><i class='fa fa-trash-o'></i> 删除</button>");
+				strArr.push('<a href="javascript:;" class="link" onclick=go("修改字典","${ctx}/dict/goUpdate?dictId='+row.dictId+'") >修改</a>');
+	            strArr.push('<span class="link-sep">|</span>');
+	            strArr.push('<a href="javascript:;" class="link" onclick=del('+row.dictId+'") >删除</a>');
 	        	return strArr.join("");
 			}
 	    }, {
 	        field: 'dictName',
-	        width: '20%',
-	        title: '字典名称',
-	        sortable: true
+	        width: '30%',
+	        title: '字典名称'
 	    }, {
 	        field: 'dictCode',
 	        title: '字典编码',
-	        width: '20%',
+	        width: '30%',
 	        sortable: true
 	    }, {
 	        field: 'remark',

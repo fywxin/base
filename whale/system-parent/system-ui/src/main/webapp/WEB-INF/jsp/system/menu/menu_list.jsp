@@ -17,52 +17,45 @@ $(function(){
 		{
 	        field: 'opt',
 	        title: '操作',
-	        width: '18%',
+	        width: '10%',
 	        align: 'center',
 	        formatter: function(value, row, index){
 	        	var strArr = [];
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"go('修改菜单','${ctx}/menu/goUpdate?menuId="+row.menuId+"')\"><i class='fa fa-pencil'></i> 修改</button>");
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='删除' onclick=\"del('"+row.menuId+"')\"><i class='fa fa-trash-o'></i> 删除</button>");
+	            strArr.push('<a href="javascript:;" class="link" onclick=go("修改菜单","${ctx}/menu/goUpdate?menuId='+row.roleId+'") >修改</a>');
+	            strArr.push('<span class="link-sep">|</span>');
+	            strArr.push('<a href="javascript:;" class="link" onclick=del('+row.roleId+'") >删除</a>');
 	        	return strArr.join("");
 			}
 	    }, {
 	        field: 'menuName',
-	        width: '10%',
+	        width: '15%',
 	        title: '菜单名',
 	        sortable: true
 	    }, {
 	        field: 'menuUrl',
-	        title: '菜单地址',
-	        width: '25%'
+	        title: '菜单地址'
 	    }, {
 	        field: 'menuInco',
-	        title: '菜单图标',
+	        title: '图标',
 	        width: '5%'
 	    }, {
 	        field: 'openType',
 	        title: '打开方式',
-	        width: '5%',
+	        width: '10%',
 	        formatter: function(value, row, index){
 				return openTypeObj[value];
 			}
 	    }, {
 	        field: 'isPublic"',
 	        title: '是否公共',
-	        width: '5%',
+	        width: '8%',
 	        formatter: function(value, row, index){
 	        	return value == 0 ? "否" : "是";
 			}
 	    }, {
-	        field: 'openState',
-	        title: '打开状态',
-	        width: '5%',
-	        formatter: function(value, row, index){
-				return openStateObj[value];
-			}
-	    }, {
 	        field: 'menuType',
 	        title: '菜单类型',
-	        width: '5%',
+	        width: '8%',
 	        formatter: function(value, row, index){
 				return menuTypeObj[value];
 			}
@@ -77,7 +70,7 @@ function del(menuId){
 }
 </script>
 </head>
-    
+
 <body style="overflow: hidden;">
 	<div class="my_gridBox">
 		<form id="queryForm" >

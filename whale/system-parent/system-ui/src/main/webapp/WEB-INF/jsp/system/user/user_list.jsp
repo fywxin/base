@@ -14,52 +14,54 @@ $(function(){
 	    url: '${ctx}/user/doList?deptId=${deptId}',
 	    idField: 'userId',
 	    columns: [
-		{
+		  {
 	        field: 'opt',
 	        title: '操作',
-	        width: '45%',
+	        width: '25%',
 	        align: 'center',
 	        formatter: function(value, row, index){
-	        	var strArr = [];
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"go('修改用户','${ctx}/user/goUpdate?userId="+row.userId+"')\"><i class='fa fa-pencil'></i> 修改</button>");
-        		
-        		if(row.status == 2){
-        			strArr.push("<button type='button' class='btn btn-success btn-ss' title='启用' onclick=\"setStatus('"+row.userId+"','"+row.userName+"',1); return false;\"><i class='fa fa-unlock'></i> 启用</button>");
-        		}else{
-        			strArr.push("<button type='button' class='btn btn-default btn-ss' title='禁用' onclick=\"setStatus('"+row.userId+"','"+row.userName+"',2); return false;\"><i class='fa fa-lock'></i> 禁用</button>");
-        		}
-        		strArr.push("<button type='button' class='btn btn-default btn-ss' title='重置密码' onclick=\"resetPassword('"+row.userId+"'); return false;\"><i class='fa fa-undo'></i> 重置密码</button>");
-        		strArr.push("<button type='button' class='btn btn-default btn-ss' title='分配角色' onclick=\"go('分配角色','${ctx}/user/goSetUserRole?userId="+row.userId+"'); return false;\"><i class='fa fa-child'></i> 分配角色</button>");
+            var strArr = [];
+            strArr.push('<a href="javascript:;" class="link" onclick=go("修改用户","${ctx}/user/goUpdate?userId='+row.userId+'") >修改</a>');
+            strArr.push('<span class="link-sep">|</span>');
+            if(row.status == 2){
+              strArr.push('<a href="javascript:;" class="link" onclick=setStatus('+row.userId+',"'+row.userName+'",1) >启用</a>');
+            }else{
+              strArr.push('<a href="javascript:;" class="link" onclick=setStatus('+row.userId+',"'+row.userName+'",2) >禁用</a>');
+            }
+            strArr.push('<span class="link-sep">|</span>');
+            strArr.push('<a href="javascript:;" class="link" onclick=resetPassword('+row.userId+') >重置密码</a>');
+            strArr.push('<span class="link-sep">|</span>');
+            strArr.push('<a href="javascript:;" class="link" onclick=go("分配角色","${ctx}/user/goSetUserRole?userId='+row.userId+') >分配角色</a>');
+
         		return strArr.join("");
 			}
 	    }, {
 	        field: 'userName',
-	        width: '15%',
 	        title: '用户名',
 	        formatter: function(value, row, index){
-				return "<a href='javascript:;' onclick=\"go('查看用户名','${ctx}/user/goView?userId="+row.userId+"')\">"+row.userName+"</a>";
+				    return "<a href='javascript:;' onclick=\"go('查看用户名','${ctx}/user/goView?userId="+row.userId+"')\">"+row.userName+"</a>";
 			}
 	    }, {
 	        field: 'realName',
 	        title: '真实姓名',
-	        width: '15%',
+	        width: '14%',
 	        sortable: true
 	    }, {
 	        field: 'phone',
 	        title: '联系电话',
-	        width: '10%',
+	        width: '15%',
 	        sortable: true
 	    }, {
 	        field: 'deptName',
 	        title: '所属组织',
-	        width: '10%',
+	        width: '16%',
 	        sortable: true
 	    }, {
 	        field: 'status',
 	        title: '状态',
-	        width: '5%',
+	        width: '7%',
 	        formatter: function(value, row, index){
-				return statusObj[row.status];
+				    return statusObj[row.status];
 			}
 	    }
 	   ]
@@ -102,7 +104,7 @@ function setStatus(id,name,type){
 							<td class="td-value"><input type="text" id="userName" name="userName" style="width:160px;" value="${userName }" /></td>
 							<td class="td-label">姓名</td>
 							<td class="td-value">
-								<input type="text" id="realName" name="realName" style="width:160px;"  value="${realName }" />	
+								<input type="text" id="realName" name="realName" style="width:160px;"  value="${realName }" />
 							<button type="button" class="btn btn-info btn-sm" onclick="search(1)" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
 						</td>
 					</tr>

@@ -20,10 +20,10 @@ $(function(){
 		{
 	        field: 'opt',
 	        title: '操作',
-	        width: '8%',
+	        width: '7%',
 	        align: 'center',
 	        formatter: function(value, row, index){
-	        	return "<button type='button' class='btn btn-default btn-ss' title='查看' onclick=\"go('查看日志','${ctx}/log/goView?id="+row.id+"')\"><i class='fa fa-info'></i> 查看</button>";
+	        	return '<a href="javascript:;" class="link" onclick=go("查看日志","${ctx}/log/goView?id='+row.id+'") >查看</a>';
 			}
 	    }, {
 	        field: 'cnName',
@@ -35,36 +35,34 @@ $(function(){
 	        width: '10%'
 	    }, {
 	        field: 'uri',
-	        title: 'uri',
-	        width: '20%'
+	        title: 'uri'
 	    }, {
 	        field: 'opt',
 	        title: '操作类型',
 	        width: '5%'
 	    }, {
-	        field: 'methodCostTime',
-	        title: '方法耗时(ms)',
-	        width: '5%'
-	    }, {
-	        field: 'costTime',
-	        title: '调用耗时(ms)',
-	        width: '5%'
+	        field: 'time',
+	        title: '耗时',
+	        width: '8%',
+	        formatter: function(value, row, index){
+	        	return row.methodCostTime+'<span class="link-sep">|</span>'+row.costTime;
+			}
 	    }, {
 	        field: 'ip',
 	        title: 'ip地址',
-	        width: '8%'
+	        width: '9%'
 	    }, {
 	        field: 'createTime',
 	        title: '创建时间',
-	        width: '8%'
+	        width: '9%'
 	    }, {
 	        field: 'userName',
 	        title: '操作人',
-	        width: '5%'
+	        width: '7%'
 	    }, {
 	        field: 'rsType',
 	        title: '结果',
-	        width: '5%',
+	        width: '7%',
 	        formatter: function(value, row, index){
 				return rsStatus[value];
 			}

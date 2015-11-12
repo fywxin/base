@@ -14,13 +14,15 @@ $(function(){
 		{
 	        field: 'opt',
 	        title: '操作',
-	        width: '30%',
+	        width: '20%',
 	        align: 'center',
 	        formatter: function(value, row, index){
 				var strArr = [];
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='添加子组织' onclick=\"go('添加子组织', '${ctx}/dept/goSave?pid="+row.id+"')\"><i class='fa fa-pencil'></i> 添加子组织</button>");
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"go('修改组织', '${ctx}/dept/goUpdate?id="+row.id+"')\"><i class='fa fa-pencil'></i> 修改</button>");
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='删除' onclick=\"del('"+row.id+"')\"><i class='fa fa-trash-o'></i> 删除</button>");
+				strArr.push("<a href='javascript:;' class='link' onclick=\"go('添加子组织', '${ctx}/dept/goSave?pid="+row.id+"')\">添加子组织</a>");
+				strArr.push('<span class="link-sep">|</span>')
+				strArr.push("<a href='javascript:;' class='link' onclick=\"go('修改组织', '${ctx}/dept/goUpdate?id="+row.id+"')\">修改</a>");
+				strArr.push('<span class="link-sep">|</span>')
+				strArr.push("<a href='javascript:;' class='link' onclick=\"del('"+row.id+"')\">删除</a>");
 	        	return strArr.join("");
 			}
 	    }, {
@@ -36,12 +38,10 @@ $(function(){
 	    }, {
 	        field: 'deptTel',
 	        title: '组织电话',
-	        width: '10%',
-	        sortable: true
+	        width: '10%'
 	    }, {
 	        field: 'deptAddr',
-	        title: '组织地址',
-	        sortable: true
+	        title: '组织地址'
 	    }, {
 	        field: 'remark',
 	        width: '15%',

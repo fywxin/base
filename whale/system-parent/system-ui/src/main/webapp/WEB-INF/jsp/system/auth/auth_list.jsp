@@ -15,23 +15,23 @@ $(function(){
 		{
 	        field: 'opt',
 	        title: '操作',
+	        width: '8%',
 	        align: 'center',
 	        formatter: function(value, row, index){
 	        	var strArr = [];
 	        	<tag:auth authCode="AUTH_UPDATE">
-	        	strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改权限' onclick=\"go('修改权限','${ctx}/auth/goUpdate?authCode="+row.authCode+"')\"><i class='fa fa-pencil'></i> 修改</button>");
+	        	strArr.push('<a href="javascript:;" class="link" onclick=go("修改权限","${ctx}/auth/goUpdate?authCode='+row.authCode+'") >修改</a>');
 	        	</tag:auth> 
 	        	return strArr.join("");
 			}
 	    }, {
 	        field: 'authName',
-	        width: '28%',
+	        width: '30%',
 	        title: '权限名称',
 	        sortable: true
 	    }, {
 	        field: 'authCode',
 	        title: '权限编码',
-	        width: '25%',
 	        sortable: true
 	    }, {
 	        field: 'menuName',

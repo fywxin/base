@@ -59,10 +59,10 @@
 
         </div>
       </div>
-    <div class="sidebar-nav" id="menuDiv" style="width: 220px;overflow: auto;">
+    <div class="sidebar-nav" id="menuDiv" style="width: 200px;overflow: auto;">
     	<ul>${uc.customDatas.menuStr }</ul>
     </div>
-    <div class="content" style="padding: 3px 5px 0px 3px;overflow: hidden;margin-left: 220px;">
+    <div class="content" style="padding: 3px 5px 0px 3px;overflow: hidden;margin-left: 200px;">
     	<ul class="nav nav-tabs" id="topTab">
     		<li id="liMain" onclick="goTab(1)" class="active"><a href="#"></a></li>
     		<li id="liSub" onclick="goTab(2)" style="display:none;"><a href="#"></a></li>

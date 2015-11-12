@@ -13,23 +13,24 @@ $(function(){
 	    url: '${ctx}/role/doList',
 	    idField: 'roleId',
 	    columns: [
-		{
+		  {
 	        field: 'opt',
 	        title: '操作',
-	        width: '30%',
+	        width: '15%',
 	        align: 'center',
 	        formatter: function(value, row, index){
 	        	var strArr = [];
-				strArr.push("<button type='button' class='btn btn-default btn-ss' title='修改' onclick=\"go('修改角色','${ctx}/role/goUpdate?roleId="+row.roleId+"')\"><i class='fa fa-pencil'></i> 修改</button>");
-	        		
-        		if(row.status == 2){
-        			strArr.push("<button type='button' class='btn btn-success btn-ss' title='启用' onclick=\"setStatus('"+row.roleId+"','"+row.roleName+"',1); return false;\"><i class='fa fa-unlock'></i> 启用</button>");
-        		}else{
-        			strArr.push("<button type='button' class='btn btn-default btn-ss' title='禁用' onclick=\"setStatus('"+row.roleId+"','"+row.roleName+"',2); return false;\"><i class='fa fa-lock'></i> 禁用</button>");
-        		}
-        		strArr.push("<button type='button' class='btn btn-info btn-ss' title='设置权限' onclick=\"go('设置权限','${ctx}/role/goSetRoleAuth?roleId="+row.roleId+"'); return false;\"><i class='fa fa-group'></i> 设置权限</button>");
+	            strArr.push('<a href="javascript:;" class="link" onclick=go("修改角色","${ctx}/role/goUpdate?roleId='+row.roleId+'") >修改</a>');
+	            strArr.push('<span class="link-sep">|</span>');
+	            if(row.status == 2){
+	              strArr.push('<a href="javascript:;" class="link" onclick=setStatus('+row.roleId+',"'+row.roleName+'",1) >启用</a>');
+	            }else{
+	              strArr.push('<a href="javascript:;" class="link" onclick=setStatus('+row.roleId+',"'+row.roleName+'",2) >禁用</a>');
+	            }
+	            strArr.push('<span class="link-sep">|</span>');
+	            strArr.push('<a href="javascript:;" class="link" onclick=go("设置权限","${ctx}/role/goSetRoleAuth?roleId='+row.roleId+') >设置权限</a>');
         		return strArr.join("");
-			}
+			    }
 	    }, {
 	        field: 'roleName',
 	        width: '20%',
@@ -48,8 +49,8 @@ $(function(){
 	        title: '状态',
 	        width: '5%',
 	        formatter: function(value, row, index){
-				return statusObj[value];
-			}
+				    return statusObj[value];
+			    }
 	    }
 	   ]
 	});
