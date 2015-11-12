@@ -39,6 +39,7 @@
             <bean id="reqBodyProcessor" class="org.whale.system.server.ReqRespBodyProcessorProxy" >
 	        	<property name="reqRespHandler" ref="wspzReqRespHandler"></property>
 		    </bean>
+		    <bean id="reqParamMethodArgumentResolver" class="org.whale.system.server.ReqParamMethodArgumentResolver"></bean>
         </mvc:argument-resolvers>
         <mvc:return-value-handlers>
             <bean id="respBodyProcessor" class="org.whale.system.server.ReqRespBodyProcessorProxy" >
@@ -46,8 +47,6 @@
 		    </bean>
         </mvc:return-value-handlers>
     </mvc:annotation-driven>
-
-	
 
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="converters">

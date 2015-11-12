@@ -17,6 +17,10 @@ public class ServerException extends BaseException{
 	public ServerException(String message) {
 		super(message);
 	}
+	
+	public ServerException(Throwable cause) {
+		super(cause);
+	}
 	/**
 	 * 业务异常
 	 */
