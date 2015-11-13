@@ -253,10 +253,18 @@ public class YoubooReqRespHandler implements ReqRespHandler {
 			if(logger.isDebugEnabled()){
 				logger.debug("接口-请求-解密：密钥 {}", context.getReqSecure());
 			}
+			String key = context.getReqSecure();
 			try{
-				datas = AES.decrypt(datas, context.getReqSecure().getBytes());
+				if(key.length() > 16){
+					key = key.substring(0,16);
+				}else{
+					while(key.length() != 16){
+						key += "0";
+					}
+				}
+				datas = AES.decrypt(datas, key.getBytes());
 			}catch(Exception e){
-				logger.error("接口-请求-解密：密钥 "+context.getReqSecure(), e);
+				logger.error("接口-请求-解密：密钥 "+key, e);
 				throw new ServerException(ErrorCode.ENCRYPT_ERROR);
 			}
 		}else{

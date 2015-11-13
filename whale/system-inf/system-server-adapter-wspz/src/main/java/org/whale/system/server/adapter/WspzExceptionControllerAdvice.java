@@ -2,6 +2,8 @@ package org.whale.system.server.adapter;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +17,8 @@ import org.whale.system.server.ServerException;
 
 @ControllerAdvice
 public class WspzExceptionControllerAdvice {
+	
+	private static final Logger logger = LoggerFactory.getLogger(WspzExceptionControllerAdvice.class);
 
 	@ExceptionHandler(FieldValidErrorException.class)
 	@ResponseStatus(HttpStatus.ACCEPTED)
@@ -30,6 +34,7 @@ public class WspzExceptionControllerAdvice {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@ResponseBody
 	public Result<?> serverException(HttpServletResponse response, ServerException e) {
+		logger.error("服务端异常", e);
 		WspzContext context = (WspzContext)ThreadContext.getContext().get(WspzContext.THREAD_KEY);
 		response.addHeader("reqno", context.getReqno());
 		
@@ -40,6 +45,7 @@ public class WspzExceptionControllerAdvice {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@ResponseBody
 	public Result<?> unknowException(HttpServletResponse response, Exception e) {
+		logger.error("未知异常", e);
 		WspzContext context = (WspzContext)ThreadContext.getContext().get(WspzContext.THREAD_KEY);
 		response.addHeader("reqno", context.getReqno());
 		
