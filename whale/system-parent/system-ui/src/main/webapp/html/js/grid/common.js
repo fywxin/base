@@ -11,6 +11,7 @@ $(function(){
 			search(1);
 		}
 	});
+	$("select").chosen();
 });
 
 function getGridDivHeight(){

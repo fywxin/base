@@ -80,5 +80,5 @@ function loginOut(){
 }
 
 function changePassword(){
-	$.openWin({url:ctx+"/user/goChangePassword", width: 600, height: 300});
+	goMain("修改密码", "/user/goChangePassword");
 }

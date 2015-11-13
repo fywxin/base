@@ -9,7 +9,6 @@ function save(){
 	$.save({'url':'${ctx}/user/doChangePassword', onSuccess: function(){
 		$.alert('修改密码成功，请重新登入！');
 		window.top.location.href="${ctx}/";
-		$.closeWin();
 	}}); 
 }
 //校验函数
@@ -46,35 +45,38 @@ $(function() {
 </script>
 
 </head>
-    
-<body class="my_formBody"> 
-	<div class="navbar-fixed-bottom my_toolbar" >
-		<button type="button" class="btn btn-primary btn-sm" onclick="save()"><i class="fa fa-hdd-o" ></i> 保存</button>
-		<button type="button" class="btn btn-info btn-sm" onclick="$.closeWin();"><i class="fa fa-times" ></i> 关闭</button>
-	</div>
-	<div id="formBoxDiv" class="my_formBox" >
-		<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
-		<form action="" method="post" id="dataForm">
-			<table class="query">
-					<col  width="100"/>
-					<col />
-					<tbody>
-						<tr>
-							<td class="td-label"><span class="required">*</span>旧密码</td>
-							<td class="td-value"><input type="password" id="oldPassword" name="oldPassword" maxlength="10" style="width:160px;"  title="请输入密码,6~10位."/></td>
-						</tr>
-						<tr>
-							<td class="td-label"><span class="required">*</span>新密码</td>
-							<td class="td-value"><input type="password" style="width:160px;" id="newPassword1" maxlength="10" name="newPassword1" title="请输入密码,6~10位." /></td>
-							
-						</tr>
-						<tr>
-							<td class="td-label"><span class="required">*</span>确认新密码</td>
-							<td class="td-value"><input type="password" style="width:160px;" id="newPassword2" maxlength="10" name="newPassword2" title="请输入密码,6~10位." /></td>
-						</tr>
-					</tbody>
-				</table>
-			</form>
-		</div>
+
+
+<body>
+<div id="bodyDiv" style="margin-top:10px;overflow-x: hidden;">
+	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
+	<div class="row">
+        <form class="form-horizontal m-t" id="dataForm">
+        	<div class="form-group">
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>旧密码：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input type="password" id="oldPassword" name="oldPassword" maxlength="10" class="form-control" style="width:250px" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>新密码：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input type="password" id="newPassword1" name="newPassword1" maxlength="10" class="form-control" style="width:250px" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>确认新密码：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input type="password" id="newPassword3" name="newPassword3" maxlength="10" class="form-control" style="width:250px" >
+                </div>
+            </div>
+    		<div class="form-group" style="border-bottom:0px;margin-top:20px;">
+                <div class="col-sm-offset-3 col-md-offset-2 col-lg-offset-1" >
+                    <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保 存</button>
+                </div>
+            </div>
+        </form>
+     </div>
+ </div>
 </body>
 </html>

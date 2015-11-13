@@ -3,6 +3,7 @@ $(window).resize(function(){
 });
 $(function() {
 	$("#bodyDiv").height($.h()-40);
+	$("select").chosen();
 });
 $.validator.setDefaults({
 	highlight: function (element) {$(element).closest('.form-group').removeClass('has-success').addClass('has-error');},

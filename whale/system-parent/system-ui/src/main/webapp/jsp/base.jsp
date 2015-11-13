@@ -13,10 +13,12 @@
 <link href="${html }/css/bootstrap.min.css" rel="stylesheet">
 <link href="${html }/css/font-awesome.css" rel="stylesheet">
 <link href="${html }/css/my.css" rel="stylesheet">
+<link href="${html }/plugins/chosen/chosen.css" rel="stylesheet">
 
 <script src="${html }/js/jquery-1.11.1.min.js"></script>
 <script src="${html }/js/bootstrap.min.js"></script>
 <script src="${html }/js/fun.js"></script>
+<script src="${html}/plugins/chosen/chosen.jquery.js"></script>
 <!--[if lt IE 9]>
 <script src="${html }/js/html5shiv.min.js"></script>
 <script src="${html }/js/respond.min.js"></script>

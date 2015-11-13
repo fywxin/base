@@ -49,11 +49,11 @@
                     <i class="fa fa-caret-down"></i>
                 </a>
               <ul class="dropdown-menu">
-                <li><a href="./">个人资料</a></li>
+                <li><a href="javascript:;">个人资料</a></li>
                 <li class="divider"></li>
-                <li><a href="./">修改密码</a></li>
+                <li><a href="javascript:;" onclick="changePassword()">修改密码</a></li>
                 <li class="divider"></li>
-                <li><a href="#" onclick="loginOut()">安全退出</a></li>
+                <li><a href="javascript:;" onclick="loginOut()">安全退出</a></li>
               </ul>
             </li>
           </ul>

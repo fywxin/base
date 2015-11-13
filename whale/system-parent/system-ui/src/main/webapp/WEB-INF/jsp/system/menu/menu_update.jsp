@@ -65,7 +65,7 @@ $(function() {
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><span class="required" id="urlSign" style="visibility:hidden;">*</span>链接地址：</label>
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i id="urlSign" style="visibility:hidden;">*</i>链接地址：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
                     <c:if test="${item.menuType == 3}"><input id="menuUrl" name="menuUrl" value="${item.menuUrl }" class="form-control" style="width:250px"  ></c:if>
                 </div>

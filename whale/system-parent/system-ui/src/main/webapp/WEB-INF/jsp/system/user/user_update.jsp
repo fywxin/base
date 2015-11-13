@@ -64,7 +64,7 @@ $(function() {
             <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>真实姓名：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
-                    <input id="realName" name="realName" class="form-control" style="width:250px"  value="${item.realName }" required="" aria-required="true" >
+                    <input id="realName" name="realName" class="form-control" style="width:250px"  value="${item.realName }" >
                 </div>
             </div>
             <div class="form-group">

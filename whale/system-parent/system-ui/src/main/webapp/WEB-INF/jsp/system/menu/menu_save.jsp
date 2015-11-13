@@ -27,6 +27,7 @@ $(function() {
 			}
 		}
 	});
+	
 });
 
 function changeMenuType(){
@@ -42,7 +43,6 @@ function changeMenuType(){
 		$("#menuUrl").css("visibility", "visible").rules("add",{"required":true});
 	}
 }
-
 </script>
 </head>
     
@@ -50,6 +50,7 @@ function changeMenuType(){
 <div id="bodyDiv" style="margin-top:10px;overflow-x: hidden;">
 	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 	<div class="row">
+	
         <form class="form-horizontal m-t" id="dataForm">
         	<div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>菜单名：</label>
@@ -74,7 +75,7 @@ function changeMenuType(){
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><span class="required" id="urlSign" style="visibility:hidden;">*</span>链接地址：</label>
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i id="urlSign" style="visibility:hidden;">*</i>链接地址：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
                     <input id="menuUrl" name="menuUrl" class="form-control" style="width:250px"  >
                 </div>
@@ -82,7 +83,7 @@ function changeMenuType(){
             <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label">打开方式：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
-                    <select id="openType" name="openType" style="width:250px">
+                    <select id="openType" name="openType" style="width:250px" class="chosen-select" data-placeholder="选择打开方式...">
 						<option value="1">窗口内打开</option>
 						<option value="2">弹出窗口</option>
 					</select>
@@ -91,7 +92,7 @@ function changeMenuType(){
             <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label">是否公共：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
-                    <select id="isPublic" name="isPublic" style="width:250px">
+                    <select id="isPublic" name="isPublic" style="width:250px;height:58px;">
 						<option value="0">否</option>
 						<option value="1">是</option>
 					</select>
@@ -115,6 +116,7 @@ function changeMenuType(){
                     <button class="btn btn-success" type="button" id="continueBut" onclick="window.location.reload();" style="display: none;"><i class='fa fa-thumbs-up'></i> 继续添加</button>
                 </div>
             </div>
+            
         </form>
      </div>
 </div>

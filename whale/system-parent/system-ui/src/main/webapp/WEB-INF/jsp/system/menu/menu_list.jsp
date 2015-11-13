@@ -46,7 +46,7 @@ $(function(){
 				return openTypeObj[value];
 			}
 	    }, {
-	        field: 'isPublic"',
+	        field: 'isPublic',
 	        title: '是否公共',
 	        width: '8%',
 	        formatter: function(value, row, index){
