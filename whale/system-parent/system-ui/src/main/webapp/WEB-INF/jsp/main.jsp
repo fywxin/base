@@ -16,6 +16,7 @@
     <link href="${html }/ui/stylesheets/premium.css" rel="stylesheet">
     
 	<style type="text/css">
+	body {font-family: Helvetica, Georgia, Arial, sans-serif, 宋体;font-size: 13px;_font-size: 12px}
 	.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {color: #fff;}
     </style>
     <!--[if lt IE 9]>

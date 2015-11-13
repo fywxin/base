@@ -9,7 +9,6 @@
 function save(){
 	$.save({'url':'${ctx}/dept/doUpdate'}); 
 }
-
 //校验函数
 $(function() {
 	$("#dataForm").validate({
@@ -45,59 +44,60 @@ function filterSelf(){
 
 </head>
     
-<body style="overflow-x: hidden;"> 
+<body>
+<div id="bodyDiv" style="margin-top:10px;overflow-x: hidden;">
 	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
-	<div class="row" style="margin:10px 20px;">
+	<div class="row">
         <form class="form-horizontal m-t" id="dataForm">
-        	<input type="hidden" id="id" name="id" value="${item.id}" />
             <div class="form-group">
-                <label class="col-sm-2 control-label">父组织：</label>
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">父组织：</label>
                 <div class="input-group col-sm-4 ">
                     <tag:tree nodeName="deptName" nodeId="id" id="pid" nodes="${nodes }" nodePId="pid" afterLoadTree="filterSelf" value="${item.pid }"></tag:tree>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label"><span class="required">*</span>组织名称：</label>
-                <div class="col-sm-4">
-                    <input id="deptName" name="deptName" value="${item.deptName }" class="form-control" required="" aria-required="true" >
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>组织名称：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input id="deptName" name="deptName" value="${item.deptName }" class="form-control" style="width:250px"  required="" aria-required="true" >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">组织编码：</label>
-                <div class="col-sm-4">
-                    <input id="deptCode" name="deptCode" value="${item.deptCode }" class="form-control" >
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">组织编码：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input id="deptCode" name="deptCode" value="${item.deptCode }" class="form-control" style="width:250px"  >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">联系电话：</label>
-                <div class="col-sm-4">
-                    <input id="deptTel" name="deptTel" value="${item.deptTel }" class="form-control" >
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">联系电话：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input id="deptTel" name="deptTel" value="${item.deptTel }" class="form-control" style="width:250px"  >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">联系地址：</label>
-                <div class="col-sm-4">
-                    <input id="deptAddr" name="deptAddr" value="${item.deptAddr }" class="form-control" >
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">联系地址：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input id="deptAddr" name="deptAddr" value="${item.deptAddr }" class="form-control" style="width:250px"  >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">排序：</label>
-                <div class="col-sm-4">
-                    <input id="orderNo" name="orderNo" value="${item.orderNo }" onkeyup="value=value.replace(/[^\d]/g,'')" class="form-control" >
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">排序：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input id="orderNo" name="orderNo" value="${item.orderNo }" onkeyup="value=value.replace(/[^\d]/g,'')" class="form-control" style="width:250px"  >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">备注：</label>
-                <div class="col-sm-4">
-                    <textarea id="remark" name="remark" rows="3" cols="58" >${item.remark }</textarea>
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">备注：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <textarea id="remark" name="remark" rows="3" class="form-control" style="width:250px" >${item.remark }</textarea>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-sm-12 col-sm-offset-2">
+            <div class="form-group" style="border-bottom:0px;margin-top:20px;">
+                <div class="col-sm-offset-3 col-md-offset-2 col-lg-offset-1" >
                     <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保 存</button>
                 </div>
             </div>
         </form>
      </div>
+    </div>
 </body>
 </html>

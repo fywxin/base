@@ -7,4 +7,3 @@
 <script src="${html}/plugins/grid/src/bootstrap-table-editable.js"></script>
 <script src="${html}/plugins/grid/src/bootstrap-editable.js"></script>
 <script src="${html}/js/grid/common.js"></script>
-<link href="${html}/css/over-write.css" rel="stylesheet">

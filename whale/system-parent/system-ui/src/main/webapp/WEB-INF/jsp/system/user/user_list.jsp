@@ -17,7 +17,7 @@ $(function(){
 		  {
 	        field: 'opt',
 	        title: '操作',
-	        width: '25%',
+	        width: '28%',
 	        align: 'center',
 	        formatter: function(value, row, index){
             var strArr = [];
@@ -31,7 +31,7 @@ $(function(){
             strArr.push('<span class="link-sep">|</span>');
             strArr.push('<a href="javascript:;" class="link" onclick=resetPassword('+row.userId+') >重置密码</a>');
             strArr.push('<span class="link-sep">|</span>');
-            strArr.push('<a href="javascript:;" class="link" onclick=go("分配角色","${ctx}/user/goSetUserRole?userId='+row.userId+') >分配角色</a>');
+            strArr.push('<a href="javascript:;" class="link" onclick=go("分配角色","${ctx}/user/goSetUserRole?userId='+row.userId+'") >分配角色</a>');
 
         		return strArr.join("");
 			}

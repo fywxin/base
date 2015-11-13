@@ -1,5 +1,7 @@
 package org.whale.system.spring;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.whale.system.common.exception.BaseException;
 import org.whale.system.common.exception.BusinessException;
+import org.whale.system.common.exception.NotLoginException;
 import org.whale.system.common.exception.OrmException;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.ThreadContext;
@@ -67,7 +70,10 @@ public class WhaleLogExceptionResolver extends SimpleMappingExceptionResolver {
                 }  
                 return getModelAndView(viewName, ex, request);  
             } else {
-            	if(ex instanceof BaseException){
+            	if(ex instanceof NotLoginException){
+            		response.addHeader("login", "1");
+            		response.setStatus(401);//401 用户未登录，提示用户重新登录
+            	}else if(ex instanceof BaseException){
             		WebUtil.fail(response, ex.getMessage());
             	}else{
             		WebUtil.fail(response, "业务处理出现未知异常，请联系管理员");

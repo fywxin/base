@@ -12,9 +12,8 @@
 		response.setHeader("Location", request.getContextPath()+"/main");
 		response.sendRedirect(request.getContextPath()+"/main");
 	}
-	Integer errorCount = (Integer)request.getSession().getAttribute("ERROR");
 	
-	boolean verityFlag = SysConstant.LOGIC_TRUE.equals(DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "VERITY_CODE_FLAG")) || (errorCount != null && errorCount >= 3);
+	boolean verityFlag = SysConstant.LOGIC_TRUE.equals(DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "VERITY_CODE_FLAG"));
 	pageContext.setAttribute("verityFlag", verityFlag);
 	
 	boolean autoLoginFlag = SysConstant.LOGIC_TRUE.equals(DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "AUTO_LOGIN_FLAG"));
@@ -28,6 +27,7 @@
     <link rel="stylesheet" type="text/css" href="${html }/ui/stylesheets/premium.css">
 	<style type="text/css">
 	.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {color: #fff;}
+	body {font-family: 'Microsoft Yahei';}
     </style>
     <!--[if lt IE 9]>
       <script src="${html }/js/html5shiv.min.js"></script>
@@ -55,25 +55,29 @@
 
 
         <div class="dialog">
+        <p class="bg-danger" style="padding: 10px 25px;visibility: hidden;border: 1px solid #F54343;border-radius: 3px;" id="errorInfoSpan" ></p>
     <div class="panel panel-default">
-        <p class="panel-heading no-collapse">登录</p>
+        <p class="panel-heading no-collapse">幼宝管理系统</p>
         <div class="panel-body">
             <form id="loginForm">
         	<input type="hidden" id="encryptedPwd" name="encryptedPwd" >
                 <div class="form-group">
                     <label>用户名</label>
-                    <input type="text" id="userName" name="userName" class="form-control span12">
+                    <input type="text" id="userName" name="userName" placeholder="用户名" class="form-control span12">
                 </div>
                 <div class="form-group">
                 <label>密码</label>
-                    <input type="password" id="password" name="password" class="form-control span12 form-control">
+                    <input type="password" id="password" name="password" placeholder="密码"  class="form-control span12 form-control">
                 </div>
                 
 <c:if test="${verityFlag }">
-          <div class="form-group">
-            <label>验证码</label>
-              <input id="verifycode" name="verifycode" class="form-control span6" placeholder="请在此输入验证码"  type="text" maxlength="4" size="4" style="width:60px" onkeyup="value=value.replace(/[^\d]/g,'')">
-              <a class="pic-ver radius2px" href="#"><img id="secimg" class="radius2px" src="bg_big.jpg" width="72" height="31" alt="" title="看不清楚，换一张" onclick="javascript:createCode();" style="cursor:pointer;vertical-align: middle;border: 0;"></a>
+          <div class="form-group" id="verifyCodeDiv" style="display:none;" show="0">
+            <label >验证码</label>
+            <div class="form-inline">
+            <input id="verifycode" name="verifycode" class="form-control span6" placeholder="验证码"  type="text" maxlength="4" size="4" style="width:120px" onkeyup="value=value.replace(/[^\d]/g,'')">
+              <a class="pic-ver radius2px" href="#"><img id="secimg" src="" width="72" height="31" alt="" title="看不清楚，换一张" onclick="javascript:createCode();" style="cursor:pointer;vertical-align: middle;border: 0;margin:5px;"></a>
+            </div>
+              
           </div>
 </c:if>
                 
@@ -107,6 +111,7 @@ function clientHeight(){
 }
 function sendForm(){
 	if($("#userName").val() ==""){
+		$("#userName").val("").focus();
 		$("#errorInfoSpan").html("请输入用户名").css("visibility","visible");
 		return false;
 	}
@@ -116,11 +121,13 @@ function sendForm(){
 			return true;
 		}
 </c:if>
+		$("#password").val("").focus();
 		$("#errorInfoSpan").html("请输入密码").css("visibility","visible");
 		return false;
 	}
 <c:if test="${verityFlag }">
-	if($("#verifycode").val() ==""){
+	if($("#verifycode").val() =="" && $("#verifyCodeDiv").attr("show") == "1"){
+		$("#verifycode").val("").focus();
 		$("#errorInfoSpan").html("请输入验证码").css("visibility","visible");
 		return false;
 	}
@@ -165,6 +172,20 @@ function login(){
 		    	}else{
 		    		createCode();
 		    		$("#errorInfoSpan").html(obj.msg).css("visibility","visible");
+		    		var code = parseInt(obj.code);
+		    		if(code > 10){
+		    			$("#verifyCodeDiv").show().attr("show", "1");
+		    		}else{
+		    			code = code * 10 + 1;
+		    		}
+		    		$("#verifycode").val("");
+		    		if(code > 30){
+		    			$("#verifycode").focus();
+		    		}else if(code > 20){
+		    			$("#password").val("").focus();
+		    		}else{
+		    			$("#userName").val("").focus();
+		    		}
 		    	}
 			}
 		});

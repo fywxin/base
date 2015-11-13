@@ -1,79 +1,34 @@
-body, label, input, button, select, textarea, .uneditable-input,.navbar-search .search-query {
-	font-family: Helvetica, Georgia, Arial, sans-serif, 宋体;
-	font-size: 13px;
-	_font-size: 12px
-}
+body, label, input, button, select, textarea, .uneditable-input,.navbar-search .search-query {font-family: Helvetica, Georgia, Arial, sans-serif, 宋体;font-size: 13px;_font-size: 12px}
 
+/** grid-form */
 table.query{clear:both; width:100%; border-collapse:collapse;table-layout: fixed; word-break:break-all;}
 table.query td{padding:5px; border:1px solid #CCCCCC;}
 table.query .td-label{background:#F4F5F7; text-align:right; width:15%}
 table.query .td-value{width:35%}
 table.query .td-value input{padding:3px; border:1px solid #CCCCCC; width:180px;}
 table.query .td-value select{padding:3px; border:1px solid #CCCCCC; width:185px;}
-.required{color: red; margin-right:5px;}
 
-
+/**扩展bs */
+.navbar-btn.btn-ss {margin-top: 16px;margin-bottom: 16px}
+.btn-group-xs>.btn .badge, .btn-ss .badge {top: 0;padding: 2px 5px}
+.btn-group-xs>.btn, .btn-ss {padding: 2px 3px;font-size: 12px;line-height: 1;border-radius: 3px;margin-left:3px;margin-right:3px;}
+.todo-list.small-list .btn-ss,
+.todo-list.small-list .btn-group-ss > .btn {border-radius: 5px;font-size: 12px;line-height: 1;padding: 1px 2px 1px 3px;}
+.spinner-buttons.input-group-btn .btn-ss {line-height: 1;}
+/**覆盖bs */
+.fixed-table-toolbar .bars, .fixed-table-toolbar .columns, .fixed-table-toolbar .search {margin: 5px 0px;}
 
 /** grid */
 .my_gridBody{overflow: hidden;background-color: #fff;}
 .my_gridBox{margin-top: 2px;}
 .my_gridToolBar{margin:3px 0px;border: 1px solid #CCCCCC; padding:3px 7px}
+th:focus {outline: 0px solid transparent;}
+.table .link{color: #4e88f2;}
+.table .link-sep{color: #4e88f2;margin: 0 5px;}
+:link, :visited, ins {text-decoration: none;}
 
 /** form */
-.my_formBody{padding:2px 5px;overflow: hidden;}
-.my_formBox{margin-bottom: 35px;overflow-y: auto;}
+.form-horizontal .control-label i {position: absolute;margin-left: -12px;color: #c00;font-weight:600;margin-top:3px;}
+.form-horizontal .vaildError {color: #c00;font-style: normal;margin: 3px 5px 0px 3px;}
+.form-horizontal label {display: inline-block;font-size: 13px;font-weight: 500;}
 .my_infoBox{margin: 3px 0px; display: none;}
-.my_toolbar{background: #f0f4f7;border-top: 1px #c7c7c7 solid;overflow: hidden;text-align: center;padding:10px 20px;}
-.my_textAreaDiv{width: 99%; height:50px; overflow-x: hidden; overflow-y: auto;word-wrap:break-word; }
-
-
-/** boostrap */
-.my_controlLabel{padding: 7px 5px;text-align: right;background:#F4F5F7;}
-
-th:focus {outline: 0px solid transparent;}
-
-
-**wjs */
-.navbar-btn.btn-ss {
-	margin-top: 16px;
-	margin-bottom: 16px
-}
-
-.btn-group-xs>.btn .badge, .btn-ss .badge {
-	top: 0;
-	padding: 2px 5px
-}
-
-.btn-group-xs>.btn, .btn-ss {
-	padding: 2px 3px;
-	font-size: 12px;
-	line-height: 1;
-	border-radius: 3px;
-	margin-left:3px;
-	margin-right:3px;
-}
-
-.todo-list.small-list .btn-ss,
-.todo-list.small-list .btn-group-ss > .btn {
-    border-radius: 5px;
-    font-size: 12px;
-    line-height: 1;
-    padding: 1px 2px 1px 3px;
-}
-
-.spinner-buttons.input-group-btn .btn-ss {
-    line-height: 1;
-}
-
-.table .link{
-	color: #4e88f2;
-}
-
-.table .link-sep{
-	color: #4e88f2;
-	margin: 0 5px;
-}
-
-:link, :visited, ins {
-	text-decoration: none;
-}

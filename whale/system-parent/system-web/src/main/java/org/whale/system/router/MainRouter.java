@@ -75,39 +75,40 @@ public class MainRouter extends BaseRouter {
 		}
 		
 		if(Strings.isBlank(userName)){
-			return Rs.fail("用户名不能为空", errorCount());
+			return Rs.fail("用户名不能为空", "1"+errorCount());
 		}
 		
 		if(Strings.isBlank(password) && Strings.isBlank(encryptedPwd)){
-			return Rs.fail("密码不能为空", errorCount());
+			return Rs.fail("密码不能为空", "2"+errorCount());
 		}
 		
 		Integer errorCount = (Integer)WebUtil.getSession().getAttribute("ERROR");
 		String msg = null;
 		if((Strings.isNotBlank(password) || Strings.isBlank(encryptedPwd)) 
-				&& ((errorCount != null && errorCount >= 3) || SysConstant.LOGIC_TRUE.equals(dictCacheService.getItemValue(DictConstant.DICT_SYS_CONF, "VERITY_CODE_FLAG"))) 
+				&& SysConstant.LOGIC_TRUE.equals(dictCacheService.getItemValue(DictConstant.DICT_SYS_CONF, "VERITY_CODE_FLAG")) 
+				&& (errorCount != null && errorCount >= 3 ) 
 				&& (msg = this.checkVerify()) != null){
-			return Rs.fail(msg, errorCount());
+			return Rs.fail(msg, "3"+errorCount());
 		}
 		
 		User user = this.userService.getByUserName(userName);
 		if(user == null || user.getStatus() == SysConstant.STATUS_DEL){
-			return Rs.fail("用户名不存在", errorCount());
+			return Rs.fail("用户名不存在", "1"+errorCount());
 		}
 		if(user.getStatus() != SysConstant.STATUS_NORMAL){
-			return Rs.fail("用户已禁止登录，请联系管理员");
+			return Rs.fail("用户已禁止登录，请联系管理员", "1"+errorCount());
 		}
 		if(Strings.isBlank(password)){
 			if(SysConstant.LOGIC_TRUE.equals(DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "AUTO_LOGIN_FLAG"))){
 				if(!encryptedPwd.equals(user.getPassword())){
-					return Rs.fail("请登录");
+					return Rs.fail("请登录", "1"+errorCount());
 				}
 			}else{
-				return Rs.fail("密码不能为空", errorCount());
+				return Rs.fail("密码不能为空", "2"+errorCount());
 			}
 		}else{
 			if(!this.userService.validPasswd(password, user.getPassword())){
-				return Rs.fail("密码错误", errorCount());
+				return Rs.fail("密码错误", "2"+errorCount());
 			}
 		}
 		try {
@@ -117,7 +118,7 @@ public class MainRouter extends BaseRouter {
 				if((sessions = MySessionContext.getSessionByUserId(user.getUserId())) != null && sessions.size() > 0) {
 					uc = (UserContext) sessions.get(0).getAttribute(SysConstant.USER_CONTEXT_KEY);
 					if(uc != null && !uc.getIp().equals(WebUtil.getIp())){
-						return Rs.fail("该帐号已于["+TimeUtil.formatTime(uc.getLoginTime(), TimeUtil.COMMON_FORMAT)+"] 在IP: ["+uc.getIp()+"] 登录，不允许重复登录!");
+						return Rs.fail("该帐号已于["+TimeUtil.formatTime(uc.getLoginTime(), TimeUtil.COMMON_FORMAT)+"] 在IP: ["+uc.getIp()+"] 登录，不允许重复登录!", "1"+errorCount());
 						
 					}else{
 						for(HttpSession session : sessions){
@@ -134,7 +135,7 @@ public class MainRouter extends BaseRouter {
 		} catch (Exception e) {
 			logger.error("绑定用户上下文出现异常", e);
 			this.clearUserContext();
-			return Rs.fail("绑定用户出现异常，请联系管理员");
+			return Rs.fail("绑定用户出现异常，请联系管理员", "1"+errorCount());
 		}
 		if(SysConstant.LOGIC_TRUE.equals(DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "AUTO_LOGIN_FLAG"))){
 			return Rs.success(Strings.isBlank(password) ? encryptedPwd : user.getPassword());

@@ -16,7 +16,7 @@ $(function(){
 		  {
 	        field: 'opt',
 	        title: '操作',
-	        width: '15%',
+	        width: '18%',
 	        align: 'center',
 	        formatter: function(value, row, index){
 	        	var strArr = [];
@@ -28,7 +28,7 @@ $(function(){
 	              strArr.push('<a href="javascript:;" class="link" onclick=setStatus('+row.roleId+',"'+row.roleName+'",2) >禁用</a>');
 	            }
 	            strArr.push('<span class="link-sep">|</span>');
-	            strArr.push('<a href="javascript:;" class="link" onclick=go("设置权限","${ctx}/role/goSetRoleAuth?roleId='+row.roleId+') >设置权限</a>');
+	            strArr.push('<a href="javascript:;" class="link" onclick=go("设置权限","${ctx}/role/goSetRoleAuth?roleId='+row.roleId+'") >设置权限</a>');
         		return strArr.join("");
 			    }
 	    }, {

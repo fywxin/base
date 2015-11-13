@@ -383,7 +383,7 @@ public class TreeTag extends TagSupport {
 	
 	private String bulidInputHtml(){
 		StringBuilder strb = new StringBuilder();
-		strb.append("<input type='text' id='"+id+"_NAME' name='"+id+"_NAME' onclick=\"showMenu_"+id+"(); return false;\" class=\"form-control\" style='margin-left:15px;' readonly=readonly /><span class=\"input-group-btn\" onclick='clear_"+id+"();'><button type=\"button\" class=\"btn btn-warning\" style='margin-left:15px;' >清空</button></span>\n")
+		strb.append("<input type='text' id='"+id+"_NAME' name='"+id+"_NAME' onclick=\"showMenu_"+id+"(); return false;\" class=\"form-control\" style='width:250px;' readonly=readonly /><button type=\"button\" class=\"btn btn-danger btn-sm\" onclick='clear_"+id+"();' style='margin-left:5px;' ><i class='fa fa-minus'></i> 清空</button>\n")
 			.append("<input type='hidden' id='"+id+"' name='"+id+"' value='"+value+"' />\n");
 		return strb.toString();
 	}
@@ -392,7 +392,7 @@ public class TreeTag extends TagSupport {
 		StringBuilder strb = new StringBuilder();
 		String maxWidth = width;
 		if(Integer.parseInt(maxWidth.substring(0,maxWidth.length()-2)) > 200)
-			maxWidth = "300px";
+			maxWidth = "250px";
 
 		strb.append("	$(\"body\").append('<div id=\"menuContent_"+id+"\" style=\"display:none; position: absolute;z-index:9999;\">");
 		if(search)

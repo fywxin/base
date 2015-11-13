@@ -207,7 +207,7 @@
 			    paginationNextText: "下一页",
 			    paginationLastText: "尾页",
 			    pageList: [10, 20, 50, 100],
-			    height: (window.top.mainHeight-$("#queryForm").height()-95),
+			    height: (window.top.mainHeight-$("#queryForm").height()-85),
 			    cache: false,
 			    onBeforeLoad: function(queryDatas){//加入搜索参数
 			    	var datas = $("#queryForm").serializeArray();
@@ -242,6 +242,13 @@ function getMain(){
 function getSub(){
 	return window.top.frames["frameMain"];
 }
+
+/**ajax 未登录异常，跳转到登录页面 */
+$(document).ajaxError(function(event, request, ajaxOptions, thrownError) {
+	if(request.getResponseHeader("login") == "1"){
+		window.location.href= window.top.ctx+"/";
+	}
+});
 
 function list2Tree(nodes, idKey, pidKey, textCol, orderCol, orderAsc){
 	var i, l;

@@ -21,9 +21,9 @@ $(function(){
 	        align: 'center',
 	        formatter: function(value, row, index){
 	        	var strArr = [];
-	            strArr.push('<a href="javascript:;" class="link" onclick=go("修改菜单","${ctx}/menu/goUpdate?menuId='+row.roleId+'") >修改</a>');
+	            strArr.push('<a href="javascript:;" class="link" onclick=go("修改菜单","${ctx}/menu/goUpdate?menuId='+row.menuId+'")>修改</a>');
 	            strArr.push('<span class="link-sep">|</span>');
-	            strArr.push('<a href="javascript:;" class="link" onclick=del('+row.roleId+'") >删除</a>');
+	            strArr.push('<a href="javascript:;" class="link" onclick=del('+row.menuId+') >删除</a>');
 	        	return strArr.join("");
 			}
 	    }, {

@@ -2,17 +2,8 @@
 <script src="${html}/plugins/validate/jquery.validate.min.js"></script>
 <script src="${html}/plugins/validate/messages_zh.min.js"></script>
 <script src="${html}/plugins/validate/addon.js"></script>
-<link href="${html}/css/over-write.css" rel="stylesheet">
-
-<script type="text/javascript">
-	$.validator.setDefaults({
-	    highlight: function (element) {
-	        $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
-	    },
-	    success: function (element) {
-	        element.closest('.form-group').removeClass('has-error').addClass('has-success');
-	    },
-	    errorElement: "span",
-	    errorClass: "help-block m-b-none"
-	});
-</script>
+<script src="${html}/js/from/common.js"></script>
+<style type="text/css">
+.form-control {font-size: 13px;}
+.form-group {padding-top: 4px;padding-bottom: 6px;margin-bottom: 0px;border-bottom: 1px dotted #f1f1f1;}
+</style>

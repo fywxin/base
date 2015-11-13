@@ -2416,11 +2416,7 @@
             this.options.url = params.url;
             this.options.pageNumber = 1;
         }
-        /**wjs from 2015-11-12*/
-        if(params.pageNumber){
-        	this.options.pageNumber = params.pageNumber;
-        }
-        /**wjs to 2015-11-12*/
+        
         this.initServer(params && params.silent, params && params.query);
     };
 

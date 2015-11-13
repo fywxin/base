@@ -49,6 +49,8 @@ public class DictRouter extends BaseRouter {
 		map.put("id", 0);
 		map.put("name", "字典管理");
 		map.put("pid", -1L);
+		map.put("isParent", true);
+		map.put("open", true);
 		map.put("orderNo", 0);
 		list.add(map);
 		for(Dict dict : dictList){
@@ -57,6 +59,7 @@ public class DictRouter extends BaseRouter {
 			map.put("name", dict.getDictName());
 			map.put("pid", 0L);
 			map.put("orderNo", dict.getDictId());
+			map.put("isParent", true);
 			list.add(map);
 		}
 		for(DictItem item : itemList){
@@ -65,6 +68,7 @@ public class DictRouter extends BaseRouter {
 			map.put("name", item.getItemName());
 			map.put("pid", item.getDictId());
 			map.put("orderNo", item.getOrderNo());
+			map.put("isParent", false);
 			list.add(map);
 		}
 		

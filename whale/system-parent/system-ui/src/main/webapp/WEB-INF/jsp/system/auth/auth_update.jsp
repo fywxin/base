@@ -47,34 +47,36 @@ function changeMenuIcon(){
 
 </head>
     
-<body style="overflow-x: hidden;"> 
+<body>
+<div id="bodyDiv" style="margin-top:10px;overflow-x: hidden;">
 	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
-	<div class="row" style="margin:10px 20px;">
+	<div class="row">
         <form class="form-horizontal m-t" id="dataForm">
         	<div class="form-group">
-                <label class="col-sm-2 control-label">权限名称：</label>
-                <div class="col-sm-4 ">
-                    <input id="authName" name="authName" value="${item.authName }" class="form-control" >
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">权限名称：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input id="authName" name="authName" value="${item.authName }" class="form-control" style="width:250px"  >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">权限编码：</label>
-                <div class="col-sm-4 ">
-                    <input id="authCode" name="authCode" value="${item.authCode }" class="form-control" readonly="readonly" >
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">权限编码：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input id="authCode" name="authCode" value="${item.authCode }" class="form-control" style="width:250px"  readonly="readonly" >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">所属菜单：</label>
-                <div class="input-group col-sm-4 ">
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">所属菜单：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
                     <tag:tree nodeName="menuName" nodeId="menuId" id="menuId" nodes="${nodes }" nodePId="parentId" value="${item.menuId }" canSelectParent="false" beforeClick="fliterMenuType" beforeLoadTree="changeMenuIcon"></tag:tree>
                 </div>
             </div>
-			<div class="form-group">
-                <div class="col-sm-12 col-sm-offset-2">
+			<div class="form-group" style="border-bottom:0px;margin-top:20px;">
+                <div class="col-sm-offset-3 col-md-offset-2 col-lg-offset-1" >
                     <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保 存</button>
                 </div>
             </div>
         </form>
      </div>
+  </div>
 </body>
 </html>

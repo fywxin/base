@@ -78,9 +78,9 @@
 		<property name="defaultErrorView" value="system/exception/error" />
 		<property name="exceptionMappings">
 			<props>
-				<prop key="org.whale.system.common.exception.ForbidVisitException">system/exception/ForbidVisitException</prop>
-				<prop key="org.whale.system.common.exception.NotLoginException">system/exception/NotLoginException</prop>
-				<prop key="java.lang.RuntimeException">system/exception/error</prop>
+				<prop key="org.whale.system.common.exception.ForbidVisitException">system/error/ForbidVisitException</prop>
+				<prop key="org.whale.system.common.exception.NotLoginException">system/error/NotLoginException</prop>
+				<prop key="java.lang.RuntimeException">system/error/error</prop>
 			</props>
 		</property>
 	</bean>

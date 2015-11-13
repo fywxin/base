@@ -19,39 +19,35 @@ $(function() {
 				validIllegalChar: true,
 				maxlength: 64,
 				required: true
-			},
-			"remark":{
-				validIllegalChar: true,
-				maxlength: 100
 			}
 		}
 	});
 });
-
 </script>
 
 </head>
     
-<body style="overflow-x: hidden;">
+<body>
+<div id="bodyDiv" style="margin-top:10px;overflow-x: hidden;">
 	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
-	<div class="row" style="margin:10px 20px;">
+	<div class="row">
         <form class="form-horizontal m-t" id="dataForm">
         	<div class="form-group">
-                <label class="col-sm-2 control-label"><span class="required">*</span>角色名称：</label>
-                <div class="col-sm-4">
-                    <input id="roleName" name="roleName" class="form-control" >
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>角色名称：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input id="roleName" name="roleName" class="form-control" style="width:250px"  >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label"><span class="required">*</span>角色编码：</label>
-                <div class="col-sm-4">
-                    <input id="roleCode" name="roleCode" class="form-control" >
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>角色编码：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <input id="roleCode" name="roleCode" class="form-control" style="width:250px"  >
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">备注：</label>
-                <div class="col-sm-4">
-                    <textarea id="remark" name="remark" rows="3" cols="58" ></textarea>
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">备注：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <textarea id="remark" name="remark" rows="3" class="form-control" style="width:250px" ></textarea>
                 </div>
             </div>
         	<div class="form-group">
@@ -62,5 +58,6 @@ $(function() {
             </div>
         </form>
      </div>
+</div>
 </body>
 </html>

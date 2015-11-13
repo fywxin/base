@@ -43,6 +43,7 @@ public class WhaleExceptionResolver extends SimpleMappingExceptionResolver {
                 return getModelAndView(viewName, ex, request);  
             } else {
             	if(ex instanceof NotLoginException){
+            		response.addHeader("login", "1");
             		response.setStatus(401);//401 用户未登录，提示用户重新登录
             	}else if(ex instanceof BaseException){
             		WebUtil.fail(response, ex.getMessage());

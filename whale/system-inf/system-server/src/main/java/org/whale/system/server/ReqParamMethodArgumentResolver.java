@@ -22,7 +22,10 @@ import org.whale.system.common.util.ThreadContext;
  * 	服务端 : 	1. 从request 的body 中获取请求串
  * 			2. 反序列化请求串为JSONArray 对象
  * 			3. @ReqParam 解析器记录当前参数解析位置，并放置到线程上下文中，并自增位置
- * 			
+ * 
+ * 	服务端空参数解决办法
+ * 			对空参数，配合切面来实现，切面用于校验签名的合法性，判断方法有@ResBody
+ * 
  * 	插件：	1. 流读取前
  * 
  * @author 王金绍

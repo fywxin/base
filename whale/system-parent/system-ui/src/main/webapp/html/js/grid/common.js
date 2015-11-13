@@ -14,7 +14,7 @@ $(function(){
 });
 
 function getGridDivHeight(){
-	return window.top.mainHeight-$("#queryForm").height()-95;
+	return window.top.mainHeight-$("#queryForm").height()-85;
 }
 
 function search(pageNo){
@@ -23,7 +23,8 @@ function search(pageNo){
 		if(pageNo != null && typeof(pageNo) != "undefined" && pageNo > 0){
 			param.offset = (pageNo-1) * 10;
 		}
-		$("#gridTable").bootstrapTable('refresh', {query: param, pageNumber: pageNo});
+		$("#gridTable").bootstrapTable('getOptions').pageNumber = pageNo;
+		$("#gridTable").bootstrapTable('refresh', {query: param});
 	}catch(e){}
 }
 
