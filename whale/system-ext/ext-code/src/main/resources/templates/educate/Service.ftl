@@ -1,6 +1,7 @@
 package ${domain.pkgName!"org.whale.system"}.service;
 
 import java.util.List;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class ${domain.domainName}Service extends BaseService<${domain.domainName
     }
     </#if>
 </#list>
-	
+
 	@Override
 	public BaseDao<${domain.domainName}, ${domain.idAttr.type}> getDao() {
 		return ${domain.domainName?uncap_first}Dao;

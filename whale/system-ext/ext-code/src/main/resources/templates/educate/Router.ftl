@@ -37,20 +37,20 @@ public class ${domain.domainName}Router extends BaseRouter {
 
 	@Autowired
 	private ${domain.domainName}Service ${domain.domainName?uncap_first}Service;
-	<#if domain.treeModel == 2>
+
     @Auth(code="${domain.domainName?uncap_first}:list", name="查询${domain.domainCnName}")
 	@RequestMapping("/goTree")
 	public ModelAndView goTree(){
 	
-		return new ModelAndView("${domain.pkgName!"system"}/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_tree");
+		return new ModelAndView("yb/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_tree");
 	}
-	</#if>
+
 
 	@Auth(code="${domain.domainName?uncap_first}:list", name="查询${domain.domainCnName}")
 	@RequestMapping("/goList")
-	public ModelAndView goList(<#if domain.treeModel != 3>, ${domain.idAttr.type} id</#if>){
+	public ModelAndView goList(${domain.idAttr.type} id){
 
-		return new ModelAndView("${domain.pkgName!"system"}/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_list")<#if domain.treeModel != 3>.addObject("id", id)</#if>;
+		return new ModelAndView("yb/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_list")<#if domain.treeModel != 3>.addObject("id", id)</#if>;
 	}
 
 	@Auth(code="${domain.domainName?uncap_first}:list", name="查询${domain.domainCnName}")
@@ -68,7 +68,7 @@ public class ${domain.domainName}Router extends BaseRouter {
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(){
 		
-		return new ModelAndView("${domain.pkgName!"system"}/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_save");
+		return new ModelAndView("yb/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_save");
 	}
 
 	@Auth(code="${domain.domainName?uncap_first}:save", name="新增${domain.domainCnName}")
@@ -87,7 +87,7 @@ public class ${domain.domainName}Router extends BaseRouter {
 		if(id == null || (${domain.domainName?uncap_first} = this.${domain.domainName?uncap_first}Service.get(id)) == null ){
 			throw new SysException("查找不到 ${domain.domainCnName} id="+id);
 		}
-		return new ModelAndView("${domain.pkgName!"system"}/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_update").addObject("item", ${domain.domainName?uncap_first});
+		return new ModelAndView("yb/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_update").addObject("item", ${domain.domainName?uncap_first});
 	}
 
 	@Auth(code="${domain.domainName?uncap_first}:update", name="更新${domain.domainCnName}")
@@ -104,10 +104,10 @@ public class ${domain.domainName}Router extends BaseRouter {
 	public ModelAndView goView(${domain.idAttr.type} id){
 		${domain.domainName} ${domain.domainName?uncap_first} = this.${domain.domainName?uncap_first}Service.get(id);
 		if(${domain.domainName?uncap_first} == null){
-			throw new SysException("查找不到 ${domain.domainCnName} id="id);
+			throw new SysException("查找不到 ${domain.domainCnName} id="+id);
 		}
 		
-		return new ModelAndView("${domain.pkgName!"system"}/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_view")
+		return new ModelAndView("yb/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_view")
 				.addObject("item", ${domain.domainName?uncap_first});
 	}
 
@@ -116,7 +116,7 @@ public class ${domain.domainName}Router extends BaseRouter {
 	@RequestMapping("/doDel")
 	public Rs doDel(${domain.idAttr.type} id){
 		if(id == null){
-			return Rs.fail(request, response, "请选择要删除的记录");
+			return Rs.fail("请选择要删除的记录");
 		}
 		this.${domain.domainName?uncap_first}Service.delete(id);
 
