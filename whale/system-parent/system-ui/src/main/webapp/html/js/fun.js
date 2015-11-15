@@ -65,7 +65,10 @@
 			    	if(obj.rs){
 			    		if($("#continueBut").length > 0){
 			    			$("#"+formId+" input, #"+formId+" select").attr("readonly", "readonly");
-					    	$("#continueBut").show();
+					    	$("#continueBut, #backBut").show();
+			    		}
+			    		if($("#backBut").length > 0){
+			    			$("#backBut").show();
 			    		}
 			    		if($.isFunction(param.onSuccess)){
 			    			param.onSuccess(obj);
@@ -207,29 +210,33 @@
 			    paginationNextText: "下一页",
 			    paginationLastText: "尾页",
 			    pageList: [10, 20, 50, 100],
+			    method: 'POST', //中文乱码解决
+			    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 			    height: (window.top.mainHeight-$("#queryForm").height()-85),
 			    cache: false,
 			    onBeforeLoad: function(queryDatas){//加入搜索参数
 			    	var datas = $("#queryForm").serializeArray();
-					var param = {};
-//					if(pageNo != null && typeof(pageNo) != "undefined" && pageNo > 0){
-//						queryDatas.offset = (pageNo-1) * queryDatas.limit;
-//					}
-					
 					for(var i=0; i<datas.length; i++){
 						if(datas[i].value != null && $.trim(datas[i].value) != ""){
 							queryDatas[datas[i].name] = $.trim(datas[i].value);
 						}
 					}
-					
-			    },
+			    }
 		}
 		var opts = $.extend(defaults, param);
+		//关闭排序
+		for(var i=0; i<opts.columns.length; i++){
+			opts.columns[i].sortable = false;
+		}
 		opts.columns.splice(0, 0, {field: 'index',width: '3%', align: 'center', formatter:function(value, row, index){return index+1;}});
 		return $(this).bootstrapTable(opts);
     };
     
 })(jQuery);
+
+function resetWidth(){
+	$("#gridTable").bootstrapTable('resetWidth', null);
+}
 
 function go(name, url){
 	window.top.goSub(name, url);
@@ -283,4 +290,22 @@ function list2Tree(nodes, idKey, pidKey, textCol, orderCol, orderAsc){
 		}
 	});
 	return r;
+}
+
+
+
+Date.prototype.format = function (fmt) { //author: meizz 
+    var o = {
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分 
+        "s+": this.getSeconds(), //秒 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+        "S": this.getMilliseconds() //毫秒 
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
 }

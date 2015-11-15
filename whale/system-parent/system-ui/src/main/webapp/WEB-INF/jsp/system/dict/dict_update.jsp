@@ -5,10 +5,7 @@
 <%@include file="/jsp/form.jsp" %>
 <script type="text/javascript">
 function save(){
-	$.save({'url':'${ctx}/dict/doUpdate', onSuccess: function(){
-		window.top.layer.msg("修改字典成功！", {time: 2000});
-		window.parent.location.reload();
-	}}); 
+	$.save({'url':'${ctx}/dict/doUpdate'}); 
 }
 
 //校验函数
@@ -65,6 +62,7 @@ $(function() {
             <div class="form-group" style="border-bottom:0px;margin-top:20px;">
                 <div class="col-sm-offset-3 col-md-offset-2 col-lg-offset-1" >
                     <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保 存</button>
+                    <button class="btn btn-default" type="button" id="backBut" onclick="window.top.goTab(1);" style="display: none;"><i class='fa fa-mail-reply'></i> 返回</button>
                 </div>
             </div>
 		</form>

@@ -5,8 +5,8 @@
 	<title>字典元素列表</title>
 <%@include file="/jsp/grid.jsp" %>
 <script type="text/javascript">
-var statusObj = {1:"<button type='button' class='btn btn-success btn-ss'><i class='fa fa-check'></i> 正常</button>",
-		2:"<button type='button' class='btn btn-default btn-ss'><i class='fa fa-lock'></i> 禁用</button>"};
+var statusObj = {1:"<button type='button' class='btn btn-success btn-ss' style='cursor:default'><i class='fa fa-check'></i> 正常</button>",
+		2:"<button type='button' class='btn btn-default btn-ss' style='cursor:default'><i class='fa fa-lock'></i> 禁用</button>"};
 		
 $(function(){
 	$("#gridTable").grid({

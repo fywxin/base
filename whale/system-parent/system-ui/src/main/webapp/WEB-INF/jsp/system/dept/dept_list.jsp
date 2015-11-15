@@ -33,18 +33,18 @@ $(function(){
 	    }, {
 	        field: 'deptCode',
 	        title: '组织编码',
-	        width: '10%',
+	        width: '15%',
 	        sortable: true
 	    }, {
 	        field: 'deptTel',
 	        title: '组织电话',
-	        width: '10%'
+	        width: '15%'
 	    }, {
 	        field: 'deptAddr',
 	        title: '组织地址'
 	    }, {
 	        field: 'remark',
-	        width: '15%',
+	        width: '10%',
 	        title: '备注'
 	    }
 	   ]

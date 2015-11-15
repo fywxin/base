@@ -5,12 +5,12 @@
 <%@include file="/jsp/grid.jsp" %>
 <title>日志</title>
 <script type="text/javascript">
-var rsStatus = {1:"<button type='button' class='btn btn-success btn-ss'><i class='fa fa-check'></i> 成功</button>",
-				2:"<button type='button' class='btn btn-warning btn-ss'><i class='fa fa-exclamation'></i> 系统异常</button>",
-				3:"<button type='button' class='btn btn-warning btn-ss'><i class='fa fa-check'></i> OrmException</button>",
-				4:"<button type='button' class='btn btn-info btn-ss'<i class='fa fa-minus'></i>> 运行时异常</button>",
-				5:"<button type='button' class='btn btn-danger btn-ss'><i class='fa fa-times'></i> 业务异常</button>",
-				6:"<button type='button' class='btn btn-info btn-ss'><i class='fa fa-info'></i> 未知异常</button>"};
+var rsStatus = {1:"<button type='button' class='btn btn-success btn-ss' style='cursor:default'><i class='fa fa-check'></i> 成功</button>",
+				2:"<button type='button' class='btn btn-warning btn-ss' style='cursor:default'><i class='fa fa-exclamation'></i> 系统异常</button>",
+				3:"<button type='button' class='btn btn-warning btn-ss' style='cursor:default'><i class='fa fa-check'></i> OrmException</button>",
+				4:"<button type='button' class='btn btn-info btn-ss' style='cursor:default'><i class='fa fa-minus'></i> 运行时异常</button>",
+				5:"<button type='button' class='btn btn-danger btn-ss' style='cursor:default'><i class='fa fa-times'></i> 业务异常</button>",
+				6:"<button type='button' class='btn btn-info btn-ss' style='cursor:default'><i class='fa fa-info'></i> 未知异常</button>"};
 var time = new Date();
 $(function(){
 	$("#gridTable").grid({
@@ -54,7 +54,10 @@ $(function(){
 	    }, {
 	        field: 'createTime',
 	        title: '创建时间',
-	        width: '9%'
+	        width: '9%',
+	        formatter: function(value, row, index){
+	        	return new Date(value).format("yyyy-MM-dd hh:mm:ss");
+	        }
 	    }, {
 	        field: 'userName',
 	        title: '操作人',

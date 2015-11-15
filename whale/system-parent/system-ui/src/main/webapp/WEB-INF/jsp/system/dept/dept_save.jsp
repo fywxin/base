@@ -89,7 +89,7 @@ $(function() {
                 <div class="col-sm-offset-3 col-md-offset-2 col-lg-offset-1" >
                     <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保存</button>
                     <button class="btn btn-success" type="button" id="continueBut" onclick="window.location.reload();" style="display: none;"><i class='fa fa-thumbs-up'></i> 继续添加</button>
-<!--                     <button class="btn btn-default" type="button" id="goBackBut" onclick="window.top.goTab(1);"><i class='fa fa-mail-reply'></i> 返回</button> -->
+					<button class="btn btn-default" type="button" id="backBut" onclick="window.top.goTab(1);" style="display: none;"><i class='fa fa-mail-reply'></i> 返回</button>
                 </div>
             </div>
         </form>

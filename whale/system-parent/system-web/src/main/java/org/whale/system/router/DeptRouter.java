@@ -43,6 +43,9 @@ public class DeptRouter extends BaseRouter {
 	@Auth(code="DEPT_LIST", name="查询部门")
 	@RequestMapping("/goList")
 	public ModelAndView goList(Long pid){
+		if(pid == null){
+			pid = 0L;
+		}
 		return new ModelAndView("system/dept/dept_list").addObject("pid", pid);
 	}
 	

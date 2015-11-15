@@ -25,6 +25,7 @@ function goTab(index){
 		$("#liSub").removeClass("active");
 		$("#frameSub").hide();
 		$("#frameMain").show();
+		window.setTimeout("resetListHead()",200);
 	}else{
 		$("#liMain").removeClass("active");
 		$("#liSub").addClass("active");
@@ -33,6 +34,18 @@ function goTab(index){
 	}
 }
 
+//子页面列表表头对齐
+function resetListHead(){
+	try{
+		window.frameMain.resetWidth();
+	}catch(e){
+		try{
+			window.frameMain.listFrame.resetWidth();
+		}catch(e2){
+			
+		}
+	}
+}
 
 function goSub(name, url){
 	$("#frameMain").hide();

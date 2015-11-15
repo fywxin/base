@@ -29,15 +29,14 @@ $(function(){
 	    }, {
 	        field: 'menuName',
 	        width: '15%',
-	        title: '菜单名',
-	        sortable: true
+	        title: '菜单名'
 	    }, {
 	        field: 'menuUrl',
 	        title: '菜单地址'
 	    }, {
 	        field: 'menuInco',
 	        title: '图标',
-	        width: '5%'
+	        width: '8%'
 	    }, {
 	        field: 'openType',
 	        title: '打开方式',
@@ -48,14 +47,14 @@ $(function(){
 	    }, {
 	        field: 'isPublic',
 	        title: '是否公共',
-	        width: '8%',
+	        width: '9%',
 	        formatter: function(value, row, index){
 	        	return value == 0 ? "否" : "是";
 			}
 	    }, {
 	        field: 'menuType',
 	        title: '菜单类型',
-	        width: '8%',
+	        width: '10%',
 	        formatter: function(value, row, index){
 				return menuTypeObj[value];
 			}

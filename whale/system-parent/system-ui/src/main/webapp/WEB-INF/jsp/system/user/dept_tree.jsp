@@ -45,6 +45,7 @@ var setting = {
 var zNodes =${nodes};
 
 $(document).ready(function(){
+	zNodes.push({id: 0, pid: -1, deptName: "机构管理", isParent: true, open: true});
 	$("#treeDiv, #listFrame").height($.h());
 	zTree = $.fn.zTree.init($("#tree"), setting, zNodes);
 	var root = zTree.getNodesByFilter(function (node) { return node.level == 0 }, true);

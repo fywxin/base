@@ -45,6 +45,7 @@ var setting = {
 var zNodes =${nodes};
 
 $(document).ready(function(){
+	zNodes.push({menuId: 0, parentId: -1, menuName:"菜单管理",isParent: true, open: true});
 	$("#treeDiv, #listFrame").height($.h());
 	for(var i=0; i<zNodes.length; i++){
 		zNodes[i].isParent = (zNodes[i].menuType != 3);

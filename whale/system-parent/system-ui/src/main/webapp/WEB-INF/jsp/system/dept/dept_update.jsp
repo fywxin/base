@@ -49,9 +49,10 @@ function filterSelf(){
 	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 	<div class="row">
         <form class="form-horizontal m-t" id="dataForm">
+        <input id="id" name="id" value="${item.id }" type="hidden" />
             <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label">父组织：</label>
-                <div class="input-group col-sm-4 ">
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
                     <tag:tree nodeName="deptName" nodeId="id" id="pid" nodes="${nodes }" nodePId="pid" afterLoadTree="filterSelf" value="${item.pid }"></tag:tree>
                 </div>
             </div>
@@ -94,6 +95,7 @@ function filterSelf(){
             <div class="form-group" style="border-bottom:0px;margin-top:20px;">
                 <div class="col-sm-offset-3 col-md-offset-2 col-lg-offset-1" >
                     <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保 存</button>
+                    <button class="btn btn-default" type="button" id="backBut" onclick="window.top.goTab(1);" style="display: none;"><i class='fa fa-mail-reply'></i> 返回</button>
                 </div>
             </div>
         </form>

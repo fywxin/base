@@ -83,9 +83,10 @@
 	<div style="flow:left;overflow:auto; margin: 5px 0px 15px 5px;" id="treeDiv">
 		<ul id="tree" class="ztree"></ul>
 	</div>
-	<div class="form-group">
-       <div class="col-sm-12 col-sm-offset-1">
+	<div class="form-group" style="border-bottom:0px;margin-top:20px;">
+         <div class="col-sm-offset-3 col-md-offset-2 col-lg-offset-1" >
            <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保 存</button>
+           <button class="btn btn-default" type="button" id="backBut" onclick="window.top.goTab(1);" style="display: none;"><i class='fa fa-mail-reply'></i> 返回</button>
        </div>
    </div>
 </body>

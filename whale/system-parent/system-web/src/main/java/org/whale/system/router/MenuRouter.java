@@ -38,7 +38,9 @@ public class MenuRouter extends BaseRouter {
 	@Auth(code="MENU_LIST",name="查询菜单")
 	@RequestMapping("/goList")
 	public ModelAndView goList(Long parentId){
-		
+		if(parentId == null){
+			parentId = 0L;
+		}
 		return new ModelAndView("system/menu/menu_list").addObject("parentId", parentId);
 	}
 	
@@ -46,8 +48,9 @@ public class MenuRouter extends BaseRouter {
 	@ResponseBody
 	@RequestMapping("/doList")
 	public Page doList(Long parentId){
+		
 		Page page = this.newPage();
-		page.newCmd(Menu.class);
+		page.newCmd(Menu.class).eq("parentId", parentId);
 		this.menuService.queryPage(page);
 		
 		return page;
