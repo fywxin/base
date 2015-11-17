@@ -214,7 +214,7 @@ public class MainRouter extends BaseRouter {
 		
 		uc.getCustomDatas().put("menusStr", this.createMenu());
 		
-		ThreadContext.getContext().put(ThreadContext.KEY_USER_CONTEXT, uc);
+		UserContext.set(uc);
 	}
 	
 	/**

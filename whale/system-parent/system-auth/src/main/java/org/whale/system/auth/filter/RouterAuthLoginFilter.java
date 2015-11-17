@@ -7,7 +7,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.whale.system.base.UserContext;
 import org.whale.system.common.exception.NotLoginException;
-import org.whale.system.common.util.ThreadContext;
 
 /**
  * 管理员权限标签过滤
@@ -25,7 +24,7 @@ public class RouterAuthLoginFilter {
 	
 	@Before("authLoginAspect()")
 	public void doBefore(JoinPoint joinPoint) {
-		UserContext uc = (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
+		UserContext uc = UserContext.get();
 		if(uc == null){
 			throw new NotLoginException("用户未登录！");
 		}

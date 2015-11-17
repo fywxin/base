@@ -50,10 +50,10 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 				if (Strings.isNotBlank(jsessionid)) {
 					session = MySessionContext.getSession(jsessionid);
 					uc = (UserContext) session.getAttribute(SysConstant.USER_CONTEXT_KEY);
-					ThreadContext.getContext().put(ThreadContext.KEY_USER_CONTEXT, uc);
+					UserContext.set(uc);
 				}
 			}else{
-				ThreadContext.getContext().put(ThreadContext.KEY_USER_CONTEXT, uc);
+				UserContext.set(uc);
 			}
 		}
 		return super.preHandle(request, response, handler);

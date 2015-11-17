@@ -5,9 +5,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.whale.system.common.util.ThreadContext;
+
 public class UserContext implements Serializable{
 
 	private static final long serialVersionUID = -349058234001L;
+	
+	public static UserContext get(){
+		return (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
+	}
+	
+	public static void set(UserContext uc){
+		ThreadContext.getContext().put(ThreadContext.KEY_USER_CONTEXT, uc);
+	}
 
 	private Long userId;
 	
@@ -26,6 +36,7 @@ public class UserContext implements Serializable{
 	private Map<String, Object> customDatas = new HashMap<String, Object>();
 	
 	private boolean isSuperAdmin;
+	
 
 	public boolean isSuperAdmin() {
 		return isSuperAdmin;
