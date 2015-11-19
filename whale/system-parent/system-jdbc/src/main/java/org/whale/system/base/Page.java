@@ -136,7 +136,7 @@ public class Page implements Serializable {
 	}
 
 	public String countSql() {
-		if(this.countSql == null){
+		if(this.sql == null){
 			this.exeCmd();
 		}
 		return countSql;
