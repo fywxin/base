@@ -45,7 +45,7 @@ $(function(){
                 formatter: function(value, row, index){
                     var strArr = [];
 				<tag:auth authCode="${domain.domainName?uncap_first}:update">
-                    strArr.push("<a href='javascript:;' onclick=\"go('修改${domain.domainCnName}','${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goUpdate?${domain.idAttr.name}="+row.roleId+"')\">修改</a>");
+                    strArr.push("<a href='javascript:;' onclick=\"go('修改${domain.domainCnName}','${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goUpdate?${domain.idAttr.name}="+row.${domain.idAttr.sqlName}+"')\">修改</a>");
 				</tag:auth>
 					return strArr.join("");
                 }
@@ -58,7 +58,8 @@ $(function(){
                     return dict_${attr.name}[value];
                 },</#if>
                 width: '10%'
-			}<#if (attr_has_next)>,</#if></#list>
+			}<#if (attr_has_next)>,</#if>
+</#list>
 		]
     });
 });
