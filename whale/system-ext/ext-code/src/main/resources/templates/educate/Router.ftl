@@ -58,9 +58,7 @@ public class ${domain.domainName}Router extends BaseRouter {
 	@RequestMapping("/doList")
 	public Page doList(${domain.domainName} ${domain.domainName?uncap_first}){
 		Page page = this.newPage();
-		page.newCmd(${domain.domainName}.class)<#list domain.attrs as attr><#if attr.inQuery>.like("${attr.sqlName}", ${domain.domainName?uncap_first}.get${attr.name?cap_first}())</#if></#list>;
-
-		this.${domain.domainName?uncap_first}Service.queryPage(page);
+		this.${domain.domainName?uncap_first}Service.queryPage(page, ${domain.domainName?uncap_first});
 		return page;
 	}
 
@@ -114,13 +112,14 @@ public class ${domain.domainName}Router extends BaseRouter {
 	@Auth(code="${domain.domainName?uncap_first}:del", name="删除${domain.domainCnName}")
 	@ResponseBody
 	@RequestMapping("/doDel")
-	public Rs doDel(${domain.idAttr.type} id){
-		if(id == null){
+	public Rs doDel(String ids){
+		if(Strings.isBlank(ids)){
 			return Rs.fail("请选择要删除的记录");
 		}
-		this.${domain.domainName?uncap_first}Service.delete(id);
+		List<Long> idList = LangUtil.splitIds(ids);
+		this.${domain.domainName?uncap_first}Service.delete(idList);
 
-		return Rs.success();
+		return Rs.success("["+idList.size()+"]条记录删除成功");
 	}
 
 }

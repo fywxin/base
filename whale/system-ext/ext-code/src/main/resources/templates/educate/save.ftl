@@ -37,11 +37,11 @@ $(function() {
             <label class="col-sm-3 col-md-2 col-lg-1 control-label"><#if !fAttr.isNull><i>*</i></#if>${fAttr.cnName}：</label>
             <div class="col-sm-9 col-md-10 col-lg-11 form-inline"  style="padding-left:0px;">
                 <#if fAttr.formType == "dict">
-                    <tag:dict id="${fAttr.name}" dictCode="${fAttr.dictName}" headerLabel="-- 请选择 --"></tag:dict>
+                <tag:dict id="${fAttr.name}" dictCode="${fAttr.dictName}" headerLabel="-- 请选择 --"></tag:dict>
                 <#elseif fAttr.name == "remark" || fAttr.formType == "textarea">
-                    <textarea id="${fAttr.name}" name="${fAttr.name}" rows="3" class="form-control" style="width:250px"></textarea>
+                <textarea id="${fAttr.name}" name="${fAttr.name}" rows="3" class="form-control" style="width:250px"></textarea>
                 <#else>
-                    <input type="text" id="${fAttr.name}" name="${fAttr.name}" value="${r"${item."}${fAttr.name}}" <#if fAttr.type == "Integer" || fAttr.type == "Long">onkeyup="value=value.replace(/[^\d]/g,'')"</#if> class="form-control" style="width:250px" />
+                <input type="text" id="${fAttr.name}" name="${fAttr.name}" value="${r"${item."}${fAttr.name}}" <#if fAttr.type == "Integer" || fAttr.type == "Long">onkeyup="value=value.replace(/[^\d]/g,'')"</#if> class="form-control" style="width:250px" />
                 </#if>
             </div>
         </div>

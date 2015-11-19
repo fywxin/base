@@ -49,6 +49,12 @@ public class ${domain.domainName}Service extends BaseService<${domain.domainName
     </#if>
 </#list>
 
+	public void queryPage(Page page, ${domain.domainName} ${domain.domainName?uncap_first}){
+		page.newCmd(${domain.domainName}.class)<#list domain.attrs as attr><#if attr.inQuery>.like("${attr.sqlName}", ${domain.domainName?uncap_first}.get${attr.name?cap_first}())</#if></#list>;
+		
+		this.queryPage(page);
+	}
+
 	@Override
 	public BaseDao<${domain.domainName}, ${domain.idAttr.type}> getDao() {
 		return ${domain.domainName?uncap_first}Dao;

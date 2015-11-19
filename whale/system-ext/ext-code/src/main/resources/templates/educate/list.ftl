@@ -29,12 +29,12 @@ var time = new Date();
 $(function(){
     $("#gridTable").grid({
         url :'${"$"+"{ctx}"}/${domain.domainName?uncap_first}/doList?id=${"$"+"{id}"}',
-        idField: '${domain.idAttr.name}',
+        idField: '${domain.idAttr.sqlName}',
         columns: [
             {
                 field: 'chk',
                 checkbox: true,
-                width: '2%',
+                width: '3%',
                 align: 'center'
             },
 			{
@@ -45,7 +45,7 @@ $(function(){
                 formatter: function(value, row, index){
                     var strArr = [];
 				<tag:auth authCode="${domain.domainName?uncap_first}:update">
-                    strArr.push("<a href='javascript:;' onclick=\"go('修改${domain.domainCnName}','${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goUpdate?${domain.idAttr.name}="+row.${domain.idAttr.sqlName}+"')\">修改</a>");
+                    strArr.push("<a href='javascript:;' onclick=\"go('修改${domain.domainCnName}','${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goUpdate?id="+row.${domain.idAttr.sqlName}+"')\">修改</a>");
 				</tag:auth>
 					return strArr.join("");
                 }
@@ -65,7 +65,7 @@ $(function(){
 });
 
 function del(id){
-    $.del({url:"${"$"+"{ctx}"}/${domain.domainName?uncap_first}/doDelete", datas:{ids:id}});
+    $.del({url:"${"$"+"{ctx}"}/${domain.domainName?uncap_first}/doDel"});
 }
 function view(id){
     $.openWin({url: "${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goView?id="+id, title:"查看${domain.domainCnName}"});
