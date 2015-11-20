@@ -3,7 +3,11 @@ $(window).resize(function(){
 });
 $(function() {
 	$("#bodyDiv").height($.h()-40);
-	$("select").chosen();
+	$("select").chosen({
+		no_results_text: "未找到", 
+		search_contains: true,
+		disable_search_threshold: 10
+	});
 });
 $.validator.setDefaults({
 	highlight: function (element) {$(element).closest('.form-group').removeClass('has-success').addClass('has-error');},

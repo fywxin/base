@@ -124,11 +124,22 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return rs;
 	}
 
-	
+	/**
+	 * 结果类型转换
+	 */
 	@Override
+	@SuppressWarnings("all")
 	public void queryPage(Page page) {
 		filter.exeBeforeQueryPage(this, page);
 		super.queryPage(page);
+		if(page.getDataClass() != null && page.getData() != null && page.getData().size() >0 && !page.getClass().equals(Map.class)){
+			List<Map<String, Object>> data = (List<Map<String, Object>>)page.getData();
+			List list = new ArrayList(data.size());
+			for(Map<String, Object> map : data){
+				list.add(ReflectionUtil.map2Clazz(map, page.getDataClass()));
+			}
+			page.setData(list);
+		}
 		filter.exeAfterQueryPage(this, page);
 	}
 	

@@ -48,7 +48,6 @@ public class MenuRouter extends BaseRouter {
 	@ResponseBody
 	@RequestMapping("/doList")
 	public Page doList(Long parentId){
-		
 		Page page = this.newPage();
 		page.newCmd(Menu.class).eq("parentId", parentId);
 		this.menuService.queryPage(page);

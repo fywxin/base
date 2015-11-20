@@ -11,7 +11,11 @@ $(function(){
 			search(1);
 		}
 	});
-	$("select").chosen();
+	$("#queryForm select").chosen({
+		no_results_text: "未找到", 
+		search_contains: true,
+		disable_search_threshold: 10
+	});
 });
 
 function getGridDivHeight(){

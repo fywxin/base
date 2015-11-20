@@ -42,6 +42,9 @@ public class Page implements Serializable {
 	/**动态拼接查询 */
 	private Iquery cmd;
 	
+	/**返回结果data 的类型，默认为Map<String, Object> */
+	private Class<?> dataClass;
+	
 	
 	public Cmd newCmd(Class<?> clazz){
 		Cmd cmd = Cmd.newCmd(clazz);
@@ -165,6 +168,17 @@ public class Page implements Serializable {
 
 	public void setOffset(Integer offset) {
 		this.offset = offset;
+	}
+	
+	
+
+	public Class<?> getDataClass() {
+		return dataClass;
+	}
+
+	public Page setDataClass(Class<?> dataClass) {
+		this.dataClass = dataClass;
+		return this;
 	}
 
 	@Override
