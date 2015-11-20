@@ -1,19 +1,20 @@
 package org.whale.system.client;
 
-import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map.Entry;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whale.system.common.exception.HttpClientException;
 import org.whale.system.common.util.Strings;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * Http 接口服务调用任务
@@ -21,18 +22,31 @@ import org.whale.system.common.util.Strings;
  * @author 王金绍
  * 2015年11月8日 上午12:55:07
  */
-public class CallInterfaceTask implements Runnable {
+public class CallTask implements Runnable {
 	
-	private static final Logger logger = LoggerFactory.getLogger(CallInterfaceTask.class);
+	private static final Logger logger = LoggerFactory.getLogger(CallTask.class);
 	
 	private ClientContext context;
 	
-	public CallInterfaceTask(ClientContext clientContext){
+	public CallTask(ClientContext clientContext){
 		this.context = clientContext;
 	}
 
 	@Override
 	public void run() {
+		byte[] data = null;
+		//TODO 改为调用链模式
+		if(context.getArgs() != null && context.getArgs().length > 0){
+			//编码
+			data = this.context.getClientCodec().encode(context.getArgs(), context);
+			//执行调用前方法、请求头签名
+			this.context.getClientInvokeHandler().beforeCall(context);
+			//加密报文
+			if(this.context.getClientEncrypt() != null){
+				data = this.context.getClientEncrypt().onWrite(data, context);
+			}
+		}
+		
 		int resCode = 0;
 		try{
 			String url = context.getUrl();
@@ -79,63 +93,44 @@ public class CallInterfaceTask implements Runnable {
 				logger.debug("HTTP-header:{}", context.getHeaders());
 			}
 			
+			this.context.getClientInvokeHandler().onReqest(context);
 			con.connect();
 			OutputStream ops = con.getOutputStream();
 			try{
-				OutputStreamWriter writer = new OutputStreamWriter(ops, "UTF-8");
-				if(context.getArg() != null){
-					writer.write(context.getReqStr());
-					if(logger.isDebugEnabled()){
-						logger.debug("HTTP-body:{}", context.getReqStr());
-					}
-				}else{
-					if(logger.isDebugEnabled()){
-						logger.debug("HTTP-body 为空");
-					}
+				if(logger.isDebugEnabled()){
+					logger.debug("HTTP-request:{}", context.getReqStr() == null ? JSON.toJSONString(context.getArgs()) : context.getReqStr());
 				}
-				writer.flush();
+				
+				if(context.getArgs() != null && context.getArgs().length > 0){
+					ops.write(data);
+					ops.flush();
+				}
 			}finally{
 				ops.close();
 			}
 			
-			
 			resCode = con.getResponseCode();
 			
 			InputStream ips = con.getInputStream();
-			StringBuffer response = new StringBuffer();
 			try{
-				BufferedReader in = new BufferedReader(new InputStreamReader(ips, "UTF-8"));
-				String inputLine;
-				
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine).append("\n");
-				}
+				data = IOUtils.toByteArray(ips);
+				data = this.context.getClientEncrypt().onRead(data, context);
+				Object rs = this.context.getClientCodec().decode(data, context);
+				context.setRs(rs);
 			}finally{
 				ips.close();
 			}
-			String resStr = response.toString();
-			context.setResStr(resStr);
 			if(logger.isDebugEnabled()){
-				logger.debug("HTTP-response:{}", resStr);
+				logger.debug("HTTP-response:{}", context.getRespStr() == null ? JSON.toJSONString(context.getRs()) : context.getRespStr());
 			}
 			
-			if(context.getIsAsyc()){
-				context.getAsycHandler().onSuccess(context);
+			if(resCode > 300){
+				throw new HttpClientException("HTTP接口返回状态码["+resCode+"]错误, 返回信息:\n"+context.getRespStr());
 			}
-			
-		}catch(Exception e){
-			if(context.getIsAsyc()){
-				context.getAsycHandler().onFail(context);
-			}
+		}catch(IOException e){
 			throw new HttpClientException("HTTP接口执行异常", e);
 		}
-		
-		if(resCode > 300){
-			if(context.getIsAsyc()){
-				context.getAsycHandler().onFail(context);
-			}
-			throw new HttpClientException("HTTP接口请求返回状态码错误");
-		}
+		this.context.getClientInvokeHandler().afterCall(context);
 	}
 
 }

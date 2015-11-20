@@ -1,7 +1,6 @@
-package org.whale.system.client;
+package org.whale.system.inf;
 
 import org.whale.system.common.exception.BaseException;
-import org.whale.system.inf.ErrorCode;
 
 /**
  * 客户端异常

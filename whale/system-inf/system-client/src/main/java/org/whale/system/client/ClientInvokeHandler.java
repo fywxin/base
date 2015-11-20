@@ -8,8 +8,22 @@ package org.whale.system.client;
  */
 public interface ClientInvokeHandler {
 	
+	/**
+	 * 执行任务前调用
+	 * @param clientContext
+	 */
 	public void beforeCall(ClientContext clientContext);
 	
+	/**
+	 * 执行HTTP REQUEST 请求时调用
+	 * @param clientContext
+	 */
+	public void onReqest(ClientContext clientContext);
+	
+	/**
+	 * 执行任务完成后调用
+	 * @param clientContext
+	 */
 	public void afterCall(ClientContext clientContext);
-
+	
 }

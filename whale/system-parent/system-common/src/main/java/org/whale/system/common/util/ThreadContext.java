@@ -29,6 +29,10 @@ public class ThreadContext {
 	public static final String KEY_RESPONSE = "response";
 	/**是否从页面进入 */
 	public static final String KEY_FROM_WEB = "from_web";
+	
+	public static final String KEY_CLIENT_CONTEXT = "client_context";
+	
+	public static final String KEY_SERVER_CONTEXT = "server_context";
 
 	private static final ThreadLocal<ThreadContext> LOCAL = new ThreadLocal<ThreadContext>() {
 		@Override

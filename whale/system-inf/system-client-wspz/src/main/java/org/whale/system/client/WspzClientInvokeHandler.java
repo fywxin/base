@@ -8,8 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.whale.system.common.encrypt.EncryptUtil;
-import org.whale.system.common.util.ReflectionUtil;
-import org.whale.system.inf.OneValueObject;
+import org.whale.system.inf.ClientException;
 import org.whale.system.inf.Result;
 
 import com.alibaba.fastjson.JSON;
@@ -46,15 +45,23 @@ public class WspzClientInvokeHandler implements ClientInvokeHandler {
 	}
 
 	public void afterCall(ClientContext clientContext) {
-		Result<?> rs = JSON.parseObject(clientContext.getResStr(), Result.class);
-		if(Result.SUCCESS_CODE.equals(rs.getCode())){
-			clientContext.setRs(rs.getData());
-		}else{
-			if(logger.isDebugEnabled()){
-				logger.debug(" afterCall 处理失败： {}", rs);
+		Object rs = clientContext.getRs();
+		if(rs instanceof Result){
+			Result<?> result = (Result<?>)rs;
+			if(!clientContext.getMethod().getReturnType().equals(Result.class)){
+				if(Result.SUCCESS_CODE.equals(result.getCode())){
+					clientContext.setRs(result.getData());
+				}else{
+					if(logger.isDebugEnabled()){
+						logger.debug(" afterCall 处理失败： {}", rs);
+					}
+					
+					//TODO 根据不同编码，抛出业务异常与Client 或 Server异常
+					throw new ClientException(result.getCode(), result.getMessage());
+				}
 			}
-			throw new ClientException(rs.getCode(), rs.getMessage());
 		}
+		
 	}
 
 	/**
@@ -66,16 +73,12 @@ public class WspzClientInvokeHandler implements ClientInvokeHandler {
 		StringBuilder strb = new StringBuilder();
 		strb.append(clientContext.getServiceUrl()+"/"+clientContext.getMethod().getName())
 			.append(clientConf.getSignKey());
-		if(clientContext.getArg() != null){
-			if(ReflectionUtil.isBaseDataType(clientContext.getArg().getClass())){
-				OneValueObject oneValueObject = new OneValueObject();
-				oneValueObject.setValue(clientContext.getArg());
-				clientContext.setReqStr(JSON.toJSONString(oneValueObject, SerializerFeature.WriteClassName));
+		if(clientContext.getArgs() != null ){
+			if(clientContext.getReqStr() != null){
+				strb.append(clientContext.getReqStr());
 			}else{
-				clientContext.setReqStr(JSON.toJSONString(clientContext.getArg(), SerializerFeature.WriteClassName));
-				
+				strb.append(JSON.toJSONString(clientContext.getArgs(), SerializerFeature.WriteClassName));
 			}
-			strb.append(clientContext.getReqStr());
 		}
 		try {
 			String sign = EncryptUtil.md5(strb.toString().getBytes("utf-8"));
@@ -87,5 +90,10 @@ public class WspzClientInvokeHandler implements ClientInvokeHandler {
 			logger.error("签名编码异常", e);
 			throw new ClientException("签名编码异常", e);
 		}
+	}
+
+	@Override
+	public void onReqest(ClientContext clientContext) {
+		
 	}
 }

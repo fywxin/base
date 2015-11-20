@@ -5,6 +5,8 @@ import java.net.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.whale.system.common.util.ThreadContext;
+
 /**
  * 客户端请求上下文
  * 
@@ -12,6 +14,14 @@ import java.util.Map;
  * 2015年11月8日 上午12:08:04
  */
 public class ClientContext {
+	
+	public static ClientContext get(){
+		return (ClientContext)ThreadContext.getContext().get(ThreadContext.KEY_CLIENT_CONTEXT);
+	}
+	
+	public static void set(ClientContext clientContext){
+		ThreadContext.getContext().put(ThreadContext.KEY_CLIENT_CONTEXT, clientContext);
+	}
 	
 	//注册类@RequestMapping 地址
 	private String serviceUrl;
@@ -31,17 +41,17 @@ public class ClientContext {
 	//代理对象
 	private Object proxyObject;
 	
-	//请求参数，只能是一个
-	private Object arg;
+	//请求参数
+	private Object[] args;
 	
 	//响应对象
 	private Object rs;
 	
-	//请求字符串
+	//请求字符串 可能为空
 	private String reqStr;
 	
-	//响应字符串
-	private String resStr;
+	//响应字符串 可能为空
+	private String respStr;
 	
 	//连接超时
 	private Integer connectTimeout;
@@ -61,10 +71,13 @@ public class ClientContext {
 	//是否异步
 	private boolean isAsyc;
 	
-	//异步回调处理类
-	private AsycHandler asycHandler;
-	
 	private Map<String, Object> attachment = new HashMap<String, Object>();
+		
+	private ClientInvokeHandler clientInvokeHandler;
+	
+	private ClientCodec clientCodec;
+	
+	private ClientEncrypt clientEncrypt;
 
 	public String getUrl() {
 		return url;
@@ -82,14 +95,14 @@ public class ClientContext {
 		this.method = method;
 	}
 
-	public Object getArg() {
-		return arg;
+	public Object[] getArgs() {
+		return args;
 	}
 
-	public void setArg(Object arg) {
-		this.arg = arg;
+	public void setArgs(Object[] args) {
+		this.args = args;
 	}
-	
+
 	public String getServiceUrl() {
 		return serviceUrl;
 	}
@@ -128,22 +141,6 @@ public class ClientContext {
 
 	public void setRs(Object rs) {
 		this.rs = rs;
-	}
-
-	public String getReqStr() {
-		return reqStr;
-	}
-
-	public void setReqStr(String reqStr) {
-		this.reqStr = reqStr;
-	}
-
-	public String getResStr() {
-		return resStr;
-	}
-
-	public void setResStr(String resStr) {
-		this.resStr = resStr;
 	}
 
 	public Proxy getHttpProxy() {
@@ -185,8 +182,6 @@ public class ClientContext {
 	public void setAttachment(Map<String, Object> attachment) {
 		this.attachment = attachment;
 	}
-	
-	
 
 	public Integer getRetry() {
 		return retry;
@@ -204,23 +199,52 @@ public class ClientContext {
 		this.isAsyc = isAsyc;
 	}
 	
-	
-
-	public AsycHandler getAsycHandler() {
-		return asycHandler;
+	public ClientInvokeHandler getClientInvokeHandler() {
+		return clientInvokeHandler;
 	}
 
-	public void setAsycHandler(AsycHandler asycHandler) {
-		this.asycHandler = asycHandler;
+	public void setClientInvokeHandler(ClientInvokeHandler clientInvokeHandler) {
+		this.clientInvokeHandler = clientInvokeHandler;
+	}
+
+	public ClientCodec getClientCodec() {
+		return clientCodec;
+	}
+
+	public void setClientCodec(ClientCodec clientCodec) {
+		this.clientCodec = clientCodec;
+	}
+	
+	public ClientEncrypt getClientEncrypt() {
+		return clientEncrypt;
+	}
+
+	public void setClientEncrypt(ClientEncrypt clientEncrypt) {
+		this.clientEncrypt = clientEncrypt;
+	}
+
+	public String getReqStr() {
+		return reqStr;
+	}
+
+	public void setReqStr(String reqStr) {
+		this.reqStr = reqStr;
+	}
+
+	public String getRespStr() {
+		return respStr;
+	}
+
+	public void setRespStr(String respStr) {
+		this.respStr = respStr;
 	}
 
 	@Override
 	public String toString() {
 		return "ClientContext [serviceUrl=" + serviceUrl + ", url=" + url
 				+ ", params=" + params + ", headers=" + headers + ", method="
-				+ method + ", proxyObject=" + proxyObject + ", arg=" + arg
-				+ ", rs=" + rs + ", reqStr=" + reqStr + ", resStr=" + resStr
-				+ ", connectTimeout=" + connectTimeout + ", readTimeout="
+				+ method + ", proxyObject=" + proxyObject + ", args=" + args
+				+ ", rs=" + rs + ", connectTimeout=" + connectTimeout + ", readTimeout="
 				+ readTimeout + ", httpProxy=" + httpProxy + ", reqno=" + reqno
 				+ ", attachment=" + attachment + "]";
 	}
