@@ -101,15 +101,15 @@ public class OrmTable extends Atable {
 	
 	/**
 	 * 返回SQL排序字符
+	 * 
+	 * 取消默认按ID排序，提供效率
 	 */
 	public String getSqlOrderSuffix(){
 		if(sqlOrderSuffixStr == null){
-			StringBuilder strb = new StringBuilder(" ORDER BY ");
-			if(orderCols == null || orderCols.size() < 1){
-				strb.append("t.").append(idCol.getSqlName()).append( " desc");
-			}else{
+			StringBuilder strb = new StringBuilder(" ");
+			if(orderCols != null && orderCols.size() > 0){
 				for(OrmColumn orderCol : orderCols){
-					strb.append("t.").append(orderCol.getSqlName()).append(orderCol.getOrmOrder().getAsc()? " asc," : " desc,");
+					strb.append(" ORDER BY t.").append(orderCol.getSqlName()).append(orderCol.getOrmOrder().getAsc()? " asc," : " desc,");
 				}
 				strb.deleteCharAt(strb.length()-1);
 			}
