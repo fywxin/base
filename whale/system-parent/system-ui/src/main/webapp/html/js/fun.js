@@ -28,6 +28,43 @@
 			return winWidth;
 		},
 		
+		openWin: function(options){
+			if(!window.winOpener){
+				window.winOpener = window.top.winOpener;
+			}
+			window.top.winOpener = window;
+			if(typeof(options.url) != undefined && options.url != null){
+				options.content = options.url;
+			}
+			
+			var defaults = {
+					type: 2,
+				    shadeClose: false,
+				    shade: 0.4,
+				    area: ['60%', '70%']
+			};
+			var opts = $.extend(defaults, options);
+			window.top.currentOpenId = window.top.layer.open(opts);
+			window.openId = window.top.currentOpenId;
+		},
+		
+		closeWin: function(){
+			if(window.top.currentOpenId != null){
+				window.top.layer.close(window.top.currentOpenId);
+				window.top.currentOpenId = window.parent.parent.openId;
+				window.parent.openId = null;
+			}else{
+				window.top.layer.close(window.parent.openId);
+				window.top.currentOpenId = window.parent.parent.openId;
+				window.parent.openId = null;
+			}
+		},
+		
+		//获取父窗口对象
+		getParent : function(){
+			return window.winOpener || window.top.winOpener;
+		},
+		
 		save : function(param){
 			if(window.saving){
 				return ;

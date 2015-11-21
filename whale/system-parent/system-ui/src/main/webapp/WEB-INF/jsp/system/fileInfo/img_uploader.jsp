@@ -3,41 +3,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
-		<%@include file="/html/jsp/common.jsp" %>
+		<%@include file="/jsp/form.jsp" %>
 		<title>图片上传</title>
 	</head>
 
 
-<body style="padding:0;margin:0;">
-	<div class="body-box-form" >
-	<div class="content-form">
-		<div class="panelBar" id="panelBarDiv"></div>
-		<div class="infoBox" id="infoBoxDiv"></div>
-		<div class="edit-form">
-			<form action="" method="post" id="dataForm" style="cursor: pointer;margin-left: ">
-				<table cellspacing="0" cellpadding="0" width="100%">
-					<col width="10%"/>
-					<col width="40%"/>
-					<col width="10%"/>
-					<col width="40%"/>
-					<tbody>
-						<tr>
-							<td class="td-label"><span class="required">*</span>角色名称</td>
-							<td class="td-value"><input type="text" style="width:160px;" id="roleName" name="roleName" maxlength="16" title="最多16个字"/></td>
-							<td class="td-label" ><span class="required">*</span>角色编码</td>
-							<td class="td-value"><input type="text" style="width:160px;" id="roleCode" name="roleCode" maxlength="64" title="最多64位"/></td>
-						</tr>
-						<tr>
-							<td class="td-label" >备注</td>
-							<td class="td-value" colspan="3">
-								<tag:image id="sdwe" value="http://127.0.0.1:8888/system-jsp/file/img/20140929160936_6145.png" maxNum="2"></tag:image>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</form>
-		</div>
-	</div>
-</div>
+<body>
+<div id="bodyDiv" style="margin-top:10px;overflow-x: hidden;">
+	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
+	<div class="row">
+        <form class="form-horizontal m-t" id="dataForm">
+        	<div class="form-group">
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>所属组织：</label>
+                <div class="col-sm-4 input-group">
+                </div>
+            </div>
+        	<div class="form-group">
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>用户名：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                   <tag:image id="sdwe"  maxNum="5"></tag:image>
+
+                </div>
+            </div>
+            
+            <div class="form-group" style="border-bottom:0px;margin-top:20px;">
+                <div class="col-sm-offset-3 col-md-offset-2 col-lg-offset-1" >
+                    <button class="btn btn-primary" type="button" id="saveBut" onclick="save();"><i class='fa fa-save'></i> 保 存</button>
+                    <button class="btn btn-success" type="button" id="continueBut" onclick="window.location.reload();" style="display: none;"><i class='fa fa-thumbs-up'></i> 继续添加</button>
+                	<button class="btn btn-default" type="button" id="backBut" onclick="window.top.goTab(1);" style="display: none;"><i class='fa fa-mail-reply'></i> 返回</button>
+                </div>
+            </div>
+        </form>
+     </div>
+ </div>
 </body>
 </html>

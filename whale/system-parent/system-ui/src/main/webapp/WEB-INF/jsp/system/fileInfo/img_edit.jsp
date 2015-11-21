@@ -3,7 +3,7 @@
 <html>
 <head>
 	<title>缩放截图</title>
-<%@include file="/html/jsp/common.jsp" %>
+<%@include file="/jsp/form.jsp" %>
 <script type="text/javascript">
 var imgSel;
 var emptyRs = {x1: 0,y1: 0,width:0, height:0};

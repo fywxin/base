@@ -5,7 +5,7 @@
 	<head>
 		<title>图片上传</title>
 	
-<%@include file="/html/jsp/common.jsp" %>
+<%@include file="/jsp/form.jsp" %>
 <script src="${resource}/ueditor/ueditor.config.js" type="text/javascript"></script>
 <script src="${resource}/ueditor/ueditor.all.js" type="text/javascript"></script>
 <script src="${resource}/ueditor/lang/zh-cn/zh-cn.js" type="text/javascript"></script>
