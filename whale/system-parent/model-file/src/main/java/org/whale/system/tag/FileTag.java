@@ -55,7 +55,7 @@ public class FileTag extends TagSupport {
 	public int doStartTag() throws JspException {
 		HttpServletRequest request =(HttpServletRequest) pageContext.getRequest();
 		ctx = request.getContextPath();
-		resource = (String)request.getSession().getServletContext().getAttribute("resource");
+		resource = (String)request.getSession().getServletContext().getAttribute("html");
 		
 		if(this.maxNum < 1){
 			this.maxNum = 1;
@@ -80,7 +80,7 @@ public class FileTag extends TagSupport {
 				.append(this.bulidDownFileStr())
 				.append("</script>\n");
 		}else{
-			strb.append("<script type='text/javascript' src='"+resource+"/plugin/webuploader/webuploader.js'></script>\n")
+			strb.append("<script type='text/javascript' src='"+resource+"/plugins/webuploader/webuploader.js'></script>\n")
 				.append("<script type='text/javascript' >\n")
 				.append(this.bulidUploadJs(request))
 				.append(this.bulidEventStr())

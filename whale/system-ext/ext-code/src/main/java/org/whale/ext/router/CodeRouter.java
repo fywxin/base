@@ -112,8 +112,22 @@ public class CodeRouter extends BaseRouter {
 						attr.setType("Double");
 					}else if(dbType.equalsIgnoreCase("datetime") || dbType.equalsIgnoreCase("date") || dbType.equalsIgnoreCase("timestamp")){
 						attr.setType("Date");
+					}else if(dbType.equalsIgnoreCase("bit")){
+						attr.setType("Boolean");
 					}else{
 						attr.setType("String");
+					}
+					
+					
+					if("CREATE_TIME".equals(attr.getSqlName()) || "UPDATE_TIME".equals(attr.getSqlName()) || "UPDATER".equals(attr.getSqlName())){
+						attr.setIsEdit(true);
+						attr.setIsNull(true);
+						attr.setInList(false);
+						attr.setInForm(false);
+						attr.setInQuery(false);
+					}
+					if("CREATE_TIME".equals(attr.getSqlName())){
+						attr.setIsEdit(false);
 					}
 					
 					attrs.add(attr);
@@ -125,7 +139,7 @@ public class CodeRouter extends BaseRouter {
 			domain.setCodePath("c://genCode");
 		}
 		if(Strings.isBlank(domain.getPkgName())){
-			domain.setPkgName("org.whale.system");
+			domain.setPkgName("net.youboo.ybplat");
 		}
 		
 		return new ModelAndView("system/code/code_list")

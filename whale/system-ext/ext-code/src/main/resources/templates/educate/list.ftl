@@ -45,7 +45,7 @@ $(function(){
                 formatter: function(value, row, index){
                     var strArr = [];
 				<tag:auth authCode="${domain.domainName?uncap_first}:update">
-                    strArr.push("<a href='javascript:;' onclick=\"go('修改${domain.domainCnName}','${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goUpdate?id="+row.${domain.idAttr.sqlName}+"')\">修改</a>");
+                    strArr.push("<a href='javascript:;' class='link' onclick=\"go('修改${domain.domainCnName}','${"$"+"{ctx}"}/${domain.domainName?uncap_first}/goUpdate?id="+row.${domain.idAttr.sqlName}+"')\">修改</a>");
 				</tag:auth>
 					return strArr.join("");
                 }
@@ -88,7 +88,7 @@ function view(id){
 							<#if qAttr.formType == "dict">
 								<tag:dict id="${qAttr.name}" dictCode="${qAttr.dictName}" headerLabel="-- 请选择 --"></tag:dict>
 							<#else>
-								<input type="text" id="${qAttr.name}" name="${qAttr.name}" style="width:160px;" value="${r"${item."}${qAttr.name}}" <#if qAttr.type == "Integer" || qAttr.type == "Long">onkeyup="value=value.replace(/[^\d]/g,'')"</#if> />
+								<input type="text" id="${qAttr.name}" name="${qAttr.name}" style="width:160px;" <#if qAttr.type == "Integer" || qAttr.type == "Long">onkeyup="value=value.replace(/[^\d]/g,'')"</#if> />
 							</#if>
 							</td>
 		<#if qAttr_index%2==1>

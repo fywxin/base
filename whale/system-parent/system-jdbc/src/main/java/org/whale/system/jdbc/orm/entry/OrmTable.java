@@ -108,8 +108,9 @@ public class OrmTable extends Atable {
 		if(sqlOrderSuffixStr == null){
 			StringBuilder strb = new StringBuilder(" ");
 			if(orderCols != null && orderCols.size() > 0){
+				strb.append(" ORDER BY ");
 				for(OrmColumn orderCol : orderCols){
-					strb.append(" ORDER BY t.").append(orderCol.getSqlName()).append(orderCol.getOrmOrder().getAsc()? " asc," : " desc,");
+					strb.append("t.").append(orderCol.getSqlName()).append(orderCol.getOrmOrder().getAsc()? " asc," : " desc,");
 				}
 				strb.deleteCharAt(strb.length()-1);
 			}

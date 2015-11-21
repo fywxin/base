@@ -55,7 +55,7 @@ public class ImageTag extends TagSupport {
 	public int doStartTag() throws JspException {
 		HttpServletRequest request =(HttpServletRequest) pageContext.getRequest();
 		ctx = request.getContextPath();
-		resource = (String)request.getSession().getServletContext().getAttribute("resource");
+		resource = (String)request.getSession().getServletContext().getAttribute("html");
 		if(this.maxNum < 1){
 			this.maxNum = 1;
 		}
@@ -74,13 +74,11 @@ public class ImageTag extends TagSupport {
 		strb.append(this.bulidHtml(upLoadFiles, isReadonly));
 		//
 		if(isReadonly){
-			strb.append("<script type='text/javascript' src=\""+resource+"/com/imgpreview.js\"></script>")
-				.append("<script type='text/javascript'>\n")
+			strb.append("<script type='text/javascript'>\n")
 				.append(this.bulidShowImageStr())
 				.append("</script>\n");
 		}else{
-			strb.append("<script type='text/javascript' src=\""+resource+"/com/imgpreview.js\"></script>\n")
-				.append("<script type='text/javascript' src=\""+resource+"/plugin/webuploader/webuploader.js\"></script>\n")
+			strb.append("<script type='text/javascript' src=\""+resource+"/plugins/webuploader/webuploader.js\"></script>\n")
 				.append("<script type='text/javascript'>\n")
 				.append(this.bulidUploadJs(request))
 				.append(this.bulidEventStr())
@@ -134,7 +132,7 @@ public class ImageTag extends TagSupport {
 		StringBuilder strb = new StringBuilder();
 		
 		strb.append("<div class=\"file-item thumbnail upload-state-done\" imgid=\""+fileInfo.getId()+"\" >\n")
-			.append("	<img style=\"width:108px;height:108px;\" src=\"").append(fileInfo.getUrlPath()).append("\" url=\""+fileInfo.getUrlPath()+"\" onclick=\"showImage_"+this.id+"(this)\" mark=\"img\" >\n")
+			.append("	<img style=\"width:300px;height:200px;\" src=\"").append(fileInfo.getUrlPath()).append("\" url=\""+fileInfo.getUrlPath()+"\" onclick=\"showImage_"+this.id+"(this)\" mark=\"img\" >\n")
 			.append(isReadonly ? "" : "	<div class=\"info\">\n")
 			.append(isReadonly ? "" : "		<span style=\"padding-left:5px;cursor: pointer;\" onclick=\"editImage_"+this.id+"(this)\" >编辑</span>\n")
 			.append(isReadonly ? "" : "		<span style=\"padding-left:40px;cursor: pointer;\" onclick=\"delImage_"+this.id+"(this)\" >删除</span>\n")
@@ -192,10 +190,10 @@ public class ImageTag extends TagSupport {
 		// 当有文件添加进来的时候
 		strb.append("uploader_"+this.id+".on('fileQueued', function(file) {\n")
 			.append("	var $li = $('<div id=\"' + file.id + '\" class=\"file-item thumbnail\">' +\n")
-			.append("		'<img style=\"width:108px;height:108px;\" mark=\"img\" onclick=\"showImage_"+this.id+"(this)\">' +\n")
+			.append("		'<img style=\"width:300px;height:200px;\" mark=\"img\" onclick=\"showImage_"+this.id+"(this)\">' +\n")
 			.append("		'<div class=\"info\">' +\n")
-			.append("			'<span onclick=\"editImage_"+this.id+"(this)\" style=\"padding-left:5px;cursor: pointer;\">编辑</span>'+\n")
-			.append("			'<span onclick=\"delImage_"+this.id+"(this)\" style=\"padding-left:40px;cursor: pointer;\">删除</span>'+\n")
+			.append("			'<span onclick=\"editImage_"+this.id+"(this)\" style=\"padding-left:15px;cursor: pointer;\">编辑</span>'+\n")
+			.append("			'<span onclick=\"delImage_"+this.id+"(this)\" style=\"padding-left:210px;cursor: pointer;\">删除</span>'+\n")
 			.append("		'</div>'+\n")
 			.append("	'</div>'\n")
 			.append("	),\n")

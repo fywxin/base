@@ -33,9 +33,11 @@ import org.whale.system.common.util.TimeUtil;
 import org.whale.system.common.util.WebUtil;
 import org.whale.system.domain.Dept;
 import org.whale.system.domain.Menu;
+import org.whale.system.domain.Role;
 import org.whale.system.domain.User;
 import org.whale.system.service.DeptService;
 import org.whale.system.service.MenuService;
+import org.whale.system.service.RoleService;
 import org.whale.system.service.UserService;
 import org.whale.system.servlet.MySessionContext;
 
@@ -56,6 +58,8 @@ public class MainRouter extends BaseRouter {
 	private DictCacheService dictCacheService;
 	@Autowired
 	private UserAuthCacheService userAuthCacheService;
+	@Autowired
+	private RoleService roleService;
 	
 	private Boolean sort = Boolean.FALSE;
 
@@ -200,6 +204,10 @@ public class MainRouter extends BaseRouter {
 		}
 		
 		uc.setSuperAdmin(user.getIsAdmin());
+		if(!uc.isSuperAdmin()){
+			List<Role> roles = this.roleService.getByUserId(uc.getUserId());
+			uc.getCustomDatas().put("roles", roles);
+		}
 		
 		if(accessores != null && accessores.size() > 0){
 			for(UserContextAccessor accessor : this.getAccessores()){

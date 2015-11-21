@@ -29,7 +29,6 @@ import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.DictConstant;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.Strings;
-import org.whale.system.common.util.ThreadContext;
 import org.whale.system.common.util.TimeUtil;
 import org.whale.system.common.util.WebUtil;
 import org.whale.system.service.FileInfoService;
@@ -384,7 +383,7 @@ public class FileInfoRouter extends BaseRouter {
 		/** 文件存储时间* */
 		fileInfo.setCreateTime(new Date());
 		/** 文件存储用户ID* */
-		fileInfo.setCreator(((UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT)).getUserId());
+		fileInfo.setCreator(UserContext.get().getUserId());
 		/** 保存方式 * */
 		String saveWay = request.getParameter("saveWay");
 		fileInfo.setSaveWay(Strings.isBlank(saveWay) ? FileInfo.SAVE_DISK : Integer.parseInt(saveWay));
