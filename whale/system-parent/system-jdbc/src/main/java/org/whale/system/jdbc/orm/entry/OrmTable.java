@@ -30,6 +30,8 @@ public class OrmTable extends Atable {
 	private OrmColumn idCol;
 	/** 所有 @Column 字段 */
 	private List<OrmColumn> ormCols;
+	/** Map<attrName, OrmColumn> 所有 @Column 字段 */
+	private Map<String, OrmColumn> ormColMap;
 	/** 所有 @Order 字段 */
 	private List<OrmColumn> orderCols;
 	/** @OptimisticLock 乐观锁字段 */
@@ -177,6 +179,10 @@ public class OrmTable extends Atable {
 	}
 	public void setOrmCols(List<OrmColumn> ormCols) {
 		this.ormCols = ormCols;
+		this.ormColMap = new HashMap<String, OrmColumn>();
+		for(OrmColumn ormColumn : ormCols){
+			this.ormColMap.put(ormColumn.getAttrName(), ormColumn);
+		}
 	}
 	public String getTableCnName() {
 		return tableCnName;
@@ -271,6 +277,14 @@ public class OrmTable extends Atable {
 
 	public void setSqlAsJavaColumn(Map<String, String> sqlAsJavaColumn) {
 		this.sqlAsJavaColumn = sqlAsJavaColumn;
+	}
+
+	public Map<String, OrmColumn> getOrmColMap() {
+		return ormColMap;
+	}
+
+	public void setOrmColMap(Map<String, OrmColumn> ormColMap) {
+		this.ormColMap = ormColMap;
 	}
 	
 }

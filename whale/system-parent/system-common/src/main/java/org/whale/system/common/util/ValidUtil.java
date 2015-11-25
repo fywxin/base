@@ -15,8 +15,11 @@ import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.stereotype.Component;
 import org.whale.system.annotation.jdbc.Validate;
+import org.whale.system.spring.SpringContextHolder;
 
+@Component
 public class ValidUtil {
 
 	private static final String mobile_regex = "1\\d{10}";
@@ -29,6 +32,24 @@ public class ValidUtil {
 								            +"(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."  
 								            +"(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."  
 								            +"(00?\\d|1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
+	
+	//是否存在system-jdbc包
+	private static ValidKeyParser validKeyParser = null;
+	
+	private static boolean hasFind = false;
+	
+	public static ValidKeyParser getValidKeyParser(){
+		if(!hasFind){
+			try{
+				validKeyParser = SpringContextHolder.getBean(ValidKeyParser.class);
+				hasFind = true;
+			}catch(Exception e){
+				
+			}
+		}
+		return validKeyParser;
+	}
+	
 	
 	/**
 	 * 校验
@@ -54,6 +75,7 @@ public class ValidUtil {
 			clazz = clazz.getSuperclass();
 			vaild(obj, append, clazz, map);
 		}
+		
 		return map;
 	}
 	
@@ -63,7 +85,11 @@ public class ValidUtil {
 		for(Field field : fields){
 			msg = valid(obj, field, append);
 			if(msg != null){
-				map.put(field.getName(), msg);
+				if(getValidKeyParser() != null){
+					map.put(validKeyParser.parseKey(obj, field.getName()), msg);
+				} else{
+					map.put(field.getName(), msg);
+				}
 			}
 		}
 	}

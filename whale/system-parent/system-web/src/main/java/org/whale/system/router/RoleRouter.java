@@ -106,8 +106,6 @@ public class RoleRouter extends BaseRouter {
 	@ResponseBody
 	@RequestMapping("/doSave")
 	public Rs doSave(Role role){	
-		if(role.getStatus() == null)
-			role.setStatus(SysConstant.STATUS_NORMAL);
 		this.roleService.save(role);
 		return Rs.success();
 	}
@@ -146,6 +144,9 @@ public class RoleRouter extends BaseRouter {
 		
 		if(role.getStatus() == null)
 			role.setStatus(SysConstant.STATUS_NORMAL);
+		if(role.getCanDel()){
+			role.setCanDel(true);
+		}
 		this.roleService.update(role);
 		return Rs.success();
 	}

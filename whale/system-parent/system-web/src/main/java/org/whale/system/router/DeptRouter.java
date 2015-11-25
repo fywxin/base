@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.base.Cmd;
 import org.whale.system.base.Page;
@@ -77,9 +78,12 @@ public class DeptRouter extends BaseRouter {
 	@Auth(code="DEPT_SAVE", name="新增部门")
 	@ResponseBody
 	@RequestMapping("/doSave")
-	public Rs doSave(Dept dept){
+	public Rs doSave(@Validate Dept dept){
 		if(dept.getPid() == null){
 			dept.setPid(0L);
+		}
+		if(dept.getDeptType() == null){
+			dept.setDeptType("1");
 		}
 		this.deptService.save(dept);
 		return Rs.success();

@@ -9,14 +9,6 @@ import org.whale.system.domain.Dept;
 @Repository
 public class DeptDao extends BaseDao<Dept, Long> {
 
-	/**
-	 * 按 部门名称 获取 部门
-	 * @param deptName 部门名称
-	 * @return
-	 */
-    public Dept getByDeptName(String deptName) {
-    	return this.get(this.cmd().eq("deptName", deptName));
-    }
     /**
 	 * 按 部门编码 获取 部门
 	 * @param deptCode 部门编码

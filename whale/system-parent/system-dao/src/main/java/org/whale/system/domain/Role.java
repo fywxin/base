@@ -6,7 +6,6 @@ import org.whale.system.annotation.jdbc.Order;
 import org.whale.system.annotation.jdbc.Table;
 import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseEntry;
-import org.whale.system.common.constant.SysConstant;
 
 
 @Table(value="sys_role", cnName="角色")
@@ -27,10 +26,13 @@ public class Role extends BaseEntry{
     private String roleCode;
 	
 	@Column(cnName="状态")
-    private Integer status = SysConstant.STATUS_NORMAL;
+    private Integer status;
 	
 	@Column(cnName="备注")
     private String remark;
+	
+	@Column(cnName="是否可以删除")
+	private Boolean canDel;
 
     public Long getRoleId() {
 		return roleId;
@@ -73,4 +75,12 @@ public class Role extends BaseEntry{
         this.remark = remark;
     }
 
+	public Boolean getCanDel() {
+		return canDel;
+	}
+
+	public void setCanDel(Boolean canDel) {
+		this.canDel = canDel;
+	}
+    
 }

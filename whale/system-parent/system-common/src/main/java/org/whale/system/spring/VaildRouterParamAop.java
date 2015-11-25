@@ -32,31 +32,36 @@ public class VaildRouterParamAop {
 		MethodSignature signature = (MethodSignature)joinPoint.getSignature();
 		Method method = signature.getMethod();
 		Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+		Class<?>[] paramTypes=method.getParameterTypes();
 		Object obj = null;
 		Annotation[] anns = null;
-		Map<String, String> map = null;
+		
+		
 		for(int i=0; i<args.length; i++){
 			obj = args[i];
 			anns = parameterAnnotations[i];
 			if(anns == null || anns.length < 1){
 				continue;
 			}
-			if(obj == null || (obj instanceof HttpServletRequest) || (obj instanceof HttpServletResponse)){
+			if((obj instanceof HttpServletRequest) || (obj instanceof HttpServletResponse)){
 				continue;
 			}
 			for(Annotation ann : anns){
 				if(ann.annotationType() == Validate.class){
 					if(ann.annotationType() == Validate.class){
 						Validate vals = (Validate)ann;
-						if(ReflectionUtil.isBaseDataType(obj.getClass())){
+						if(ReflectionUtil.isBaseDataType(paramTypes[i])){
 							String msg = ValidUtil.valid(obj, vals);
 							if(msg != null){
 								throw new FieldValidErrorException(msg);
 							}
 						}else{
+							if(obj == null){
+								throw new FieldValidErrorException("对象为空");
+							}
 							Map<String, String> error = ValidUtil.valid(obj);
 							if(error != null && error.size() > 0){
-								throw new FieldValidErrorException(ValidUtil.formatMsg(map, "</br>"), map);
+								throw new FieldValidErrorException(ValidUtil.formatMsg(error, "</br>"), error);
 							}
 						}
 					}

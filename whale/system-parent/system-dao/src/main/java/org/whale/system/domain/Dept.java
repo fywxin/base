@@ -25,9 +25,10 @@ public class Dept extends BaseEntry {
 	private Long id;
 	
 	@Validate(required=true)
-  	@Column(name="deptName", cnName="部门名称", unique=true)
+  	@Column(name="deptName", cnName="部门名称")
 	private String deptName;
 	
+	@Validate(required=true)
   	@Column(name="deptCode", cnName="部门编码", unique=true)
 	private String deptCode;
 	
@@ -38,7 +39,6 @@ public class Dept extends BaseEntry {
   	@Column(name="remark", cnName="备注")
 	private String remark;
   	
-  	@Validate(required=true)
   	@Column(name="pid", cnName="父部门")
 	private Long pid;
   	
@@ -47,6 +47,9 @@ public class Dept extends BaseEntry {
   	
   	@Column(name="deptAddr", cnName="联系地址")
 	private String deptAddr;
+  	
+  	@Column(cnName="部门类型")
+  	private String deptType;
 	
 	/**id */
 	public Long getId(){
@@ -128,4 +131,11 @@ public class Dept extends BaseEntry {
 		this.deptAddr = deptAddr;
 	}
 
+	public String getDeptType() {
+		return deptType;
+	}
+
+	public void setDeptType(String deptType) {
+		this.deptType = deptType;
+	}
 }

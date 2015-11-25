@@ -292,9 +292,9 @@ public class UserRouter extends BaseRouter {
 	@Auth(code="USER_DEL",name="删除用户")
 	@ResponseBody
 	@RequestMapping("/doDelete")
-	public Rs doDelete(Long userId){
+	public Rs doDelete(String ids){
 		User user = null;
-		if(userId == null || (user = this.userService.get(userId)) == null){
+		if(Strings.isBlank(ids)){
 			return Rs.fail("请选择删除记录");
 		}
 		
@@ -302,15 +302,25 @@ public class UserRouter extends BaseRouter {
 		if(uc == null){
 			return Rs.fail("你未登录，请重新登录");
 		}
-		if(user.getIsAdmin()){
-			return Rs.fail("超级管理员不能被删除");
-		}
-		if(userId == uc.getUserId()){
+		
+		List<Long> idList = LangUtil.splitIds(ids);
+		if(idList.contains(uc.getUserId())){
 			return Rs.fail("亲，你在自杀吗？");
 		}
-		this.userService.delete(userId);
+		for(int i = idList.size()-1; i>=0; i--){
+			user = this.userService.get(idList.get(i));
+			if(user == null){
+				idList.remove(i);
+			}
+			if(user.getIsAdmin()){
+				return Rs.fail("超级管理员不能被删除");
+			}
+		}
 		
-		this.userAuthCacheService.delUserAuth(userId);
+		for(Long userId : idList){
+			this.userService.delete(userId);
+			this.userAuthCacheService.delUserAuth(userId);
+		}
 		
 		return Rs.success();
 	}

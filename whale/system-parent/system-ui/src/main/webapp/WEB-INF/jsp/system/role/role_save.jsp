@@ -45,6 +45,15 @@ $(function() {
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">是否可删除：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <select id="canDel" name="canDel" style="width:250px">
+                    	<option value="1">是</option>
+                    	<option value="0">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label">备注：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
                     <textarea id="remark" name="remark" rows="3" class="form-control" style="width:250px" ></textarea>

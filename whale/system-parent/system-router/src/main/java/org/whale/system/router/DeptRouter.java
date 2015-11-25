@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
+import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.base.Cmd;
 import org.whale.system.base.Page;

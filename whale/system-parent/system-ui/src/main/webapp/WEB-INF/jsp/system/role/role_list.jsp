@@ -16,7 +16,7 @@ $(function(){
 		  {
 	        field: 'opt',
 	        title: '操作',
-	        width: '18%',
+	        width: '25%',
 	        align: 'center',
 	        formatter: function(value, row, index){
 	        	var strArr = [];
@@ -29,7 +29,11 @@ $(function(){
 	            }
 	            strArr.push('<span class="link-sep">|</span>');
 	            strArr.push('<a href="javascript:;" class="link" onclick=go("设置权限","${ctx}/role/goSetRoleAuth?roleId='+row.roleId+'") >设置权限</a>');
-        		return strArr.join("");
+	            if(row.canDel){
+	            	strArr.push('<span class="link-sep">|</span>')
+					strArr.push("<a href='javascript:;' class='link' onclick=\"del('"+row.roleId+"')\">删除</a>");
+	            }
+	            return strArr.join("");
 			    }
 	    }, {
 	        field: 'roleName',
@@ -41,9 +45,21 @@ $(function(){
 	        title: '角色编码',
 	        width: '20%',
 	        sortable: true
-	    }, {
+	    },{
 	        field: 'remark',
 	        title: '备注'
+	    }, {
+	        field: 'canDel',
+	        title: '可删除',
+	        width: '6%',
+	        align: 'center',
+	        formatter: function(value, row, index){
+	        	if(row.canDel){
+	        		return "是";
+	        	}else{
+	        		return "否";
+	        	}
+	        }
 	    }, {
 	        field: 'status',
 	        title: '状态',
@@ -56,8 +72,8 @@ $(function(){
 	});
 });
 
-function del(){
-	$.del({url:"${ctx}/role/doDelete"});
+function del(id){
+	$.del({url:"${ctx}/role/doDelete?id="+id});
 }
 
 function setStatus(id,name,type){
@@ -91,7 +107,6 @@ function setStatus(id,name,type){
 		</form>
 		<div id="mytoolbar" style="margin-left:5px;">
 			<button type="button" class="btn btn-primary btn-sm" onclick="go('新增角色', '${ctx}/role/goSave')"><i class="fa fa-plus"></i> 新  增</button>
-			<button type="button" class="btn btn-danger btn-sm" onclick="del()"><i class="fa fa-trash-o"></i> 删  除</button>
 		</div>
 		<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
 			<table id="gridTable" ></table>

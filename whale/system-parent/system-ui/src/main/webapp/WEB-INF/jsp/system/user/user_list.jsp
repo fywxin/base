@@ -14,6 +14,12 @@ $(function(){
 	    url: '${ctx}/user/doList?deptId=${deptId}',
 	    idField: 'userId',
 	    columns: [
+          {
+           	field: 'chk',
+           	checkbox: true,
+           	width: '4%',
+    	    align: 'center'
+          },
 		  {
 	        field: 'opt',
 	        title: '操作',

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.exception.SysException;
-import org.whale.system.common.util.LangUtil;
 import org.whale.system.dao.RoleAuthDao;
 import org.whale.system.dao.RoleDao;
 import org.whale.system.dao.UserRoleDao;
@@ -23,6 +23,16 @@ public class RoleService extends BaseService<Role, Long> {
 	@Autowired
 	private UserRoleDao userRoleDao;
 	
+	public void save(Role role){
+		if(role.getStatus() == null){
+			role.setStatus(SysConstant.STATUS_NORMAL);
+		}
+		if(role.getCanDel() == null){
+			role.setCanDel(true);
+		}
+		this.roleDao.save(role);
+	}
+	
 	
 	public void transDelete(List<Long> roleIds) {
 		if(roleIds == null || roleIds.size() < 1){
@@ -33,17 +43,23 @@ public class RoleService extends BaseService<Role, Long> {
 			this.roleAuthDao.deleteByRoleId(roleId);
 			this.userRoleDao.deleteByRoleId(roleId);
 		}
-		
+	}
+	
+	public void delete(Long roleId){
+		Role role = this.get(roleId);
+		if(role != null){
+			if(!role.getCanDel()){
+				throw new SysException("角色["+role.getRoleName()+"]不能删除");
+			}
+			this.roleDao.delete(roleId);
+		}
 	}
 	
 	public void updateStatus(Long roleId, Integer status){
-		Role role = this.get(roleId);
-		if(role == null){
-			throw new SysException("找不到角色ID=["+roleId+"]的对象");
-		}
+		Role role = new Role();
+		role.setRoleId(roleId);
 		role.setStatus(status);
-		LangUtil.trim(role);
-		this.roleDao.update(role);
+		this.roleDao.updateNotNull(role);
 	}
 	
 	public void transSaveRoleAuths(Long roleId, String[] authCodes){

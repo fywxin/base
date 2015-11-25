@@ -21,18 +21,7 @@ public class DeptService extends BaseService<Dept, Long> {
 	@Autowired
 	private DeptDao deptDao;
 	
-    /**
-	 * 按 部门名称 获取 部门
-	 * @param deptName 部门名称
-	 * @return
-	 */
-    public Dept getByDeptName(String deptName) {
-    	if(Strings.isBlank(deptName)){
-    		return null;
-    	}
-    	
-    	return this.deptDao.getByDeptName(deptName);
-    }
+	
     /**
 	 * 按 部门编码 获取 部门
 	 * @param deptCode 部门编码

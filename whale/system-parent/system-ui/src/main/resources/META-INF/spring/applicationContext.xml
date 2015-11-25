@@ -81,6 +81,15 @@
 <!-- 		<property name="password" value="${mail.password}"></property> -->
 <!-- 	</bean> -->
 
+	<bean id="vaildRouterParamAop" class="org.whale.system.spring.VaildRouterParamAop"/>
+	<aop:config proxy-target-class="true">
+        <aop:aspect ref="vaildRouterParamAop">
+            <aop:pointcut id="vaildPointcut" expression="execution(* org.whale.*.router.*.*(..))"/>
+            
+            <aop:before pointcut-ref="vaildPointcut" method="doBefore"/>
+        </aop:aspect>
+    </aop:config>
+
 	<import resource="classpath:/META-INF/spring/applicationContext-datasource.xml" />
 	<import resource="classpath:/META-INF/spring/log.xml" />
 </beans>
