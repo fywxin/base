@@ -60,6 +60,15 @@ public class ValueUpdateBulider {
 		return ormValues;
 	}
 	
+	/**
+	 * 非空更新
+	 * 1. 根据ID 更新
+	 * 2. 根据唯一字段更新
+	 * 
+	 * @param obj
+	 * @param ormTable
+	 * @return
+	 */
 	public OrmValue getUpdateNotNull(Object obj, OrmTable ormTable) {
 		OrmValue ormValue = new OrmValue();
 		List<OrmColumn> cols = ormTable.getOrmCols();
@@ -72,27 +81,45 @@ public class ValueUpdateBulider {
 		StringBuilder sql = new StringBuilder("update ");
 		sql.append(ormTable.getTableDbName()).append(" t set ");
 		
+		//获取ID字段值
+		OrmColumn idCol = ormTable.getIdCol();
+		Object idVal = AnnotationUtil.getFieldValue(obj, idCol.getField());
+		boolean idNull = idVal == null;
+		OrmColumn uniqueColumn = null;
+		
 		//待更新字段
 		Object val = null;
 		for(OrmColumn col : cols){
-			if(col.getIsId() || !col.getUpdateAble() ||(val = AnnotationUtil.getFieldValue(obj, col.getField())) == null) {
+			if(col.getIsId() ||(val = AnnotationUtil.getFieldValue(obj, col.getField())) == null) {
 				//乐观锁 字段值不能为空
 				if(col.getIsOptimisticLock()){
 					throw new OrmException("对象 ["+obj.getClass().getName()+"] 中乐观锁字段 ["+col.getAttrName()+"] 值不能为空");
 				}
 				continue;
 			}
+			
 			//乐观锁 t.version = t.version+1， 版本+1
 			if(col.getIsOptimisticLock()){
 				sql.append(" t.").append(col.getSqlName()).append("=(t.").append(col.getSqlName()).append("+1),");
 				continue;
 			}
-				
-			sql.append(" t.").append(col.getSqlName()).append("=?,");
-			argTypes.add(col.getType());
-			fields.add(col.getField());
-			sCols.add(col);
-			objs.add(val);
+			
+			if(idNull && col.getUnique()){
+				if(uniqueColumn != null){
+					throw new OrmException("对象 ["+obj.getClass().getName()+"] 中主键字段 ["+idCol.getAttrName()+"] 值不能为空");
+				}else{
+					uniqueColumn = col;
+				}
+			}else{
+				if(!col.getUpdateAble()){
+					continue;
+				}
+				sql.append(" t.").append(col.getSqlName()).append("=?,");
+				argTypes.add(col.getType());
+				fields.add(col.getField());
+				sCols.add(col);
+				objs.add(val);
+			}
 		}
 		if(objs.size() < 1){
 			throw new OrmException("查找不到需要更新的字段");
@@ -100,19 +127,31 @@ public class ValueUpdateBulider {
 		
 		sql.deleteCharAt(sql.length()-1);
 		sql.append(" where ");
-		OrmColumn idCol = ormTable.getIdCol();
-		sql.append("t.").append(idCol.getSqlName()).append("=?");
-		argTypes.add(idCol.getType());
-		fields.add(idCol.getField());
-		sCols.add(idCol);
-		val = AnnotationUtil.getFieldValue(obj, idCol.getField());
-		if(val == null)
-			throw new OrmException("对象 ["+obj.getClass().getName()+"] 中主键字段 ["+idCol.getAttrName()+"] 值不能为空");
-		objs.add(val);
+		
+		if(idNull){//不存在主键，按唯一字段更新
+			if(uniqueColumn == null){//唯一字段也不存在
+				throw new OrmException("对象 ["+obj.getClass().getName()+"] 中主键字段 ["+idCol.getAttrName()+"] 值不能为空");
+			}
+			sql.append("t.").append(uniqueColumn.getSqlName()).append("=?");
+			argTypes.add(uniqueColumn.getType());
+			fields.add(uniqueColumn.getField());
+			sCols.add(uniqueColumn);
+			objs.add(AnnotationUtil.getFieldValue(obj, uniqueColumn.getField()));
+		}else{
+			sql.append("t.").append(idCol.getSqlName()).append("=?");
+			argTypes.add(idCol.getType());
+			fields.add(idCol.getField());
+			sCols.add(idCol);
+			objs.add(idNull);
+		}
 		
 		//乐观锁  AND t.version = ?
 		OrmColumn optimisticLockCol = ormTable.getOptimisticLockCol();
 		if(optimisticLockCol != null){
+			if(uniqueColumn.getAttrName().equals(optimisticLockCol.getAttrName())){
+				throw new OrmException("对象 ["+obj.getClass().getName()+"] 中主键字段 ["+optimisticLockCol.getAttrName()+"] 值不能既是唯一又是乐观锁");
+			}
+			
 			sql.append(" AND t.").append(optimisticLockCol.getSqlName()).append("=?");
 			argTypes.add(optimisticLockCol.getType());
 			fields.add(optimisticLockCol.getField());

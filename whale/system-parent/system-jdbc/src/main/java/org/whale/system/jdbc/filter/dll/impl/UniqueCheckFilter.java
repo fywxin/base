@@ -106,7 +106,11 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 	}
 	
 	public void beforeUpdateNotNull(T obj, org.whale.system.jdbc.IOrmDao<T,PK> baseDao) {
-		this.beforeUpdate(obj, baseDao);
+		OrmTable ormTable = baseDao._getOrmTable();
+		//根据ID更新时，需要做唯一性校验，否则根据唯一更新，不需要校验
+		if(AnnotationUtil.getFieldValue(obj, ormTable.getIdCol().getField()) != null){
+			this.beforeUpdate(obj, baseDao);
+		}
 	}
 
 	@Override

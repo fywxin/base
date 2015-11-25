@@ -1,5 +1,6 @@
 package org.whale.system.tag;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,8 @@ import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.util.Strings;
 import org.whale.system.domain.DictItem;
 import org.whale.system.spring.SpringContextHolder;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * 字典控件,用户需提供字典编码，或查询sql，获取数据集
@@ -55,84 +58,109 @@ public class DictTag extends TagSupport {
 	/** 不可用模式，值为true 会在select 中加入disabled = disabled 属性*/
 	private String disabled;
 	
+	/** 是否返回为JSON javascript 对象 */
+	private String formatJsonObj;
+	
 	@Override
 	public int doStartTag() throws JspException {
 		StringBuffer strb = new StringBuffer();
 		if(Strings.isBlank(id))
 			return SKIP_BODY;
-		if(LOGIC_TRUE.equals(readonly)){
-			if(Strings.isBlank(value))
-				return SKIP_BODY;
-			String val = "";
+		if(LOGIC_TRUE.equals(formatJsonObj)){
+			Map<String, Object> map = new HashMap<String, Object>();
 			if(Strings.isBlank(dictCode)){
 				JdbcTemplate jdbcTemplate = (JdbcTemplate) SpringContextHolder.getApplicationContext().getBean("jdbcTemplate");
-				List<Map<String, Object>> list=jdbcTemplate.queryForList(sql);
-				
+				List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 				if(list != null && list.size() > 0){
-					for(Map<String, Object> map : list){
-						if(map.get(sqlValueKey) != null && map.get(sqlValueKey).toString().equals(value)){
-							val = map.get(sqlLableKey) == null ? "" : map.get(sqlLableKey).toString();
-						}
+					for(Map<String, Object> m : list){
+						map.put(m.get(sqlValueKey).toString(), m.get(sqlLableKey));
 					}
 				}
 			}else{
-				if(Strings.isNotBlank(DictCacheService.getThis().getItemLabel(dictCode, value)))
-					val = DictCacheService.getThis().getItemLabel(dictCode, value).trim();
+				List<DictItem> items = DictCacheService.getThis().getItemsByDictCode(dictCode);
+				if(items != null && items.size() > 0){
+					for(DictItem item : items){
+						map.put(item.getItemCode(), item.getItemName());
+					}
+				}
 			}
-			strb.append(val)
-				.append("<input type='hidden' id='"+id+"' name='"+id+"' value='"+value+"' />");
+			strb.append(JSON.toJSONString(map));
 		}else{
-			strb.append("<select id='"+id+"' name='"+id+"' style='width:"+width+";'");
-			if(LOGIC_TRUE.equals(disabled)){
-				strb.append(" disabled = 'disabled'");
-			}
-			strb.append(" >");
-			if(Strings.isNotBlank(headerLabel)){
-				strb.append("\t<option value='' >").append(headerLabel).append("</option>");
-			}
-			
-			if(Strings.isBlank(dictCode)){
-				if(Strings.isBlank(sql))
+			if(LOGIC_TRUE.equals(readonly)){
+				if(Strings.isBlank(value))
 					return SKIP_BODY;
-				
-				JdbcTemplate jdbcTemplate = (JdbcTemplate) SpringContextHolder.getApplicationContext().getBean("jdbcTemplate");
-				List<Map<String, Object>> list=jdbcTemplate.queryForList(sql);
-				
-				if(list != null && list.size() > 0){
-					for(Map<String, Object> map : list){
-						if(Strings.isNotBlank(valDefault)){
-							String[] vals = valDefault.split(",");
-							for (String s : vals) {
-								if(map.get(sqlValueKey)!=null&&map.get(sqlValueKey).toString().trim().equals(s.trim())){
-									strb.append(this.bulidOption(map.get(sqlValueKey), map.get(sqlLableKey), value, false));
-								}
+				String val = "";
+				if(Strings.isBlank(dictCode)){
+					JdbcTemplate jdbcTemplate = (JdbcTemplate) SpringContextHolder.getApplicationContext().getBean("jdbcTemplate");
+					List<Map<String, Object>> list=jdbcTemplate.queryForList(sql);
+					
+					if(list != null && list.size() > 0){
+						for(Map<String, Object> map : list){
+							if(map.get(sqlValueKey) != null && map.get(sqlValueKey).toString().equals(value)){
+								val = map.get(sqlLableKey) == null ? "" : map.get(sqlLableKey).toString();
 							}
-						}else{
-							strb.append(this.bulidOption(map.get(sqlValueKey), map.get(sqlLableKey), value, false));
 						}
 					}
+				}else{
+					if(Strings.isNotBlank(DictCacheService.getThis().getItemLabel(dictCode, value)))
+						val = DictCacheService.getThis().getItemLabel(dictCode, value).trim();
 				}
+				strb.append(val)
+					.append("<input type='hidden' id='"+id+"' name='"+id+"' value='"+value+"' />");
 			}else{
-				List<DictItem> list = DictCacheService.getThis().getItemsByDictCode(dictCode.trim());
-				if(list != null && list.size() > 0){
-					for(DictItem dictItem : list){
-						if(dictItem != null){
+				strb.append("<select id='"+id+"' name='"+id+"' style='width:"+width+";'");
+				if(LOGIC_TRUE.equals(disabled)){
+					strb.append(" disabled = 'disabled'");
+				}
+				strb.append(" >");
+				if(Strings.isNotBlank(headerLabel)){
+					strb.append("\t<option value='' >").append(headerLabel).append("</option>");
+				}
+				
+				if(Strings.isBlank(dictCode)){
+					if(Strings.isBlank(sql))
+						return SKIP_BODY;
+					
+					JdbcTemplate jdbcTemplate = (JdbcTemplate) SpringContextHolder.getApplicationContext().getBean("jdbcTemplate");
+					List<Map<String, Object>> list=jdbcTemplate.queryForList(sql);
+					
+					if(list != null && list.size() > 0){
+						for(Map<String, Object> map : list){
 							if(Strings.isNotBlank(valDefault)){
 								String[] vals = valDefault.split(",");
 								for (String s : vals) {
-									if(dictItem.getItemCode()!=null&&dictItem.getItemCode().toString().trim().equals(s.trim())){
-										strb.append(this.bulidOption(dictItem.getItemCode(), dictItem.getItemName(), value, SysConstant.STATUS_UNUSE == dictItem.getStatus()));
+									if(map.get(sqlValueKey)!=null&&map.get(sqlValueKey).toString().trim().equals(s.trim())){
+										strb.append(this.bulidOption(map.get(sqlValueKey), map.get(sqlLableKey), value, false));
 									}
 								}
 							}else{
-								strb.append(this.bulidOption(dictItem.getItemCode(), dictItem.getItemName(), value, SysConstant.STATUS_UNUSE == dictItem.getStatus()));
+								strb.append(this.bulidOption(map.get(sqlValueKey), map.get(sqlLableKey), value, false));
+							}
+						}
+					}
+				}else{
+					List<DictItem> list = DictCacheService.getThis().getItemsByDictCode(dictCode.trim());
+					if(list != null && list.size() > 0){
+						for(DictItem dictItem : list){
+							if(dictItem != null){
+								if(Strings.isNotBlank(valDefault)){
+									String[] vals = valDefault.split(",");
+									for (String s : vals) {
+										if(dictItem.getItemCode()!=null&&dictItem.getItemCode().toString().trim().equals(s.trim())){
+											strb.append(this.bulidOption(dictItem.getItemCode(), dictItem.getItemName(), value, SysConstant.STATUS_UNUSE == dictItem.getStatus()));
+										}
+									}
+								}else{
+									strb.append(this.bulidOption(dictItem.getItemCode(), dictItem.getItemName(), value, SysConstant.STATUS_UNUSE == dictItem.getStatus()));
+								}
 							}
 						}
 					}
 				}
+				strb.append("</select>");
 			}
-			strb.append("</select>");
 		}
+		
 		try {
 			pageContext.getOut().print(strb.toString());
 		} catch (java.io.IOException e) {
@@ -246,5 +274,15 @@ public class DictTag extends TagSupport {
 	public void setValDefault(String valDefault) {
 		this.valDefault = valDefault;
 	}
+
+	public String getFormatJsonObj() {
+		return formatJsonObj;
+	}
+
+	public void setFormatJsonObj(String formatJsonObj) {
+		this.formatJsonObj = formatJsonObj;
+	}
+
+	
 	
 }

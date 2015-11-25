@@ -91,6 +91,12 @@
      <rtexprvalue>true</rtexprvalue>
      <description>用户自定义 option文本在sql中的key</description>
    </attribute>
+   <attribute>
+     <name>formatJsonObj</name>
+     <required>false</required>
+     <rtexprvalue>true</rtexprvalue>
+     <description>打印字典js对象</description>
+   </attribute>
  </tag>
  
  <tag>
