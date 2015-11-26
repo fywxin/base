@@ -4,6 +4,7 @@
 <head>
 <%@include file="/jsp/form.jsp" %>
 <%@include file="/jsp/ztree.jsp" %>
+<%@include file="/jsp/ueditor.jsp" %>
 <script type="text/javascript">
 function save(){
 	$.save({'url':'${ctx}/user/doSave'}); 
@@ -115,7 +116,7 @@ $(function() {
             <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label">备注：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
-                    <textarea id="remark" name="remark" rows="3" class="form-control" style="width:250px" ></textarea>
+                	<script id="remark" name="remark" type="text/plain"></script>
                 </div>
             </div>
         	<div class="form-group" style="border-bottom:0px;margin-top:20px;">
@@ -128,5 +129,8 @@ $(function() {
         </form>
      </div>
  </div>
+ <script type="text/javascript">
+var ue = UE.getEditor('remark');
+</script>
 </body>
 </html>

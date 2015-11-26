@@ -36,6 +36,7 @@ import org.whale.system.ueditor.ActionEnter;
 import org.whale.system.domain.FileInfo;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 
 @Controller
@@ -56,8 +57,8 @@ public class FileInfoRouter extends BaseRouter {
 	
 	@ResponseBody
 	@RequestMapping("/doUeditorExec")
-	public String doUeditorExec(HttpServletRequest request) {
-		return new ActionEnter(request).exec();
+	public JSONObject doUeditorExec(HttpServletRequest request) {
+		return JSON.parseObject(new ActionEnter(request).exec());
 	}
 	
 	@RequestMapping("/goFileUpload")
