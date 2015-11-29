@@ -20,6 +20,12 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
+/**
+ * 效率出现问题时，或者功能不满足时，换成 ganymed-ssh2
+ * 
+ * @author 王金绍
+ * @date 2015年11月29日 下午6:05:34
+ */
 public class JSCHUtil {
 	private static final Logger log = LoggerFactory.getLogger(JSCHUtil.class
 			.getName());
