@@ -2,12 +2,15 @@ package org.whale.system.router;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,6 +37,7 @@ import org.whale.system.common.util.WebUtil;
 import org.whale.system.service.FileInfoService;
 import org.whale.system.ueditor.ActionEnter;
 import org.whale.system.domain.FileInfo;
+import org.whale.system.common.util.JSCHUtil;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -49,6 +53,8 @@ public class FileInfoRouter extends BaseRouter {
 	private FileInfoService fileInfoService;
 	@Autowired
 	private DictCacheService dictCacheService;
+	
+	private static JSCHUtil jschUtil = new JSCHUtil();
 	
 	@RequestMapping("/goUeditor")
 	public ModelAndView goUeditor(){
@@ -298,14 +304,14 @@ public class FileInfoRouter extends BaseRouter {
 		
 		FileInfo fileInfo = this.fileInfoService.get(fileId);
 		if (fileInfo != null) {
-			if(FileInfo.SAVE_DISK.equals(fileInfo.getSaveWay())){
+			if(FileInfo.SAVE_DISK.equals(fileInfo.getSaveWay()) || FileInfo.SAVE_BOTH.equals(fileInfo.getSaveWay())){
 				File file = new File(fileInfo.getAbsolutePath());
 				if(file.exists()){
 					file.delete();
 				}
+			}else if(FileInfo.SAVE_FTP.equals(fileInfo.getSaveWay()) || FileInfo.SAVE_BOTH.equals(fileInfo.getSaveWay())){
+				jschUtil.delFile(fileInfo.getAbsolutePath());
 			}
-			
-			//TODO 删除FTP
 			
 			this.fileInfoService.delete(fileId);
 		}
@@ -325,18 +331,22 @@ public class FileInfoRouter extends BaseRouter {
 			HttpServletResponse response) throws Exception {
 		try {
 			FileInfo fileInfo = fileInfoService.get(fileId);
-			if (fileInfo.getSaveWay() == null || FileInfo.SAVE_DISK.equals(fileInfo.getSaveWay())) {
+			if (!FileInfo.SAVE_FTP.equals(fileInfo.getSaveWay())) {
 				String fileName = (request.getSession().getServletContext()
 						.getRealPath("/") + fileInfo.getFilePath())
 						.replaceAll("\\\\", "/").replaceAll("//", "/")
 						+ fileInfo.getFileName();
 				File file = new File(fileName);
 				if (file.exists()) {
-					//WebUtil.downLoad(fileName);
+					WebUtil.downLoad(request, response, fileInfo.getRealFileName(), new FileInputStream(file));
 				}
+			}else{
+				URL url = new URL(fileInfo.getAbsolutePath());
+				WebUtil.downLoad(request, response, fileInfo.getRealFileName(), url.openStream());
 			}
 		} catch (Exception e) {
 			logger.error("下载文件出错" + e.getMessage(), e);
+			WebUtil.fail(response, "下载文件异常");
 		}
 	}
 
@@ -411,7 +421,7 @@ public class FileInfoRouter extends BaseRouter {
 		if (FileInfo.SAVE_DISK.equals(fileInfo.getSaveWay())) {
 			return save2Disk(fileInfo, multipartFile);
 		} else if (FileInfo.SAVE_FTP.equals(fileInfo.getSaveWay())) {
-			return null;
+			return save2Ftp(fileInfo, multipartFile);
 		} else {
 			logger.warn("文件没有设置保存方式，系统将不会自动保存此文件，除非开发人员实现接口中进行文件保存");
 		}
@@ -468,41 +478,40 @@ public class FileInfoRouter extends BaseRouter {
 	 * @param fileInfo
 	 * @param multipartFile
 	 * @return
-	 
-	public boolean save2Ftp(FileInfo fileInfo, MultipartFile multipartFile) {
-		UserContext uc = UserContextHolder.getUserContext();
+	 */
+	public static String save2Ftp(FileInfo fileInfo, MultipartFile multipartFile) {
 		// ftp对外展示文件相对路径
-		String relativePath = fileInfo.getDirName().trim() + "/"
-				+ uc.getCityCode() + "/";
-		String netAddress = DictCacheUtil.getItemValue(
-				DictConstant.ABSTRACT_DICT_FTP_TEST,
-				DictConstant.DICT_NET_ADDRESS);
-		if (StringUtils.isBlank(netAddress))
-			throw new RuntimeException("字典元素【文件服务器】["
-					+ DictConstant.DICT_NET_ADDRESS + "] 为设置地址");
-		netAddress = netAddress.trim();
-		if (!netAddress.endsWith("/"))
-			netAddress = netAddress + "/";
-
-		FtpUtil ftpUtil = new FtpUtil(DictConstant.ABSTRACT_DICT_FTP_TEST);
-
-		fileInfo.setFilePath(relativePath);
-		fileInfo.setAffixPath(ftpUtil.getFullPath(relativePath));
-		fileInfo.setFullUrl(netAddress + relativePath
-				+ fileInfo.getFileName());
-
+		String sshHost = DictCacheService.getThis().getItemValue(DictConstant.DICT_FILE, DictConstant.FILE_SERVER_HOST);
+		String sshUserName = DictCacheService.getThis().getItemValue(DictConstant.DICT_FILE, DictConstant.FILE_SERVER_SSH_USER_NAME);
+		String sshPassword = DictCacheService.getThis().getItemValue(DictConstant.DICT_FILE, DictConstant.FILE_SERVER_SSH_PASSWORD);
+		Integer sshPort = DictCacheService.getThis().getItemIntValue(DictConstant.DICT_FILE, DictConstant.FILE_SERVER_SSH_PORT);
+		String serverdeployPath = DictCacheService.getThis().getItemValue(DictConstant.DICT_FILE, DictConstant.FILE_SERVER_DEPLOY_PATH);
+		
 		try {
-			return ftpUtil.uploadFile(multipartFile.getInputStream(),
-					relativePath, fileInfo.getFileName());
-		} catch (IOException e) {
+			String deployPath = serverdeployPath.trim()+"/"+fileInfo.getDirName().trim();
+			while(deployPath.indexOf("//") != -1){
+				deployPath = deployPath.replaceAll("//", "/");
+			}
+			while(deployPath.indexOf("\\") != -1){
+				deployPath = deployPath.replaceAll("\\", "/");
+			}
+			if(!deployPath.startsWith("/")){
+				deployPath = "/"+deployPath;
+			}
+			
+			jschUtil.connectSession(sshHost, sshUserName, sshPassword, sshPort);
+	        jschUtil.connectSftp();
+	        jschUtil.scpStream(multipartFile.getInputStream(), deployPath, fileInfo.getFileName());
+	        fileInfo.setFilePath(fileInfo.getDirName());
+			fileInfo.setAbsolutePath(deployPath+"/"+fileInfo.getFileName());
+			fileInfo.setUrlPath(DictCacheService.getThis().getItemValue(DictConstant.DICT_FILE, DictConstant.FILE_SERVER_APACHE_HOST) + fileInfo.getDirName()+"/" + fileInfo.getFileName());
+		} catch (Exception e) {
 			logger.error("保存文件出错" + e.getMessage(), e);
-			return false;
-		} finally {
-			if (ftpUtil != null)
-				ftpUtil.closeConnect();
+			return "保存文件出错" + e.getMessage();
 		}
+		return null;
 	}
-*/
+
 	
 	@RequestMapping("/goList")
 	public ModelAndView goList(FileInfo fileInfo){

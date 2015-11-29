@@ -48,6 +48,11 @@
 			<artifactId>hessian</artifactId>
 			<version>4.0.7</version>
 		</dependency>
+		<dependency>
+			<groupId>org.whale</groupId>
+			<artifactId>model-file</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>system-ui</finalName>

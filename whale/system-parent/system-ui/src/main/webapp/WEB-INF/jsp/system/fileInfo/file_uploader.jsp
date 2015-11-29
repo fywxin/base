@@ -22,7 +22,7 @@
         	<div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i>*</i>用户名：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
-                    <tag:file id="inf" maxNum="2" ></tag:file>
+                    <tag:file id="inf" maxNum="2" saveWay="2" ></tag:file>
                 </div>
             </div>
             

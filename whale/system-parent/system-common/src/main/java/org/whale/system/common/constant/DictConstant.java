@@ -44,5 +44,17 @@ public class DictConstant {
 	/** 文件公共路径 */
 	public static final String DICT_ITEM_FILE_PUB_DIRS = "ITEM_FILE_PUB_DIRS";
 	
+	/**linux 主机 IP */
+	public static final String FILE_SERVER_HOST = "FILE_SERVER_HOST";
+	/**文件服务器 SSH用户名 */
+	public static final String FILE_SERVER_SSH_USER_NAME = "FILE_SERVER_SSH_USER_NAME";
+	/**文件服务器 SSH登录密码 */
+	public static final String FILE_SERVER_SSH_PASSWORD = "FILE_SERVER_SSH_PASSWORD";
+	/**文件服务器 SSH登录端口 */
+	public static final String FILE_SERVER_SSH_PORT = "FILE_SERVER_SSH_PORT";
 	
+	/**文件服务器 scp文件上传后的保存路径 */
+	public static final String FILE_SERVER_DEPLOY_PATH = "FILE_SERVER_DEPLOY_PATH";
+	/**文件服务器IP */
+	public static final String FILE_SERVER_APACHE_HOST = "FILE_SERVER_APACHE_HOST";
 }
