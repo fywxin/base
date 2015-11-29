@@ -26,7 +26,7 @@ public class MenuRouter extends BaseRouter {
 	@Autowired
 	private MenuService menuService;
 	
-	@Auth(code="MENU_LIST",name="查询菜单")
+	@Auth(code="menu:list",name="查询菜单")
 	@RequestMapping("/goTree")
 	public ModelAndView goTree(Long parentId){
 		
@@ -35,7 +35,7 @@ public class MenuRouter extends BaseRouter {
 		.addObject("parentId", parentId);
 	}
 	
-	@Auth(code="MENU_LIST",name="查询菜单")
+	@Auth(code="menu:list",name="查询菜单")
 	@RequestMapping("/goList")
 	public ModelAndView goList(Long parentId){
 		if(parentId == null){
@@ -44,7 +44,7 @@ public class MenuRouter extends BaseRouter {
 		return new ModelAndView("system/menu/menu_list").addObject("parentId", parentId);
 	}
 	
-	@Auth(code="MENU_LIST",name="查询菜单")
+	@Auth(code="menu:list",name="查询菜单")
 	@ResponseBody
 	@RequestMapping("/doList")
 	public Page doList(Long parentId){
@@ -55,7 +55,7 @@ public class MenuRouter extends BaseRouter {
 		return page;
 	}
 	
-	@Auth(code="MENU_SAVE",name="新增菜单")
+	@Auth(code="menu:save",name="新增菜单")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(Long parentId){
 		if(parentId == null)
@@ -73,7 +73,7 @@ public class MenuRouter extends BaseRouter {
 	 * @param response
 	 * @param menu
 	 */
-	@Auth(code="MENU_SAVE",name="新增菜单")
+	@Auth(code="menu:save",name="新增菜单")
 	@ResponseBody
 	@RequestMapping("/doSave")
 	public Rs doSave(Menu menu){
@@ -91,19 +91,19 @@ public class MenuRouter extends BaseRouter {
 		if(menu.getMenuType() != 1 && menu.getParentId() == 0){
 			return Rs.fail("请选择父菜单");
 		}
+		if(menu.getPublicFlag() && menu.getMenuType() != 3){
+			return Rs.fail("非链接菜单不能是公共菜单");
+		}
 		
 		if(menu.getOrderNo() == null){
 			menu.setOrderNo(1);
-		}
-		if(menu.getIsPublic() != 1){
-			menu.setIsPublic(0);
 		}
 		
 		this.menuService.save(menu);
 		return Rs.success(menu.getMenuId());
 	}
 	
-	@Auth(code="MENU_UPDATE",name="修改菜单")
+	@Auth(code="menu:update",name="修改菜单")
 	@RequestMapping("/goUpdate")
 	public ModelAndView goUpdate(Long menuId, Integer view){
 		Menu menu = this.menuService.get(menuId);
@@ -119,7 +119,7 @@ public class MenuRouter extends BaseRouter {
 	 * @param response
 	 * @param menu
 	 */
-	@Auth(code="MENU_UPDATE",name="修改菜单")
+	@Auth(code="menu:update",name="修改菜单")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
 	public Rs doUpdate(Menu menu, String oldMenuName){
@@ -142,10 +142,6 @@ public class MenuRouter extends BaseRouter {
 			menu.setOrderNo(1);
 		}
 		
-		if(menu.getIsPublic() != 1){
-			menu.setIsPublic(0);
-		}
-		
 		this.menuService.update(menu);
 		
 		return Rs.success();
@@ -158,7 +154,7 @@ public class MenuRouter extends BaseRouter {
 	 * @param response
 	 * @param menuId
 	 */
-	@Auth(code="MENU_DEL",name="删除菜单")
+	@Auth(code="menu:del",name="删除菜单")
 	@ResponseBody
 	@RequestMapping("/doDelete")
 	public Rs doDelete(String ids){

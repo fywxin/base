@@ -17,10 +17,14 @@ $(function(){
 	        align: 'center',
 	        formatter: function(value, row, index){
 				var strArr = [];
+				<tag:auth authCode="dict:update">
 				strArr.push('<a href="javascript:;" class="link" onclick=go("修改字典","${ctx}/dict/goUpdate?dictId='+row.dictId+'") >修改</a>');
-	            strArr.push('<span class="link-sep">|</span>');
+				</tag:auth>
+				<tag:auth authCode="dict:del">
+				strArr.push('<span class="link-sep">|</span>');
 	            strArr.push('<a href="javascript:;" class="link" onclick=del('+row.dictId+') >删除</a>');
-	        	return strArr.join("");
+	            </tag:auth>
+	            return strArr.join("");
 			}
 	    }, {
 	        field: 'dictName',
@@ -59,14 +63,16 @@ function del(dictId){
 						<td class="td-label">字典编码</td>
 						<td class="td-value">
 							<input type="text" id="dictCode" name="dictCode" style="width:160px;" value="${dictCode }" />
-							<button type="button" class="btn btn-info btn-sm" onclick="search(1)" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
+							<button type="button" class="btn btn-success btn-xs" onclick="search(1)" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</form>
 		<div id="mytoolbar" style="margin-left:5px;">
+		<tag:auth authCode="dict:save">
 			<button type="button" class="btn btn-primary btn-sm" onclick="go('新增字典','${ctx}/dict/goSave')"><i class="fa fa-plus"></i> 新  增 </button>
+		</tag:auth>
 		</div>
 		<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
 			<table id="gridTable" ></table>

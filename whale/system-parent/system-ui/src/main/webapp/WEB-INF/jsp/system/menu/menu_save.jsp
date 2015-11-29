@@ -74,9 +74,18 @@ function changeMenuType(){
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">是否公共：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
+                    <select id="publicFlag" name="publicFlag" style="width:250px;visibility:hidden;">
+						<option value="0">否</option>
+						<option value="1">是</option>
+					</select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label"><i id="urlSign" style="visibility:hidden;">*</i>链接地址：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
-                    <input id="menuUrl" name="menuUrl" class="form-control" style="width:250px"  >
+                    <input id="menuUrl" name="menuUrl" class="form-control" style="width:250px;visibility:hidden;"  >
                 </div>
             </div>
             <div class="form-group">
@@ -88,15 +97,7 @@ function changeMenuType(){
 					</select>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 col-md-2 col-lg-1 control-label">是否公共：</label>
-                <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
-                    <select id="isPublic" name="isPublic" style="width:250px;height:58px;">
-						<option value="0">否</option>
-						<option value="1">是</option>
-					</select>
-                </div>
-            </div>
+            
             <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label">图标：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">

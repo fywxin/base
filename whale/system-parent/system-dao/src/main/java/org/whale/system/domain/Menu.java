@@ -61,9 +61,8 @@ public class Menu extends BaseEntry implements TreeNode{
 	@Column(cnName="打开状态")
 	private Integer openState = 1;
 	
-	@Validate(enums={"0","1"})
 	@Column(cnName="是否公共")
-	private Integer isPublic = 0;
+	private Boolean publicFlag = false;
 
 	public Long getMenuId() {
 		return menuId;
@@ -137,12 +136,13 @@ public class Menu extends BaseEntry implements TreeNode{
 		this.openState = openState;
 	}
 
-	public Integer getIsPublic() {
-		return isPublic;
+
+	public Boolean getPublicFlag() {
+		return publicFlag;
 	}
 
-	public void setIsPublic(Integer isPublic) {
-		this.isPublic = isPublic;
+	public void setPublicFlag(Boolean publicFlag) {
+		this.publicFlag = publicFlag;
 	}
 
 	@Override
@@ -201,7 +201,7 @@ public class Menu extends BaseEntry implements TreeNode{
 		tmp.put("menuUrl", this.getMenuUrl());
 		tmp.put("openType", this.getOpenType());
 		tmp.put("openState", this.getOpenState());
-		tmp.put("isPublic", this.getIsPublic());
+		tmp.put("publicFlag", this.getPublicFlag());
 		return tmp;
 	}
 

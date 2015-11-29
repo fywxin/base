@@ -32,7 +32,7 @@ public class Role extends BaseEntry{
     private String remark;
 	
 	@Column(cnName="是否可以删除")
-	private Boolean canDel;
+	private Boolean canDelFlag;
 
     public Long getRoleId() {
 		return roleId;
@@ -75,12 +75,11 @@ public class Role extends BaseEntry{
         this.remark = remark;
     }
 
-	public Boolean getCanDel() {
-		return canDel;
+	public Boolean getCanDelFlag() {
+		return canDelFlag;
 	}
 
-	public void setCanDel(Boolean canDel) {
-		this.canDel = canDel;
+	public void setCanDelFlag(Boolean canDelFlag) {
+		this.canDelFlag = canDelFlag;
 	}
-    
 }

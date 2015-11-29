@@ -135,7 +135,7 @@ public class UserRouter extends BaseRouter {
 		}
 		
 		UserContext uc = this.getUserContext();
-		if(!uc.isSuperAdmin() && user.getIsAdmin()){
+		if(!uc.isSuperAdmin() && user.getAdminFlag()){
 			return Rs.fail("你无权修改该用户信息");
 		}
 		
@@ -154,7 +154,7 @@ public class UserRouter extends BaseRouter {
 	@RequestMapping("/goSetUserRole")
 	public ModelAndView goSetUserRole(Long userId){
 		User user = this.userService.get(userId);
-		if(user.getIsAdmin()){
+		if(user.getAdminFlag()){
 			throw new SysException("你无权操作对该用户分配角色");
 		}
 		
@@ -302,7 +302,7 @@ public class UserRouter extends BaseRouter {
 		if(uc == null){
 			return Rs.fail("你未登录，请重新登录");
 		}
-		if(user.getIsAdmin()){
+		if(user.getAdminFlag()){
 			return Rs.fail("超级管理员不能被删除");
 		}
 		if(userId == uc.getUserId()){

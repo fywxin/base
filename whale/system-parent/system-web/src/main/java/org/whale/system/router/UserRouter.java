@@ -44,7 +44,7 @@ public class UserRouter extends BaseRouter {
 	@Autowired
 	private UserAuthCacheService userAuthCacheService;
 	
-	@Auth(code="USER_LIST",name="查询用户")
+	@Auth(code="user:list",name="查询用户")
 	@RequestMapping("/goTree")
 	public ModelAndView goTree(){
 		String nodes = "[]";
@@ -57,7 +57,7 @@ public class UserRouter extends BaseRouter {
 				.addObject("rootName", DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "ITEM_DEPT_ROOT"));
 	}	
 	
-	@Auth(code="USER_LIST",name="查询用户")
+	@Auth(code="user:list",name="查询用户")
 	@RequestMapping("/goList")
 	public ModelAndView goList(Long deptId){
 		
@@ -65,18 +65,21 @@ public class UserRouter extends BaseRouter {
 			.addObject("deptId", deptId);
 	}
 	
-	@Auth(code="USER_LIST",name="查询用户")
+	@Auth(code="user:list",name="查询用户")
 	@ResponseBody
 	@RequestMapping("/doList")
 	public Page doList(String userName, String realName, Long deptId){
 		Page page = this.newPage();
 		Cmd cmd = page.newCmd(User.class)
-					.select("userId","userName","realName","deptId","email","phone","status" )
+					.select("userId","userName","realName","deptId","email","phone","status", "adminFlag" )
 					.selectWrap(",(select d.deptName from sys_dept d where d.id = t.deptId) as deptName")
 					.like("userName", userName)
 					.like("realName", realName);
 		if(deptId != null && !deptId.equals(0L)){
 			cmd.eq("deptId", deptId);
+		}
+		if(!UserContext.get().isSuperAdmin()){
+			cmd.eq("adminFlag", false);
 		}
 		
 		this.userService.queryPage(page);
@@ -84,7 +87,7 @@ public class UserRouter extends BaseRouter {
 		return page;
 	}
 	
-	@Auth(code="USER_SAVE",name="新增用户")
+	@Auth(code="user:save",name="新增用户")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(Long deptId){
 		List<Dept> depts = this.deptService.queryAll();
@@ -94,7 +97,7 @@ public class UserRouter extends BaseRouter {
 				.addObject("deptId", deptId);
 	}
 	
-	@Auth(code="USER_SAVE",name="新增用户")
+	@Auth(code="user:save",name="新增用户")
 	@ResponseBody
 	@RequestMapping("/doSave")
 	public Rs doSave(User user, String repassword){
@@ -110,7 +113,7 @@ public class UserRouter extends BaseRouter {
 		return Rs.success();
 	}
 	
-	@Auth(code="USER_UPDATE",name="修改用户")
+	@Auth(code="user:update",name="修改用户")
 	@RequestMapping("/goUpdate")
 	public ModelAndView goUpdate(Long userId){
 		User user = this.userService.get(userId);
@@ -126,7 +129,7 @@ public class UserRouter extends BaseRouter {
 				.addObject("rootName", DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "ITEM_DEPT_ROOT"));
 	}
 	
-	@Auth(code="USER_UPDATE",name="修改用户")
+	@Auth(code="user:update",name="修改用户")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
 	public Rs doUpdate(User user){
@@ -135,7 +138,7 @@ public class UserRouter extends BaseRouter {
 		}
 		
 		UserContext uc = this.getUserContext();
-		if(!uc.isSuperAdmin() && user.getIsAdmin()){
+		if(!uc.isSuperAdmin() && user.getAdminFlag()){
 			return Rs.fail("你无权修改该用户信息");
 		}
 		
@@ -150,11 +153,11 @@ public class UserRouter extends BaseRouter {
 	 * @param userId
 	 * @return
 	 */
-	@Auth(code="USER_ROLE",name="分配角色")
+	@Auth(code="user:role",name="分配角色")
 	@RequestMapping("/goSetUserRole")
 	public ModelAndView goSetUserRole(Long userId){
 		User user = this.userService.get(userId);
-		if(user.getIsAdmin()){
+		if(user.getAdminFlag()){
 			throw new SysException("你无权操作对该用户分配角色");
 		}
 		
@@ -181,7 +184,7 @@ public class UserRouter extends BaseRouter {
 	 * @param userId
 	 * @param roleIdS
 	 */
-	@Auth(code="USER_ROLE",name="分配角色")
+	@Auth(code="user:role",name="分配角色")
 	@ResponseBody
 	@RequestMapping("/doSetUserRole")
 	public Rs doSetUserRole(Long userId, String roleIdS){
@@ -255,7 +258,7 @@ public class UserRouter extends BaseRouter {
 		return Rs.success("修改密码成功");
 	}
 	
-	@Auth(code="USER_VIEW",name="查看用户")
+	@Auth(code="user:list",name="查询用户")
 	@RequestMapping("/goView")
 	public ModelAndView goView(Long userId){
 		User user = this.userService.get(userId);
@@ -289,7 +292,7 @@ public class UserRouter extends BaseRouter {
 	}
 	
 	
-	@Auth(code="USER_DEL",name="删除用户")
+	@Auth(code="user:del",name="删除用户")
 	@ResponseBody
 	@RequestMapping("/doDelete")
 	public Rs doDelete(String ids){
@@ -312,7 +315,7 @@ public class UserRouter extends BaseRouter {
 			if(user == null){
 				idList.remove(i);
 			}
-			if(user.getIsAdmin()){
+			if(user.getAdminFlag()){
 				return Rs.fail("超级管理员不能被删除");
 			}
 		}
@@ -325,7 +328,7 @@ public class UserRouter extends BaseRouter {
 		return Rs.success();
 	}
 	
-	@Auth(code="USER_PASS_REST",name="重置密码")
+	@Auth(code="user:restPassword",name="重置密码")
 	@ResponseBody
 	@RequestMapping("/doRestPassword")
 	public Rs doRestPassword(Long userId){
@@ -337,7 +340,7 @@ public class UserRouter extends BaseRouter {
 		}
 	}
 	
-	@Auth(code="USER_STATUS",name="启禁用户")
+	@Auth(code="user:status",name="启禁用户")
 	@ResponseBody
 	@RequestMapping("/doChangeState")
 	public Rs doChangeState(Long userId, Integer status){

@@ -21,9 +21,13 @@ $(function(){
 	        align: 'center',
 	        formatter: function(value, row, index){
 	        	var strArr = [];
+	        	<tag:auth authCode="menu:update">
 	            strArr.push('<a href="javascript:;" class="link" onclick=go("修改菜单","${ctx}/menu/goUpdate?menuId='+row.menuId+'")>修改</a>');
+	            </tag:auth>
+	            <tag:auth authCode="role:del">
 	            strArr.push('<span class="link-sep">|</span>');
 	            strArr.push('<a href="javascript:;" class="link" onclick=del('+row.menuId+') >删除</a>');
+	            </tag:auth>
 	        	return strArr.join("");
 			}
 	    }, {
@@ -45,11 +49,11 @@ $(function(){
 				return openTypeObj[value];
 			}
 	    }, {
-	        field: 'isPublic',
+	        field: 'publicFlag',
 	        title: '是否公共',
 	        width: '9%',
 	        formatter: function(value, row, index){
-	        	return value == 0 ? "否" : "是";
+	        	return value? "是" : "否" ;
 			}
 	    }, {
 	        field: 'menuType',
@@ -74,8 +78,11 @@ function del(menuId){
 	<div class="my_gridBox">
 		<form id="queryForm" >
 		</form>
+		
 		<div id="mytoolbar" style="margin-left:5px;">
+		<tag:auth authCode="menu:save">
 			<button type="button" class="btn btn-primary btn-sm" onclick="go('新增菜单','${ctx}/menu/goSave')"><i class="fa fa-plus"></i> 新  增 </button>
+		</tag:auth>
 		</div>
 		<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
 			<table id="gridTable" ></table>

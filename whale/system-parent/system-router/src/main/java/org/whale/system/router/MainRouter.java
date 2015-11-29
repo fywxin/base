@@ -186,7 +186,7 @@ public class MainRouter extends BaseRouter {
 		uc.setUserId(user.getUserId());
 		uc.setUserName(user.getUserName());
 		uc.setUserType(user.getUserType());
-		if(!user.getIsAdmin()){
+		if(!user.getAdminFlag()){
 			Dept dept = this.deptService.get(user.getDeptId());
 			if(dept == null){
 				dept = new Dept();
@@ -197,7 +197,7 @@ public class MainRouter extends BaseRouter {
 			uc.getCustomDatas().put("dept", dept);
 		}
 		
-		uc.setSuperAdmin(user.getIsAdmin());
+		uc.setSuperAdmin(user.getAdminFlag());
 		
 		if(accessores != null && accessores.size() > 0){
 			for(UserContextAccessor accessor : this.getAccessores()){
@@ -220,7 +220,7 @@ public class MainRouter extends BaseRouter {
 	 */
 	private void updateUserLoginInfo(User user){
 		user.setLoginIp(WebUtil.getIp());
-		user.setLastLoginTime(new Date());
+		user.setLastLoginTime(System.currentTimeMillis());
 		user.setLoginNum(user.getLoginNum() == null ? 1 : user.getLoginNum()+1);
 		this.userService.update(user);
 	}

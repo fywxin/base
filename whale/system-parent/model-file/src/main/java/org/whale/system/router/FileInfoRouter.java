@@ -382,7 +382,7 @@ public class FileInfoRouter extends BaseRouter {
 		/** 文件存储名称* */
 		fileInfo.setFileName(fileName);
 		/** 文件存储时间* */
-		fileInfo.setCreateTime(new Date());
+		fileInfo.setCreateTime(System.currentTimeMillis());
 		/** 文件存储用户ID* */
 		fileInfo.setCreator(UserContext.get().getUserId());
 		/** 保存方式 * */

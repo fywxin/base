@@ -19,7 +19,7 @@ $(function(){
 	        align: 'center',
 	        formatter: function(value, row, index){
 	        	var strArr = [];
-	        	<tag:auth authCode="AUTH_UPDATE">
+	        	<tag:auth authCode="auth:update">
 	        	strArr.push('<a href="javascript:;" class="link" onclick=go("修改权限","${ctx}/auth/goUpdate?authCode='+row.authCode+'") >修改</a>');
 	        	</tag:auth> 
 	        	return strArr.join("");

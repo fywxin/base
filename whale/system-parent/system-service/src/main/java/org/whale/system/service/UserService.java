@@ -1,7 +1,6 @@
 package org.whale.system.service;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +47,7 @@ public class UserService extends BaseService<User, Long> {
 	
 	@Override
 	public void save(User user) {
-		user.setCreateTime(new Date());
+		user.setCreateTime(System.currentTimeMillis());
 		user.setStatus(SysConstant.STATUS_NORMAL);
 		try {
 			user.setPassword(getEncryptedPwd(user.getPassword()));

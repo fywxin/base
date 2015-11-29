@@ -14,20 +14,27 @@ $(function(){
 		{
 	        field: 'opt',
 	        title: '操作',
-	        width: '20%',
+	        width: '18%',
 	        align: 'center',
 	        formatter: function(value, row, index){
 				var strArr = [];
+				<tag:auth authCode="dept:save">
 				strArr.push("<a href='javascript:;' class='link' onclick=\"go('添加子组织', '${ctx}/dept/goSave?pid="+row.id+"')\">添加子组织</a>");
-				strArr.push('<span class="link-sep">|</span>')
+				</tag:auth>
+				<tag:auth authCode="dept:update">
+				strArr.push('<span class="link-sep">|</span>');
 				strArr.push("<a href='javascript:;' class='link' onclick=\"go('修改组织', '${ctx}/dept/goUpdate?id="+row.id+"')\">修改</a>");
-				strArr.push('<span class="link-sep">|</span>')
+				
+				</tag:auth>
+				<tag:auth authCode="dept:del">
+				strArr.push('<span class="link-sep">|</span>');
 				strArr.push("<a href='javascript:;' class='link' onclick=\"del('"+row.id+"')\">删除</a>");
-	        	return strArr.join("");
+				</tag:auth>
+				return strArr.join("");
 			}
 	    }, {
 	        field: 'deptName',
-	        width: '20%',
+	        width: '15%',
 	        title: '组织名称',
 	        sortable: true
 	    }, {
@@ -38,13 +45,13 @@ $(function(){
 	    }, {
 	        field: 'deptTel',
 	        title: '组织电话',
-	        width: '15%'
+	        width: '10%'
 	    }, {
 	        field: 'deptAddr',
-	        title: '组织地址'
+	        title: '组织地址',
+	        width: '15%'
 	    }, {
 	        field: 'remark',
-	        width: '10%',
 	        title: '备注'
 	    }
 	   ]
@@ -71,14 +78,16 @@ function del(id){
 						<td class="td-label">组织编码</td>
 						<td class="td-value">
 							<input type="text" id="deptCode" name="deptCode" value="${deptCode }" />
-							<button type="button" class="btn btn-info btn-sm" onclick="search(1)" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
+							<button type="button" class="btn btn-success btn-xs" onclick="search(1)" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</form>
 		<div id="mytoolbar" style="margin-left:5px;">
+		<tag:auth authCode="dept:save">
 			<button type="button" class="btn btn-primary btn-sm" onclick="go('新增组织','${ctx}/dept/goSave')"><i class="fa fa-plus"></i> 新  增 </button>
+		</tag:auth>
 		</div>
 		<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
 			<table id="gridTable" ></table>

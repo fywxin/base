@@ -1,7 +1,5 @@
 package org.whale.system.domain;
 
-import java.util.Date;
-
 import org.whale.system.annotation.jdbc.Column;
 import org.whale.system.annotation.jdbc.Id;
 import org.whale.system.annotation.jdbc.Table;
@@ -39,7 +37,7 @@ public class User extends BaseEntry {
 	private String phone;
 	
 	@Column(updateable=false,cnName="创建时间")
-	private Date createTime;
+	private Long createTime;
 	
 	@Column(updateable=false,cnName="创建人")
 	private Long createUserId;
@@ -48,7 +46,7 @@ public class User extends BaseEntry {
 	private Long loginNum;
 	
 	@Column(cnName="最后登录时间")
-	private Date lastLoginTime;
+	private Long lastLoginTime;
 	
 	@Column(cnName="登录IP")
 	private String loginIp;
@@ -66,7 +64,15 @@ public class User extends BaseEntry {
 	private String remark;
 	
 	@Column(updateable=false,cnName="是否管理员")
-	private Boolean isAdmin = false;
+	private Boolean adminFlag = false;
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
 	public String getUserName() {
 		return userName;
@@ -100,19 +106,51 @@ public class User extends BaseEntry {
 		this.deptId = deptId;
 	}
 
-	public Date getCreateTime() {
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Long getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(Long createTime) {
 		this.createTime = createTime;
 	}
 
-	public Date getLastLoginTime() {
+	public Long getCreateUserId() {
+		return createUserId;
+	}
+
+	public void setCreateUserId(Long createUserId) {
+		this.createUserId = createUserId;
+	}
+
+	public Long getLoginNum() {
+		return loginNum;
+	}
+
+	public void setLoginNum(Long loginNum) {
+		this.loginNum = loginNum;
+	}
+
+	public Long getLastLoginTime() {
 		return lastLoginTime;
 	}
 
-	public void setLastLoginTime(Date lastLoginTime) {
+	public void setLastLoginTime(Long lastLoginTime) {
 		this.lastLoginTime = lastLoginTime;
 	}
 
@@ -156,54 +194,11 @@ public class User extends BaseEntry {
 		this.remark = remark;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public Boolean getAdminFlag() {
+		return adminFlag;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setAdminFlag(Boolean adminFlag) {
+		this.adminFlag = adminFlag;
 	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public Long getCreateUserId() {
-		return createUserId;
-	}
-
-	public void setCreateUserId(Long createUserId) {
-		this.createUserId = createUserId;
-	}
-
-	public Boolean getIsAdmin() {
-		return isAdmin;
-	}
-
-	public void setIsAdmin(Boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
-
-	public Long getLoginNum() {
-		return loginNum;
-	}
-
-	public void setLoginNum(Long loginNum) {
-		this.loginNum = loginNum;
-	}
-	
-	
-	
 }

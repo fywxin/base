@@ -31,14 +31,14 @@ public class LogRouter extends BaseRouter {
 	 * @param roleCode
 	 * @return
 	 */
-	@Auth(code="LOG_LIST",name="日志查询")
+	@Auth(code="log:list",name="日志查询")
 	@RequestMapping("/goList")
 	public ModelAndView goList(HttpServletRequest request, HttpServletResponse response){
 
 		return new ModelAndView("system/log/log_list");
 	}
 	
-	@Auth(code="LOG_LIST",name="日志查询")
+	@Auth(code="log:list",name="日志查询")
 	@ResponseBody
 	@RequestMapping("/doList")
 	public Page doList(Log log, String startTime, String endTime){
@@ -124,7 +124,7 @@ public class LogRouter extends BaseRouter {
 		return page;
 	}
 	
-	@Auth(code="LOG_LIST",name="日志查询")
+	@Auth(code="log:list",name="日志查询")
 	@RequestMapping("/goView")
 	public ModelAndView goView(String id){
 		return new ModelAndView("system/log/log_view").addObject("item", this.LogServiceAdapter.get(id));

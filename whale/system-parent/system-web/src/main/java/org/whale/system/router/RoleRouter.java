@@ -63,7 +63,7 @@ public class RoleRouter extends BaseRouter {
 	 * @param roleCode
 	 * @return
 	 */
-	@org.whale.system.annotation.auth.Auth(code="ROLE_LIST",name="查询角色")
+	@org.whale.system.annotation.auth.Auth(code="role:list",name="查询角色")
 	@RequestMapping("/goList")
 	public ModelAndView goList(){
 
@@ -71,7 +71,7 @@ public class RoleRouter extends BaseRouter {
 	}
 	
 	
-	@org.whale.system.annotation.auth.Auth(code="ROLE_LIST",name="查询角色")
+	@org.whale.system.annotation.auth.Auth(code="role:list",name="查询角色")
 	@ResponseBody
 	@RequestMapping("/doList")
 	public Page doList(HttpServletResponse response, String roleName, String roleCode){
@@ -90,7 +90,7 @@ public class RoleRouter extends BaseRouter {
 	 * @param response
 	 * @return
 	 */
-	@org.whale.system.annotation.auth.Auth(code="ROLE_SAVE",name="新增角色")
+	@org.whale.system.annotation.auth.Auth(code="role:save",name="新增角色")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(){
 		return new ModelAndView("system/role/role_save");
@@ -102,15 +102,13 @@ public class RoleRouter extends BaseRouter {
 	 * @param response
 	 * @param role
 	 */
-	@org.whale.system.annotation.auth.Auth(code="ROLE_SAVE",name="新增角色")
+	@org.whale.system.annotation.auth.Auth(code="role:save",name="新增角色")
 	@ResponseBody
 	@RequestMapping("/doSave")
 	public Rs doSave(Role role){	
 		this.roleService.save(role);
 		return Rs.success();
 	}
-	
-	
 	
 	/**
 	 * 跳转到更新页面
@@ -119,7 +117,7 @@ public class RoleRouter extends BaseRouter {
 	 * @param roleId
 	 * @return
 	 */
-	@org.whale.system.annotation.auth.Auth(code="ROLE_UPDATE",name="修改角色")
+	@org.whale.system.annotation.auth.Auth(code="role:update",name="修改角色")
 	@RequestMapping("/goUpdate")
 	public ModelAndView goUpdate(Long roleId){
 		Role role = this.roleService.get(roleId);
@@ -132,7 +130,7 @@ public class RoleRouter extends BaseRouter {
 	 * @param response
 	 * @param role
 	 */
-	@org.whale.system.annotation.auth.Auth(code="ROLE_UPDATE",name="修改角色")
+	@org.whale.system.annotation.auth.Auth(code="role:update",name="修改角色")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
 	public Rs doUpdate(Role role){
@@ -144,15 +142,15 @@ public class RoleRouter extends BaseRouter {
 		
 		if(role.getStatus() == null)
 			role.setStatus(SysConstant.STATUS_NORMAL);
-		if(role.getCanDel()){
-			role.setCanDel(true);
+		if(role.getCanDelFlag()){
+			role.setCanDelFlag(true);
 		}
 		this.roleService.update(role);
 		return Rs.success();
 	}
 
 	
-	@org.whale.system.annotation.auth.Auth(code="ROLE_AUTH",name="分配权限")
+	@org.whale.system.annotation.auth.Auth(code="role:auth",name="分配权限")
 	@RequestMapping("/goSetRoleAuth")
 	public ModelAndView goSetRoleAuth(Long roleId){
 		UserContext uc = this.getUserContext();
@@ -222,7 +220,7 @@ public class RoleRouter extends BaseRouter {
 				.addObject("allMenus", allMenus == null ? "[]" : JSON.toJSONString(allMenus));
 	}
 	
-	@org.whale.system.annotation.auth.Auth(code="ROLE_AUTH",name="分配权限")
+	@org.whale.system.annotation.auth.Auth(code="role:auth",name="分配权限")
 	@ResponseBody
 	@RequestMapping("/doSetRoleAuth")
 	public Rs doSetRoleAuth(Long roleId, String authCodeS){
@@ -250,7 +248,7 @@ public class RoleRouter extends BaseRouter {
 	 * @param response
 	 * @param roleId
 	 */
-	@org.whale.system.annotation.auth.Auth(code="ROLE_DEL",name="删除角色")
+	@org.whale.system.annotation.auth.Auth(code="role:del",name="删除角色")
 	@ResponseBody
 	@RequestMapping("/doDelete")
 	public Rs doDelete(String ids){
@@ -268,7 +266,7 @@ public class RoleRouter extends BaseRouter {
 		return Rs.success();
 	}
 	
-	@org.whale.system.annotation.auth.Auth(code="ROLE_STATUS",name="启禁角色")
+	@org.whale.system.annotation.auth.Auth(code="role:status",name="启禁角色")
 	@ResponseBody
 	@RequestMapping("/doChangeState")
 	public Rs doChangeState(Long roleId, Integer status){

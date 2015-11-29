@@ -36,7 +36,7 @@ public class DictRouter extends BaseRouter {
 	@Autowired
 	private DictCacheService dictCacheService;
 	
-	@Auth(code="DICT_LIST",name="查询字典")
+	@Auth(code="dict:list",name="查询字典")
 	@RequestMapping("/goTree")
 	public ModelAndView goTree(Long clkId){
 		if(clkId == null)
@@ -85,7 +85,7 @@ public class DictRouter extends BaseRouter {
 	 * @param dictCode
 	 * @return
 	 */
-	@Auth(code="DICT_LIST",name="查询字典")
+	@Auth(code="dict:list",name="查询字典")
 	@RequestMapping("/goList")
 	public ModelAndView goList(){
 		
@@ -100,7 +100,7 @@ public class DictRouter extends BaseRouter {
 	 * @param dictCode
 	 * @return
 	 */
-	@Auth(code="DICT_LIST",name="查询字典")
+	@Auth(code="dict:list",name="查询字典")
 	@ResponseBody
 	@RequestMapping("/doList")
 	public Page doList(String dictName, String dictCode){
@@ -118,7 +118,7 @@ public class DictRouter extends BaseRouter {
 	 * @param response
 	 * @return
 	 */
-	@Auth(code="DICT_SAVE",name="新增字典")
+	@Auth(code="dict:save",name="新增字典")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(){
 		return new ModelAndView("system/dict/dict_save");
@@ -131,7 +131,7 @@ public class DictRouter extends BaseRouter {
 	 * @param dictId
 	 * @return
 	 */
-	@Auth(code="DICT_UPDATE",name="修改字典")
+	@Auth(code="dict:update",name="修改字典")
 	@RequestMapping("/goUpdate")
 	public ModelAndView goUpdate(Long dictId){
 		Dict dict = this.dictService.get(dictId);
@@ -145,7 +145,7 @@ public class DictRouter extends BaseRouter {
 	 * @param response
 	 * @param dict
 	 */
-	@Auth(code="DICT_SAVE",name="新增字典")
+	@Auth(code="dict:save",name="新增字典")
 	@ResponseBody
 	@RequestMapping("/doSave")
 	public Rs doSave(Dict dict){
@@ -161,7 +161,7 @@ public class DictRouter extends BaseRouter {
 	 * @param response
 	 * @param dict
 	 */
-	@Auth(code="DICT_UPDATE",name="修改字典")
+	@Auth(code="dict:update",name="修改字典")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
 	public Rs doUpdate(Dict dict){		
@@ -179,7 +179,7 @@ public class DictRouter extends BaseRouter {
 	 * @param response
 	 * @param dictId
 	 */
-	@Auth(code="DICT_DEL",name="删除字典")
+	@Auth(code="dict:del",name="删除字典")
 	@ResponseBody
 	@RequestMapping("/doDelete")
 	public Rs doDelete(Long dictId){

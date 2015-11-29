@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -192,7 +193,7 @@ public class MainRouter extends BaseRouter {
 		uc.setUserId(user.getUserId());
 		uc.setUserName(user.getUserName());
 		uc.setUserType(user.getUserType());
-		if(!user.getIsAdmin()){
+		if(!user.getAdminFlag()){
 			Dept dept = this.deptService.get(user.getDeptId());
 			if(dept == null){
 				dept = new Dept();
@@ -203,7 +204,7 @@ public class MainRouter extends BaseRouter {
 			uc.getCustomDatas().put("dept", dept);
 		}
 		
-		uc.setSuperAdmin(user.getIsAdmin());
+		uc.setSuperAdmin(user.getAdminFlag());
 		if(!uc.isSuperAdmin()){
 			List<Role> roles = this.roleService.getByUserId(uc.getUserId());
 			uc.getCustomDatas().put("roles", roles);
@@ -219,9 +220,8 @@ public class MainRouter extends BaseRouter {
 		
 		session.setAttribute(SysConstant.USER_CONTEXT_KEY, uc);
 		uc.setSessionId(WebUtil.getSession().getId());
-		
-		uc.getCustomDatas().put("menusStr", this.createMenu());
-		
+		//绑定菜单
+		this.attachMenu();
 		UserContext.set(uc);
 	}
 	
@@ -232,7 +232,7 @@ public class MainRouter extends BaseRouter {
 	 */
 	private void updateUserLoginInfo(User user){
 		user.setLoginIp(WebUtil.getIp());
-		user.setLastLoginTime(new Date());
+		user.setLastLoginTime(System.currentTimeMillis());
 		this.userService.update(user);
 	}
 	
@@ -299,29 +299,58 @@ public class MainRouter extends BaseRouter {
 	public ModelAndView main() {
 		UserContext uc = this.getUserContext();
 		if(uc.getCustomDatas().get("menuStr") == null){
-			//获取所有的菜单
-			List<Menu> totalMenus = this.menuService.queryAll();
-			Map<Long, Menu> idMenus = new HashMap<Long, Menu>(totalMenus.size() * 2);
-			for(Menu menu : totalMenus){
-				idMenus.put(menu.getMenuId(), menu);
+			this.attachMenu();
+		}
+		
+		return new ModelAndView("main")
+				.addObject("uc", uc);
+	}
+	
+	
+	private void attachMenu(){
+		UserContext uc = this.getUserContext();
+		//获取所有的菜单
+		//获取所有的菜单
+		List<Menu> totalMenus = this.menuService.queryAll();
+		//公共菜单
+		List<Menu> publicMenus = new ArrayList<Menu>();
+		//TODO 未配置权限的菜单
+		
+		Map<Long, Menu> idMenus = new HashMap<Long, Menu>(totalMenus.size() * 2);
+		for(Menu menu : totalMenus){
+			idMenus.put(menu.getMenuId(), menu);
+			if(menu.getPublicFlag() && menu.getMenuType() == 3){
+				publicMenus.add(menu);
 			}
-			
-			//获取分配给用户的菜单
-			List<Menu> userMenus = null;
-			if(uc.isSuperAdmin()){
-				userMenus = totalMenus;
-			}else{
-				Set<Long> userMenuIds = userAuthCacheService.getUserAuth(uc.getUserId()).getMenuIds();
-				if(userMenuIds != null){
-					userMenus = new ArrayList<Menu>(userMenuIds.size());
-					for(Long id : userMenuIds){
-						userMenus.add(idMenus.get(id));
+		}
+		
+		//获取分配给用户的菜单
+		Set<Menu> userMenus = null;
+		if(uc.isSuperAdmin()){
+			userMenus = new HashSet<Menu>(totalMenus);
+		}else{
+			userMenus = new HashSet<Menu>();
+			if(publicMenus.size() > 0){
+				for(Menu pubMenu : publicMenus){
+					userMenus.add(pubMenu);
+					pubMenu = idMenus.get(pubMenu.getParentId());
+					while(pubMenu != null){//递归加入公共菜单的父菜单
+						userMenus.add(pubMenu);
+						pubMenu = idMenus.get(pubMenu.getParentId());
 					}
-				}else{
-					userMenus = new ArrayList<Menu>(0);
 				}
 			}
 			
+			Set<Long> userMenuIds = userAuthCacheService.getUserAuth(uc.getUserId()).getMenuIds();
+			if(userMenuIds != null){
+				for(Long id : userMenuIds){
+					userMenus.add(idMenus.get(id));
+				}
+			}
+		}
+		
+		StringBuilder strb = new StringBuilder();
+		if(userMenus.size() > 0){
 			//用户菜单建立  <pid, List<子菜单>>
 			Map<Long, List<Menu>> pidMenus = new HashMap<Long, List<Menu>>(userMenus.size());
 			List<Menu> menus = null;
@@ -337,8 +366,6 @@ public class MainRouter extends BaseRouter {
 			//用户所有tab菜单
 			List<Menu> tabMenus = pidMenus.get(0L);
 			sortMenu(tabMenus);
-			
-			StringBuilder strb = new StringBuilder();
 			//默认第一个tab菜单打开
 			boolean activce = true;
 			for(Menu node : tabMenus){
@@ -346,66 +373,8 @@ public class MainRouter extends BaseRouter {
 				strb.append(this.createMenuTree(node, pidMenus, 1, activce));
 				activce=false;
 			}
-			uc.getCustomDatas().put("menuStr", strb.toString());
 		}
-		
-		return new ModelAndView("main")
-				//.addObject("menus", strb.toString())
-				//.addObject("idMenus", JSON.toJSONString(idMenus))
-				.addObject("uc", uc);
-	}
-	
-	
-	private String createMenu(){
-		UserContext uc = this.getUserContext();
-		//获取所有的菜单
-		List<Menu> totalMenus = this.menuService.queryAll();
-		Map<Long, Menu> idMenus = new HashMap<Long, Menu>(totalMenus.size() * 2);
-		for(Menu menu : totalMenus){
-			idMenus.put(menu.getMenuId(), menu);
-		}
-		
-		//获取分配给用户的菜单
-		List<Menu> userMenus = null;
-		if(uc.isSuperAdmin()){
-			userMenus = totalMenus;
-		}else{
-			Set<Long> userMenuIds = userAuthCacheService.getUserAuth(uc.getUserId()).getMenuIds();
-			if(userMenuIds != null){
-				userMenus = new ArrayList<Menu>(userMenuIds.size());
-				for(Long id : userMenuIds){
-					userMenus.add(idMenus.get(id));
-				}
-			}else{
-				userMenus = new ArrayList<Menu>(0);
-			}
-		}
-		
-		//用户菜单建立  <pid, List<子菜单>>
-		Map<Long, List<Menu>> pidMenus = new HashMap<Long, List<Menu>>(userMenus.size());
-		List<Menu> menus = null;
-		for(Menu menu : userMenus){
-			menus = pidMenus.get(menu.getParentId());
-			if(menus == null){
-				menus = new ArrayList<Menu>();
-				pidMenus.put(menu.getParentId(), menus);
-			}
-			menus.add(menu);
-		}
-		
-		//用户所有tab菜单
-		List<Menu> tabMenus = pidMenus.get(0L);
-		sortMenu(tabMenus);
-		
-		StringBuilder strb = new StringBuilder();
-		//默认第一个tab菜单打开
-		boolean activce = true;
-		for(Menu node : tabMenus){
-			//递归创建所有菜单的HTML节点
-			strb.append(this.createMenuTree(node, pidMenus, 1, activce));
-			activce=false;
-		}
-		return strb.toString();
+		uc.getCustomDatas().put("menuStr", strb.toString());
 	}
 
 	private String createMenuTree(Menu node, Map<Long, List<Menu>> pidMenus, int level, boolean activce){

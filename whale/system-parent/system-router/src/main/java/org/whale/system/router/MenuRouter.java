@@ -92,9 +92,6 @@ public class MenuRouter extends BaseRouter {
 		if(menu.getOrderNo() == null){
 			menu.setOrderNo(1);
 		}
-		if(menu.getIsPublic() != 1){
-			menu.setIsPublic(0);
-		}
 		
 		this.menuService.save(menu);
 		return Rs.success(menu.getMenuId());
@@ -137,10 +134,6 @@ public class MenuRouter extends BaseRouter {
 		
 		if(menu.getOrderNo() == null){
 			menu.setOrderNo(1);
-		}
-		
-		if(menu.getIsPublic() != 1){
-			menu.setIsPublic(0);
 		}
 		
 		this.menuService.update(menu);

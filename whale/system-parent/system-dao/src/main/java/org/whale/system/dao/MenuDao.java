@@ -36,7 +36,6 @@ public class MenuDao extends BaseDao<Menu, Long> {
 		return this.get(this.cmd().eq("menuName", menuName));
 	}
 	
-	
 	final String getCurOrder_SQL = "select max(orderNo) from sys_menu where parentId = ?";
 	@SuppressWarnings("all")
 	public Integer getCurOrder(Long parentId){

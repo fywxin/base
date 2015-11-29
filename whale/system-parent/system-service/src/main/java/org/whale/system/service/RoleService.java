@@ -27,8 +27,8 @@ public class RoleService extends BaseService<Role, Long> {
 		if(role.getStatus() == null){
 			role.setStatus(SysConstant.STATUS_NORMAL);
 		}
-		if(role.getCanDel() == null){
-			role.setCanDel(true);
+		if(role.getCanDelFlag() == null){
+			role.setCanDelFlag(true);
 		}
 		this.roleDao.save(role);
 	}
@@ -48,7 +48,7 @@ public class RoleService extends BaseService<Role, Long> {
 	public void delete(Long roleId){
 		Role role = this.get(roleId);
 		if(role != null){
-			if(!role.getCanDel()){
+			if(!role.getCanDelFlag()){
 				throw new SysException("角色["+role.getRoleName()+"]不能删除");
 			}
 			this.roleDao.delete(roleId);

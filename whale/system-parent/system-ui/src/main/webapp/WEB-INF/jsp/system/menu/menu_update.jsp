@@ -69,16 +69,16 @@ $(function() {
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
                     <select id="openType" name="openType" style="width:250px">
 						<option value="1" <c:if test="${item.openType == 1}">selected="selected"</c:if>>窗口内打开</option>
-									<option value="2" <c:if test="${item.openType == 2}">selected="selected"</c:if>>弹出窗口</option>
+						<option value="2" <c:if test="${item.openType == 2}">selected="selected"</c:if>>弹出窗口</option>
 					</select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label">是否公共：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
-                    <select id="isPublic" name="isPublic" style="width:250px">
-						<option value="0" <c:if test="${item.isPublic != 1}">selected="selected"</c:if>>否</option>
-									<option value="1" <c:if test="${item.isPublic == 1}">selected="selected"</c:if>>是</option>
+                    <select id="publicFlag" name="publicFlag" style="width:250px">
+						<option value="false" <c:if test="${!item.publicFlag}">selected="selected"</c:if>>否</option>
+						<option value="true" <c:if test="${item.publicFlag}">selected="selected"</c:if>>是</option>
 					</select>
                 </div>
             </div>

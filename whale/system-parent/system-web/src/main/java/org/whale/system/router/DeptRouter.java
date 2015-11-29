@@ -30,7 +30,7 @@ public class DeptRouter extends BaseRouter {
 	@Autowired
 	private UserService userService;
 	
-	@Auth(code="DEPT_LIST", name="查询部门")
+	@Auth(code="dept:list", name="查询部门")
 	@RequestMapping("/goTree")
 	public ModelAndView goTree(){
 		String nodes = "[]";
@@ -41,7 +41,7 @@ public class DeptRouter extends BaseRouter {
 		return new ModelAndView("system/dept/dept_tree").addObject("nodes", nodes);
 	}
 	
-	@Auth(code="DEPT_LIST", name="查询部门")
+	@Auth(code="dept:list", name="查询部门")
 	@RequestMapping("/goList")
 	public ModelAndView goList(Long pid){
 		if(pid == null){
@@ -50,7 +50,7 @@ public class DeptRouter extends BaseRouter {
 		return new ModelAndView("system/dept/dept_list").addObject("pid", pid);
 	}
 	
-	@Auth(code="DEPT_LIST", name="查询部门")
+	@Auth(code="dept:list", name="查询部门")
 	@ResponseBody
 	@RequestMapping("/doList")
 	public Page doList(Long pid, String deptName, String deptCode, Integer limit){
@@ -66,7 +66,7 @@ public class DeptRouter extends BaseRouter {
 		return page;
 	}
 		
-	@Auth(code="DEPT_SAVE", name="新增部门")
+	@Auth(code="dept:save", name="新增部门")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(Long pid){
 		return new ModelAndView("system/dept/dept_save")
@@ -75,7 +75,7 @@ public class DeptRouter extends BaseRouter {
 				.addObject("orderNo", this.deptService.getNextOrder(pid));
 	}
 	
-	@Auth(code="DEPT_SAVE", name="新增部门")
+	@Auth(code="dept:save", name="新增部门")
 	@ResponseBody
 	@RequestMapping("/doSave")
 	public Rs doSave(@Validate Dept dept){
@@ -89,7 +89,7 @@ public class DeptRouter extends BaseRouter {
 		return Rs.success();
 	}
 	
-	@Auth(code="DEPT_UPDATE", name="修改部门")
+	@Auth(code="dept:update", name="修改部门")
 	@RequestMapping("/goUpdate")
 	public ModelAndView goUpdate(Long id){
 		Dept dept = null;
@@ -102,7 +102,7 @@ public class DeptRouter extends BaseRouter {
 				.addObject("nodes", JSON.toJSONString(this.deptService.queryAll()));
 	}
 	
-	@Auth(code="DEPT_UPDATE", name="修改部门")
+	@Auth(code="dept:update", name="修改部门")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
 	public Rs doUpdate(Dept dept){
@@ -110,7 +110,7 @@ public class DeptRouter extends BaseRouter {
 		return Rs.success();
 	}
 	
-	@Auth(code="DEPT_DEL", name="删除部门")
+	@Auth(code="dept:del", name="删除部门")
 	@ResponseBody
 	@RequestMapping("/doDelete")
 	public Rs doDelete(Long id){

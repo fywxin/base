@@ -38,7 +38,7 @@ public class DictItemRouter extends BaseRouter {
 	 * @param dictItemCode
 	 * @return
 	 */
-	@Auth(code="ITEM_LIST",name="查询元素")
+	@Auth(code="dictItem:list",name="查询元素")
 	@RequestMapping("/goList")
 	public ModelAndView goList(Long dictId){
 		
@@ -54,7 +54,7 @@ public class DictItemRouter extends BaseRouter {
 	 * @param dictItemCode
 	 * @return
 	 */
-	@Auth(code="ITEM_LIST",name="查询元素")
+	@Auth(code="dictItem:list",name="查询元素")
 	@ResponseBody
 	@RequestMapping("/doList")
 	public Page doList(Long dictId, String itemName, String itemCode){
@@ -72,7 +72,7 @@ public class DictItemRouter extends BaseRouter {
 	 * @param response
 	 * @return
 	 */
-	@Auth(code="ITEM_SAVE",name="新增元素")
+	@Auth(code="dictItem:save",name="新增元素")
 	@RequestMapping("/goSave")
 	public ModelAndView goSave(Long dictId){
 		Dict dict = this.dictService.get(dictId);
@@ -88,7 +88,7 @@ public class DictItemRouter extends BaseRouter {
 	 * @param response
 	 * @param dictItem
 	 */
-	@Auth(code="ITEM_SAVE",name="新增元素")
+	@Auth(code="dictItem:save",name="新增元素")
 	@ResponseBody
 	@RequestMapping("/doSave")
 	public Rs doSave(DictItem dictItem){
@@ -115,7 +115,7 @@ public class DictItemRouter extends BaseRouter {
 	 * @param dictItemId
 	 * @return
 	 */
-	@Auth(code="ITEM_UPDATE",name="修改元素")
+	@Auth(code="dictItem:update",name="修改元素")
 	@RequestMapping("/goUpdate")
 	public ModelAndView goUpdate(Long dictItemId){
 		DictItem dictItem = this.dictItemService.get(dictItemId);
@@ -130,7 +130,7 @@ public class DictItemRouter extends BaseRouter {
 	 * @param dictItemId
 	 * @return
 	 */
-	@Auth(code="ITEM_VIEW",name="查看元素")
+	@Auth(code="dictItem:list",name="查看元素")
 	@RequestMapping("/goView")
 	public ModelAndView goView(Long dictItemId){
 		DictItem dictItem = this.dictItemService.get(dictItemId);
@@ -143,7 +143,7 @@ public class DictItemRouter extends BaseRouter {
 	 * @param response
 	 * @param dictItem
 	 */
-	@Auth(code="ITEM_UPDATE",name="修改元素")
+	@Auth(code="dictItem:update",name="修改元素")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
 	public Rs doUpdate(DictItem dictItem){
@@ -164,7 +164,7 @@ public class DictItemRouter extends BaseRouter {
 	 * @param response
 	 * @param dictItemId
 	 */
-	@Auth(code="ITEM_DEL",name="删除元素")
+	@Auth(code="dictItem:del",name="删除元素")
 	@ResponseBody
 	@RequestMapping("/doDelete")
 	public Rs doDelete(String ids){
@@ -182,7 +182,7 @@ public class DictItemRouter extends BaseRouter {
 		return Rs.success();
 	}
 	
-	@Auth(code="ITEM_STATUS",name="启禁元素")
+	@Auth(code="dictItem:status",name="启禁元素")
 	@ResponseBody
 	@RequestMapping("/doChangeState")
 	public Rs doChangeState(Long dictItemId, Integer status){

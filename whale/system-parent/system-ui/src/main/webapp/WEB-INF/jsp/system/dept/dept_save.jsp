@@ -62,6 +62,12 @@ $(function() {
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-3 col-md-2 col-lg-1 control-label">组织类型：</label>
+                <div class="col-sm-9 col-md-10 col-lg-11 form-inline" style="padding-left:0px;">
+                    <input id="deptType" name="deptType" class="form-control" style="width:250px">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label">联系电话：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline" style="padding-left:0px;">
                     <input id="deptTel" name="deptTel" class="form-control" style="width:250px">

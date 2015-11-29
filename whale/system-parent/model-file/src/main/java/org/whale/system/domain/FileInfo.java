@@ -1,6 +1,5 @@
 package org.whale.system.domain;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -130,7 +129,7 @@ public class FileInfo extends BaseEntry {
 	private Long creator;
   	
   	@Column(name="createTime", cnName="创建时间")
-	private Date createTime;
+	private Long createTime;
   	
   //不保存到数据库
   	private String dirName;
@@ -296,14 +295,12 @@ public class FileInfo extends BaseEntry {
 	public void setCreator(Long creator){
 		this.creator = creator;
 	}
-	
-	/**创建时间 */
-	public Date getCreateTime(){
+
+	public Long getCreateTime() {
 		return createTime;
 	}
-	
-	/**创建时间 */
-	public void setCreateTime(Date createTime){
+
+	public void setCreateTime(Long createTime) {
 		this.createTime = createTime;
 	}
 

@@ -25,14 +25,18 @@ $(function(){
 	        align: 'center',
 	        formatter: function(value, row, index){
         		var strArr = [];
+        		<tag:auth authCode="dictItem:update">
 	            strArr.push('<a href="javascript:;" class="link" onclick=go("修改字典元素","${ctx}/dictItem/goUpdate?dictItemId='+row.dictItemId+'") >修改</a>');
+	            </tag:auth>
+	            <tag:auth authCode="dictItem:status">
 	            strArr.push('<span class="link-sep">|</span>');
 	            if(row.status == 2){
 	              strArr.push('<a href="javascript:;" class="link" onclick=setStatus('+row.dictItemId+',"'+row.itemName+'",1) >启用</a>');
 	            }else{
 	              strArr.push('<a href="javascript:;" class="link" onclick=setStatus('+row.dictItemId+',"'+row.itemName+'",2) >禁用</a>');
 	            }
-        		return strArr.join("");
+	            </tag:auth>
+	            return strArr.join("");
 			}
 	    }, {
 	        field: 'itemName',
@@ -95,15 +99,19 @@ function setStatus(id,name,type){
 						<td class="td-label">元素编码</td>
 						<td class="td-value">
 							<input type="text" id="itemCode" name="itemCode" style="width:160px;" value="${itemCode }" />
-							<button type="button" class="btn btn-info btn-sm" onclick="search(1)" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
+							<button type="button" class="btn btn-success btn-xs" onclick="search(1)" style="margin-left:15px;"><i class="fa fa-search" ></i> 查  询</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</form>
 		<div id="mytoolbar" style="margin-left:5px;">
+			<tag:auth authCode="dictItem:save">
 			<button type="button" class="btn btn-primary btn-sm" onclick="go('新增字典元素','${ctx}/dictItem/goSave?dictId=${dictId}')"><i class="fa fa-plus"></i> 新  增 </button>
+			</tag:auth>
+			<tag:auth authCode="dictItem:del">
 			<button type="button" class="btn btn-danger btn-sm" onclick="del()"><i class="fa fa-trash-o"></i> 删  除</button>
+			</tag:auth>
 		</div>
 		<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
 			<table id="gridTable" ></table>
