@@ -238,16 +238,6 @@ public class ClientContext {
 	public void setRespStr(String respStr) {
 		this.respStr = respStr;
 	}
-
-	@Override
-	public String toString() {
-		return "ClientContext [serviceUrl=" + serviceUrl + ", url=" + url
-				+ ", params=" + params + ", headers=" + headers + ", method="
-				+ method + ", proxyObject=" + proxyObject + ", args=" + args
-				+ ", rs=" + rs + ", connectTimeout=" + connectTimeout + ", readTimeout="
-				+ readTimeout + ", httpProxy=" + httpProxy + ", reqno=" + reqno
-				+ ", attachment=" + attachment + "]";
-	}
 	
 	
 }

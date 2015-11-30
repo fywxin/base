@@ -1,10 +1,11 @@
-package org.whale.system.client;
+package org.whale.inf.client;
 
 import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.whale.inf.api.Dept;
 import org.whale.inf.api.User;
 import org.whale.inf.api.UserInf;
 
@@ -21,7 +22,11 @@ public class MainClient {
         User user  = userService.get(1L);
         System.out.println(JSON.toJSONString(user));
         
-        //userService.sayHello(2.562f);
+        Dept dept = new Dept();
+        dept.setDeptName("测试部门");
+        dept.setId(12L);
+        
+        userService.sayHello("wjs", dept);
         
 	}
 }

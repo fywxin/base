@@ -130,6 +130,30 @@ public class JSCHUtil {
 	public void delFile(String file) throws SftpException{
 		channelSftp.rm(file);
 	}
+	
+	/**
+	 * 文件上传复制
+	 * @param instream
+	 * @param deployDir
+	 * @param fileName
+	 * @throws SftpException
+	 * @throws IOException
+	 */
+	public void doScpStream(InputStream instream, String deployDir, String fileName) throws SftpException, IOException{
+		OutputStream outstream = null;
+		// 进入服务器指定的文件夹
+		try {
+			channelSftp.cd(deployDir);
+			log.info("scp file " + fileName);
+			outstream = channelSftp.put(fileName);
+			byte[] data = IOUtils.toByteArray(instream);
+			IOUtils.write(data, outstream);
+			outstream.flush();
+		} finally {
+			IOUtils.closeQuietly(outstream);
+			IOUtils.closeQuietly(instream);
+		}
+	}
 
 	/**
 	 * 复制文件或者目录
@@ -145,23 +169,12 @@ public class JSCHUtil {
 	public void scpStream(InputStream instream, String deployDir,
 			String fileName) throws SftpException, IOException {
 		if (channelSftp == null)
-			throw new ScpFileException(
-					"channelSftp is null ,please call connectSftp()");
-		OutputStream outstream = null;
-		// 进入服务器指定的文件夹
+			throw new ScpFileException("channelSftp is null , please call connectSftp()");
 		try {
-			this.mkDirs(deployDir);
-			channelSftp.cd(deployDir);
-			log.info("scp file " + fileName);
-			outstream = channelSftp.put(fileName);
-			byte[] data = IOUtils.toByteArray(instream);
-			IOUtils.write(data, outstream);
-			outstream.flush();
+			this.doScpStream(instream, deployDir, fileName);
 		} catch (Exception e) {
-			throw new ScpFileException(e);
-		} finally {
-			IOUtils.closeQuietly(outstream);
-			IOUtils.closeQuietly(instream);
+			this.mkDirs(deployDir);
+			this.doScpStream(instream, deployDir, fileName);
 		}
 	}
 	

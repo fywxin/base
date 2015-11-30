@@ -46,9 +46,6 @@ div.but {
 <body>
 	<div align="center">
 	<div class="but">
-		<a href="${ctx }/doFlushAuthCache">刷新权限缓存</a>
-	</div>
-	<div class="but">
 		<a href="${ctx }/doFlushAuthUris">刷新权限URL信息</a>
 	</div>
 	<div class="but">
