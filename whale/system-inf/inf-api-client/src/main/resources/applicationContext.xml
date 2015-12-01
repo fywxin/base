@@ -20,7 +20,7 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 	
-	<bean class="org.whale.system.client.impl.FastJsonClientCodec" id="fastJsonClientCodec"></bean>
+	<bean class="org.whale.inf.client.FastJsonClientCodec" id="fastJsonClientCodec"></bean>
 	
 	<bean class="org.whale.inf.client.ClientConf" id="clientConf">
 		<property name="appId" value="test"></property>
@@ -28,11 +28,11 @@
 		<property name="serverHost" value="http://127.0.0.1:8080/inf-api-server"></property>
 	</bean>
 	
-	<bean id="userService" class="org.whale.system.client.HttpInvokeFactory">
+	<bean id="userService" class="org.whale.inf.client.HttpInvokeFactory">
         <property name="serviceInterface" value="org.whale.inf.api.UserInf"/><!-- 对应的Java接口,便于Java使用 -->
         <property name="serviceUrl" value="/user"/><!-- 对应的PHP JSONRPC URL -->
     </bean>
     
-    
+    <bean class="org.whale.inf.common.impl.EmptyEncryptService" id="mptyEncryptService"></bean>
 </beans>
 

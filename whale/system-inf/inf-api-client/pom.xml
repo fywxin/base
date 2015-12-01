@@ -20,7 +20,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.whale</groupId>
-			<artifactId>system-client</artifactId>
+			<artifactId>inf-client</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

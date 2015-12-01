@@ -5,7 +5,7 @@
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:/applicationContext.xml</param-value>
+		<param-value>classpath*:applicationContext.xml</param-value>
 	</context-param>
 
 	<servlet-mapping>
@@ -66,7 +66,7 @@
 		<!-- 默认所对应的配置文件是WEB-INF下的{servlet-name}-servlet.xml，这里可以自定义路径 -->
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath*:/springMVC-servlet.xml</param-value>
+			<param-value>classpath*:springMVC-servlet.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

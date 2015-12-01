@@ -23,20 +23,12 @@
 
 	<!--支持@ResponseBody -->  
     <mvc:annotation-driven conversion-service="conversionService">
-        <mvc:message-converters register-defaults="true">
-            <bean class="org.whale.system.server.FastJsonReqRespHttpMessageConverter">
-                <property name="supportedMediaTypes">
-                    <list>
-                        <value>application/json;charset=utf-8</value>
-                        <value>text/html;charset=utf-8</value>
-                        <value>application/x-javascript;charset=utf-8</value>
-                    </list>
-                </property>
-            </bean>
-        </mvc:message-converters>
         <mvc:argument-resolvers>
-		    <bean id="reqParamMethodArgumentResolver" class="org.whale.system.server.ReqParamMethodArgumentResolver"></bean>
+		    <bean id="reqParamMethodArgumentResolver" class="org.whale.inf.server.ReqParamMethodArgumentResolver"></bean>
         </mvc:argument-resolvers>
+        <mvc:return-value-handlers>
+            <bean id="respBodyMethodReturnValueHandler" class="org.whale.inf.server.RespBodyMethodReturnValueHandler" ></bean>
+        </mvc:return-value-handlers>
     </mvc:annotation-driven>
 
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">

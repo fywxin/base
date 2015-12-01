@@ -30,5 +30,7 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean class="org.whale.inf.common.impl.EmptyEncryptService" id="mptyEncryptService"></bean>
 </beans>
 

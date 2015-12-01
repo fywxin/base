@@ -7,11 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.whale.system.client.ClientContext;
-import org.whale.system.client.ClientInvokeHandler;
+import org.whale.inf.common.InfException;
+import org.whale.inf.common.Result;
+import org.whale.inf.common.ResultCode;
 import org.whale.system.common.encrypt.EncryptUtil;
-import org.whale.system.inf.ClientException;
-import org.whale.system.inf.Result;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -45,7 +44,7 @@ public class DefaultClientInvokeHandler  implements ClientInvokeHandler {
 		if(rs instanceof Result){
 			Result<?> result = (Result<?>)rs;
 			if(!clientContext.getMethod().getReturnType().equals(Result.class)){
-				if(Result.SUCCESS_CODE.equals(result.getCode())){
+				if(result.isSuccess()){
 					clientContext.setRs(result.getData());
 				}else{
 					if(logger.isDebugEnabled()){
@@ -53,7 +52,7 @@ public class DefaultClientInvokeHandler  implements ClientInvokeHandler {
 					}
 					
 					//TODO 根据不同编码，抛出业务异常与Client 或 Server异常
-					throw new ClientException(result.getCode(), result.getMessage());
+					throw new InfException(result.getCode(), result.getMsg());
 				}
 			}
 		}
@@ -84,7 +83,7 @@ public class DefaultClientInvokeHandler  implements ClientInvokeHandler {
 			return sign;
 		}catch(Exception e){
 			logger.error("签名编码异常", e);
-			throw new ClientException("签名编码异常", e);
+			throw new InfException(ResultCode.SIGN_ERROR, e);
 		}
 	}
 

@@ -24,6 +24,11 @@ public class InfException extends RuntimeException {
 		super(message, cause);
 	}
 	
+	public InfException(String code, String message){
+		super(message);
+		this.code = code;
+	}
+	
 	public InfException(String code, String message, Throwable cause) {
 		super(message, cause);
 		this.code = code;
