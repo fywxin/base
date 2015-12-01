@@ -25,7 +25,7 @@ public class FastJsonClientCodec implements ClientCodec {
 			String data = JSON.toJSONString(args, SerializerFeature.WriteClassName);
 			clientContext.setReqStr(data);
 			try {
-				data.getBytes("UTF-8");
+				return data.getBytes("UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				throw new HttpClientException("请求参数序列化编码异常", e);
 			}

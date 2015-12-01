@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

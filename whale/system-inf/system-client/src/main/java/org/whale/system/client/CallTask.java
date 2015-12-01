@@ -46,6 +46,7 @@ public class CallTask implements Runnable {
 				data = this.context.getClientEncrypt().onWrite(data, context);
 			}
 		}
+		System.out.println("data == "+data);
 		
 		int resCode = 0;
 		try{
@@ -95,34 +96,40 @@ public class CallTask implements Runnable {
 			
 			this.context.getClientInvokeHandler().onReqest(context);
 			con.connect();
-			OutputStream ops = con.getOutputStream();
+			OutputStream ops = null;
+			InputStream ips = null;
 			try{
 				if(logger.isDebugEnabled()){
 					logger.debug("HTTP-request:{}", context.getReqStr() == null ? JSON.toJSONString(context.getArgs()) : context.getReqStr());
 				}
+				ops = con.getOutputStream();
 				
 				if(context.getArgs() != null && context.getArgs().length > 0){
 					ops.write(data);
 					ops.flush();
 				}
-			}finally{
-				ops.close();
-			}
-			
-			resCode = con.getResponseCode();
-			
-			InputStream ips = con.getInputStream();
-			try{
+				resCode = con.getResponseCode();
+				
+				ips = con.getInputStream();
 				data = IOUtils.toByteArray(ips);
 				data = this.context.getClientEncrypt().onRead(data, context);
 				Object rs = this.context.getClientCodec().decode(data, context);
 				context.setRs(rs);
+				if(logger.isDebugEnabled()){
+					logger.debug("HTTP-response:{}", context.getRespStr() == null ? JSON.toJSONString(context.getRs()) : context.getRespStr());
+				}
+			}catch(Exception e){
+				e.printStackTrace();
 			}finally{
-				ips.close();
+				if(ops != null){
+					ops.close();
+				}
+				if(ips != null){
+					ips.close();
+				}
 			}
-			if(logger.isDebugEnabled()){
-				logger.debug("HTTP-response:{}", context.getRespStr() == null ? JSON.toJSONString(context.getRs()) : context.getRespStr());
-			}
+			
+			
 			
 			if(resCode > 300){
 				throw new HttpClientException("HTTP接口返回状态码["+resCode+"]错误, 返回信息:\n"+context.getRespStr());

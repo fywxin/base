@@ -4,5 +4,5 @@ public interface UserInf {
 
 	public User get(long id);
 	
-	public void sayHello(float val);
+	public void sayHello(String userName, Dept dept);
 }
