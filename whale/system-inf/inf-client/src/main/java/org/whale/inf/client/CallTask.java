@@ -12,8 +12,10 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whale.inf.common.EncryptService;
+import org.whale.inf.common.InfException;
+import org.whale.inf.common.Result;
+import org.whale.inf.common.ResultCode;
 import org.whale.inf.common.SignService;
-import org.whale.system.common.exception.HttpClientException;
 import org.whale.system.common.util.Strings;
 
 import com.alibaba.fastjson.JSON;
@@ -57,18 +59,19 @@ public class CallTask implements Runnable {
 			data = this.clientCodec.encode(context.getArgs(), context);
 			//加密报文
 			if(this.encryptService != null){
-				data = this.encryptService.onWrite(data, context);
+				data = this.encryptService.encrypt(data, context);
 			}
 			//执行调用前方法、请求头签名
 			if(this.signService != null){
-				String sign = this.signService.sign(context);
+				String sign = this.signService.signReq(context);
 				if(Strings.isNotBlank(sign)){
 					context.getParams().put("sign", sign);
 				}
 			}
 		}
-		System.out.println("data == "+data);
 		
+		OutputStream ops = null;
+		InputStream ips = null;
 		int resCode = 0;
 		try{
 			String url = context.getUrl();
@@ -95,12 +98,12 @@ public class CallTask implements Runnable {
 			HttpURLConnection con = (HttpURLConnection)new URL(url).openConnection(context.getHttpProxy());
 			con.setConnectTimeout(context.getConnectTimeout());
 			con.setReadTimeout(context.getReadTimeout());
-			con.setAllowUserInteraction(false); //是否允许用户修改连接上下文信息
+			con.setAllowUserInteraction(false);
 			con.setDefaultUseCaches(false);
-			con.setDoInput(true);//启用
-			con.setDoOutput(true); //启用Output
+			con.setDoInput(true);
+			con.setDoOutput(true);
 			con.setUseCaches(false);
-			con.setInstanceFollowRedirects(true); //设置此 HttpURLConnection 实例是否应该自动执行 HTTP 重定向（响应代码为 3xx 的请求）。
+			con.setInstanceFollowRedirects(false);
 			con.setRequestMethod("POST");
 			con.setRequestProperty("content-type", "application/json");
 			con.setRequestProperty("accept", "application/json");
@@ -111,53 +114,70 @@ public class CallTask implements Runnable {
 					con.setRequestProperty(entry.getKey(), entry.getValue());
 				}
 			}
-			if(logger.isDebugEnabled()){
-				logger.debug("HTTP-header:{}", context.getHeaders());
-			}
 			
 			this.clientInvokeHandler.onReqest(context);
+			if(logger.isDebugEnabled()){
+				logger.debug("HTTP-request:{}\nHTTP-header:{}", 
+								(context.getReqStr() == null ? JSON.toJSONString(context.getArgs()) : context.getReqStr()),
+								context.getHeaders());
+			}
 			con.connect();
-			OutputStream ops = null;
-			InputStream ips = null;
-			try{
-				if(logger.isDebugEnabled()){
-					logger.debug("HTTP-request:{}", context.getReqStr() == null ? JSON.toJSONString(context.getArgs()) : context.getReqStr());
-				}
-				ops = con.getOutputStream();
-				
-				if(context.getArgs() != null && context.getArgs().size() > 0){
-					ops.write(data);
-					ops.flush();
-				}
-				resCode = con.getResponseCode();
-				
-				ips = con.getInputStream();
-				data = IOUtils.toByteArray(ips);
-				if(this.encryptService != null){
-					data = this.encryptService.onRead(data, context);
-				}
-				
-				Object rs = this.clientCodec.decode(data, context);
-				context.setRs(rs);
-				if(logger.isDebugEnabled()){
-					logger.debug("HTTP-response:{}", context.getRespStr() == null ? JSON.toJSONString(context.getRs()) : context.getRespStr());
-				}
-			}catch(Exception e){
-				e.printStackTrace();
-			}finally{
-				if(ops != null){
-					ops.close();
-				}
-				if(ips != null){
-					ips.close();
+			ops = con.getOutputStream();
+			if(context.getArgs() != null && context.getArgs().size() > 0){
+				ops.write(data);
+				ops.flush();
+			}
+			resCode = con.getResponseCode();
+			ips = con.getInputStream();
+			data = IOUtils.toByteArray(ips);
+			
+			if(resCode > 300){
+				logger.error("HTTP接口返回状态码["+resCode+"]错误\n"+new String(data, "UTF-8"));
+				throw new InfException(ResultCode.NET_ERROR);
+			}
+			
+			if(this.encryptService != null){
+				String encrypt = con.getHeaderField("encrypt");
+				if("true".equals(encrypt)){
+					data = this.encryptService.decrypt(data, context);
 				}
 			}
 			
-			if(resCode > 300){
-				throw new HttpClientException("HTTP接口返回状态码["+resCode+"]错误, 返回信息:\n"+context.getRespStr());
+			Object rs = this.clientCodec.decode(data, context);
+			if(logger.isDebugEnabled()){
+				logger.debug("HTTP-response:{}", context.getRespStr() == null ? JSON.toJSONString(rs) : context.getRespStr());
 			}
+			
+			
+			
+			if(this.signService != null){
+				String sign = con.getHeaderField("sign");
+				if(Strings.isNotBlank(sign)){
+					String rsSign = this.signService.signResp(context);
+					if(!sign.equals(rsSign)){
+						throw new InfException(ResultCode.SIGN_ERROR);
+					}
+				}
+			}
+			
+			if(rs == null || !(rs instanceof Result)){
+				logger.error("返回对象为空，或类型非 Result对象:{}\n"+context.getRespStr());
+				throw new InfException(ResultCode.RESP_DATA_ERROR);
+			}
+			if(context.getMethod().getReturnType().equals(Result.class)){
+				context.setRs(rs);
+			}else{
+				Result<?> result = (Result<?>)rs;
+				if(result.isSuccess()){
+					context.setRs(rs);
+				}
+			}
+			
 		}catch(IOException e){
-			throw new HttpClientException("HTTP接口执行异常", e);
+			throw new InfException(ResultCode.NET_ERROR, e);
+		}finally{
+			IOUtils.closeQuietly(ops);
+			IOUtils.closeQuietly(ips);
 		}
 		this.clientInvokeHandler.afterCall(context);
 	}

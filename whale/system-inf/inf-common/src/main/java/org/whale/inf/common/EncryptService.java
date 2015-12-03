@@ -8,7 +8,19 @@ package org.whale.inf.common;
  */
 public interface EncryptService {
 
-	public byte[] onWrite(byte[] datas, InfContext context);
+	/**
+	 * 加密
+	 * @param datas
+	 * @param context
+	 * @return
+	 */
+	public byte[] encrypt(byte[] datas, InfContext context);
 	
-	public byte[] onRead(byte[] datas, InfContext context);
+	/**
+	 * 解密
+	 * @param datas
+	 * @param context
+	 * @return
+	 */
+	public byte[] decrypt(byte[] datas, InfContext context);
 }

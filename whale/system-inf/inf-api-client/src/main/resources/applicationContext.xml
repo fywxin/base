@@ -25,7 +25,7 @@
 	<bean class="org.whale.inf.client.ClientConf" id="clientConf">
 		<property name="appId" value="test"></property>
 		<property name="signKey" value="111111"></property>
-		<property name="serverHost" value="http://127.0.0.1:8080/inf-api-server"></property>
+		<property name="serverHost" value="http://127.0.0.1:7040/inf-api-server"></property>
 	</bean>
 	
 	<bean id="userService" class="org.whale.inf.client.HttpInvokeFactory">

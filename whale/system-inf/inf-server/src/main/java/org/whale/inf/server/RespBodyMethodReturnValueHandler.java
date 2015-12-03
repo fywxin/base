@@ -20,10 +20,10 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 
 public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValueHandler {
 	
-	@Autowired
+	@Autowired(required=false)
 	private EncryptService encryptService;
 	
-	@Autowired
+	@Autowired(required=false)
 	private SignService signService;
 
 	@Override
@@ -54,8 +54,17 @@ public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValu
 	        //保证客户端可以反序列化成功
 	        String text = JSON.toJSONString(returnValue, SerializerFeature.WriteClassName);
 	        
-	        byte[] bytes = text.getBytes("UTF-8");
-	        out.write(bytes);
+	        byte[] datas = text.getBytes("UTF-8");
+	        if(signService != null){
+	        	String sign = this.signService.signResp(context);
+	        	response.addHeader("sign", sign);
+	        }
+	        if(this.encryptService != null && context.getRespEncryptFlag()){
+	        	datas = this.encryptService.encrypt(datas, context);
+	        	response.addHeader("encrypt", "true");
+	        }
+	        
+	        out.write(datas);
 	        out.flush();
 		}finally{
 			ThreadContext.getContext().remove(ServerContext.THREAD_KEY);

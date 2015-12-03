@@ -68,10 +68,10 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 			context.setParamIndex(0);
 			byte[] datas = this.readBodyByte(webRequest);
 			if(datas != null && datas.length > 0){
-				if(encryptService != null){
-					datas = encryptService.onRead(datas, context);
-				}
 				//解密
+				if(encryptService != null){
+					datas = encryptService.decrypt(datas, context);
+				}
 				context.setBody(new String(datas, "UTF-8"));
 				JSONArray bodyJsonArr = JSON.parseArray(context.getBody());
 				context.setBodyJsonArr(bodyJsonArr);
@@ -84,7 +84,7 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 			}
 			//签名校验
 			if(signService != null){
-				String sign = this.signService.sign(context);
+				String sign = this.signService.signReq(context);
 				if(!sign.equals(webRequest.getParameter("sign"))){
 					throw new InfException(ResultCode.SIGN_ERROR);
 				}

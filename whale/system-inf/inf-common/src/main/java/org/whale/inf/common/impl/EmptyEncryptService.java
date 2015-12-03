@@ -6,13 +6,12 @@ import org.whale.inf.common.InfContext;
 public class EmptyEncryptService implements EncryptService {
 
 	@Override
-	public byte[] onWrite(byte[] datas, InfContext context) {
+	public byte[] encrypt(byte[] datas, InfContext context) {
 		return datas;
 	}
 
 	@Override
-	public byte[] onRead(byte[] datas, InfContext context) {
+	public byte[] decrypt(byte[] datas, InfContext context) {
 		return datas;
 	}
-
 }
