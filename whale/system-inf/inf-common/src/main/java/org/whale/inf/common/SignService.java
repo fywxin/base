@@ -9,10 +9,18 @@ package org.whale.inf.common;
 public interface SignService {
 
 	/**
-	 * 签名
+	 * 请求字符串签名
 	 * @param datas
 	 * @param context
 	 * @return
 	 */
-	public String sign(InfContext context);
+	public String signReq(InfContext context);
+	
+	/**
+	 * 请求字符串签名
+	 * @param datas
+	 * @param context
+	 * @return
+	 */
+	public String signResp(InfContext context);
 }

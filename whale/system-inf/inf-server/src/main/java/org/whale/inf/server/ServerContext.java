@@ -38,6 +38,9 @@ public class ServerContext implements InfContext {
 	
 	private JSONArray bodyJsonArr;
 	
+	//响应内容是否需要加密
+	private boolean respEncryptFlag;
+	
 	private HttpServletRequest request;
 	
 	public JSONObject readJSONObject(){
@@ -135,6 +138,12 @@ public class ServerContext implements InfContext {
 	public void setRequest(HttpServletRequest request) {
 		this.request = request;
 	}
-	
-	
+
+	public boolean getRespEncryptFlag() {
+		return respEncryptFlag;
+	}
+
+	public void setRespEncryptFlag(boolean respEncryptFlag) {
+		this.respEncryptFlag = respEncryptFlag;
+	}
 }
