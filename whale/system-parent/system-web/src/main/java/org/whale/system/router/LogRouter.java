@@ -16,7 +16,6 @@ import org.whale.system.common.util.TimeUtil;
 import org.whale.system.domain.Log;
 import org.whale.system.service.LogServiceAdapter;
 
-@Controller
 @RequestMapping("/log")
 public class LogRouter extends BaseRouter {
 

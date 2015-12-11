@@ -117,7 +117,7 @@ public class ${domain.domainName}Router extends BaseRouter {
 			return Rs.fail("请选择要删除的记录");
 		}
 		List<Long> idList = LangUtil.splitIds(ids);
-		this.${domain.domainName?uncap_first}Service.delete(idList);
+		this.${domain.domainName?uncap_first}Service.deleteBatch(idList);
 
 		return Rs.success("["+idList.size()+"]条记录删除成功");
 	}

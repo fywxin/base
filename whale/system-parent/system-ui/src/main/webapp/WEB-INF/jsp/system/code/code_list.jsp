@@ -155,7 +155,7 @@ function pid(){
 				</tr>
 				<tr>
 					<td class="td-label"><span class="required">*</span>基础包路径</td>
-					<td class="td-value"><input type="text" id="pkgName" name="pkgName" style="width:200px;" value="${domain.pkgName }" /></td>
+					<td class="td-value"><input type="text" id="pkgName" name="pkgName" style="width:200px;" value="com.qc.admin" /></td>
 					<td class="td-label">生产代码路径</td>
 					<td class="td-value">
 						<input type="text" name="codePath" id="codePath" style="width:200px;" value="${domain.codePath }" />

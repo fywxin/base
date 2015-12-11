@@ -10,6 +10,7 @@ import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
 
 import org.whale.system.base.BaseDao;
+import org.whale.system.base.Page;
 import org.whale.system.service.BaseService;
 import ${domain.pkgName!"org.whale.system"}.dao.${domain.domainName}Dao;
 import ${domain.pkgName!"org.whale.system"}.domain.${domain.domainName};

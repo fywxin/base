@@ -74,6 +74,9 @@ public class CodeRouter extends BaseRouter {
 			
 			domain.setDomainSqlName(tableName);
 			domain.setDomainCnName(table.get("comments") == null ? "" : table.get("comments").toString());
+			if(tableName.startsWith("tb_")){
+				tableName = tableName.substring(3);
+			}
 			domain.setDomainName(OrmUtil.sql2Camel(tableName));
 			domain.setAttrs(attrs);
 			
@@ -86,7 +89,12 @@ public class CodeRouter extends BaseRouter {
 					String dbType = col.get("jdbcType").toString().toLowerCase();
 					attr.setDbType(dbType);
 					attr.setIsNull("1".equals(col.get("isNull").toString()));
-					attr.setMaxLength(col.get("maxLength") == null || "".equals(col.get("maxLength").toString()) ? 0 : Integer.parseInt(col.get("maxLength").toString()));
+					try{
+						attr.setMaxLength(col.get("maxLength") == null || "".equals(col.get("maxLength").toString()) ? 0 : Integer.parseInt(col.get("maxLength").toString()));
+
+					}catch(Exception e){
+						e.printStackTrace();
+					}
 					attr.setInOrder(col.get("sort") == null ? 0 : Integer.parseInt(col.get("sort").toString()));
 					
 					attr.setName(OrmUtil.sql2Camel(attr.getSqlName()));
@@ -94,6 +102,8 @@ public class CodeRouter extends BaseRouter {
 					
 					if(dbType.equalsIgnoreCase("tinyint") || dbType.equalsIgnoreCase("smallint") || dbType.equalsIgnoreCase("mediumint")){
 						attr.setType("Integer");
+					}else if(dbType.toLowerCase().indexOf("bigint") != -1){
+						attr.setType("Long");
 					}else if(dbType.indexOf("int") != -1){
 						if(attr.getMaxLength() == null || attr.getMaxLength() >= 10){
 							attr.setType("Long");
@@ -104,15 +114,13 @@ public class CodeRouter extends BaseRouter {
 								attr.setType("Integer");
 							}
 						}
-					}else if(dbType.equalsIgnoreCase("bigint")){
-						attr.setType("Long");
 					}else if(dbType.equalsIgnoreCase("float")){
 						attr.setType("Float");
 					}else if(dbType.equalsIgnoreCase("double") || dbType.equalsIgnoreCase("numeric") || dbType.equalsIgnoreCase("decimal")){
 						attr.setType("Double");
 					}else if(dbType.equalsIgnoreCase("datetime") || dbType.equalsIgnoreCase("date") || dbType.equalsIgnoreCase("timestamp")){
 						attr.setType("Date");
-					}else if(dbType.equalsIgnoreCase("bit")){
+					}else if(dbType.equalsIgnoreCase("bit") || dbType.equalsIgnoreCase("bit(1)")){
 						attr.setType("Boolean");
 					}else{
 						attr.setType("String");
@@ -131,6 +139,11 @@ public class CodeRouter extends BaseRouter {
 					}
 					
 					attrs.add(attr);
+					
+					if(attr.getIsId()){
+						attr.setInForm(false);
+						attr.setInList(false);
+					}
 				}
 			}
 		}
