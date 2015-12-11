@@ -1,10 +1,12 @@
-package org.whale.inf.client;
+package org.whale.inf.client.impl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.whale.inf.client.ClientCodec;
+import org.whale.inf.client.ClientContext;
 import org.whale.system.common.exception.HttpClientException;
 
 import com.alibaba.fastjson.JSON;

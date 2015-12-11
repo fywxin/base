@@ -19,7 +19,6 @@
 	<context:component-scan base-package="org.whale" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
-	
 
 	<!--支持@ResponseBody -->  
     <mvc:annotation-driven conversion-service="conversionService">
@@ -39,6 +38,20 @@
             </set>
         </property>
     </bean>
+    
+    <bean class="org.whale.inf.common.impl.EmptyEncryptService" id="emptyEncryptService"></bean>
+	
+	<!--必须放在此文件中，否则扫描不到 -->  
+	<bean class="org.whale.inf.server.impl.DefaultServerSignService" id="defaultServerSignService"></bean>
+	
+	<bean class="org.whale.inf.server.NoMethodArgumentResolver" id="noMethodArgumentResolver"></bean>
+    
+    <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="org.whale.inf.server.EmptyInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
     
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />

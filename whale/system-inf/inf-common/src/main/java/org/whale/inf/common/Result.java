@@ -1,7 +1,10 @@
 package org.whale.inf.common;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.whale.system.common.util.ThreadContext;
 
 /**
  * 服务端返回结果对象
@@ -12,6 +15,8 @@ import java.util.Map;
 public class Result<T> implements Serializable {
 
 	private static final long serialVersionUID = -56340583049801L;
+	
+	private static final String KEY_INF_RESULT = "inf_Result";
 
 	//返回编码
 	private String code = ResultCode.SUCCESS.getCode();
@@ -25,6 +30,13 @@ public class Result<T> implements Serializable {
 	//附加信息
 	private Map<String, Object> attachment;
 	
+	public static Result<?> get(){
+		return (Result<?>)ThreadContext.getContext().get(KEY_INF_RESULT);
+	}
+	
+	public static void set(Result<?> rs){
+		ThreadContext.getContext().put(KEY_INF_RESULT, rs);
+	}
 	
 	@SuppressWarnings("all")
 	public static Result<?> success(){
@@ -57,8 +69,18 @@ public class Result<T> implements Serializable {
 		return rs;
 	}
 	
+	
+ 	
 	public boolean isSuccess(){
 		return ResultCode.SUCCESS.getCode().equals(code);
+	}
+	
+	public Result<?> putAttachment(String key, Object val){
+		if(attachment == null){
+			attachment = new HashMap<String, Object>();
+		}
+		attachment.put(key, val);
+		return this;
 	}
 
 	public String getCode() {
