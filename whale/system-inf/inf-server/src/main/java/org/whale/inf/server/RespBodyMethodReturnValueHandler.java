@@ -13,7 +13,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.whale.inf.common.EncryptService;
 import org.whale.inf.common.SignService;
 import org.whale.system.annotation.web.RespBody;
-import org.whale.system.common.util.ThreadContext;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -44,7 +43,7 @@ public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValu
 	public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
 		//设置true，防止变为页面跳转处理
 		mavContainer.setRequestHandled(true);
-		ServerContext context = (ServerContext)ThreadContext.getContext().get(ServerContext.THREAD_KEY);
+		ServerContext context = ServerContext.get();
 		ServletOutputStream out = null;
 		try{
 			HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
@@ -53,6 +52,9 @@ public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValu
 			//String text = JSON.toJSONString(obj, this.getFeatures());
 	        //保证客户端可以反序列化成功
 	        String text = JSON.toJSONString(returnValue, SerializerFeature.WriteClassName);
+	        context.setRespStr(text);
+	        
+	        response.addHeader("reqno", context.getReqno());
 	        
 	        byte[] datas = text.getBytes("UTF-8");
 	        if(signService != null){
@@ -67,7 +69,7 @@ public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValu
 	        out.write(datas);
 	        out.flush();
 		}finally{
-			ThreadContext.getContext().remove(ServerContext.THREAD_KEY);
+			ServerContext.remove();
 			if(out != null){
 				out.close();
 			}

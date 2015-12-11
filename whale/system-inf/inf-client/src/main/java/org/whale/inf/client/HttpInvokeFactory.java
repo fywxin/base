@@ -29,7 +29,7 @@ public class HttpInvokeFactory extends UrlBasedRemoteAccessor implements MethodI
 	
 	private Integer readTimeout = 30000;
 	
-	@Autowired
+	@Autowired(required=false)
 	private ClientInvokeHandler clientInvokeHandler;
 	
 	@Autowired
@@ -40,6 +40,9 @@ public class HttpInvokeFactory extends UrlBasedRemoteAccessor implements MethodI
 	
 	@Autowired(required=false)
 	private SignService signService;
+	
+	@Autowired
+	private ClientConf clientConf;
 	
 	@Override
 	public Object getObject() throws Exception {
@@ -72,7 +75,7 @@ public class HttpInvokeFactory extends UrlBasedRemoteAccessor implements MethodI
 			logger.debug("客户端beforeCall前:{}", context);
 		}
 		
-		CallTask task = new CallTask(context, clientCodec, encryptService, signService, clientInvokeHandler);
+		CallTask task = new CallTask(context, clientCodec, encryptService, signService, clientInvokeHandler, clientConf);
 		if(context.getIsAsyc()){
 			new Thread(task).start();//TODO 并发很高时，可以采用线程池， 线程池可以适当大一些
 		}else{

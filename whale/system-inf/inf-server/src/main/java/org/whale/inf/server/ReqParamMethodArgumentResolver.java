@@ -6,6 +6,8 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
@@ -20,7 +22,6 @@ import org.whale.inf.common.ResultCode;
 import org.whale.inf.common.SignService;
 import org.whale.system.annotation.web.ReqParam;
 import org.whale.system.common.util.ReflectionUtil;
-import org.whale.system.common.util.ThreadContext;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -42,6 +43,8 @@ import com.alibaba.fastjson.JSONArray;
  */
 public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentResolver{
 	
+	private static final Logger logger = LoggerFactory.getLogger(ReqParamMethodArgumentResolver.class);
+	
 	@Autowired(required=false)
 	private EncryptService encryptService;
 	@Autowired(required=false)
@@ -62,9 +65,12 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 			WebDataBinderFactory binderFactory) throws Exception {
 		
 		Object param = null;
-		ServerContext context = (ServerContext)ThreadContext.getContext().get(ServerContext.THREAD_KEY);
+		ServerContext context = ServerContext.get();
 		if(context == null){
 			context = new ServerContext();
+			context.setUri(this.getUri(webRequest));
+			context.setAppId(webRequest.getParameter("appId"));
+			context.setReqno(webRequest.getParameter("reqno"));
 			context.setParamIndex(0);
 			byte[] datas = this.readBodyByte(webRequest);
 			if(datas != null && datas.length > 0){
@@ -72,15 +78,18 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 				if(encryptService != null){
 					datas = encryptService.decrypt(datas, context);
 				}
-				context.setBody(new String(datas, "UTF-8"));
-				JSONArray bodyJsonArr = JSON.parseArray(context.getBody());
+				context.setReqStr(new String(datas, "UTF-8"));
+				JSONArray bodyJsonArr = JSON.parseArray(context.getReqStr());
 				context.setBodyJsonArr(bodyJsonArr);
 				
 				param = this.decode(parameter, context);
 				context.addArg(context.getParamIndex(), param);
 				context.incParamIndex();
 			}else{
-				context.setBody(null);
+				context.setReqStr(null);
+			}
+			if(logger.isDebugEnabled()){
+				logger.debug("服务端第一个参数Context对象:", context.toString());
 			}
 			//签名校验
 			if(signService != null){
@@ -89,7 +98,7 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 					throw new InfException(ResultCode.SIGN_ERROR);
 				}
 			}
-			ThreadContext.getContext().put(ServerContext.THREAD_KEY, context);
+			ServerContext.set(context);
 		}else{
 			param = this.decode(parameter, context);
 			context.addArg(context.getParamIndex(), param);
@@ -157,4 +166,20 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 			throw new InfException(ResultCode.REQ_DATA_ERROR, e);
 		}
 	}
+	
+	/**
+	 * 获取请求服务端uri
+	 * @param webRequest
+	 * @return
+	 */
+	private String getUri(NativeWebRequest webRequest){
+		HttpServletRequest request = (HttpServletRequest)webRequest.getNativeRequest();
+		String ctx = request.getContextPath();
+		if(ctx != null && ctx.length() > 1){
+			return request.getRequestURI().substring(ctx.length());
+		}
+		return request.getRequestURI();
+	}
+
+
 }

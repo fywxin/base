@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.whale.inf.common.InfContext;
+import org.whale.system.common.util.ThreadContext;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -21,8 +22,26 @@ public class ServerContext implements InfContext {
 	
 	public transient static final String THREAD_KEY = "server:p:i";
 	
+	public static ServerContext get(){
+		return (ServerContext)ThreadContext.getContext().get(ServerContext.THREAD_KEY);
+	}
+	
+	public static void set(ServerContext serverContext){
+		ThreadContext.getContext().put(ServerContext.THREAD_KEY, serverContext);
+	}
+	
+	public static void remove(){
+		ThreadContext.getContext().remove(ServerContext.THREAD_KEY);
+	}
+	
 	//当前解析参数位置
 	private transient Integer paramIndex;
+	//请求URI
+	private String uri;
+	//客户端APPID
+	private String appId;
+	//请求流水号
+	private String reqno;
 	
 	private String reqStr;
 	
@@ -33,8 +52,6 @@ public class ServerContext implements InfContext {
 	private Object rs;
 	
 	private Map<String, Object> attachment;
-	
-	private String body;
 	
 	private JSONArray bodyJsonArr;
 	
@@ -99,14 +116,6 @@ public class ServerContext implements InfContext {
 		this.attachment = attachment;
 	}
 
-	public String getBody() {
-		return body;
-	}
-
-	public void setBody(String body) {
-		this.body = body;
-	}
-
 	public JSONArray getBodyJsonArr() {
 		return bodyJsonArr;
 	}
@@ -146,4 +155,39 @@ public class ServerContext implements InfContext {
 	public void setRespEncryptFlag(boolean respEncryptFlag) {
 		this.respEncryptFlag = respEncryptFlag;
 	}
+
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	public String getReqno() {
+		return reqno;
+	}
+
+	public void setReqno(String reqno) {
+		this.reqno = reqno;
+	}
+
+	@Override
+	public String toString() {
+		return "ServerContext [uri=" + uri + ", appId=" + appId + ", reqno="
+				+ reqno + ", reqStr=" + reqStr + ", respStr=" + respStr
+				+ ", args=" + args + ", rs=" + rs + ", attachment="
+				+ attachment + ", respEncryptFlag=" + respEncryptFlag + "]";
+	}
+	
+	
+	
 }

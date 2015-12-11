@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.whale.inf.common.EncryptService;
 import org.whale.inf.common.InfContext;
 import org.whale.system.common.util.ThreadContext;
 
@@ -75,6 +74,21 @@ public class ClientContext implements InfContext{
 	private boolean isAsyc;
 	
 	private Map<String, Object> attachment = new HashMap<String, Object>();
+	
+	public ClientContext putParam(String key, Object value) {
+		this.getParams().put(key, value);
+		return this;
+	}
+	
+	public ClientContext putAttachment(String key, Object value) {
+		this.getAttachment().put(key, value);
+		return this;
+	}
+	
+	public ClientContext putHeader(String key, String value) {
+		this.getHeaders().put(key, value);
+		return this;
+	}
 
 	public String getUrl() {
 		return url;
