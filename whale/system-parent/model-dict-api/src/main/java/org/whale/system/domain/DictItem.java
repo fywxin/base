@@ -1,16 +1,17 @@
 package org.whale.system.domain;
 
+import java.io.Serializable;
+
 import org.whale.system.annotation.jdbc.Column;
 import org.whale.system.annotation.jdbc.Id;
 import org.whale.system.annotation.jdbc.Order;
 import org.whale.system.annotation.jdbc.Table;
 import org.whale.system.annotation.jdbc.Validate;
-import org.whale.system.base.BaseEntry;
 import org.whale.system.common.constant.SysConstant;
 
 
 @Table(value="sys_dict_item", cnName="字典元素")
-public class DictItem extends BaseEntry{
+public class DictItem  implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
