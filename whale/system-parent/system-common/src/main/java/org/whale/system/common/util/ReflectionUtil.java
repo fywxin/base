@@ -671,17 +671,14 @@ public class ReflectionUtil {
     	try {
 	    	for(Map.Entry<String, Object> entry : map.entrySet()){
 	    		field = fieldMap.get(entry.getKey());
+	    		if(field == null && entry.getKey().indexOf("_") != -1){
+	    			field = fieldMap.get(Strings.sql2Camel(entry.getKey()));
+	    		}
 	    		if(field == null){
-	    			if(entry.getKey().indexOf("_") != -1){
-	    				field = fieldMap.get(Strings.sql2Camel(entry.getKey()));
-	    				if(field == null){
-	    					if(logger.isInfoEnabled()){
-	    						logger.info("类{}查找不到字段{}", clazz, entry.getKey());
-	    					}
-	    					
-	    					continue;
-	    				}
-	    			}
+	    			if(logger.isInfoEnabled()){
+						logger.info("类{}查找不到字段{}", clazz, entry.getKey());
+					}
+	    			continue;
 	    		}
 	    		writeField(field, m, entry.getValue(), true);
 	    	}

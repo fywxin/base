@@ -142,7 +142,7 @@ public class ValueUpdateBulider {
 			argTypes.add(idCol.getType());
 			fields.add(idCol.getField());
 			sCols.add(idCol);
-			objs.add(idNull);
+			objs.add(idVal);
 		}
 		
 		//乐观锁  AND t.version = ?
