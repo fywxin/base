@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.whale.system.base.Iquery;
+import org.whale.system.base.Iquery.SqlType;
 import org.whale.system.base.Page;
 import org.whale.system.base.Query;
 import org.whale.system.common.util.ReflectionUtil;
@@ -159,6 +160,10 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return this.queryForList(Query.newQuery(sql, objs));
 	}
 	
+	public <M> List<M> query(Class<M> clazz, Iquery query){
+		return this.query(clazz, query.getSql(SqlType.QUERY), query.getArgs());
+	}
+	
 	public <M> List<M> query(Class<M> clazz, String sql, Object... objs){
 		List<Map<String, Object>> rs = this.queryForList(Query.newQuery(sql, objs).setClazz(clazz));
 		if(rs == null || rs.size() < 1){
@@ -172,13 +177,16 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return list;
 	}
 	
+	public <M> M get(Class<M> clazz, Iquery query){
+		return this.get(clazz, query.getSql(SqlType.QUERY), query.getArgs());
+	}
+	
 	
 	public <M> M get(Class<M> clazz, String sql, Object... objs){
-		List<Map<String, Object>> rs = this.queryForList(Query.newQuery(sql, objs).setClazz(clazz));
-		if(rs == null || rs.size() < 1){
+		List<M> list = this.query(clazz, sql, objs);
+		if(list == null || list.size() < 1){
 			return null;
 		}
-		List<M> list = this.query(clazz, sql, objs);
 		return list.get(0);
 	}
 

@@ -165,10 +165,15 @@ public class Cmd implements Iquery{
 		}
 		
 		if(cols == null || cols.length < 1){
-			select.append(ormTable.getSqlHeadPrefix());
+			select.append(ormTable.getSqlHeadPrefix().substring(6));
 		}else{
 			for(String col : cols){
-				select.append("t.").append(this.fixCol(col)).append(",");
+				//自定义字段
+				if(col.indexOf(")") != -1 || col.toLowerCase().indexOf("from") != -1){
+					select.append(col).append(",");
+				}else{
+					select.append("t.").append(this.fixCol(col)).append(",");
+				}
 			}
 			select.deleteCharAt(select.length()-1);
 		}

@@ -675,11 +675,15 @@ public class ReflectionUtil {
 	    			if(entry.getKey().indexOf("_") != -1){
 	    				field = fieldMap.get(Strings.sql2Camel(entry.getKey()));
 	    				if(field == null){
+	    					if(logger.isInfoEnabled()){
+	    						logger.info("类{}查找不到字段{}", clazz, entry.getKey());
+	    					}
+	    					
 	    					continue;
 	    				}
 	    			}
 	    		}
-	    		writeField(fieldMap.get(entry.getKey()), m, entry.getValue(), true);
+	    		writeField(field, m, entry.getValue(), true);
 	    	}
     	} catch (Exception e) {
 			throw new SysException("类["+clazz+"]写入字段["+field+"]值异常", e);

@@ -15,6 +15,15 @@ table.query .td-value select{padding:3px; border:1px solid #CCCCCC; width:185px;
 .todo-list.small-list .btn-ss,
 .todo-list.small-list .btn-group-ss > .btn {border-radius: 5px;font-size: 12px;line-height: 1;padding: 1px 2px 1px 3px;}
 .spinner-buttons.input-group-btn .btn-ss {line-height: 1;}
+span.bg-default{background-color: #c2c2c2;border-color: #c2c2c2;color: #FFF;border-radius: 3px;padding: 0px 5px;display: inline-block;text-align: center;white-space: nowrap;border: 1px solid transparent;}
+span.bg-primary{background-color: #1ab394;border-color: #1ab394;color: #FFF;border-radius: 3px;padding: 0px 5px;display: inline-block;text-align: center;white-space: nowrap;border: 1px solid transparent;}
+span.bg-success{background-color: #1c84c6;border-color: #1c84c6;color: #FFF;border-radius: 3px;padding: 0px 5px;display: inline-block;text-align: center;white-space: nowrap;border: 1px solid transparent;}
+span.bg-info{background-color: #23c6c8;border-color: #23c6c8;color: #FFF;border-radius: 3px;padding: 0px 5px;display: inline-block;text-align: center;white-space: nowrap;border: 1px solid transparent;}
+span.bg-warning{background-color: #f8ac59;border-color: #f8ac59;color: #FFF;border-radius: 3px;padding: 0px 5px;display: inline-block;text-align: center;white-space: nowrap;border: 1px solid transparent;}
+span.bg-danger{background-color: #ed5565;border-color: #ed5565;color: #FFF;border-radius: 3px;padding: 0px 5px;display: inline-block;text-align: center;white-space: nowrap;border: 1px solid transparent;}
+span.bg-white{background-color: #fff;color: inherit;border-radius: 3px;padding: 0px 5px;display: inline-block;text-align: center;white-space: nowrap;border: 1px solid #e7eaec;}
+
+
 /**覆盖bs */
 .fixed-table-toolbar .bars, .fixed-table-toolbar .columns, .fixed-table-toolbar .search {margin: 5px 0px;}
 

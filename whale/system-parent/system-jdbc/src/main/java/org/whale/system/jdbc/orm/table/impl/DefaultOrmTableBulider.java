@@ -631,7 +631,10 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		}
 		//http://www.cnblogs.com/shihujiang/archive/2012/06/14/2548981.html
 		if(t.equals("class java.util.Date")){
-			return Types.TIME;
+			
+			return Types.TIMESTAMP;
+			//dateTime获取值错误
+			//return Types.TIME;
 		}
 		if(t.equals("class java.sql.Time")){
 			return Types.TIME;
