@@ -469,7 +469,9 @@
         cellStyle: undefined,
         searchable: true,
         searchFormatter: true,
-        cardVisible: true
+        cardVisible: true,
+        
+        fix: false //wjs  超过字段长度，显示 ...
     };
 
     BootstrapTable.EVENTS = {
@@ -610,6 +612,16 @@
         $.each(this.options.columns, function (i, columns) {
             $.each(columns, function (j, column) {
                 column = $.extend({}, BootstrapTable.COLUMN_DEFAULTS, column);
+                
+                //---------------wjs
+                if(column.fix){
+                	if(column['class']){
+                		column['class'] = column['class']+' fix_text';
+                	}else{
+                		column['class'] = 'fix_text';
+                	}
+                }
+              //wjs------------------
 
                 if (typeof column.fieldIndex !== 'undefined') {
                     that.columns[column.fieldIndex] = column;
@@ -1452,7 +1464,13 @@
 
                 value = calculateObjectValue(column,
                     that.header.formatters[j], [value, item, i], value); 
-
+                //wjs----------
+                var titleLabel;
+                if(column.fix){
+                	titleLabel = value.replace(/\"/g,"'"); 
+                	titleLabel = titleLabel.replace(/<\/?[^>]*>/g,'');
+                }
+                //----------wjs
                 
                 // handle td's id and class
                 if (item['_' + field + '_id']) {
@@ -1513,13 +1531,15 @@
                 } else {
                     value = typeof value === 'undefined' || value === null ?
                         that.options.undefinedText : value;
-
+                    	
                     text = that.options.cardView ? ['<div class="card-view">',
                         that.options.showHeader ? sprintf('<span class="title" %s>%s</span>', style,
                             getPropertyFromOther(that.columns, 'field', 'title', field)) : '',
                         sprintf('<span class="value">%s</span>', value),
                         '</div>'
-                    ].join('') : [sprintf('<td%s %s %s %s %s %s>', id_, class_, style, data_, rowspan_, title_),
+                    //wjs
+                    //].join('') : [sprintf('<td%s %s %s %s %s %s>', id_, class_, style, data_, rowspan_, title_),
+                    ].join('') : [sprintf('<td%s %s %s %s %s %s>', id_, class_, style, data_, rowspan_, column.fix ? "title=\""+titleLabel+"\"" : title_),
                         value,
                         '</td>'
                     ].join('');
@@ -1529,7 +1549,6 @@
                         text = '';
                     }
                 }
-
                 html.push(text);
             });
 
