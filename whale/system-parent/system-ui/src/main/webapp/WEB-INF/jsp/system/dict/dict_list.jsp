@@ -37,7 +37,8 @@ $(function(){
 	        sortable: true
 	    }, {
 	        field: 'remark',
-	        title: '备注'
+	        title: '备注',
+	        fix: true
 	    }
 	   ]
 	});

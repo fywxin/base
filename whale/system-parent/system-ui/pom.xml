@@ -19,11 +19,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.whale</groupId>
-			<artifactId>ext-session</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.whale</groupId>
 			<artifactId>ext-code</artifactId>
 			<version>${project.parent.version}</version>
 			<exclusions>
@@ -32,11 +27,6 @@
 					<artifactId>system-router</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.whale</groupId>
-			<artifactId>ext-read-write</artifactId>
-			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>

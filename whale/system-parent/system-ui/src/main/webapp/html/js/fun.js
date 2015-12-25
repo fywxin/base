@@ -261,11 +261,11 @@
 			    }
 		}
 		var opts = $.extend(defaults, param);
-		//关闭排序
-		for(var i=0; i<opts.columns.length; i++){
-			opts.columns[i].sortable = false;
+		//关闭选择框提示
+		if(opts.columns[0].checkbox){
+			opts.columns[0].fix = false;
 		}
-		opts.columns.splice(0, 0, {field: 'index',width: '3%', align: 'center', formatter:function(value, row, index){return index+1;}});
+		opts.columns.splice(0, 0, {field: 'index',width: '30px', align: 'center', fix: false, formatter:function(value, row, index){return index+1;}});
 		return $(this).bootstrapTable(opts);
     };
     

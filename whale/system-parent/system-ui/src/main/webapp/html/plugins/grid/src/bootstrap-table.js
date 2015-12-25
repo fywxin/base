@@ -471,7 +471,7 @@
         searchFormatter: true,
         cardVisible: true,
         
-        fix: false //wjs  超过字段长度，显示 ...
+        fix: true //wjs  超过字段长度，显示 ...
     };
 
     BootstrapTable.EVENTS = {
@@ -920,10 +920,11 @@
         // Assign the correct sortable arrow
         this.getCaret();
 
-        if (this.options.sidePagination === 'server') {
-            this.initServer(this.options.silentSort);
-            return;
-        }
+        //wjs移除服务端排序功能，只支持本地排序  2015-12-25
+//        if (this.options.sidePagination === 'server') {
+//            this.initServer(this.options.silentSort);
+//            return;
+//        }
 
         this.initSort();
         this.initBody();
@@ -1466,7 +1467,7 @@
                     that.header.formatters[j], [value, item, i], value); 
                 //wjs----------
                 var titleLabel;
-                if(column.fix){
+                if(column.fix && value && column.field != 'opt'){
                 	titleLabel = value.replace(/\"/g,"'"); 
                 	titleLabel = titleLabel.replace(/<\/?[^>]*>/g,'');
                 }
@@ -1539,7 +1540,7 @@
                         '</div>'
                     //wjs
                     //].join('') : [sprintf('<td%s %s %s %s %s %s>', id_, class_, style, data_, rowspan_, title_),
-                    ].join('') : [sprintf('<td%s %s %s %s %s %s>', id_, class_, style, data_, rowspan_, column.fix ? "title=\""+titleLabel+"\"" : title_),
+                    ].join('') : [sprintf('<td%s %s %s %s %s %s>', id_, class_, style, data_, rowspan_, (column.fix && titleLabel && column.field != 'opt') ? "title=\""+titleLabel+"\"" : title_),
                         value,
                         '</td>'
                     ].join('');

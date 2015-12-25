@@ -91,6 +91,6 @@
     </aop:config>
 
 	<import resource="classpath:/META-INF/spring/applicationContext-datasource.xml" />
-	<import resource="classpath:/META-INF/spring/log.xml" />
+<!-- 	<import resource="classpath:/META-INF/spring/log.xml" /> -->
 </beans>
 

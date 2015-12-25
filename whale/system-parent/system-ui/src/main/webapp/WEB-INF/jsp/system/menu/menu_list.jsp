@@ -17,7 +17,7 @@ $(function(){
 		{
 	        field: 'opt',
 	        title: '操作',
-	        width: '10%',
+	        width: '100px',
 	        align: 'center',
 	        formatter: function(value, row, index){
 	        	var strArr = [];
@@ -36,29 +36,36 @@ $(function(){
 	        title: '菜单名'
 	    }, {
 	        field: 'menuUrl',
-	        title: '菜单地址'
+	        title: '菜单地址',
+	        fix: true
 	    }, {
 	        field: 'menuInco',
 	        title: '图标',
+	        align: 'center',
 	        width: '8%'
 	    }, {
 	        field: 'openType',
 	        title: '打开方式',
 	        width: '10%',
+	        align: 'center',
+	        fix: true,
 	        formatter: function(value, row, index){
 				return openTypeObj[value];
 			}
 	    }, {
 	        field: 'publicFlag',
 	        title: '是否公共',
-	        width: '9%',
+	        width: '50px',
+	        align: 'center',
 	        formatter: function(value, row, index){
-	        	return value? "是" : "否" ;
+	        	return value ? '<span class="bg-success">是</span>' : "否";
 			}
 	    }, {
 	        field: 'menuType',
 	        title: '菜单类型',
 	        width: '10%',
+	        align: 'center',
+	        fix: true,
 	        formatter: function(value, row, index){
 				return menuTypeObj[value];
 			}

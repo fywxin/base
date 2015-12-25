@@ -16,13 +16,14 @@ $(function(){
 		{
 		    field: 'chk',
 		    checkbox: true,
-		    width: '4%',
+		    width: '35px',
 		    align: 'center'
 		}, {
 	        field: 'opt',
 	        title: '操作',
-	        width: '14%',
+	        width: '100px',
 	        align: 'center',
+	        fix: true,
 	        formatter: function(value, row, index){
         		var strArr = [];
         		<tag:auth authCode="dictItem:update">
@@ -40,26 +41,28 @@ $(function(){
 			}
 	    }, {
 	        field: 'itemName',
-	        width: '15%',
+	        width: '140px',
 	        title: '元素名称',
 	        sortable: true
 	    }, {
 	        field: 'itemCode',
 	        title: '元素编码',
-	        width: '15%',
+	        width: '160px',
 	        sortable: true
 	    }, {
 	        field: 'itemVal',
 	        title: '元素值',
-	        sortable: true
+	        width: '140px',
+	        fix: true
 	    }, {
 	        field: 'remark',
-	        width: '15%',
-	        title: '备注'
+	        title: '备注',
+	        fix: true
 	    }, {
 	        field: 'status',
 	        title: '状态',
-	        width: '5%',
+	        width: '50px',
+	        align: 'center',
 	        formatter: function(cellvalue, options, rowObject){
 				return statusObj[cellvalue];
 			}

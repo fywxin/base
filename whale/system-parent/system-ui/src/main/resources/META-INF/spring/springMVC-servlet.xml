@@ -58,10 +58,6 @@
 			<mvc:mapping path="/**" />
 			<bean class="org.whale.system.servlet.SessionInterceptor" />
 		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean class="org.whale.system.spring.LogInterceptor" />
-		</mvc:interceptor>
 	</mvc:interceptors>
 	 
 	
@@ -74,7 +70,7 @@
 		
 	
 	<bean id="exceptionResolver"
-		class="org.whale.system.spring.WhaleLogExceptionResolver">
+		class="org.whale.system.spring.SimpleWhaleExceptionResolver">
 		<property name="defaultErrorView" value="system/exception/error" />
 		<property name="exceptionMappings">
 			<props>

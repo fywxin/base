@@ -55,29 +55,28 @@ $(function(){
 	        sortable: true
 	    },{
 	        field: 'remark',
-	        title: '备注'
+	        title: '备注',
+	        fix: true
 	    }, {
-	        field: 'canDel',
+	        field: 'canDelFlag',
 	        title: '可删除',
-	        width: '6%',
+	        width: '80px',
 	        align: 'center',
 	        formatter: function(value, row, index){
-	        	if(row.canDel){
-	        		return "是";
-	        	}else{
-	        		return "否";
-	        	}
+	        	return value ? '<span class="bg-success">是</span>' : "否";
 	        }
 	    }, {
 	        field: 'status',
 	        title: '状态',
 	        width: '5%',
+	        align: 'center',
 	        formatter: function(value, row, index){
 				    return statusObj[value];
 			    }
 	    }
 	   ]
 	});
+	
 });
 
 function del(id){
@@ -92,6 +91,11 @@ function setStatus(id,name,type){
 		opt = "禁用";
 	}
 	$.confirm({info:'您确定要[ '+opt+' ]用户[ '+name+' ]吗？', url : url});
+}
+
+function sw(w){
+	alert($(w).attr("checked"));
+	alert($(w).val());
 }
 </script>
 </head>

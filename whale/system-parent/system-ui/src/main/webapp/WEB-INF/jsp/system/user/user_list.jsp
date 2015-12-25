@@ -54,6 +54,7 @@ $(function(){
 	    }, {
 	        field: 'userName',
 	        title: '用户名',
+	        sortable: true,
 	        formatter: function(value, row, index){
 				    return "<a href='javascript:;' onclick=\"go('查看用户名','${ctx}/user/goView?userId="+row.userId+"')\">"+row.userName+"</a>";
 			}
@@ -65,8 +66,7 @@ $(function(){
 	    }, {
 	        field: 'phone',
 	        title: '联系电话',
-	        width: '15%',
-	        sortable: true
+	        width: '15%'
 	    }, {
 	        field: 'deptName',
 	        title: '所属组织',
@@ -76,6 +76,7 @@ $(function(){
 	        field: 'status',
 	        title: '状态',
 	        width: '7%',
+	        align: 'center',
 	        formatter: function(value, row, index){
 				    return statusObj[row.status];
 			}
