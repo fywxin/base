@@ -6,6 +6,100 @@
 </head>
     
 <body>
+<div class="row" style="padding: 10px 30px;">
+    <div class="panel panel-default">
+        <div class="panel-heading collapsed" href="#infoDiv"  data-toggle="collapse" aria-expanded="false" style="cursor: pointer;margin-top: 0;font-size: 16px;padding: 7px 15px;">
+            	用户详情
+        </div>
+        <div id="infoDiv" class="panel-collapse collapse in" aria-expanded="true" style="">
+            <div class="panel-body">
+            	<div class="table-responsive">
+    <table class="table table-bordered">
+        <colgroup>
+            <col class="col-xs-1">
+            <col class="col-xs-5">
+            <col class="col-xs-1">
+            <col class="col-xs-5">
+        </colgroup>
+        <tbody>
+        <tr>
+            <th scope="row">
+                订单编号
+            </th>
+            <td>201512251134131279</td>
+            <th scope="row">
+                商品名称
+            </th>
+            <td>6094.00金 ＝ 590.00元 【绿色商品，安全迅速】</td>
+        </tr>
+        <tr>
+            <th scope="row">
+                商户订单编号
+            </th>
+            <td>JS201512254170366040</td>
+            <th scope="row">
+                订单状态
+            </th>
+            <td>已支付</td>
+        </tr>
+        <tr>
+            <th scope="row">
+                商品编号
+            </th>
+            <td>132000015343</td>
+            <th scope="row">
+                商品数量
+            </th>
+            <td>1</td>
+        </tr>
+        <tr>
+            <th scope="row">
+                商品类型
+            </th>
+            <td>游戏币</td>
+            <th scope="row">
+                商品单价
+            </th>
+            <td>0.01</td>
+        </tr>
+        <tr>
+            <th scope="row">
+                交易类型
+            </th>
+            <td>寄售交易</td>
+            <th scope="row">
+                交易方式
+            </th>
+            <td>0</td>
+        </tr>
+        <tr>
+            <th scope="row">
+                	下单时间
+            </th>
+            <td>2015-12-25 11:34:12</td>
+            <th scope="row">
+                	商品来源
+            </th>
+            <td>5173</td>
+        </tr>
+        <tr>
+            <th scope="row">
+                	订单失效时间
+            </th>
+            <td></td>
+            <th scope="row">
+                	发货客服
+            </th>
+            <td>331605173</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+                            
 <div id="bodyDiv" style="margin-top:10px;overflow-x: hidden;">
 	<div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
 	<div class="row">
@@ -57,7 +151,6 @@
             <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label">登入时间：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
-                    <input id="email" name="email"  value="<fmt:formatDate value="${item.lastLoginTime }" pattern="yyyy-MM-dd HH:mm:ss"/>" readonly="readonly" class="form-control" style="width:250px" >
                 </div>
             </div>
             <div class="form-group">
@@ -69,7 +162,6 @@
             <div class="form-group">
                 <label class="col-sm-3 col-md-2 col-lg-1 control-label">创建时间：</label>
                 <div class="col-sm-9 col-md-10 col-lg-11 form-inline input-group" style="padding-left:0px;">
-                    <input id="email" name="email"  value="<fmt:formatDate value="${item.createTime }" pattern="yyyy-MM-dd HH:mm:ss"/>" readonly="readonly" class="form-control" style="width:250px" >
                 </div>
             </div>
             <div class="form-group">
