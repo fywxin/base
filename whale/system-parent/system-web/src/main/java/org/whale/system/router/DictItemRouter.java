@@ -134,7 +134,12 @@ public class DictItemRouter extends BaseRouter {
 	@RequestMapping("/goView")
 	public ModelAndView goView(Long dictItemId){
 		DictItem dictItem = this.dictItemService.get(dictItemId);
-		return new ModelAndView("system/dict/item/item_view").addObject("item", dictItem);
+		String dictName = "";
+		Dict dict = this.dictService.get(dictItem.getDictId());
+		if(dict != null){
+			dictName = dict.getDictName();
+		}
+		return new ModelAndView("system/dict/item/item_view").addObject("item", dictItem).addObject("dictName", dictName);
 	}
 
 	/**

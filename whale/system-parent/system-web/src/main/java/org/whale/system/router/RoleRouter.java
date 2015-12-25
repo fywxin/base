@@ -150,6 +150,20 @@ public class RoleRouter extends BaseRouter {
 	}
 
 	
+	/**
+	 * 跳转到更新页面
+	 * @param request
+	 * @param response
+	 * @param roleId
+	 * @return
+	 */
+	@org.whale.system.annotation.auth.Auth(code="role:list",name="查询角色")
+	@RequestMapping("/goView")
+	public ModelAndView goView(Long roleId){
+		Role role = this.roleService.get(roleId);
+		return new ModelAndView("system/role/role_view").addObject("item", role);
+	}
+	
 	@org.whale.system.annotation.auth.Auth(code="role:auth",name="分配权限")
 	@RequestMapping("/goSetRoleAuth")
 	public ModelAndView goSetRoleAuth(Long roleId){

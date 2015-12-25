@@ -47,7 +47,10 @@ $(function(){
 	        field: 'roleName',
 	        width: '20%',
 	        title: '角色名称',
-	        sortable: true
+	        sortable: true,
+	        formatter: function(value, row, index){
+			    return "<a href='javascript:;' onclick=\"go('查看角色','${ctx}/role/goView?roleId="+row.roleId+"')\">"+row.roleName+"</a>";
+		}
 	    }, {
 	        field: 'roleCode',
 	        title: '角色编码',

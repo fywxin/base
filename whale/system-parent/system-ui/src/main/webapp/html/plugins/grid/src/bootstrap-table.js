@@ -2088,6 +2088,11 @@
         this.getCaret();
         this.$tableContainer.css('padding-bottom', padding + 'px');
         this.trigger('reset-view');
+        
+        //-- wjs 没有工具栏时，往上顶
+        if($(this.options.toolbar).length == 0){
+        	this.$toolbar.hide();
+        }
     };
 
     BootstrapTable.prototype.getData = function (useCurrentPage) {

@@ -14,13 +14,16 @@ import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.SysConstant;
+import org.whale.system.common.exception.BusinessException;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.TreeUtil;
 import org.whale.system.domain.Auth;
 import org.whale.system.domain.Menu;
+import org.whale.system.domain.User;
 import org.whale.system.service.AuthService;
 import org.whale.system.service.MenuService;
+import org.whale.system.service.UserService;
 
 @Controller
 @RequestMapping("/auth")
@@ -34,6 +37,8 @@ public class AuthRouter extends BaseRouter {
 	private UserAuthCacheService userAuthCacheService;
 	@Autowired
 	private DictCacheService dictCacheService;
+	@Autowired
+	private UserService userService;
 	
 	@org.whale.system.annotation.auth.Auth(code="auth:list",name="查询权限")
 	@RequestMapping("/goTree")
@@ -81,42 +86,58 @@ public class AuthRouter extends BaseRouter {
 	@org.whale.system.annotation.auth.Auth(code="auth:list",name="查询权限")
 	@ResponseBody
 	@RequestMapping("/doList")
-	public Page doList(String authName, String authCode, Long menuId){
+	public Page doList(String authName, String authCode, Long menuId, Long userId, Long roleId){
 		Page page = this.newPage();
 		StringBuilder strb = new StringBuilder();
 		strb.append(" FROM sys_auth t WHERE 1=1 ");
 		
-		Menu menu = this.menuService.get(menuId);
-		if(menu != null){
-			List<Long> menuIds = null;
-			if(menu.getMenuType() == 3){
-				menuIds = new ArrayList<Long>(1);
-				menuIds.add(menuId);
-			}else{
-				List<Menu> menus = this.menuService.queryAll();
-				List<Menu> leafMenus = TreeUtil.getAllSubLeaf(menus, menuId);
-				if(leafMenus != null){
-					menuIds = LangUtil.getIdList(leafMenus,"menuId");
-				}
-				if(menuIds == null){
+		if(userId == null && roleId == null){
+			Menu menu = this.menuService.get(menuId);
+			if(menu != null){
+				List<Long> menuIds = null;
+				if(menu.getMenuType() == 3){
 					menuIds = new ArrayList<Long>(1);
-					menuIds.add(-1L);
+					menuIds.add(menuId);
+				}else{
+					List<Menu> menus = this.menuService.queryAll();
+					List<Menu> leafMenus = TreeUtil.getAllSubLeaf(menus, menuId);
+					if(leafMenus != null){
+						menuIds = LangUtil.getIdList(leafMenus,"menuId");
+					}
+					if(menuIds == null){
+						menuIds = new ArrayList<Long>(1);
+						menuIds.add(-1L);
+					}
+				}
+				strb.append(" AND t.menuId in(").append(LangUtil.joinIds(menuIds)).append(")");
+			}else{
+				if(menuId != null && menuId.equals(-99L)){
+					strb.append(" AND t.menuId IS NULL");
 				}
 			}
-			strb.append(" AND t.menuId in(").append(LangUtil.joinIds(menuIds)).append(")");
-		}else{
-			if(menuId != null && menuId.equals(-99L)){
-				strb.append(" AND t.menuId IS NULL");
+			
+			if(Strings.isNotBlank(authName)){
+				strb.append(" AND t.authName like ?");
+				page.addArg("%"+authName.trim()+"%");
 			}
-		}
-		
-		if(Strings.isNotBlank(authName)){
-			strb.append(" AND t.authName like ?");
-			page.addArg("%"+authName.trim()+"%");
-		}
-		if(Strings.isNotBlank(authCode)){
-			strb.append(" AND t.authCode like ?");
-			page.addArg("%"+authCode.trim()+"%");
+			if(Strings.isNotBlank(authCode)){
+				strb.append(" AND t.authCode like ?");
+				page.addArg("%"+authCode.trim()+"%");
+			}
+		}else{
+			if(userId != null){
+				User user = this.userService.get(userId);
+				if(user == null){
+					throw new BusinessException("用户["+userId+"]不存在");
+				}
+				if(!user.getAdminFlag()){
+					strb.append(" AND t.authCode in(select DISTINCT(ra.authCode) from sys_user_role ur, sys_role_auth ra WHERE ur.roleId = ra.roleId and ur.userId = ?)");
+					page.addArg(userId);
+				}
+			}else{
+				strb.append(" AND t.authCode in(select DISTINCT(ra.authCode) from sys_role_auth ra WHERE ra.roleId = ?)");
+				page.addArg(roleId);
+			}
 		}
 		
 		page.setCountSql("SELECT count(1) "+strb.toString());

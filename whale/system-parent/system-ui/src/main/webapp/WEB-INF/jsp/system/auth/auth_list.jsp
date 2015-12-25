@@ -62,7 +62,7 @@ $(function(){
 				</tbody>
 			</table>
 		</form>
-		<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
+		<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;margin-top: 10px;">
 			<table id="gridTable" ></table>
 		</div>
 	</div>

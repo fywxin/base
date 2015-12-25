@@ -9,7 +9,7 @@ function getGridDivHeight(){
 }
 $(function(){
 	$("#gridTable").grid({
-	    url: '${ctx}/auth/doList?userId=${item.userId}',
+	    url: '${ctx}/auth/doList?roleId=${item.roleId}',
 	    idField: 'authCode',
 	    pageSize: 20,
 	    height: $.h()-$("#panelDiv1").height()-120,
@@ -51,42 +51,18 @@ $(function(){
 							</colgroup>
 							<tbody>
 								<tr>
-									<th scope="row" style="text-align: right;">用户名</th>
-									<td>${item.userName }</td>
-									<th scope="row" style="text-align: right;">真实姓名</th>
-									<td>${item.realName }</td>
+									<th scope="row" style="text-align: right;">角色名称</th>
+									<td>${item.roleName }</td>
+									<th scope="row" style="text-align: right;">角色编码</th>
+									<td>${item.roleCode }</td>
 								</tr>
 								<tr>
-									<th scope="row" style="text-align: right;">联系电话</th>
-									<td>${item.phone }</td>
-									<th scope="row" style="text-align: right;">邮箱地址</th>
-									<td>${item.email }</td>
-								</tr>
-								<tr>
-									<th scope="row">所属部门</th>
-									<td>${deptName }</td>
-									<th scope="row">状态</th>
-									<td>
-										<c:if test="${item.status == 2}"><span class="bg-danger">禁用 </span></c:if> 
-										<c:if test="${item.status == 1}">正常</c:if>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row">登入IP</th>
-									<td>${item.loginIp }</td>
-									<th scope="row">登入时间</th>
-									<td>${item.lastLoginTime }</td>
-								</tr>
-								<tr>
-									<th scope="row">创建人</th>
-									<td>${creator }</td>
-									<th scope="row">创建时间</th>
-									<td>${item.createTime }</td>
-								</tr>
-								<tr>
-									<th scope="row">附加信息</th>
-									<td colspan="3">${item.remark }</td>
-
+									<th scope="row" style="text-align: right;">可删除</th>
+									<td><c:if test="${!item.canDelFlag}">否</c:if> 
+										<c:if test="${item.canDelFlag}"><span class="bg-success">是</span></c:if></td>
+									<th scope="row" style="text-align: right;">状态</th>
+									<td><c:if test="${item.status == 2}"><span class="bg-danger">禁用 </span></c:if> 
+										<c:if test="${item.status == 1}"><span class="bg-success">正常</span></c:if></td>
 								</tr>
 								<tr>
 									<th scope="row">备注</th>
@@ -104,7 +80,7 @@ $(function(){
 	<div class="row panel-row">
 		<div class="panel panel-default">
 			<div class="panel-heading collapsed panel-heading-style" href="#panel2" data-toggle="collapse" aria-expanded="false">
-				分配用户的权限</div>
+				角色权限</div>
 			<div id="panel2" class="panel-collapse collapse in" aria-expanded="false">
 				<div class="panel-body">
 					<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
