@@ -28,6 +28,17 @@
         <mvc:return-value-handlers>
             <bean id="respBodyMethodReturnValueHandler" class="org.whale.inf.server.RespBodyMethodReturnValueHandler" ></bean>
         </mvc:return-value-handlers>
+        <mvc:message-converters register-defaults="true">
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=utf-8</value>
+                        <value>text/html;charset=utf-8</value>
+                        <value>application/x-javascript;charset=utf-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
     </mvc:annotation-driven>
 
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
@@ -61,5 +72,10 @@
 	
 	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="10" />
 	
-	
+	<bean id="multipartResolver" 
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" 
+		p:defaultEncoding="UTF-8"
+		p:maxUploadSize="104857600" 
+		p:uploadTempDir="temp" 
+		/>
 </beans>

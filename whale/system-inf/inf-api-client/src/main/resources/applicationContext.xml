@@ -42,6 +42,11 @@
         <property name="serviceUrl" value="/user"/><!-- 对应的PHP JSONRPC URL -->
     </bean>
     
+    <bean id="fileService" class="org.whale.inf.client.HttpInvokeFactory">
+        <property name="serviceInterface" value="org.whale.inf.api.FileIntf"/><!-- 对应的Java接口,便于Java使用 -->
+        <property name="serviceUrl" value="/fileIntf"/><!-- 对应的PHP JSONRPC URL -->
+    </bean>
+    
     <bean class="org.whale.inf.common.impl.EmptyEncryptService" id="emptyEncryptService"></bean>
     
     <bean class="org.whale.inf.client.impl.FastJsonClientCodec" id="fastJsonClientCodec"></bean>
