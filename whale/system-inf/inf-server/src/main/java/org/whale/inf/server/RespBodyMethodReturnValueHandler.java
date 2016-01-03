@@ -24,6 +24,9 @@ public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValu
 	
 	@Autowired(required=false)
 	private SignService signService;
+	
+	@Autowired
+	private ServerIntfFilterRunner filterRunner;
 
 	@Override
 	public boolean supportsReturnType(MethodParameter returnType) {
@@ -47,6 +50,10 @@ public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValu
 		ServletOutputStream out = null;
 		try{
 			HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
+			context.setResponse(response);
+			
+			filterRunner.exeBeforeResp(context);
+			
 			out = response.getOutputStream();
 			
 			//String text = JSON.toJSONString(obj, this.getFeatures());
@@ -66,6 +73,8 @@ public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValu
 	        	response.addHeader("encrypt", "true");
 	        }
 	        
+	        filterRunner.exeAfterResp(context);
+	        
 	        out.write(datas);
 	        out.flush();
 		}finally{
@@ -75,5 +84,4 @@ public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValu
 			}
 		}
 	}
-
 }

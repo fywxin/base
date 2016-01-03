@@ -24,9 +24,6 @@ public class ClientRouter {
 	@Autowired
 	private UserInf userInf;
 	
-	@Autowired
-	private FileIntf fileIntf;
-	
 	@ResponseBody
 	@RequestMapping("/get")
 	public Rs get(Long id){
@@ -34,32 +31,32 @@ public class ClientRouter {
 		return Rs.success(user);
 	}
 	
-	@ResponseBody
-	@RequestMapping("/upload")
-	public Rs upload(HttpServletRequest request){
-		if (!ServletFileUpload.isMultipartContent(request)) {
-			return Rs.success("请选择文件。");
-		}
-		Map<String, MultipartFile> fileMap = ((MultipartHttpServletRequest) request).getFileMap();
-		if (fileMap == null || fileMap.keySet().size() != 1) {
-			return Rs.fail("只能上传一个文件，请开启自动上传模式");
-		}
-		
-		MultipartFile multipartFile = null;
-		for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
-			try {
-				multipartFile = entry.getValue();
-				
-				FileBean fileBean = new FileBean();
-				fileBean.setBytes(multipartFile.getBytes());
-				fileBean.setFileName(multipartFile.getName());
-				
-				String name = this.fileIntf.uploadFileBean(fileBean);
-				return Rs.success(name);
-			} catch (Exception e) {
-				return Rs.fail("保存文件异常-"+e.getMessage());
-			}
-		}
-		return Rs.success();
-	}
+//	@ResponseBody
+//	@RequestMapping("/upload")
+//	public Rs upload(HttpServletRequest request){
+//		if (!ServletFileUpload.isMultipartContent(request)) {
+//			return Rs.success("请选择文件。");
+//		}
+//		Map<String, MultipartFile> fileMap = ((MultipartHttpServletRequest) request).getFileMap();
+//		if (fileMap == null || fileMap.keySet().size() != 1) {
+//			return Rs.fail("只能上传一个文件，请开启自动上传模式");
+//		}
+//		
+//		MultipartFile multipartFile = null;
+//		for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
+//			try {
+//				multipartFile = entry.getValue();
+//				
+//				FileBean fileBean = new FileBean();
+//				fileBean.setBytes(multipartFile.getBytes());
+//				fileBean.setFileName(multipartFile.getName());
+//				
+//				String name = this.fileIntf.uploadFileBean(fileBean);
+//				return Rs.success(name);
+//			} catch (Exception e) {
+//				return Rs.fail("保存文件异常-"+e.getMessage());
+//			}
+//		}
+//		return Rs.success();
+//	}
 }

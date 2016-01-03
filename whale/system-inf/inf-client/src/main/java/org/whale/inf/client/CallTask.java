@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -18,6 +19,7 @@ import org.whale.inf.common.Result;
 import org.whale.inf.common.ResultCode;
 import org.whale.inf.common.SignService;
 import org.whale.system.common.util.Strings;
+import org.whale.system.common.util.TimeUtil;
 
 import com.alibaba.fastjson.JSON;
 
@@ -41,30 +43,30 @@ public class CallTask implements Runnable {
 	
 	private SignService signService;
 	
-	private ClientInvokeHandler clientInvokeHandler;
+	private ClientIntfFilterRunner filterRunner;
 	
 	private ClientConf clientConf;
 	
 	
-	public CallTask(ClientContext clientContext, ClientCodec clientCodec, EncryptService encryptService, SignService signService, ClientInvokeHandler clientInvokeHandler, ClientConf clientConf){
+	public CallTask(ClientContext clientContext, ClientCodec clientCodec, EncryptService encryptService, SignService signService, ClientIntfFilterRunner filterRunner, ClientConf clientConf){
 		this.context = clientContext;
 		this.clientCodec = clientCodec;
 		this.encryptService = encryptService;
 		this.signService = signService;
-		this.clientInvokeHandler = clientInvokeHandler;
+		this.filterRunner = filterRunner;
 		this.clientConf = clientConf;
 	}
 
 	@Override
 	public void run() {
-		if(clientInvokeHandler != null){
-			this.clientInvokeHandler.beforeCall(context);
-		}
+		filterRunner.exeBefore(context);
 		
 		String nextSeq = clientConf.getAppId()+":"+seq.incrementAndGet();
 		context.setReqno(nextSeq);
 		context.setUrl(clientConf.getServerHost()+context.getServiceUrl()+"/"+context.getMethod().getName());
-		context.putParam("appId", clientConf.getAppId()).putParam("reqno", nextSeq);
+		context.putParam("appId", clientConf.getAppId())
+			.putParam("reqno", nextSeq)
+			.putParam("timestamp", TimeUtil.formatTime(new Date(), TimeUtil.COMMON_FORMAT));
 		
 		byte[] data = null;
 		//TODO 改为调用链模式
@@ -129,9 +131,7 @@ public class CallTask implements Runnable {
 					con.setRequestProperty(entry.getKey(), entry.getValue());
 				}
 			}
-			if(clientInvokeHandler != null){
-				this.clientInvokeHandler.onReqest(context);
-			}
+			filterRunner.exeOnRequest(context);
 			if(logger.isDebugEnabled()){
 				logger.debug("HTTP-request:{}\nHTTP-header:{}", 
 								(context.getReqStr() == null ? JSON.toJSONString(context.getArgs()) : context.getReqStr()),
@@ -204,13 +204,17 @@ public class CallTask implements Runnable {
 				}
 			}
 		}catch(IOException e){
+			filterRunner.exeException(context, e);
 			throw new InfException(ResultCode.NET_ERROR, e);
+		}catch(InfException e){
+			filterRunner.exeException(context, e);
+			throw e;
 		}finally{
 			IOUtils.closeQuietly(ops);
 			IOUtils.closeQuietly(ips);
 		}
-		if(clientInvokeHandler != null){
-		}
+		
+		filterRunner.exeAfter(context);
 	}
 
 }

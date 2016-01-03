@@ -17,6 +17,7 @@ public class ClientConf {
 	//服务端主机地址
 	private String serverHost;
 	
+	
 	public String getAppId() {
 		return appId;
 	}

@@ -73,7 +73,7 @@ public class DefaultClientSignService implements SignService{
 	
 	/**
 	 * 响应结果签名
-	 * 	MD5(接口uri + reqno + sign + bodyStr)
+	 * 	MD5(接口uri + reqno + session + appSign + bodyStr)
 	 * @param context
 	 * @return
 	 */
@@ -82,6 +82,7 @@ public class DefaultClientSignService implements SignService{
 		StringBuilder strb = new StringBuilder();
 		strb.append(clientContext.getServiceUrl()+"/"+clientContext.getMethod().getName())
 			.append(clientContext.getReqno())
+			.append(clientContext.getSession() == null ? "" : clientContext.getSession())
 			.append(clientConf.getSignKey());
 		
 		if(clientContext.getRespStr() != null){

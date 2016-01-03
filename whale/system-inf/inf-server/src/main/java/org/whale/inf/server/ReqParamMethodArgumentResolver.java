@@ -41,14 +41,18 @@ import com.alibaba.fastjson.JSONArray;
  * @author 王金绍
  * @date 2015年11月12日 下午5:32:07
  */
-public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentResolver{
+public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentResolver {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ReqParamMethodArgumentResolver.class);
 	
 	@Autowired(required=false)
 	private EncryptService encryptService;
+	
 	@Autowired(required=false)
 	private SignService signService;
+	
+	@Autowired
+	private ServerIntfFilterRunner filterRunner;
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
@@ -68,9 +72,19 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 		ServerContext context = ServerContext.get();
 		if(context == null){
 			context = new ServerContext();
+			filterRunner.exeBeforeReq(context);
+			
+			context.setRequest((HttpServletRequest)webRequest.getNativeRequest());
 			context.setUri(this.getUri(webRequest));
-			context.setAppId(webRequest.getParameter("appId"));
+			context.setAppId(webRequest.getParameter("appid") == null ? webRequest.getParameter("appId") : webRequest.getParameter("appid"));
 			context.setReqno(webRequest.getParameter("reqno"));
+			context.setSession(webRequest.getParameter("session"));
+			context.setTimestamp(webRequest.getParameter("timestamp"));
+			context.setVersion(webRequest.getParameter("version"));
+			context.setSign(webRequest.getParameter("sign"));
+			context.setFormat(webRequest.getParameter("format"));
+			context.setGzip(webRequest.getParameter("gzip") == null ? false : "1".equals(webRequest.getParameter("gzip")));
+			
 			context.setParamIndex(0);
 			byte[] datas = this.readBodyByte(webRequest);
 			if(datas != null && datas.length > 0){
@@ -91,11 +105,14 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 			if(logger.isDebugEnabled()){
 				logger.debug("服务端第一个参数Context对象:", context.toString());
 			}
+			
+			
+			
 			//签名校验
 			if(signService != null){
 				String sign = this.signService.signReq(context);
-				if(!sign.equals(webRequest.getParameter("sign"))){
-					throw new InfException(ResultCode.SIGN_ERROR);
+				if(!sign.equals(context.getSign())){
+					//throw new InfException(ResultCode.SIGN_ERROR);
 				}
 			}
 			ServerContext.set(context);
@@ -104,7 +121,7 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 			context.addArg(context.getParamIndex(), param);
 			context.incParamIndex();
 		}
-		
+		filterRunner.exeAfterReq(context);
 		return param;
 	}
 	
@@ -180,6 +197,8 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 		}
 		return request.getRequestURI();
 	}
+
+	
 
 
 }

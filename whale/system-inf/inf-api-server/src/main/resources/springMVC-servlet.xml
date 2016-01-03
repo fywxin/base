@@ -56,6 +56,8 @@
 	<bean class="org.whale.inf.server.impl.DefaultServerSignService" id="defaultServerSignService"></bean>
 	
 	<bean class="org.whale.inf.server.NoMethodArgumentResolver" id="noMethodArgumentResolver"></bean>
+	
+	<bean class="org.whale.inf.server.ServerIntfFilterRunner" id="serverIntfFilterRunner"></bean>
     
     <mvc:interceptors>
 		<mvc:interceptor>
