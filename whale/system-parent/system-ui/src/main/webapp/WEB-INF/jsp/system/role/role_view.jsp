@@ -38,7 +38,7 @@ $(function(){
 	<div class="row panel-row" id="panelDiv1" >
 		<div class="panel panel-default">
 			<div class="panel-heading collapsed panel-heading-style" href="#panel1" data-toggle="collapse" aria-expanded="false">
-				用户详情</div>
+				用户详情<span class="caret pull-right toggle-caret" ></span></div>
 			<div id="panel1" class="panel-collapse collapse in" aria-expanded="true" >
 				<div class="panel-body">
 					<div class="table-responsive">
@@ -80,7 +80,7 @@ $(function(){
 	<div class="row panel-row">
 		<div class="panel panel-default">
 			<div class="panel-heading collapsed panel-heading-style" href="#panel2" data-toggle="collapse" aria-expanded="false">
-				角色权限</div>
+				角色 [${item.roleName }] 的权限<span class="caret pull-right toggle-caret" ></span></div>
 			<div id="panel2" class="panel-collapse collapse in" aria-expanded="false">
 				<div class="panel-body">
 					<div id="gridDiv" style="overflow-y: auto;overflow-x: hidden;">
