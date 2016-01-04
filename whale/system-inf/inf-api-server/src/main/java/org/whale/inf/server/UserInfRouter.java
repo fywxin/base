@@ -42,6 +42,7 @@ public class UserInfRouter {
 		return Result.success();
 	}
 
+	// [[{id:2,"@type":"org.whale.inf.api.Dept"},{id:1,"@type":"org.whale.inf.api.Dept"}]]
 	@RespBody
 	@RequestMapping("/testList")
 	public Result<User> testList(@ReqParam List<Dept> depts){

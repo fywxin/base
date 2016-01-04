@@ -25,6 +25,7 @@ import org.whale.system.common.util.ReflectionUtil;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * 实现思路
@@ -67,7 +68,6 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 	public Object resolveArgument(MethodParameter parameter,
 			ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
 			WebDataBinderFactory binderFactory) throws Exception {
-		
 		Object param = null;
 		ServerContext context = ServerContext.get();
 		if(context == null){
@@ -93,8 +93,12 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 					datas = encryptService.decrypt(datas, context);
 				}
 				context.setReqStr(new String(datas, "UTF-8"));
-				JSONArray bodyJsonArr = JSON.parseArray(context.getReqStr());
-				context.setBodyJsonArr(bodyJsonArr);
+				
+				//入参数是数组
+				if(context.getReqStr().startsWith("[") || context.getReqStr().trim().startsWith("[")) {
+					JSONArray bodyJsonArr = JSON.parseArray(context.getReqStr());
+					context.setBodyJsonArr(bodyJsonArr);
+				}
 				
 				param = this.decode(parameter, context);
 				context.addArg(context.getParamIndex(), param);
@@ -106,17 +110,19 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 				logger.debug("服务端第一个参数Context对象:", context.toString());
 			}
 			
-			
-			
 			//签名校验
 			if(signService != null){
 				String sign = this.signService.signReq(context);
 				if(!sign.equals(context.getSign())){
-					//throw new InfException(ResultCode.SIGN_ERROR);
+					throw new InfException(ResultCode.SIGN_ERROR);
 				}
 			}
 			ServerContext.set(context);
 		}else{
+			if(context.getBodyJsonArr() == null){
+				logger.error("接口超过一个参数，入参必须是数组!");
+				throw new InfException(ResultCode.REQ_DATA_ERROR);
+			}
 			param = this.decode(parameter, context);
 			context.addArg(context.getParamIndex(), param);
 			context.incParamIndex();
@@ -134,11 +140,31 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 	 */
 	private Object decode(MethodParameter parameter, ServerContext context) {
 		JSONArray jsonArray = context.getBodyJsonArr();
-		if(ReflectionUtil.isBaseDataType(parameter.getParameterType())){
-			return jsonArray.getObject(context.getParamIndex(), parameter.getParameterType());
+		if(jsonArray != null){
+			if(ReflectionUtil.isBaseDataType(parameter.getParameterType())){
+				return jsonArray.getObject(context.getParamIndex(), parameter.getParameterType());
+			}else{
+//				if(parameter.getMethod().getParameterTypes().length == 1){
+//					return JSON.parseArray(context.getReqStr(), parameter.getParameterType());
+//				}else{
+//					return jsonArray.getObject(context.getParamIndex(), parameter.getParameterType());
+//				}
+				return jsonArray.getObject(context.getParamIndex(), parameter.getParameterType());
+			}
+		//对方传入的是对象，而不是数组，那么只能只有一个参数
 		}else{
-			return jsonArray.getObject(context.getParamIndex(), parameter.getParameterType());
+			if(ReflectionUtil.isBaseDataType(parameter.getParameterType())){
+				JSONObject jsonObject = JSON.parseObject(context.getReqStr());
+				if(jsonObject.keySet() != null && jsonObject.keySet().size() == 1){
+					return jsonObject.getObject(jsonObject.keySet().iterator().next(), parameter.getParameterType());
+				}else{
+					throw new InfException(ResultCode.REQ_DATA_ERROR);
+				}
+			}else{
+				return JSON.parseObject(context.getReqStr(), parameter.getParameterType());
+			}
 		}
+		
 	}
 	
 	/**
