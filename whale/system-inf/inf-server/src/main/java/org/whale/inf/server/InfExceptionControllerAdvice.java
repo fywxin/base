@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +20,9 @@ import org.whale.system.common.exception.FieldValidErrorException;
 public class InfExceptionControllerAdvice {
 
 	private static final Logger logger = LoggerFactory.getLogger(InfExceptionControllerAdvice.class);
+	
+	@Autowired
+	private ServerIntfFilterRunner filterRunner;
 
 
 	@ExceptionHandler(FieldValidErrorException.class)
@@ -27,6 +31,8 @@ public class InfExceptionControllerAdvice {
 	public Result<?> fieldValidException(HttpServletResponse response, FieldValidErrorException e) {
 		ServerContext context = ServerContext.get();
 		response.addHeader("reqno", context.getReqno());
+		
+		filterRunner.exeException(context, e);
 		
 		return Result.fail(ResultCode.FIELD_VALID_ERROR, e.getError());
 	}
@@ -39,6 +45,8 @@ public class InfExceptionControllerAdvice {
 		ServerContext context = ServerContext.get();
 		response.addHeader("reqno", context.getReqno());
 		
+		filterRunner.exeException(context, e);
+		
 		return Result.fail(e.getCode(), e.getMessage());
 	}
 	
@@ -49,6 +57,8 @@ public class InfExceptionControllerAdvice {
 		logger.error("未知异常", e);
 		ServerContext context = ServerContext.get();
 		response.addHeader("reqno", context.getReqno());
+		
+		filterRunner.exeException(context, e);
 		
 		return Result.fail(ResultCode.UNKNOW_ERROR, e.getMessage());
 	}

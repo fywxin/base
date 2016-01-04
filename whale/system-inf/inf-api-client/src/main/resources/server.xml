@@ -13,28 +13,24 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 	
-	<!-- 启动对@AspectJ注解的支持 -->  
-	<aop:aspectj-autoproxy/>  
-	
-	<!-- 自动搜索@Component , @Service , @Repository等标注的类 不搜索@Controller的类 -->
-	<!-- 自动扫描组件，这里要把web下面的 controller去除，他们是在springMVC-servlet.xml中配置的，如果不去除会影响事务管理的。 -->
-	<context:component-scan base-package="org.whale" annotation-config="true">
-		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-	</context:component-scan>
-
-	<bean id="propertyPlaceholderConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath:conf.properties</value>
-			</list>
-		</property>
+	<bean class="org.whale.inf.client.ClientConf" id="clientConf">
+		<property name="appId" value="test"></property>
+		<property name="signKey" value="111111"></property>
+		<property name="serverHost" value="http://127.0.0.1:8080/inf-api-server"></property>
 	</bean>
-	
-	
-	<import resource="classpath:server.xml" />
-	
-	
-	
+    
+    <bean class="org.whale.inf.common.impl.EmptyEncryptService" id="emptyEncryptService"></bean>
+    
+    <bean class="org.whale.inf.client.impl.FastJsonClientCodec" id="fastJsonClientCodec"></bean>
+    
+    <bean class="org.whale.inf.client.impl.DefaultClientSignService" id="defaultClientSignService"></bean>
+    
+    <bean class="org.whale.inf.client.ClientIntfFilterRunner" id="clientIntfFilterRunner"></bean>
+    
+    
+    <bean id="userService" class="org.whale.inf.client.HttpInvokeFactory">
+        <property name="serviceInterface" value="org.whale.inf.api.UserInf"/>
+        <property name="serviceUrl" value="/user"/>
+    </bean>
 </beans>
 

@@ -18,6 +18,9 @@ public class NoMethodArgumentResolver {
 	@Autowired(required=false)
 	private SignService signService;
 	
+	@Autowired
+	private ServerIntfFilterRunner filterRunner;
+	
 	@Pointcut("@annotation(org.whale.system.annotation.web.RespBody)")
 	public void noArgAspect() {
 		
@@ -33,21 +36,33 @@ public class NoMethodArgumentResolver {
 		if(request == null){
 			throw new RuntimeException("未将Request对象设置到ThreadContext线程上下文中!");
 		}
+		
+		
 		ServerContext serverContext = new ServerContext();
 		ServerContext.set(serverContext);
-		serverContext.setAppId(request.getParameter("appId"));
+		
+		filterRunner.exeBeforeReq(serverContext);
+		
+		serverContext.setRequest(request);
+		serverContext.setAppId(request.getParameter("appid") == null ? request.getParameter("appId") : request.getParameter("appid"));
 		serverContext.setReqno(request.getParameter("reqno"));
 		serverContext.setUri(this.getUri(request));
+		serverContext.setSession(request.getParameter("session"));
+		serverContext.setTimestamp(request.getParameter("timestamp"));
+		serverContext.setVersion(request.getParameter("version"));
+		serverContext.setSign(request.getParameter("sign"));
+		serverContext.setFormat(request.getParameter("format"));
+		serverContext.setGzip(request.getParameter("gzip") == null ? false : "1".equals(request.getParameter("gzip")));
 		
 		//签名校验
 		if(signService != null){
 			String sign = this.signService.signReq(serverContext);
-			if(!sign.equals(request.getParameter("sign"))){
+			if(!sign.equals(serverContext.getSign())){
 				throw new InfException(ResultCode.SIGN_ERROR);
 			}
 		}
 		
-		
+		filterRunner.exeAfterReq(serverContext);
 	}
 	
 	/**

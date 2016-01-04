@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.whale.inf.common.InfContext;
 import org.whale.system.common.util.ThreadContext;
@@ -36,10 +37,31 @@ public class ServerContext implements InfContext {
 	
 	//当前解析参数位置
 	private transient Integer paramIndex;
+	
 	//请求URI
 	private String uri;
+	
 	//客户端APPID
 	private String appId;
+	
+	//登录后，参数必须携带该值
+	private String session;
+	
+	//时间戳
+	private String timestamp;
+	
+	//接口版本
+	private String version;
+	
+	//参数签名结果
+	private String sign;
+	
+	//响应格式
+	private String format;
+	
+	//是否启用压缩
+	private Boolean gzip;
+	
 	//请求流水号
 	private String reqno;
 	
@@ -59,6 +81,8 @@ public class ServerContext implements InfContext {
 	private boolean respEncryptFlag;
 	
 	private HttpServletRequest request;
+	
+	private HttpServletResponse response;
 	
 	public JSONObject readJSONObject(){
 		return bodyJsonArr.getJSONObject(this.paramIndex);
@@ -180,12 +204,67 @@ public class ServerContext implements InfContext {
 		this.reqno = reqno;
 	}
 
+	public String getSession() {
+		return session;
+	}
+
+	public void setSession(String session) {
+		this.session = session;
+	}
+
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getSign() {
+		return sign;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public Boolean getGzip() {
+		return gzip;
+	}
+
+	public void setGzip(Boolean gzip) {
+		this.gzip = gzip;
+	}
+	
+	public HttpServletResponse getResponse() {
+		return response;
+	}
+
+	public void setResponse(HttpServletResponse response) {
+		this.response = response;
+	}
+
 	@Override
 	public String toString() {
-		return "ServerContext [uri=" + uri + ", appId=" + appId + ", reqno="
-				+ reqno + ", reqStr=" + reqStr + ", respStr=" + respStr
-				+ ", args=" + args + ", rs=" + rs + ", attachment="
-				+ attachment + ", respEncryptFlag=" + respEncryptFlag + "]";
+		return "ServerContext [uri=" + uri + ", appId=" + appId + ", session="+session+ ", sign="+ sign+", reqno="
+				+ reqno + ", \nreqStr=" + reqStr + ", \nrespStr=" + respStr
+				+ ", \nargs=" + args + ", rs=" + rs + ", \nattachment=" + attachment+ "]";
 	}
 	
 	

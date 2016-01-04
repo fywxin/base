@@ -22,12 +22,6 @@
 
 	<!--支持@ResponseBody -->  
     <mvc:annotation-driven conversion-service="conversionService">
-        <mvc:argument-resolvers>
-		    <bean id="reqParamMethodArgumentResolver" class="org.whale.inf.server.ReqParamMethodArgumentResolver"></bean>
-        </mvc:argument-resolvers>
-        <mvc:return-value-handlers>
-            <bean id="respBodyMethodReturnValueHandler" class="org.whale.inf.server.RespBodyMethodReturnValueHandler" ></bean>
-        </mvc:return-value-handlers>
         <mvc:message-converters register-defaults="true">
             <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
                 <property name="supportedMediaTypes">
@@ -49,22 +43,7 @@
             </set>
         </property>
     </bean>
-    
-    <bean class="org.whale.inf.common.impl.EmptyEncryptService" id="emptyEncryptService"></bean>
-	
-	<!--必须放在此文件中，否则扫描不到 -->  
-	<bean class="org.whale.inf.server.impl.DefaultServerSignService" id="defaultServerSignService"></bean>
-	
-	<bean class="org.whale.inf.server.NoMethodArgumentResolver" id="noMethodArgumentResolver"></bean>
-	
-	<bean class="org.whale.inf.server.ServerIntfFilterRunner" id="serverIntfFilterRunner"></bean>
-    
-    <mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean class="org.whale.inf.server.EmptyInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors>
+
     
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
@@ -74,10 +53,14 @@
 	
 	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="10" />
 	
+	
 	<bean id="multipartResolver" 
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" 
 		p:defaultEncoding="UTF-8"
 		p:maxUploadSize="104857600" 
 		p:uploadTempDir="temp" 
 		/>
+	
+	
+	
 </beans>

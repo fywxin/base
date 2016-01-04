@@ -2,13 +2,17 @@ package org.whale.inf.server;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.whale.inf.api.Dept;
 import org.whale.inf.api.User;
 import org.whale.inf.common.Result;
 import org.whale.system.annotation.web.ReqParam;
 import org.whale.system.annotation.web.RespBody;
+import org.whale.system.base.Rs;
 import org.whale.system.common.exception.BusinessException;
 
 import com.alibaba.fastjson.JSON;
@@ -20,11 +24,6 @@ public class UserInfRouter {
 	@RespBody
 	@RequestMapping("/get")
 	public Result<User> get(@ReqParam long id) {
-		
-		if(id == 1){
-			throw new BusinessException("sadfasdf");
-		}
-		
 		System.out.println("id =  "+id);
 		User user = new User();
 		user.setId(id);
@@ -43,6 +42,7 @@ public class UserInfRouter {
 		return Result.success();
 	}
 
+	// [[{id:2,"@type":"org.whale.inf.api.Dept"},{id:1,"@type":"org.whale.inf.api.Dept"}]]
 	@RespBody
 	@RequestMapping("/testList")
 	public Result<User> testList(@ReqParam List<Dept> depts){
@@ -62,4 +62,5 @@ public class UserInfRouter {
 	public Result<Integer> emptyBodyTest(){
 		return Result.success(11111);
 	}
+	
 }

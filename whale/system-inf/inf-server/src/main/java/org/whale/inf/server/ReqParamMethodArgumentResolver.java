@@ -25,6 +25,7 @@ import org.whale.system.common.util.ReflectionUtil;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * 实现思路
@@ -41,14 +42,18 @@ import com.alibaba.fastjson.JSONArray;
  * @author 王金绍
  * @date 2015年11月12日 下午5:32:07
  */
-public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentResolver{
+public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentResolver {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ReqParamMethodArgumentResolver.class);
 	
 	@Autowired(required=false)
 	private EncryptService encryptService;
+	
 	@Autowired(required=false)
 	private SignService signService;
+	
+	@Autowired
+	private ServerIntfFilterRunner filterRunner;
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
@@ -63,14 +68,23 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 	public Object resolveArgument(MethodParameter parameter,
 			ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
 			WebDataBinderFactory binderFactory) throws Exception {
-		
 		Object param = null;
 		ServerContext context = ServerContext.get();
 		if(context == null){
 			context = new ServerContext();
+			filterRunner.exeBeforeReq(context);
+			
+			context.setRequest((HttpServletRequest)webRequest.getNativeRequest());
 			context.setUri(this.getUri(webRequest));
-			context.setAppId(webRequest.getParameter("appId"));
+			context.setAppId(webRequest.getParameter("appid") == null ? webRequest.getParameter("appId") : webRequest.getParameter("appid"));
 			context.setReqno(webRequest.getParameter("reqno"));
+			context.setSession(webRequest.getParameter("session"));
+			context.setTimestamp(webRequest.getParameter("timestamp"));
+			context.setVersion(webRequest.getParameter("version"));
+			context.setSign(webRequest.getParameter("sign"));
+			context.setFormat(webRequest.getParameter("format"));
+			context.setGzip(webRequest.getParameter("gzip") == null ? false : "1".equals(webRequest.getParameter("gzip")));
+			
 			context.setParamIndex(0);
 			byte[] datas = this.readBodyByte(webRequest);
 			if(datas != null && datas.length > 0){
@@ -79,8 +93,12 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 					datas = encryptService.decrypt(datas, context);
 				}
 				context.setReqStr(new String(datas, "UTF-8"));
-				JSONArray bodyJsonArr = JSON.parseArray(context.getReqStr());
-				context.setBodyJsonArr(bodyJsonArr);
+				
+				//入参数是数组
+				if(context.getReqStr().startsWith("[") || context.getReqStr().trim().startsWith("[")) {
+					JSONArray bodyJsonArr = JSON.parseArray(context.getReqStr());
+					context.setBodyJsonArr(bodyJsonArr);
+				}
 				
 				param = this.decode(parameter, context);
 				context.addArg(context.getParamIndex(), param);
@@ -91,20 +109,25 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 			if(logger.isDebugEnabled()){
 				logger.debug("服务端第一个参数Context对象:", context.toString());
 			}
+			
 			//签名校验
 			if(signService != null){
 				String sign = this.signService.signReq(context);
-				if(!sign.equals(webRequest.getParameter("sign"))){
+				if(!sign.equals(context.getSign())){
 					throw new InfException(ResultCode.SIGN_ERROR);
 				}
 			}
 			ServerContext.set(context);
 		}else{
+			if(context.getBodyJsonArr() == null){
+				logger.error("接口超过一个参数，入参必须是数组!");
+				throw new InfException(ResultCode.REQ_DATA_ERROR);
+			}
 			param = this.decode(parameter, context);
 			context.addArg(context.getParamIndex(), param);
 			context.incParamIndex();
 		}
-		
+		filterRunner.exeAfterReq(context);
 		return param;
 	}
 	
@@ -117,11 +140,31 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 	 */
 	private Object decode(MethodParameter parameter, ServerContext context) {
 		JSONArray jsonArray = context.getBodyJsonArr();
-		if(ReflectionUtil.isBaseDataType(parameter.getParameterType())){
-			return jsonArray.getObject(context.getParamIndex(), parameter.getParameterType());
+		if(jsonArray != null){
+			if(ReflectionUtil.isBaseDataType(parameter.getParameterType())){
+				return jsonArray.getObject(context.getParamIndex(), parameter.getParameterType());
+			}else{
+//				if(parameter.getMethod().getParameterTypes().length == 1){
+//					return JSON.parseArray(context.getReqStr(), parameter.getParameterType());
+//				}else{
+//					return jsonArray.getObject(context.getParamIndex(), parameter.getParameterType());
+//				}
+				return jsonArray.getObject(context.getParamIndex(), parameter.getParameterType());
+			}
+		//对方传入的是对象，而不是数组，那么只能只有一个参数
 		}else{
-			return jsonArray.getObject(context.getParamIndex(), parameter.getParameterType());
+			if(ReflectionUtil.isBaseDataType(parameter.getParameterType())){
+				JSONObject jsonObject = JSON.parseObject(context.getReqStr());
+				if(jsonObject.keySet() != null && jsonObject.keySet().size() == 1){
+					return jsonObject.getObject(jsonObject.keySet().iterator().next(), parameter.getParameterType());
+				}else{
+					throw new InfException(ResultCode.REQ_DATA_ERROR);
+				}
+			}else{
+				return JSON.parseObject(context.getReqStr(), parameter.getParameterType());
+			}
 		}
+		
 	}
 	
 	/**
@@ -180,6 +223,8 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 		}
 		return request.getRequestURI();
 	}
+
+	
 
 
 }
