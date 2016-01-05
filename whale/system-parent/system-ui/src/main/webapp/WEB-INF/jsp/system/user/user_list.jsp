@@ -56,7 +56,7 @@ $(function(){
 	        title: '用户名',
 	        sortable: true,
 	        formatter: function(value, row, index){
-				    return "<a href='javascript:;' onclick=\"go('查看用户名','${ctx}/user/goView?userId="+row.userId+"')\">"+row.userName+"</a>";
+				    return "<a href='javascript:;' onclick=\"go('用户查看','${ctx}/user/goView?userId="+row.userId+"')\">"+row.userName+"</a>";
 			}
 	    }, {
 	        field: 'realName',

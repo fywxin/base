@@ -73,6 +73,11 @@ public class ClientContext implements InfContext{
 	//是否异步
 	private boolean isAsyc;
 	
+	//当前请求session
+	private String session;
+	
+	
+	
 	private Map<String, Object> attachment = new HashMap<String, Object>();
 	
 	public ClientContext putParam(String key, Object value) {
@@ -226,6 +231,14 @@ public class ClientContext implements InfContext{
 	@Override
 	public void setArgs(List<Object> args) {
 		this.args = args;
+	}
+
+	public String getSession() {
+		return session;
+	}
+
+	public void setSession(String session) {
+		this.session = session;
 	}
 	
 	
