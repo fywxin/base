@@ -19,6 +19,7 @@ public enum ResultCode {
 	AUTH_ERROR("170", "权限错误"),
 	NET_ERROR("180", "网络异常"),
 	FIELD_VALID_ERROR("200", "字段参数校验错误"),//客户端需要处理
+	BUSINESS_ERROR("210", "业务异常"),//客户端需要处理
 	SESSION_INVAIAL("300", "Session过期"),//客户端需要处理
 	UNKNOW_ERROR("999", "未知错误");
 	

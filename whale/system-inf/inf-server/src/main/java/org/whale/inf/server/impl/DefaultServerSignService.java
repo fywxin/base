@@ -12,7 +12,7 @@ import org.whale.system.common.util.PropertiesUtil;
 
 public class DefaultServerSignService implements SignService {
 	
-	private static final Logger logger = LoggerFactory.getLogger(DefaultServerSignService.class);
+	private static final Logger logger = LoggerFactory.getLogger("server");
 
 	@Override
 	public String signReq(InfContext context) {
@@ -36,7 +36,7 @@ public class DefaultServerSignService implements SignService {
 		ServerContext serverContext = (ServerContext)context;
 		StringBuilder strb = new StringBuilder();
 		strb.append(serverContext.getUri())
-			.append(PropertiesUtil.getValue("inf.sign."+serverContext.getAppId()))
+			.append(PropertiesUtil.getValue("inf."+serverContext.getAppId()+".sign"))
 			.append(serverContext.getReqno());
 		
 		if(serverContext.getReqStr() != null){
@@ -68,8 +68,8 @@ public class DefaultServerSignService implements SignService {
 		StringBuilder strb = new StringBuilder();
 		strb.append(serverContext.getUri())
 			.append(serverContext.getReqno())
-			//.append(serverContext.getSession() == null ? "" : serverContext.getSession())
-			.append(PropertiesUtil.getValue("inf.sign."+serverContext.getAppId()));
+			.append(serverContext.getSession() == null ? "" : serverContext.getSession())
+			.append(PropertiesUtil.getValue("inf."+serverContext.getAppId()+".sign"));
 		
 		if(serverContext.getRespStr() != null){
 			strb.append(serverContext.getRespStr());

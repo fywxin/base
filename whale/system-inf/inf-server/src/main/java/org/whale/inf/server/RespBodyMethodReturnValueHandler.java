@@ -5,6 +5,8 @@ import java.lang.annotation.Annotation;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -13,11 +15,14 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.whale.inf.common.EncryptService;
 import org.whale.inf.common.SignService;
 import org.whale.system.annotation.web.RespBody;
+import org.whale.system.common.util.PropertiesUtil;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValueHandler {
+	
+	private static final Logger logger = LoggerFactory.getLogger("server");
 	
 	@Autowired(required=false)
 	private EncryptService encryptService;
@@ -53,14 +58,16 @@ public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValu
 			context.setResponse(response);
 			
 			filterRunner.exeBeforeResp(context);
-			
 			out = response.getOutputStream();
 			
-			//String text = JSON.toJSONString(obj, this.getFeatures());
-	        //保证客户端可以反序列化成功
-	        String text = JSON.toJSONString(returnValue, SerializerFeature.WriteClassName);
+			String text =  null;
+			if(PropertiesUtil.getValueBoolean("inf."+context.getAppId()+".serializer", true)){//是否开启
+				text = JSON.toJSONString(returnValue, SerializerFeature.WriteClassName);
+			}else{
+				text = JSON.toJSONString(returnValue);
+			}
+			
 	        context.setRespStr(text);
-	        
 	        response.addHeader("reqno", context.getReqno());
 	        
 	        byte[] datas = text.getBytes("UTF-8");
@@ -72,6 +79,8 @@ public class RespBodyMethodReturnValueHandler implements HandlerMethodReturnValu
 	        	datas = this.encryptService.encrypt(datas, context);
 	        	response.addHeader("encrypt", "true");
 	        }
+	        
+	        logger.info("响应报文:{}", text);
 	        
 	        filterRunner.exeAfterResp(context);
 	        

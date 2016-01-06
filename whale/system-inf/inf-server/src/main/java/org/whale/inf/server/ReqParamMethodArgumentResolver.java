@@ -44,7 +44,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentResolver {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ReqParamMethodArgumentResolver.class);
+	private static final Logger logger = LoggerFactory.getLogger("server");
 	
 	@Autowired(required=false)
 	private EncryptService encryptService;
@@ -106,9 +106,8 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 			}else{
 				context.setReqStr(null);
 			}
-			if(logger.isDebugEnabled()){
-				logger.debug("服务端第一个参数Context对象:", context.toString());
-			}
+			
+			logger.info("请求报文：{}\n请求参数：{}", context.getReqStr(), context.toParamStr());
 			
 			//签名校验
 			if(signService != null){
@@ -223,8 +222,5 @@ public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentReso
 		}
 		return request.getRequestURI();
 	}
-
-	
-
 
 }

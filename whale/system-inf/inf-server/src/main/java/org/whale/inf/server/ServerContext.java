@@ -267,6 +267,8 @@ public class ServerContext implements InfContext {
 				+ ", \nargs=" + args + ", rs=" + rs + ", \nattachment=" + attachment+ "]";
 	}
 	
-	
+	public String toParamStr(){
+		return "appId=" + appId +", uri=" + uri+", version="+ version +", reqno="+ reqno+ ", sign="+ sign;
+	}
 	
 }

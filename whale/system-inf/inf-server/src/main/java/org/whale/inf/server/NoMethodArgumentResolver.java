@@ -6,6 +6,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.whale.inf.common.InfException;
 import org.whale.inf.common.ResultCode;
@@ -14,6 +16,8 @@ import org.whale.system.common.util.ThreadContext;
 
 @Aspect
 public class NoMethodArgumentResolver {
+	
+	private static final Logger logger = LoggerFactory.getLogger("server");
 	
 	@Autowired(required=false)
 	private SignService signService;
@@ -53,6 +57,8 @@ public class NoMethodArgumentResolver {
 		serverContext.setSign(request.getParameter("sign"));
 		serverContext.setFormat(request.getParameter("format"));
 		serverContext.setGzip(request.getParameter("gzip") == null ? false : "1".equals(request.getParameter("gzip")));
+		
+		logger.info("请求报文：空\n请求参数：{}", serverContext.toParamStr());
 		
 		//签名校验
 		if(signService != null){
