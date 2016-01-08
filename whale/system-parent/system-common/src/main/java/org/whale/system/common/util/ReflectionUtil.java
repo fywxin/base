@@ -680,7 +680,44 @@ public class ReflectionUtil {
 					}
 	    			continue;
 	    		}
-	    		writeField(field, m, entry.getValue(), true);
+	    		try{
+	    			writeField(field, m, entry.getValue(), true);
+	    		}catch(IllegalArgumentException e){
+	    			if(field.getType().equals(Date.class)){
+	    				if(entry.getValue().getClass().equals(Long.class)){
+	    					writeField(field, m, TimeUtil.parse2Date((Long)entry.getValue()), true);
+	    				}else if(entry.getValue().getClass().equals(String.class)){
+	    					writeField(field, m, TimeUtil.parseTime((String)entry.getValue()), true);
+	    				}else{
+	    					throw e;
+	    				}
+	    			} else if(field.getType().equals(Boolean.class) 
+	    					&& (entry.getValue().getClass().equals(Integer.class) || 
+	    							entry.getValue().getClass().equals(Long.class) || 
+	    							entry.getValue().getClass().equals(Short.class) || 
+	    							entry.getValue().getClass().equals(String.class))){
+	    				Integer val = null;
+	    				if(entry.getValue().getClass().equals(Integer.class)){
+	    					val = (Integer) entry.getValue();
+	    				}else if(entry.getValue().getClass().equals(Long.class)){
+	    					Long valLong = (Long) entry.getValue();
+	    					val = valLong.intValue();
+	    				}else if(entry.getValue().getClass().equals(Short.class)){
+	    					Short valShort = (Short) entry.getValue();
+	    					val = valShort.intValue();
+	    				}else{
+	    					val = Integer.parseInt(entry.getValue().toString());
+	    				}
+	    				if(val > 0){
+	    					writeField(field, m, Boolean.TRUE, true);
+	    				}else{
+	    					writeField(field, m, Boolean.FALSE, true);
+	    				}
+	    			}else{
+	    				throw e;
+	    			}
+	    		}
+	    		
 	    	}
     	} catch (Exception e) {
 			throw new SysException("类["+clazz+"]写入字段["+field+"]值异常", e);
@@ -713,4 +750,66 @@ public class ReflectionUtil {
         );   
     }
 	
+    
+    public static void main(String[] args) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", 2);
+		map.put("name", "asdfasd");
+		map.put("sex", -1);
+		map.put("date", 1);
+		
+		Test t = ReflectionUtil.map2Clazz(map,Test.class);
+		System.out.println(t);
+	}
+    
+    public static class Test{
+    	private Integer id;
+    	
+    	private String name;
+    	
+    	private Boolean sex;
+    	
+    	private Date date;
+
+		public Integer getId() {
+			return id;
+		}
+
+		public void setId(Integer id) {
+			this.id = id;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public Boolean getSex() {
+			return sex;
+		}
+
+		public void setSex(Boolean sex) {
+			this.sex = sex;
+		}
+
+		public Date getDate() {
+			return date;
+		}
+
+		public void setDate(Date date) {
+			this.date = date;
+		}
+
+		@Override
+		public String toString() {
+			return "Test [id=" + id + ", name=" + name + ", sex=" + sex
+					+ ", date=" + date + "]";
+		}
+
+		
+    	
+    }
 }

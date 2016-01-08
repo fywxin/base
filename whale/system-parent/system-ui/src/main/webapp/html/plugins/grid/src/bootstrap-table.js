@@ -1467,9 +1467,11 @@
                     that.header.formatters[j], [value, item, i], value); 
                 //wjs----------
                 var titleLabel;
-                if(column.fix && value && column.field != 'opt'){
-                	titleLabel = value.replace(/\"/g,"'"); 
-                	titleLabel = titleLabel.replace(/<\/?[^>]*>/g,'');
+                if(column.fix && value && column.field != 'opt' && (typeof value == "string")){
+                	try{
+	                	titleLabel = value.replace(/\"/g,"'"); 
+	                	titleLabel = titleLabel.replace(/<\/?[^>]*>/g,'');
+                	}catch(e){}
                 }
                 //----------wjs
                 
