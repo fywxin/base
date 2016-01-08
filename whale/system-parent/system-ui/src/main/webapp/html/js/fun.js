@@ -183,7 +183,44 @@
 						}
 					});
 				});
-			
+		},
+		
+		run: function(param){
+			if($.isFunction(param.beforeAjax)){
+				param.beforeAjax();
+			}
+			$.ajax({
+				url : param.url,
+				data : param.datas,
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				dataType: 'json',
+				type: 'post',
+				cache: false,
+				error: function(){
+					$.alert('服务请求异常');
+					if($.isFunction(param.onError)){
+						param.onError();
+					}
+				},
+				success: function(obj){
+					if(obj.rs){
+						if($.isFunction(param.onSuccess)){
+							param.onSuccess(obj);
+						}else{
+							$.msg(obj.msg);
+							try{
+								search();
+							}catch(e){}
+						}
+					}else{
+						if($.isFunction(param.onFail)){
+							param.onFail(obj);
+						}else{
+							$.alert(obj.msg);
+						}
+					}
+				}
+			});
 		},
 		
 		alert: function(str){
