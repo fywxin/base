@@ -85,7 +85,7 @@ public class ValidUtil {
 		for(Field field : fields){
 			msg = valid(obj, field, append);
 			if(msg != null){
-				if(getValidKeyParser() != null){
+				if(getValidKeyParser() != null && validKeyParser.support(obj)){
 					map.put(validKeyParser.parseKey(obj, field.getName()), msg);
 				} else{
 					map.put(field.getName(), msg);

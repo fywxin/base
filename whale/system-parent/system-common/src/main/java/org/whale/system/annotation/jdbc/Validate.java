@@ -74,6 +74,7 @@ public @interface Validate {
 	 * 数值型数据取值范围区间验证规则，兼容 int、long、float、double
 	 */
 	public double[] limit() default {};
+
 	
 	/**
 	 * 通过spring自带的el表达式进行验证。注意该表达式返回值应该为布尔型<br>

@@ -24,4 +24,11 @@ public class OrmValidKeyParser implements ValidKeyParser {
 		return ormColumn.getCnName();
 	}
 
+	@Override
+	public boolean support(Object obj) {
+		return this.ormContext.contain(obj.getClass());
+	}
+
+	
+	
 }
