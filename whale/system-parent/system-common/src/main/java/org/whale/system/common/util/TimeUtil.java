@@ -111,6 +111,8 @@ public class TimeUtil {
 	 * @return
 	 */
 	public static Date parse2Date(Long time){
+		if(time == null)
+			return null;
 		return new Date(time);
 	}
 	
@@ -119,6 +121,9 @@ public class TimeUtil {
 	}
 	
 	public static String formatTime(Date date, String format){
+		if(date == null){
+			return null;
+		}
 		DateFormat df = new SimpleDateFormat(format);
 		return df.format(date);
 	}
@@ -155,7 +160,5 @@ public class TimeUtil {
 	public static Long countSecond(Long time){
 		return time / 1000;
 	}
-	
-	
 
 }
