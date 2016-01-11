@@ -18,6 +18,7 @@ hs_err_pid*
 .settings/
 target/
 *.log
+*.iml
 Thumbs.db
 logs/
 rebel.xml
