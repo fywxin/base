@@ -91,9 +91,6 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 				List<Map<String, Object>> list = baseDao.getJdbcTemplate().queryForList(queryObjectSql, AnnotationUtil.getFieldValue(obj, ormTable.getIdCol().getField()));
 				if(list == null || list.size() < 1)
 					throw new BusinessException("找不到 Id["+val+"] 的记录");
-				if(list.get(0).get("oldValue").equals(val)){
-					continue;
-				}
 				
 				String sql = "select count(1) from "+ormTable.getTableDbName()
 						+" where "+col.getSqlName()+"=?";
@@ -128,7 +125,6 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 				vals = valMap.get(col);
 				if(vals == null){
 					vals = new ArrayList<Object>(objs.size());
-					valMap.put(col, vals);
 				}
 				if(vals.contains(val)){
 					throw new BusinessException(col.getCnName()+"["+val+"] 已存在值");

@@ -94,8 +94,6 @@ public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> 
 			throw new OrmException("SQL 返回结果不能过一条记录");
 		
 		Collection<Object> values = rs.get(0).values();
-		if(values == null)
-			return ;
 		if(values.size() != 1)
 			throw new OrmException("SQL 返回结果单条记录中不能有多个字段集");
 		//设值

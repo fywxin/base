@@ -34,7 +34,7 @@ public class SqlUpdateBulider {
 				continue;
 			//乐观锁 t.version = t.version+1
 			if(col.getIsOptimisticLock()){
-				sql.append(" t.").append(col.getSqlName()).append("=(t.").append(col.getSqlName()).append("+1),");
+				sql.append(" t.").append(col.getSqlName()).append("(t.").append(col.getSqlName()).append("-1),");
 				continue;
 			}
 			sql.append(" t.").append(col.getSqlName()).append("=?,");
@@ -42,7 +42,6 @@ public class SqlUpdateBulider {
 			fields.add(col.getField());
 			sCols.add(col);
 		}
-		sql.deleteCharAt(sql.length()-1);
 		sql.append(" WHERE ");
 		OrmColumn idCol = ormTable.getIdCol();
 		sql.append("t.").append(idCol.getSqlName()).append("=?");
