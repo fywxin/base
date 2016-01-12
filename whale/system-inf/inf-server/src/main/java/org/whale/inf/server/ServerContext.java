@@ -16,7 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 /**
  * 接口请求上下文
  * 
- * @author 王金绍
+ * @author wjs
  * @date 2015年12月1日 下午4:20:16
  */
 public class ServerContext implements InfContext {

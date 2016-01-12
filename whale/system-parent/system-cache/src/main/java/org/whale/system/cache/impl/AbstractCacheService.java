@@ -16,7 +16,7 @@ import com.alibaba.fastjson.JSON;
 /**
  * 缓存模板抽象类
  *
- * @author 王金绍
+ * @author wjs
  * 2015年4月25日 下午10:25:22
  */
 public abstract class AbstractCacheService<M extends Serializable> implements ICacheService<M> {

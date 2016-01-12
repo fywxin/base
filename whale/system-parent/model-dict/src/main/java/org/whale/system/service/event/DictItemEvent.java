@@ -5,7 +5,7 @@ import org.whale.system.base.BaseCrudEvent;
 import org.whale.system.domain.DictItem;
 
 /**
- * @author 王金绍
+ * @author wjs
  * @date 2013-9-18 下午3:10:09 
  */
 public interface DictItemEvent extends BaseCrudEvent<DictItem>, PriorityOrdered{

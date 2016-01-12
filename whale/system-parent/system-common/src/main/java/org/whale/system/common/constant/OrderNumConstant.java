@@ -3,7 +3,7 @@ package org.whale.system.common.constant;
 /**
  * 初始化顺序登记类
  *
- * @author 王金绍
+ * @author wjs
  * @date 2015年1月6日 上午9:58:34
  */
 public class OrderNumConstant {

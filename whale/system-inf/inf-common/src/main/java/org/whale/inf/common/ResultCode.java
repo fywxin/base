@@ -3,7 +3,7 @@ package org.whale.inf.common;
 /**
  * 公共异常编码
  * 
- * @author 王金绍
+ * @author wjs
  * 2015年11月8日 上午12:37:35
  */
 public enum ResultCode {

@@ -11,7 +11,7 @@ import org.whale.system.jdbc.orm.entry.Atable;
 /**
  * 反射常用对象缓存
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午1:45:02
  */
 @Component("entryContext")

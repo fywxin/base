@@ -7,7 +7,7 @@ import org.whale.system.domain.User;
 
 /**
  * 用户事件监听接口
- * @author 王金绍
+ * @author wjs
  * @date 2013-12-17 上午11:35:29 
  *
  */

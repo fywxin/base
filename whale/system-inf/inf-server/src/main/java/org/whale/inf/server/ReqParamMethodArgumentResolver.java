@@ -39,7 +39,7 @@ import com.alibaba.fastjson.JSONObject;
  * 
  * 	插件：	1. 流读取前
  * 
- * @author 王金绍
+ * @author wjs
  * @date 2015年11月12日 下午5:32:07
  */
 public class ReqParamMethodArgumentResolver implements HandlerMethodArgumentResolver {

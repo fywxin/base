@@ -3,7 +3,7 @@ package org.whale.system.jdbc.orm.alter;
 /**
  * 创建表格
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午1:51:02
  */
 public interface AlterTableService {

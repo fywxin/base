@@ -24,7 +24,7 @@ import ${domain.pkgName!"org.whale.system"}.domain.${domain.domainName};
 /**
  * ${domain.domainCnName}控制器
  *
- * @author 王金绍
+ * @author wjs
  * ${.now}
  */
 @Controller

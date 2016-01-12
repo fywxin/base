@@ -16,7 +16,7 @@ import ${domain.pkgName!"org.whale.system"}.domain.${domain.domainName};
 /**
  * ${domain.domainCnName}管理
  *
- * @author 王金绍
+ * @author wjs
  * ${.now}
  */
 @Service

@@ -3,7 +3,7 @@ package org.whale.system.common.exception;
 /**
  * SCP 上传文件异常
  * 
- * @author 王金绍
+ * @author wjs
  * @date 2015年11月29日 下午4:08:28
  */
 public class ScpFileException extends BaseException {

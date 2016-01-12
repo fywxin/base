@@ -21,7 +21,7 @@ import com.alibaba.fastjson.JSON;
 /**
  * 邮件发送器
  * 
- * @author 王金绍
+ * @author wjs
  * 2014年10月26日 下午7:59:17
  */
 public class MailUtil {

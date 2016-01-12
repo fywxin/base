@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * 字段排序
  *
- * @author 王金绍
+ * @author wjs
  * @date 2015年1月5日 下午7:52:34
  */
 @Retention(RetentionPolicy.RUNTIME)

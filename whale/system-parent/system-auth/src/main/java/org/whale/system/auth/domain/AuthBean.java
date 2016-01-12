@@ -11,7 +11,7 @@ import org.whale.system.common.util.Strings;
 /**
  * 权限标签实体
  * 
- * @author 王金绍
+ * @author wjs
  * @date 2014年12月23日 下午9:50:26
  */
 public class AuthBean {

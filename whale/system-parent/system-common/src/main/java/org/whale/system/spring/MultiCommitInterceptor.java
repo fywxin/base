@@ -12,7 +12,7 @@ import java.util.UUID;
 
 /**
  * 
- * User: 王金绍
+ * User: wjs
  * Date: 2015/10/14
  * Time: 16:20
  */

@@ -6,7 +6,7 @@ import org.whale.system.jdbc.orm.entry.OrmColumn;
 /**
  * 字段扩展信息读取，将读取到的扩张信息保存到 extInfo 字段
  *
- * @author 王金绍
+ * @author wjs
  * 2015年4月26日 上午9:01:39
  */
 public interface ColumnExtInfoReader extends PriorityOrdered {

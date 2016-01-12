@@ -13,7 +13,7 @@ import org.whale.system.common.util.PropertiesUtil;
 /**
  * 实体对象
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月10日-上午10:12:48
  */
 @Table(value="sys_domian", cnName="实体对象")
@@ -55,7 +55,7 @@ public class Domain extends BaseEntry{
 	//代码路径
 	private String codePath;
 	
-	private String author = PropertiesUtil.getValue("author", "王金绍");
+	private String author = PropertiesUtil.getValue("author", "wjs");
 	
 	//主键
 	private Attr idAttr;

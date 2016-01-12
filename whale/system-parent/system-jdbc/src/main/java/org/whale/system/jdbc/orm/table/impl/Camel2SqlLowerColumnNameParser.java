@@ -7,7 +7,7 @@ import org.whale.system.jdbc.util.OrmUtil;
 /**
  * 驼峰规则转换器 驼峰转小写下划线
  * userName user_name
- * @author 王金绍
+ * @author wjs
  * 2015年10月13日 下午11:18:44
  */
 @Component

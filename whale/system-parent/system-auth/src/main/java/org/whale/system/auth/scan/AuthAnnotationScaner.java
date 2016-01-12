@@ -18,7 +18,7 @@ import org.whale.system.common.util.Strings;
 /**
  * 权限扫描器
  * 
- * @author 王金绍
+ * @author wjs
  * @date 2014年12月23日 下午10:09:18
  */
 @Component

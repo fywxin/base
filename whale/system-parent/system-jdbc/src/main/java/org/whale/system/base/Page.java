@@ -10,7 +10,7 @@ import org.whale.system.common.exception.SysException;
 /**
  * 分页对象
  *
- * @author 王金绍 2014年9月6日-下午1:49:23
+ * @author wjs 2014年9月6日-下午1:49:23
  */
 public class Page implements Serializable {
 	private static final long serialVersionUID = -4710867631907261303L;

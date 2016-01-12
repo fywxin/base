@@ -3,7 +3,7 @@ package org.whale.system.common.exception;
 /**
  * 基础异常类
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月18日-下午4:20:25
  */
 public class BaseException extends RuntimeException {

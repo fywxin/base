@@ -9,7 +9,7 @@ import org.whale.system.domain.DictItem;
 /**
  * 字典接口
  * 
- * @author 王金绍
+ * @author wjs
  *
  */
 public interface IDictIntf {

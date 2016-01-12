@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * 使用的数据库类型
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月7日-下午4:29:46
  */
 public class DbKind {

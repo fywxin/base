@@ -8,7 +8,7 @@ import org.whale.system.base.BaseEntry;
 
 /**
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月23日-上午9:34:26
  */
 @Table(value="sys_auth", cnName="权限")

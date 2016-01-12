@@ -3,7 +3,7 @@ package org.whale.system.common.exception;
 /**
  * 系统异常
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午1:28:45
  */
 public class SysException extends BaseException {

@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 线程上下文
  * TODO ab测试是否存在内存溢出
- * @author 王金绍
+ * @author wjs
  * 2014年9月17日-下午12:02:35
  */
 public class ThreadContext {

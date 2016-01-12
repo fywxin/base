@@ -29,7 +29,7 @@ import org.whale.system.common.exception.SysException;
 /**
  * 反射工具类.
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午1:32:39
  */
 public class ReflectionUtil {
@@ -308,7 +308,7 @@ public class ReflectionUtil {
 	/**
 	 * 
 	 *功能说明: 得到本类物理路径所在文件夹
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2012-10-25 下午4:01:41
 	 *@return String
 	 *

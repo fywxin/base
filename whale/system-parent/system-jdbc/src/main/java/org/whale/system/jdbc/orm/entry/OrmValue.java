@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 将运行时objcet对象依照OrmSql对象结构将值取出
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午1:52:10
  */
 public class OrmValue extends OrmSql {

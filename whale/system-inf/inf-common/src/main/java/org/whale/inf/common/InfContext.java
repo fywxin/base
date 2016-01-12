@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 接口请求上线文
  * 
- * @author 王金绍
+ * @author wjs
  * @date 2015年12月1日 下午3:52:49
  */
 public interface InfContext {

@@ -17,7 +17,7 @@ import org.whale.system.jdbc.util.AnnotationUtil;
 /**
  * 解析@SQL 默认不启用
  * 
- * @author 王金绍
+ * @author wjs
  * 2014年9月17日-上午11:28:52
  */
 public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> extends BaseDaoDllFilterWarpper<T, PK> {
@@ -64,7 +64,7 @@ public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> 
 	/**
 	 * 
 	 *功能说明: 执行sql，并将值设置给该字段
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-18 下午6:10:56
 	 *@param obj
 	 *@param col void

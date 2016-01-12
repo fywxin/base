@@ -11,7 +11,7 @@ import com.cyou.fz.commons.mybatis.selecterplus.mybatis.annotation.Id;
 import com.cyou.fz.commons.mybatis.selecterplus.mybatis.annotation.Table;
 
 /**
-* Created by 王金绍 on ${.now?date}.
+* Created by wjs on ${.now?date}.
 */
 @Table("${domain.domainSqlName}")
 public class ${domain.domainName} {

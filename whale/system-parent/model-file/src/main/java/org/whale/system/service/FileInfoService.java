@@ -11,7 +11,7 @@ import org.whale.system.spring.SpringContextHolder;
 /**
  * 文件 管理
  *
- * @author 王金绍
+ * @author wjs
  * 2014-9-27 17:08:39
  */
 @Service

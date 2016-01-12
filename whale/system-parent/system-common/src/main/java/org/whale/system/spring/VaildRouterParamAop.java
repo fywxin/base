@@ -19,7 +19,7 @@ import org.whale.system.common.util.ValidUtil;
  * TODO valid 是否会被spring自动执行
  * 
  * http://chaoren3166gg.iteye.com/blog/2001734
- * @author 王金绍
+ * @author wjs
  * @date 2015年11月10日 下午6:33:53
  */
 public class VaildRouterParamAop {

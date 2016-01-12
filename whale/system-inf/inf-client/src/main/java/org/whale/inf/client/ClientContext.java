@@ -12,7 +12,7 @@ import org.whale.system.common.util.ThreadContext;
 /**
  * 客户端请求上下文
  * 
- * @author 王金绍
+ * @author wjs
  * 2015年11月8日 上午12:08:04
  */
 public class ClientContext implements InfContext{

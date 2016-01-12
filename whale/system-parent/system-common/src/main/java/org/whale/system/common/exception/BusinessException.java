@@ -3,7 +3,7 @@ package org.whale.system.common.exception;
 /**
  * 业务异常
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月29日-上午11:42:44
  */
 public class BusinessException extends BaseException {

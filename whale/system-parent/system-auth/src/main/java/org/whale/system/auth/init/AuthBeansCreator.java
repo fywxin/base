@@ -12,7 +12,7 @@ import org.whale.system.common.util.Bootable;
 /**
  * 权限扫描器初始化系统注册的权限
  *
- * @author 王金绍
+ * @author wjs
  * @date 2015年1月5日 下午5:28:53
  */
 @Component

@@ -13,7 +13,7 @@ import org.whale.system.common.util.TreeNode;
 
 /**
  * 
- * @author 王金绍
+ * @author wjs
  *
  */
 @Table(value="sys_menu", cnName="菜单")

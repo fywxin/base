@@ -19,7 +19,7 @@ public class ValueDelBulider {
 	/**
 	 * 
 	 *功能说明: 删除单条为主键的记录
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-15 下午12:45:50
 	 *@param pk
 	 *@param ormSql
@@ -36,7 +36,7 @@ public class ValueDelBulider {
 	/**
 	 * 
 	 *功能说明: 批量删除多条为主键的记录
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-15 下午12:55:33
 	 *@param pks
 	 *@param ormSql
@@ -56,7 +56,7 @@ public class ValueDelBulider {
 	/**
 	 * 
 	 *功能说明: 按对象删除记录，只要主键或复合主键不为空
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-15 下午1:16:50
 	 *@param obj
 	 *@param ormSql
@@ -75,7 +75,7 @@ public class ValueDelBulider {
 	/**
 	 * 
 	 *功能说明:
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-15 下午1:17:27
 	 *@param objs
 	 *@param ormSql
@@ -97,7 +97,7 @@ public class ValueDelBulider {
 	/**
 	 * 
 	 *功能说明: 按对象删除记录，只要主键或复合主键不为空
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-15 下午1:16:50
 	 *@param obj
 	 *@param ormSql

@@ -47,7 +47,7 @@ import org.whale.system.jdbc.util.DbKind;
 /**
  * 从实体中解析ORM元注释，构建OrmTable对象
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午1:59:55
  */
 @Component
@@ -82,7 +82,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明: 解析实体类元注释，生成OrmTable对象
-	 *创建人:王金绍
+	 *创建人:wjs
 	 *创建时间:2013-3-28 上午9:09:51
 	 *@param clazz
 	 *@return
@@ -126,7 +126,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明: 封装table
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-19 下午12:44:08
 	 *@param clazz
 	 *@param ormTable void
@@ -173,7 +173,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明: 获取所有的@Column 列表
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-19 下午1:44:18
 	 *@param table
 	 *@return List<OrmColumn>
@@ -420,7 +420,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明:设置状态字段
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-4-23 下午1:38:26
 	 *@param ormColumn void
 	 *
@@ -437,7 +437,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	 * 
 	 *功能说明: 设置 ormTable 中的 idCol 和 pkCols
 	 *			检查乐观锁字段是否超过1个
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-19 下午1:59:36
 	 *@param ormTable void
 	 *
@@ -571,7 +571,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明: 如果@column为定义name，则安装规则器从字段中生成
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-19 下午1:42:18
 	 *@param fieldName
 	 *@param column
@@ -594,7 +594,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明: 获取字段对于的 java.sql.Types 类型值
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-19 下午1:43:33
 	 *@param col
 	 *@param column

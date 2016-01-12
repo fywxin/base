@@ -8,7 +8,7 @@ import org.whale.system.jdbc.util.OrmUtil;
 /**
  * 驼峰规则转换器
  * 
- * @author 王金绍
+ * @author wjs
  * 2015年10月13日 下午11:18:34
  */
 @Component

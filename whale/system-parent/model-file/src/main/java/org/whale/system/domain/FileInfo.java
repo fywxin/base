@@ -14,7 +14,7 @@ import org.whale.system.domain.FileInfo;
 /**
  * 文件
  *
- * @author 王金绍
+ * @author wjs
  * @Date 2014-9-27
  */
 @Table(value="sys_file_info", cnName="文件")

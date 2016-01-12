@@ -25,7 +25,7 @@ import org.whale.system.jdbc.util.RowMapperBulider;
 /**
  * ORM 容器上下文
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月7日-下午4:59:41
  */
 @Component
@@ -49,7 +49,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 添加一个元注释
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-18 下午6:25:53
 	 *@param clazz void
 	 *
@@ -127,7 +127,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取类对象的rowMapper
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-4-9 上午9:56:03
 	 *@param clazz
 	 *@return RowMapper<?>
@@ -144,7 +144,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取某个类的所有OrmSql
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-14 下午4:03:42
 	 *@param clazz
 	 *@return List<OrmSql>
@@ -158,7 +158,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取不同操作类型对应的OrmSql
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-14 下午4:03:22
 	 *@param clazz
 	 *@param opType
@@ -181,7 +181,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取类的@Table 定义信息
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-9 下午1:40:19
 	 *@param clazz
 	 *@return OrmTable
@@ -194,7 +194,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取类的所有@Column 定义信息
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-9 下午1:44:48
 	 *@param clazz
 	 *@return List<OrmColumn>
@@ -210,7 +210,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取类中字段{colName}的@Column 定义信息
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-9 下午1:45:21
 	 *@param clazz
 	 *@param colName
@@ -231,7 +231,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取类中ID主键字段的@Column 定义信息
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-9 下午1:46:00
 	 *@param clazz
 	 *@return OrmColumn
@@ -247,7 +247,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取类的所有@Column 对应的 Field 对象列表
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-9 下午1:46:20
 	 *@param clazz
 	 *@return List<Field>
@@ -267,7 +267,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取类中字段{colName}的 Field 对象
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-9 下午1:47:14
 	 *@param clazz
 	 *@param colName
@@ -288,7 +288,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明:获取类中ID主键字段的 Field 对象
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-9 下午1:47:47
 	 *@param clazz
 	 *@return Field
@@ -304,7 +304,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取类中{colName}字段的值
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-9 下午1:48:09
 	 *@param obj
 	 *@param colName
@@ -322,7 +322,7 @@ public class OrmContext extends EntryContext {
 	/**
 	 * 
 	 *功能说明: 获取类中ID主键字段的值
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-9 下午1:48:09
 	 *@param obj
 	 *@param colName

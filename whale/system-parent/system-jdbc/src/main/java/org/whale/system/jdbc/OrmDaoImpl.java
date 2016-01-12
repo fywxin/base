@@ -344,7 +344,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	/**
 	 * 
 	 *功能说明: 批量处理
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-4-11 下午3:57:41
 	 *@param ormValues
 	 *@return int[]

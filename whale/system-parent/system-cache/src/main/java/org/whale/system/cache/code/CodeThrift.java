@@ -7,7 +7,7 @@ import java.io.Serializable;
  * http://www.micmiu.com/soa/rpc/thrift-sample/
  * http://itindex.net/detail/46937-thrift-%E5%8E%9F%E7%90%86-java
  *
- * @author 王金绍
+ * @author wjs
  * 2015年4月26日 上午12:29:58
  */
 public class CodeThrift<M extends Serializable> extends AbstractCode<M> {

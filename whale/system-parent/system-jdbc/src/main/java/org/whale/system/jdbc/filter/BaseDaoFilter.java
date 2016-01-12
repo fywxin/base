@@ -10,7 +10,7 @@ import org.whale.system.jdbc.filter.query.BaseDaoQueryFilter;
  * 
  * 包含  BaseDaoDllFilter + BaseDaoQueryFilter
  *
- * @author 王金绍
+ * @author wjs
  * 2015年4月26日 下午12:01:31
  */
 public interface BaseDaoFilter<T extends Serializable,PK extends Serializable> extends BaseDaoDllFilter<T, PK>, BaseDaoQueryFilter<T, PK> {

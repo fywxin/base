@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 错误校验元注释
  * 
- * @author 王金绍
+ * @author wjs
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

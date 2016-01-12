@@ -32,7 +32,7 @@ public interface ICacheService<M extends Serializable> {
 	/**
 	 * 
 	 *功能说明: 往本缓中存入一条记录，seconds 秒后过期
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-4-28 下午3:06:19
 	 *@param key
 	 *@param value void

@@ -24,7 +24,7 @@ import org.whale.system.domain.RoleAuth;
 /**
  * 
  * 
- * @author 王金绍
+ * @author wjs
  * @date 2014年12月23日 下午10:56:48
  */
 public class AuthBeanStore {

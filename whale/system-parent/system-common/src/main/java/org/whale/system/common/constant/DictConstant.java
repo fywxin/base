@@ -3,7 +3,7 @@ package org.whale.system.common.constant;
 /**
  * 字典常量
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午1:29:18
  */
 public class DictConstant {

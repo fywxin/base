@@ -20,7 +20,7 @@ import org.whale.system.spring.SpringContextHolder;
  * 		@org.apache.ibatis.jdbc.SQL
  * 		https://github.com/nutzam/nutz/blob/master/src/org/nutz/dao/Cnd.java
  * 
- * @author 王金绍
+ * @author wjs
  */
 public class AsynQuery implements Iquery{
 

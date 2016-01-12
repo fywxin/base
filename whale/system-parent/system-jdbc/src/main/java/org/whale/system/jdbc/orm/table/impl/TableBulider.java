@@ -13,7 +13,7 @@ import org.whale.system.jdbc.orm.entry.Atable;
 /**
  * 获取类反射对象信息
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午1:48:33
  */
 @Component

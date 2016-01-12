@@ -26,7 +26,7 @@ import com.alibaba.fastjson.JSON;
 /**
  * Http 接口服务调用任务
  * 
- * @author 王金绍
+ * @author wjs
  * 2015年11月8日 上午12:55:07
  */
 public class CallTask implements Runnable {

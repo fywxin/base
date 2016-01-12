@@ -6,7 +6,7 @@ import org.whale.system.jdbc.IOrmDao;
 /**
  * 执行BaseDao方法上下文
  * 
- * @author 王金绍
+ * @author wjs
  * 2014年9月17日-上午11:39:27
  */
 @SuppressWarnings("all")

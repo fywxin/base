@@ -62,7 +62,7 @@ public class ValueSaveBulider {
 	/**
 	 * 
 	 *功能说明: 批量保存，无法获取到各个实体的id值
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-15 上午10:33:06
 	 *@param objs
 	 *@param ormSql
@@ -88,7 +88,7 @@ public class ValueSaveBulider {
 	/**
 	 * 
 	 *功能说明: 根据序列获取下一个值
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-15 上午10:34:54
 	 *@param sequence
 	 *@return Object
@@ -103,7 +103,7 @@ public class ValueSaveBulider {
 	/**
 	 * 
 	 *功能说明: 获取字段定义的值
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-15 上午10:54:07
 	 *@param obj
 	 *@param list

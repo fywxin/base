@@ -16,7 +16,7 @@ import org.whale.inf.common.SignService;
 /**
  * 客户端Http代理接口处理器
  * 
- * @author 王金绍
+ * @author wjs
  * 2015年11月8日 上午12:20:23
  */
 public class HttpInvokeFactory extends UrlBasedRemoteAccessor implements MethodInterceptor, FactoryBean<Object> {

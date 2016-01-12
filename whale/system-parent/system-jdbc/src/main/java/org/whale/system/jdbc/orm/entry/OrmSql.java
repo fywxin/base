@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * orm对象元注释相对应不同操作类型的sql语句与字段信息，本结构在系统初始化时生成
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午1:51:46
  */
 public class OrmSql {

@@ -9,7 +9,7 @@ import org.whale.system.common.util.Strings;
 /**
  * 下拉选项树控件
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午3:10:35
  */
 public class TreeTag extends TagSupport {

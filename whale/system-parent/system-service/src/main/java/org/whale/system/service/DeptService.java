@@ -12,7 +12,7 @@ import org.whale.system.jdbc.IOrmDao;
 /**
  * 部门 管理
  *
- * @author 王金绍
+ * @author wjs
  * 2014-9-16 15:20:11
  */
 @Service

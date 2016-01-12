@@ -12,7 +12,7 @@ import org.whale.system.common.util.Strings;
 /**
  * orm实体表信息
  *
- * @author 王金绍
+ * @author wjs
  * 2014年9月6日-下午1:52:01
  */
 public class OrmTable extends Atable {
@@ -141,7 +141,7 @@ public class OrmTable extends Atable {
 	/**
 	 * 
 	 *功能说明: 是否有主键字段
-	 *创建人: 王金绍
+	 *创建人: wjs
 	 *创建时间:2013-3-19 上午10:01:10
 	 *@return boolean
 	 *

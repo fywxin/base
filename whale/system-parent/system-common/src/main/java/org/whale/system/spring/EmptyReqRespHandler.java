@@ -9,7 +9,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 /**
  * 空扩展
  * 
- * @author 王金绍
+ * @author wjs
  * 2015年10月31日 上午1:16:03
  */
 public class EmptyReqRespHandler implements ReqRespHandler {

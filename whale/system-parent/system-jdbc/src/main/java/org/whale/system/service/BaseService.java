@@ -12,7 +12,7 @@ import org.whale.system.jdbc.IOrmDao;
  * service 基础模板类
  * 注意事务
  *
- * @author 王金绍
+ * @author wjs
  * 2015年4月26日 下午3:49:57
  */
 public abstract class BaseService<T extends Serializable, PK extends Serializable> {
