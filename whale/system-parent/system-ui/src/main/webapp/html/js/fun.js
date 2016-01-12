@@ -62,7 +62,7 @@
 		
 		//获取父窗口对象
 		getParent : function(){
-			return window.winOpener || window.top.winOpener;
+			return window.winOpener && window.top.winOpener;
 		},
 		
 		save : function(param){
@@ -110,7 +110,7 @@
 			    		if($.isFunction(param.onSuccess)){
 			    			param.onSuccess(obj);
 			    		}else{
-			    			try{getMain().refresh();}catch(e){getMain().location.reload();}
+			    			try{getSub().refresh();}catch(e){getSub2().location.reload();}
 			    			$.msg(obj.msg);
 			    		}
 			    	}else{
@@ -186,15 +186,12 @@
 		},
 		
 		run: function(param){
-			if($.isFunction(param.beforeAjax)){
-				param.beforeAjax();
-			}
 			$.ajax({
 				url : param.url,
 				data : param.datas,
 				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 				dataType: 'json',
-				type: 'post',
+				type: 'get',
 				cache: false,
 				error: function(){
 					$.alert('服务请求异常');
