@@ -175,10 +175,9 @@ public class Cmd implements Iquery{
 					select.append("t.").append(this.fixCol(col)).append(",");
 				}
 			}
-			select.deleteCharAt(select.length()-1);
 		}
 		
-		return this;
+		return selectWrap(cols[0]);
 	}
 	
 	/**

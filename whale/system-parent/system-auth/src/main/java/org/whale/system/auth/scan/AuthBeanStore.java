@@ -81,7 +81,7 @@ public class AuthBeanStore {
 				if(oldAuth == null){
 					warn.append("权限 "+authBean.toString()+" 没有匹配到菜单; \n");
 				}else{
-					auth.setMenuId(oldAuth.getMenuId());
+					auth.setMenuId(auth.getMenuId());
 				}
 			}else{
 				auth.setMenuId(targetMenu.getMenuId());

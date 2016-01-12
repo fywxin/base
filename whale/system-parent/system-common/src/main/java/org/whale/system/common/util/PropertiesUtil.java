@@ -81,6 +81,8 @@ public class PropertiesUtil {
 				Resource resource = resourceLoader.getResource(location);
 				is = resource.getInputStream();
 				props.load(is);
+				//修复值读取不到bug
+				loadProperties(resourcesPaths);
 			} catch (IOException ex) {
 				logger.error("加载配置文件错误路径:" + location, ex);
 			} finally {

@@ -64,6 +64,7 @@ public class DictCacheService implements Bootable{
 	 */
 	public void putDict(String dictCode){
 		Dict dict = null;
+		boolean exp = false;
 		try {
 			if(cacheService == null){
 				logger.warn("缓存被禁用，采用无缓存模式运行！");
@@ -71,9 +72,10 @@ public class DictCacheService implements Bootable{
 				dict = this.getByDictCodeFromDb(dictCode);
 			}
 		} catch (Exception e) {
+			exp = true;
 			logger.warn("DICT: 从数据库查找该字典dictCode="+dictCode+" 异常！", e);
 		}
-		if(dict != null && cacheService != null){
+		if(dict != null && cacheService != null && !exp){
 			try {
 				this.cacheService.put(CACHE_PREX, dict.getDictCode(), dict, PropertiesUtil.getValueInt("cache.dict.expTime", 2592000));
 			} catch (RemoteCacheException e){

@@ -83,14 +83,14 @@ public class AuthAnnotationScaner {
 					for(int i=0; i< codes.length; i++){
 						if(Strings.isNotBlank(codes[i])){
 							AuthBean authBean = new AuthBean();
-							authBean.setAuthCode(codes[i].trim());
+							authBean.setAuthCode(auth.name().trim());
 							if(codes.length == names.length){
 								authBean.setAuthName(names[i]);
 							}else{
 								authBean.setAuthName(auth.name());
 							}
 							ms = new HashSet<String>(4);
-							ms.add(className+"#"+method.getName());
+							ms.add(className+"!"+method.getName());
 							authBean.setMethods(ms);
 							authBean.setController(controller);
 							AuthBean.put(authBean);
