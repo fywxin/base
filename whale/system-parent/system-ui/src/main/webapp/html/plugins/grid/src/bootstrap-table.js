@@ -469,9 +469,7 @@
         cellStyle: undefined,
         searchable: true,
         searchFormatter: true,
-        cardVisible: true,
-        
-        fix: true //wjs  超过字段长度，显示 ...
+        cardVisible: true
     };
 
     BootstrapTable.EVENTS = {
@@ -488,7 +486,6 @@
         'check-some.bs.table': 'onCheckSome',
         'uncheck-some.bs.table': 'onUncheckSome',
         'before-load.bs.table': 'onBeforeLoad',
-        'load-success.bs.table': 'onLoadSuccess',//wjs
         'load-error.bs.table': 'onLoadError',
         'column-switch.bs.table': 'onColumnSwitch',
         'page-change.bs.table': 'onPageChange',
@@ -612,16 +609,6 @@
         $.each(this.options.columns, function (i, columns) {
             $.each(columns, function (j, column) {
                 column = $.extend({}, BootstrapTable.COLUMN_DEFAULTS, column);
-                
-                //---------------wjs
-                if(column.fix){
-                	if(column['class']){
-                		column['class'] = column['class']+' fix_text';
-                	}else{
-                		column['class'] = 'fix_text';
-                	}
-                }
-              //wjs------------------
 
                 if (typeof column.fieldIndex !== 'undefined') {
                     that.columns[column.fieldIndex] = column;
@@ -919,12 +906,6 @@
 
         // Assign the correct sortable arrow
         this.getCaret();
-
-        //wjs移除服务端排序功能，只支持本地排序  2015-12-25
-//        if (this.options.sidePagination === 'server') {
-//            this.initServer(this.options.silentSort);
-//            return;
-//        }
 
         this.initSort();
         this.initBody();
@@ -1465,15 +1446,7 @@
 
                 value = calculateObjectValue(column,
                     that.header.formatters[j], [value, item, i], value); 
-                //wjs----------
-                var titleLabel;
-                if(column.fix && value && column.field != 'opt' && (typeof value == "string")){
-                	try{
-	                	titleLabel = value.replace(/\"/g,"'"); 
-	                	titleLabel = titleLabel.replace(/<\/?[^>]*>/g,'');
-                	}catch(e){}
-                }
-                //----------wjs
+
                 
                 // handle td's id and class
                 if (item['_' + field + '_id']) {
@@ -1540,10 +1513,8 @@
                             getPropertyFromOther(that.columns, 'field', 'title', field)) : '',
                         sprintf('<span class="value">%s</span>', value),
                         '</div>'
-                    //wjs
-                    //].join('') : [sprintf('<td%s %s %s %s %s %s>', id_, class_, style, data_, rowspan_, title_),
-                    ].join('') : [sprintf('<td%s %s %s %s %s %s>', id_, class_, style, data_, rowspan_, (column.fix && titleLabel && column.field != 'opt') ? "title=\""+titleLabel+"\"" : title_),
-                        value,
+                    ].join('') : [sprintf('<td%s %s %s %s %s %s>', id_, class_, style, data_, rowspan_, title_),
+
                         '</td>'
                     ].join('');
 
@@ -1739,8 +1710,7 @@
         if (!silent) {
             this.$tableLoading.show();
         }
-        
-        that.trigger('before-load', data);//wjs
+
         request = $.extend({}, calculateObjectValue(null, this.options.ajaxOptions), {
             type: this.options.method,
             url: this.options.url,
@@ -2090,11 +2060,7 @@
         this.getCaret();
         this.$tableContainer.css('padding-bottom', padding + 'px');
         this.trigger('reset-view');
-        
-        //-- wjs 没有工具栏时，往上顶
-        if($(this.options.toolbar).length == 0){
-        	this.$toolbar.hide();
-        }
+
     };
 
     BootstrapTable.prototype.getData = function (useCurrentPage) {
@@ -2317,21 +2283,6 @@
             return row[that.header.stateField];
         });
     };
-    
-    //wjs 增加获取选择框id值
-    BootstrapTable.prototype.getSelIds = function (chkFiled) {
-    	chkFiled = chkFiled || 'chk';
-    	var ids = [];
-    	var datas = this.getSelections();
-    	if(datas.length){
-    		for(var i=0; i<datas.length; i++){
-        		if(datas[i][chkFiled]){
-        			ids.push(datas[i][this.getOptions().idField]);
-        		}
-        	}
-    	}
-    	return ids;
-    }
 
     BootstrapTable.prototype.getAllSelections = function () {
         var that = this;
@@ -2608,7 +2559,6 @@
     // =======================
 
     var allowedMethods = [
-        'getSelIds',//wjs
         'getOptions',
         'getSelections', 'getAllSelections', 'getData',
         'load', 'append', 'prepend', 'remove', 'removeAll',
