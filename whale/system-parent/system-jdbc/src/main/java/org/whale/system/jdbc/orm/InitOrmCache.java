@@ -19,7 +19,7 @@ import org.whale.system.spring.SpringContextHolder;
 /**
  * 初始化所有所有的orm实体
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午2:05:56
  */
 @Component

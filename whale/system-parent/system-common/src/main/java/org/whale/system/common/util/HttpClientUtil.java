@@ -33,7 +33,7 @@ import org.whale.system.spring.SpringContextHolder;
  * 
  *功能说明: httpClient 4.0 工具类
  *
- *创建人:wjs
+ *创建人:王金绍
  */
 public class HttpClientUtil {
 	

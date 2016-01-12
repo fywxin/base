@@ -15,7 +15,7 @@ import org.whale.system.common.util.WebUtil;
  * 统一异常处理
  * http://gaojiewyh.iteye.com/blog/1297746
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月18日-下午4:27:21
  */
 public class WhaleExceptionResolver extends SimpleMappingExceptionResolver {

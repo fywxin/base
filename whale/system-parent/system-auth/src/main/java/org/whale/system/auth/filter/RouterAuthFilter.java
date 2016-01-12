@@ -12,7 +12,7 @@ import org.whale.system.auth.service.IauthManager;
  * http://itindex.net/detail/50710-springaop-controller-service
  * http://tiangai.iteye.com/blog/2103708
  *
- * @author wjs
+ * @author 王金绍
  * @date 2014年12月31日 下午3:07:48
  */
 @Component

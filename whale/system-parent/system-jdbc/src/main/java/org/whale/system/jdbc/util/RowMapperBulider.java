@@ -21,7 +21,7 @@ import org.whale.system.jdbc.orm.entry.OrmColumn;
 /**
  * jdbcTemplate RowMapper 生成器
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月7日-下午4:26:47
  */
 @Component

@@ -17,7 +17,7 @@ import org.whale.system.jdbc.util.DbKind;
 /**
  * 保存
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:57:56
  */
 @Component
@@ -31,7 +31,7 @@ public class SqlSaveBulider {
 	 *	oracle : 主键的值是在插入前获取，故而id是 ？
 	 *  mysql  : 主键自增时，值是再插入后在获取的，故不要id。
 	 *  	http://tech.it168.com/oldarticle/2007-05-15/200705150841875.shtml
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-19 下午2:20:55
 	 *@param table
 	 *@param ormSql void
@@ -82,7 +82,7 @@ public class SqlSaveBulider {
 	/**
 	 * 
 	 *功能说明: 批量插入，id无法返回，故而id处为 .NEXTVAL
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-19 下午2:22:10
 	 *@param table
 	 *@param ormSql void

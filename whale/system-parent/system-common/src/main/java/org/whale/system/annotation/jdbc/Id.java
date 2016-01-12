@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * 数字主键
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午2:03:16
  */
 @Retention(RetentionPolicy.RUNTIME)

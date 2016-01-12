@@ -11,7 +11,7 @@ import org.whale.system.jdbc.IOrmDao;
 /**
  * 过滤器执行模板类
  *
- * @author wjs
+ * @author 王金绍
  * 2015年4月26日 下午3:47:16
  */
 public abstract class BaseDaoFilterWarpper<T extends Serializable,PK extends Serializable> implements BaseDaoFilter<T, PK> {

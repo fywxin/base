@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 常用工具类
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:30:20
  */
 @SuppressWarnings("all")

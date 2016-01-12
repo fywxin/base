@@ -16,7 +16,7 @@ import org.whale.system.cache.ICacheService;
  * 一级缓存只保存最热的数据
  * 二级缓存保存数据量更大
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年5月22日 下午12:53:37
  */
 public class CombineCacheService<M extends Serializable> extends AbstractCacheService<M> {

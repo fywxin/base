@@ -3,7 +3,7 @@ package org.whale.system.common.exception;
 /**
  * 远程缓存不可用
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月19日-下午5:39:28
  */
 public class RemoteCacheException extends CacheException {

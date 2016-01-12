@@ -3,7 +3,7 @@ package org.whale.system.common.exception;
 /**
  * 乐观锁更新 脏数据异常
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年7月17日 下午4:42:26
  */
 public class StaleObjectStateException extends OrmException {

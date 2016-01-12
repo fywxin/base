@@ -13,7 +13,7 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 /**
  * 获取注解类
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月19日-下午12:14:30
  */
 public class AnnotationScanUtil {

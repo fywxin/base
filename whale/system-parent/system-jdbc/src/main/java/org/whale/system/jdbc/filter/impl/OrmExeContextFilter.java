@@ -16,7 +16,7 @@ import org.whale.system.jdbc.filter.BaseDaoFilterWarpper;
  * ORM容器上下文获取截取器
  * 第一个执行before，最后一个执行 after
  *
- * @author wjs
+ * @author 王金绍
  * 2015年4月26日 下午12:22:19
  */
 @Component

@@ -15,7 +15,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 /**
  * 默认为fastJSON协议
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年11月20日 下午6:06:23
  */
 public class FastJsonClientCodec implements ClientCodec {

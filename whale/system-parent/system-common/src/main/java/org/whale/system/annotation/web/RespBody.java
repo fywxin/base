@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * 自定义报文返回标签，类比 @ResponseBody
  * 
- * @author wjs
+ * @author 王金绍
  * 2015年10月31日 上午1:16:55
  */
 @Target(ElementType.METHOD)

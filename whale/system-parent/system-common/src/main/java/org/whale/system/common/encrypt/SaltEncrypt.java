@@ -11,7 +11,7 @@ import org.whale.system.common.exception.BaseException;
 /**
  * 密码加盐加密
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年10月17日 下午9:46:13
  */
 public class SaltEncrypt {

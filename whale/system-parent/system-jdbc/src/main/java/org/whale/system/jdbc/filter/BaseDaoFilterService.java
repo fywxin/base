@@ -26,7 +26,7 @@ import org.whale.system.jdbc.filter.query.BaseDaoQueryFilter;
  * 正反序 在执行调用链时，形成嵌套调用链过滤器
  * 
  *
- * @author wjs
+ * @author 王金绍
  * 2015年4月26日 下午1:58:56
  */
 @Component

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 /**
  * 初始化启动器
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:29:51
  */
 @Component

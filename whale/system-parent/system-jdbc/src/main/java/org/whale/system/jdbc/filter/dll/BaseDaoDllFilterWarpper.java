@@ -10,7 +10,7 @@ import org.whale.system.jdbc.IOrmDao;
 /**
  * 增删改执行模板
  *
- * @author wjs
+ * @author 王金绍
  * 2015年4月26日 下午3:49:13
  */
 @SuppressWarnings("all")

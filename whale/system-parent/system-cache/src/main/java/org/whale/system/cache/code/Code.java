@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * 编码解码器
  *
- * @author wjs
+ * @author 王金绍
  * 2015年4月25日 下午10:29:50
  */
 public interface Code<M extends Serializable> {

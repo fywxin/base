@@ -3,7 +3,7 @@ package org.whale.system.base;
 /**
  * 单表动态sql语句
  * 
- * @author wjs
+ * @author 王金绍
  *
  */
 public interface Iquery {
@@ -31,7 +31,7 @@ public interface Iquery {
 	 * COUNT 获取总数语句
 	 * DEL 删除记录语句
 	 * 
-	 * @author wjs
+	 * @author 王金绍
 	 */
 	public static enum SqlType{
 		QUERY,GET, COUNT, DEL

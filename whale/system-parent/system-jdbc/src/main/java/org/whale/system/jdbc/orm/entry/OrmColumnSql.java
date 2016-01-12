@@ -9,7 +9,7 @@ import org.whale.system.common.util.Strings;
 /**
  * 对应@Sql
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:51:36
  */
 public class OrmColumnSql {
@@ -35,7 +35,7 @@ public class OrmColumnSql {
 	/**
 	 * 
 	 *功能说明: 获取@占位符内容，并将其替换为 ?, 同时将@@ 替换为 @
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-18 下午2:16:42
 	 *@return List<String>
 	 *

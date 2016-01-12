@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 字段orm属性
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:51:26
  */
 public class OrmColumn extends Acolumn {

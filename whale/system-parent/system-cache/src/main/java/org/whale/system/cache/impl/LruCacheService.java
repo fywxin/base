@@ -19,7 +19,7 @@ import org.whale.system.common.util.PropertiesUtil;
 /**
  * http://www.yufengof.com/2015/11/18/lru-and-linkedhashmap-source-code/?hmsr=toutiao.io&utm_medium=toutiao.io&utm_source=toutiao.io
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年11月30日 上午9:47:28
  */
 public class LruCacheService<M extends Serializable> extends AbstractCacheService<M> {

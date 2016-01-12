@@ -25,7 +25,7 @@ import org.whale.system.spring.SpringContextHolder;
 /**
  * 用户权限数据
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月19日-下午9:14:14
  */
 public class UserAuthCacheService implements Bootable{

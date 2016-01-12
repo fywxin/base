@@ -3,7 +3,7 @@ package org.whale.system.common.exception;
 /**
  * 客户端接口异常
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年7月16日 下午2:59:34
  */
 public class InfClientException extends BaseException {

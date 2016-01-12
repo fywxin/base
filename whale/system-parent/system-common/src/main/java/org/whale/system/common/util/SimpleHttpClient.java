@@ -30,7 +30,7 @@ import org.whale.system.spring.SpringContextHolder;
 /**
  * 基于JDK的HTTP 请求
  * 
- * @author wjs
+ * @author 王金绍
  * @Date 2015-05-19 17:21:02
  */
 @Component

@@ -14,7 +14,7 @@ import org.whale.system.spring.SpringContextHolder;
  * col 支持java字段和sql字段
  * 参考nutz  OR 以后加入
  * 
- * @author wjs
+ * @author 王金绍
  *
  */
 public class Cmd implements Iquery{

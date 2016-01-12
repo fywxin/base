@@ -22,7 +22,7 @@ import org.whale.system.annotation.web.ReqBody;
 /**
  * 默认的报文处理器
  * 
- * @author wjs
+ * @author 王金绍
  * 2015年10月31日 上午1:15:03
  */
 public class ReqRespBodyProcessor extends RequestResponseBodyMethodProcessor {

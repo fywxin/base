@@ -16,7 +16,7 @@ import org.whale.system.base.BaseEntry;
 /**
  * ${domain.domainCnName}
  *
- * @author wjs
+ * @author 王金绍
  * @Date ${.now?date}
  */
 @Table(value="${domain.domainSqlName}", cnName="${domain.domainCnName}")

@@ -11,7 +11,7 @@ import org.whale.system.jdbc.IOrmDao;
 /**
  * 查询过滤器 模板
  *
- * @author wjs
+ * @author 王金绍
  * 2015年4月26日 下午3:47:57
  */
 @SuppressWarnings("all")

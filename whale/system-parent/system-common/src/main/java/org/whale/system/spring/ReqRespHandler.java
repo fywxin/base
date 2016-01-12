@@ -9,7 +9,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 /**
  * 自定义标签 @ReqBody @ResBody 执行器
  * 
- * @author wjs
+ * @author 王金绍
  * 2015年10月31日 上午12:23:54
  */
 public interface ReqRespHandler {

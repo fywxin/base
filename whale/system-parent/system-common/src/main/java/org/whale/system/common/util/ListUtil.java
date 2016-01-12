@@ -139,7 +139,7 @@ public class ListUtil {
     /**
 	 * 
 	 *功能说明: 列表转数组
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-14 下午5:37:16
 	 *@param list
 	 *@return int[]

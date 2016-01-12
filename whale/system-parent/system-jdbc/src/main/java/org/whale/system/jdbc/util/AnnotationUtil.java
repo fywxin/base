@@ -16,7 +16,7 @@ public class AnnotationUtil {
 	/**
 	 * 
 	 *功能说明: 获取字段的值
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-25 上午11:23:25
 	 *@param obj
 	 *@param field

@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * 插入数据库前字段sql定义
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午2:03:23
  */
 @Retention(RetentionPolicy.RUNTIME)

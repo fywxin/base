@@ -18,7 +18,7 @@ public class MySqlAlterTableService extends AbstractAlterTableService {
 	/**
 	 * 
 	 *功能说明: 创建表格
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-4-15 下午4:56:41
 	 *@param table void
 	 *

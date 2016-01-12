@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * 自定义body解析标签，类比@RequstBody
  * 
- * @author wjs
+ * @author 王金绍
  * 2015年10月31日 上午1:16:19
  */
 @Target(ElementType.PARAMETER)

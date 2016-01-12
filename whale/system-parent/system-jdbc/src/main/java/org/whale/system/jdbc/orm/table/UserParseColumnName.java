@@ -5,7 +5,7 @@ import org.springframework.core.PriorityOrdered;
 /**
  * 用户自定义的个别表字段名与数据库名转换规则
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:59:34
  */
 public interface UserParseColumnName extends ParseColumnName, PriorityOrdered  {

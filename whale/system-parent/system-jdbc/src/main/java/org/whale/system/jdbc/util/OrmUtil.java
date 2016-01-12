@@ -53,7 +53,7 @@ public class OrmUtil {
 	 * 
 	 * 将驼峰原则的字符串转成ORCALE数据库大写形式"_" 分隔的字符串
 	 *	userName - USER_NAME
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-14 下午5:50:39
 	 *@param str
 	 *@return String

@@ -16,7 +16,7 @@ import org.springframework.core.io.ResourceLoader;
 /**
  * properties配置文件工具类
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:32:29
  */
 public class PropertiesUtil {
@@ -37,7 +37,7 @@ public class PropertiesUtil {
 	/**
 	 * 
 	 *功能说明: 读取配置文件信息返回Map
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-4-26 下午2:36:17
 	 *@param resourcesPaths
 	 *@return Map<String,String>
@@ -65,7 +65,7 @@ public class PropertiesUtil {
 	/**
 	 * 
 	 *功能说明: 加载properties配置文件
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-4-26 下午2:36:45
 	 *@param resourcesPaths
 	 *@return Properties
@@ -99,7 +99,7 @@ public class PropertiesUtil {
 	/**
 	 * 
 	 *功能说明: 添加配置集合
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-4-26 下午2:42:11
 	 *@param map void
 	 *
@@ -117,7 +117,7 @@ public class PropertiesUtil {
 	/**
 	 * 
 	 *功能说明: 配置文件是否包含key的配置项
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-4-26 下午2:37:04
 	 *@param key
 	 *@return boolean
@@ -132,7 +132,7 @@ public class PropertiesUtil {
 	/**
 	 * 
 	 *功能说明:取值
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-4-26 下午2:37:33
 	 *@param key
 	 *@return String
@@ -147,7 +147,7 @@ public class PropertiesUtil {
 	/**
 	 * 
 	 *功能说明: 取值，如果值为null，则使用默认值
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-4-26 下午2:38:09
 	 *@param key
 	 *@param defaultVal
@@ -213,7 +213,7 @@ public class PropertiesUtil {
 	/**
 	 * 
 	 *功能说明:获取所有的配置项key集合
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-4-26 下午2:39:34
 	 *@return Set<String>
 	 *

@@ -3,7 +3,7 @@ package org.whale.system.common.exception;
 /**
  * 用户未登入系统
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:29:01
  */
 public class NotLoginException extends BusinessException {

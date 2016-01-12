@@ -3,7 +3,7 @@ package org.whale.system.base;
 /**
  * 基础增删改查时间监听接口
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午2:32:09
  */
 public interface BaseCrudEvent<T> {

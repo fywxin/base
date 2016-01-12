@@ -8,7 +8,7 @@ import ${domain.pkgName!"org.whale.system"}.domain.${domain.domainName};
 /**
  * ${domain.domainCnName}Dao 
  *
- * @author wjs
+ * @author 王金绍
  * ${.now}
  */
 @Repository

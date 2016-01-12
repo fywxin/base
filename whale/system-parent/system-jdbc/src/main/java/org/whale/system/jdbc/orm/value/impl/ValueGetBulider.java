@@ -26,7 +26,7 @@ public class ValueGetBulider {
 	/**
 	 * 
 	 *功能说明: 根据复合主键查找该对象
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-18 上午10:19:52
 	 *@param obj
 	 *@param ormSql
@@ -47,7 +47,7 @@ public class ValueGetBulider {
 	 * 
 	 *功能说明: obj中值非空字段才作为查询条件，字符串类型采用like
 	 *   动态生存，sql也是变化的，故而绕过ormSql 动态生成sql语句
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-18 上午10:09:18
 	 *@param obj
 	 *@param ormTable

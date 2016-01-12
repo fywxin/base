@@ -11,7 +11,7 @@ import org.whale.system.base.BaseEntry;
  * refId, domainName，fieldName 设置联合索引
  * 
  * 对应 @BigCol
- * @author wjs
+ * @author 王金绍
  *
  */
 @Table(value="sys_big_data_col", cnName="大数据字段保存表")

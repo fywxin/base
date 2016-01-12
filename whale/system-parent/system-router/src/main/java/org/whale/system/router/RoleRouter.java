@@ -35,7 +35,7 @@ import com.alibaba.fastjson.JSON;
 /**
  * 角色管理
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午3:11:14
  */
 @Controller

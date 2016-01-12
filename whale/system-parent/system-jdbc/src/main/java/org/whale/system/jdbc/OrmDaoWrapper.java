@@ -16,7 +16,7 @@ import org.whale.system.jdbc.filter.BaseDaoFilterService;
 /**
  * BaseDao 绑定执行 Filter
  *
- * @author wjs
+ * @author 王金绍
  * 2015年4月26日 下午3:44:43
  */
 public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> extends OrmDaoImpl<T, PK> {

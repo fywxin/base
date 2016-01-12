@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  * 
  * key： tableName + colName + id
  * 
- * @author wjs
+ * @author 王金绍
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

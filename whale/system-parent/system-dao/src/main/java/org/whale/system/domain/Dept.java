@@ -12,7 +12,7 @@ import org.whale.system.domain.Dept;
 /**
  * 根部门 需要sql脚本初始化
  *
- * @author wjs
+ * @author 王金绍
  * @Date 2014-9-16
  */
 @Table(value="sys_dept", cnName="部门")

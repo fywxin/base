@@ -17,7 +17,7 @@ import org.whale.system.common.exception.SysException;
 /**
  * Redis 缓存实现，才有自定义byte 编码，提高效率
  *
- * @author wjs
+ * @author 王金绍
  * 2015年4月25日 下午10:27:29
  */
 public class RedisService<M extends Serializable> extends AbstractCacheService<M> {

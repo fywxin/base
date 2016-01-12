@@ -3,7 +3,7 @@ package org.whale.inf.client;
 /**
  * 客户端应用配置
  * 
- * @author wjs
+ * @author 王金绍
  * 2015年11月8日 上午12:35:26
  */
 public class ClientConf {

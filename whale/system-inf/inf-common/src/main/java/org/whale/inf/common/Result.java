@@ -9,7 +9,7 @@ import org.whale.system.common.util.ThreadContext;
 /**
  * 服务端返回结果对象
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年12月1日 下午3:43:12
  */
 public class Result<T> implements Serializable {

@@ -3,7 +3,7 @@ package org.whale.inf.common;
 /**
  * 接口运行时异常
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年12月1日 下午3:00:38
  */
 public class InfException extends RuntimeException {

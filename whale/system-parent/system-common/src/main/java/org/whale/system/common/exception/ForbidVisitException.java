@@ -3,7 +3,7 @@ package org.whale.system.common.exception;
 /**
  * 禁止访问
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:28:54
  */
 public class ForbidVisitException extends BusinessException {

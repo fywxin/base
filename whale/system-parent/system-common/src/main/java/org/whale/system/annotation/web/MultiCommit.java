@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 重复提交
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年10月17日 下午10:25:21
  */
 @Target(ElementType.METHOD)

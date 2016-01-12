@@ -8,7 +8,7 @@ import org.whale.system.jdbc.util.OrmUtil;
  * 驼峰规则转下划线大写 
  * 	 userName USER_NAME
  * 
- * @author wjs
+ * @author 王金绍
  * 2015年10月13日 下午11:09:18
  */
 @Component

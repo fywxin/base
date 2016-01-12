@@ -13,7 +13,7 @@ import org.whale.system.jdbc.filter.OrmFilter;
 /**
  * BaseDao 查询过滤器
  * 
- * @author wjs
+ * @author 王金绍
  * 2014年9月17日-上午11:03:03
  */
 

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 编码解码器
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年11月20日 下午5:45:15
  */
 public interface ClientCodec {

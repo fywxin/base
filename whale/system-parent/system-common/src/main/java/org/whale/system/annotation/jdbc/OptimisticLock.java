@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
  * 
  * 脏数据异常：  StaleObjectStateException
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年7月17日 下午4:40:30
  */
 @Retention(RetentionPolicy.RUNTIME)

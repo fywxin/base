@@ -11,6 +11,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,7 @@ import org.whale.system.jdbc.util.DbKind;
 /**
  * 从实体中解析ORM元注释，构建OrmTable对象
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:59:55
  */
 @Component
@@ -82,7 +84,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明: 解析实体类元注释，生成OrmTable对象
-	 *创建人:wjs
+	 *创建人:王金绍
 	 *创建时间:2013-3-28 上午9:09:51
 	 *@param clazz
 	 *@return
@@ -97,7 +99,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		}
 		OrmTable ormTable = new OrmTable(table); //设置类基本属性
 		logger.info("ORM:设置类clazz={}基本属性完成, aCols={}", clazz,ormTable.getCols());
-		this.fireAndParseTable(ormTable); //设置数据库，序列，拥有者
+		this.exeTableExtInfoReaders(ormTable); //设置数据库，序列，拥有者
 		logger.info("ORM:设置类clazz={}设置数据库，序列，拥有者完成, tableDbName={}, tableCnName={}", clazz, ormTable.getTableDbName(), ormTable.getTableCnName());
 		List<OrmColumn> cols = this.getColumns(ormTable); //获取所有@Column
 		ormTable.setOrmCols(cols); //设置字段
@@ -105,7 +107,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		this.reParseTable(ormTable); //设置idCol,pkCols
 		logger.info("ORM:提取 类clazz={} ID字段完成 idColumn={}", clazz, ormTable.getIdCol());
 		this.exeTableExtInfoReaders(ormTable);
-		logger.info("ORM:执行 类table={} 扩展信息读取完成:{}",ormTable.getIdCol(), ormTable);
+		logger.info("ORM:执行 类table={} 扩展信息读取完成:{}", ormTable.getIdCol(), ormTable);
 		return ormTable;
 	}
 	
@@ -122,11 +124,10 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		OrmTableGenEvent ormTableGenEventAfter = new OrmTableGenEvent(this, ormTable, false, true);
 		this.omEventMuliter.multicater(ormTableGenEventAfter);
 	}
-	
 	/**
 	 * 
 	 *功能说明: 封装table
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-19 下午12:44:08
 	 *@param clazz
 	 *@param ormTable void
@@ -173,7 +174,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明: 获取所有的@Column 列表
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-19 下午1:44:18
 	 *@param table
 	 *@return List<OrmColumn>
@@ -262,8 +263,8 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		
 		ormColumn.setSqlName(this.parseDbColumnName(acolumn.getAttrName(), table.getColumnFormat()));
 		ormColumn.setCnName(acolumn.getAttrName());
-		ormColumn.setUnique(false);
-		ormColumn.setUpdateAble(true);
+		ormColumn.setUnique(true);
+		ormColumn.setUpdateAble(false);
 		//字段类型
 		ormColumn.setType(this.getFieldType(acolumn));
 
@@ -281,8 +282,6 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	 */
 	private OrmColumn parseColumnWithAnnotation(Atable table, Acolumn acolumn){
 		Column column = acolumn.getField().getAnnotation(Column.class);
-		if(column == null) 
-			return null;
 		UnColumn unColumn = acolumn.getField().getAnnotation(UnColumn.class);
 		if(unColumn != null){
 			throw new OrmException("实体 ["+table.getEntityName()+"]中字段["+acolumn.getAttrName()+"]不能同时包含 @Column 与 @UnColumn 标签");
@@ -305,11 +304,11 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 //		ormColumn.setPrecision(column.precision());
 		
 		//字段约束
-		ormColumn.setUnique(column.unique());
+		ormColumn.setUnique(!column.unique());
 //		ormColumn.setNullAble(column.nullable());
 		ormColumn.setUpdateAble(column.updateable());
-		ormColumn.setDefaultValue("".equals(column.defaultValue()) ? null : column.defaultValue());
-		//字段类型
+		ormColumn.setDefaultValue("".equals(column.defaultValue()) ?column.defaultValue() : null);
+		//字段类
 		ormColumn.setType(this.getFieldType(acolumn));
 		
 		this.readOtherAnnotation(table, acolumn, ormColumn);
@@ -354,7 +353,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 		if(optimisticLock != null){
 			Type type = acolumn.getAttrType();
 			String t = type.toString();
-			if(t.equals("class java.lang.Long") || t.equals("class java.lang.Integer")){
+			if(t.equals("class java.lang.String")){
 				try{
 					Object obj = table.getClazz().newInstance();
 					
@@ -420,7 +419,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明:设置状态字段
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-4-23 下午1:38:26
 	 *@param ormColumn void
 	 *
@@ -437,7 +436,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	 * 
 	 *功能说明: 设置 ormTable 中的 idCol 和 pkCols
 	 *			检查乐观锁字段是否超过1个
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-19 下午1:59:36
 	 *@param ormTable void
 	 *
@@ -571,7 +570,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明: 如果@column为定义name，则安装规则器从字段中生成
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-19 下午1:42:18
 	 *@param fieldName
 	 *@param column
@@ -594,7 +593,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	/**
 	 * 
 	 *功能说明: 获取字段对于的 java.sql.Types 类型值
-	 *创建人: wjs
+	 *创建人: 王金绍
 	 *创建时间:2013-3-19 下午1:43:33
 	 *@param col
 	 *@param column

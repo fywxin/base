@@ -23,7 +23,7 @@ import org.whale.system.annotation.web.RespBody;
  * 
  * http://www.codeweblog.com/springmvc%E6%BA%90%E7%A0%81%E6%80%BB%E7%BB%93-%E5%85%AD-mvc-annotation-driven%E4%B8%AD%E7%9A%84handlermethodreturnvaluehandler/
  * 
- * @author wjs
+ * @author 王金绍
  * 2015年10月31日 上午12:15:28
  */
 public class ReqRespBodyProcessorProxy implements HandlerMethodArgumentResolver, HandlerMethodReturnValueHandler, InitializingBean {

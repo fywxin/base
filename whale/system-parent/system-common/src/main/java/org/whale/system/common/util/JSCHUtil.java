@@ -23,7 +23,7 @@ import com.jcraft.jsch.SftpException;
 /**
  * 效率出现问题时，或者功能不满足时，换成 ganymed-ssh2
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年11月29日 下午6:05:34
  */
 public class JSCHUtil {

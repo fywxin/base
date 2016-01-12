@@ -6,7 +6,7 @@ import org.whale.system.jdbc.orm.entry.OrmTable;
 /**
  * 表扩展信息预读取, 将读取到的信息保存到  extInfo 字段
  *
- * @author wjs
+ * @author 王金绍
  * 2015年4月26日 上午8:34:15
  */
 public interface TableExtInfoReader extends PriorityOrdered{

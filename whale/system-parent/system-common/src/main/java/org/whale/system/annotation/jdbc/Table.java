@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * 表
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午2:03:28
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -37,7 +37,7 @@ public @interface Table {
 	 * CAMEL2UNDERLINE_UPPER : 驼峰规则转下划线大写  userName USER_NAME
 	 * CAMEL2UNDERLINE_LOWER : 驼峰规则转下划线小写 userName user_name
 	 * 
-	 * @author wjs
+	 * @author 王金绍
 	 * 2015年10月13日 下午10:31:18
 	 */
 	public static enum ColumnFormat {

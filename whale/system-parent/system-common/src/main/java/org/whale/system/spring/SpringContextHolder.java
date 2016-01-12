@@ -16,7 +16,7 @@ import org.whale.system.common.util.Strings;
 /**
  * spring 容器
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:32:52
  */
 @Component

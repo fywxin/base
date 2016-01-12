@@ -19,7 +19,7 @@ import org.whale.system.jdbc.util.AnnotationUtil;
 /**
  * 唯一值校验
  * 
- * @author wjs
+ * @author 王金绍
  * 2014年9月17日-上午11:19:05
  */
 @SuppressWarnings("all")

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * session 监听器
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午3:11:03
  */
 @Component

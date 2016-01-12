@@ -5,7 +5,7 @@ import java.lang.ref.SoftReference;
 /**
  * jvm缓存实体对象
  *
- * @author wjs
+ * @author 王金绍
  * 2014年10月24日-上午11:49:25
  */
 @SuppressWarnings("all")

@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * 缓存最新最热的数据
  * 
- * @author wjs
+ * @author 王金绍
  * @date 2015年5月22日 下午1:09:16
  */
 public class HostJvmCacheService<M extends Serializable> extends AbstractCacheService<M> {

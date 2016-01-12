@@ -12,7 +12,7 @@ import org.whale.system.common.exception.NotLoginException;
 /**
  * 管理员权限标签过滤
  *
- * @author wjs
+ * @author 王金绍
  * @date 2015年1月5日 下午5:22:04
  */
 @Component

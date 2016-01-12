@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * 字符串工具类
  *
- * @author wjs
+ * @author 王金绍
  * 2014年9月6日-下午1:33:02
  */
 public class Strings {

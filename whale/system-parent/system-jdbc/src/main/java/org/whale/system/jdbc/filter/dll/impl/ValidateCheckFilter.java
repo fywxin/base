@@ -13,7 +13,7 @@ import org.whale.system.validation.ValidOrmUtil;
 /**
  * @Valition 注释解释拦截器
  *
- * @author wjs
+ * @author 王金绍
  * 2015年3月9日 下午7:34:24
  */
 
