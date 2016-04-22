@@ -157,23 +157,32 @@ public class Strings {
         StringBuilder sb = new StringBuilder();
         for (char c : cas) {
             switch (c) {
-            case '&':
-                sb.append("&amp;");
-                break;
-            case '<':
-                sb.append("&lt;");
-                break;
-            case '>':
-                sb.append("&gt;");
-                break;
-            case '\'':
-                sb.append("&#x27;");
-                break;
-            case '"':
-                sb.append("&quot;");
-                break;
-            default:
-                sb.append(c);
+                case '\r':
+                    sb.append("&#013;");
+                    break;
+                case '\t':
+                    sb.append("&#009;");
+                    break;
+                case '\n':
+                    sb.append("<br/>");
+                    break;
+                case '&':
+                    sb.append("&amp;");
+                    break;
+                case '<':
+                    sb.append("&lt;");
+                    break;
+                case '>':
+                    sb.append("&gt;");
+                    break;
+                case '\'':
+                    sb.append("&#39;");
+                    break;
+                case '"':
+                    sb.append("&#34;");
+                    break;
+                default:
+                    sb.append(c);
             }
         }
         return sb.toString();

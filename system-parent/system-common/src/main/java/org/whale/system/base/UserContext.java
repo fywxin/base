@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.whale.system.common.exception.NotLoginException;
 import org.whale.system.common.util.ThreadContext;
 
 public class UserContext implements Serializable{
@@ -12,9 +13,61 @@ public class UserContext implements Serializable{
 	private static final long serialVersionUID = -349058234001L;
 	
 	public static UserContext get(){
+		UserContext uc = (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
+		if (uc == null){
+			throw new NotLoginException();
+		}
+		return uc;
+	}
+
+	public static UserContext getOrNull(){
 		return (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
 	}
-	
+
+	public static String userName(){
+		return get().getUserName();
+	}
+
+	public static String userNameOrNull(){
+		UserContext uc = (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
+		if (uc == null){
+			return null;
+		}
+		return uc.getUserName();
+	}
+
+	public static Long userId(){
+		return get().getUserId();
+	}
+
+	public static Long userIdOrNull(){
+		UserContext uc = (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
+		if (uc == null){
+			return null;
+		}
+		return uc.getUserId();
+	}
+
+	public static String realName(){
+		return get().getRealName();
+	}
+
+	public static String realNameOrNull(){
+		UserContext uc = (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
+		if (uc == null){
+			return null;
+		}
+		return uc.getRealName();
+	}
+
+	public static boolean isAdmin(){
+		UserContext uc = (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
+		if (uc == null){
+			return false;
+		}
+		return uc.isSuperAdmin();
+	}
+
 	public static void set(UserContext uc){
 		ThreadContext.getContext().put(ThreadContext.KEY_USER_CONTEXT, uc);
 	}

@@ -9,6 +9,10 @@ package org.whale.system.common.exception;
 public class NotLoginException extends BusinessException {
 
 	private static final long serialVersionUID = 23231L;
+
+	public NotLoginException() {
+		super("未登录");
+	}
 	
 	/**
 	 * 用户未登入系统
