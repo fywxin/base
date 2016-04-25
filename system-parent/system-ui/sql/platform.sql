@@ -231,28 +231,30 @@ CREATE TABLE `sys_file_info` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `sys_log`
+-- Table structure for `sys_log_info`
 -- ----------------------------
-DROP TABLE IF EXISTS `sys_log`;
-CREATE TABLE `sys_log` (
-  `id` varchar(64) NOT NULL,
-  `appId` varchar(16) DEFAULT NULL,
-  `opt` varchar(64) DEFAULT NULL,
-  `cnName` varchar(128) DEFAULT NULL,
-  `tableName` varchar(64) DEFAULT NULL,
-  `uri` varchar(128) DEFAULT NULL,
-  `sqlStr` varchar(512) DEFAULT NULL,
-  `argStr` longtext,
-  `rsStr` longtext,
-  `ip` varchar(15) DEFAULT NULL,
-  `createTime` bigint(15) DEFAULT NULL,
-  `userName` varchar(32) DEFAULT NULL,
-  `callOrder` int(4) unsigned DEFAULT NULL,
-  `methodCostTime` int(10) unsigned DEFAULT NULL,
-  `costTime` int(10) unsigned DEFAULT NULL,
-  `rsType` int(2) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `sys_log_info`;
+CREATE TABLE `sys_log_info` (
+`id`  int(11) NOT NULL ,
+`clazz`  varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调用类' ,
+`method`  varchar(48) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调用方法' ,
+`module`  varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '中文模块名' ,
+`opt`  varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作名' ,
+`info`  varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志描述' ,
+`params`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '方法参数' ,
+`ip`  varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`userName`  varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '当前用户' ,
+`costTime`  int(11) NOT NULL COMMENT '调用耗时' ,
+`createTime`  bigint(14) NOT NULL COMMENT '创建时间' ,
+`rs`  tinyint(4) NULL DEFAULT NULL COMMENT '结果类型 0：成功' ,
+PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+ROW_FORMAT=COMPACT
+;
+
+
 
 -- ----------------------------
 -- Records of sys_log
