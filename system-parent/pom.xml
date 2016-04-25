@@ -16,12 +16,11 @@
 		<module>system-cache</module>
 		<module>system-auth</module>
 		<module>system-service</module>
-
-		
 		
 		<module>model-dict-api</module>
 		<module>model-dict</module>
 		<module>model-file</module>
+		<module>model-log</module>
 
 		<module>inf-client</module>
 		<module>inf-server</module>

@@ -1,7 +1,6 @@
 package org.whale.system.router;
 
-import java.util.List;
-
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,18 +8,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.annotation.jdbc.Validate;
+import org.whale.system.annotation.log.Log;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.base.Cmd;
 import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
 import org.whale.system.common.exception.SysException;
-import org.whale.system.service.DeptService;
-import org.whale.system.service.UserService;
 import org.whale.system.domain.Dept;
 import org.whale.system.domain.User;
+import org.whale.system.log.service.LogHelper;
+import org.whale.system.service.DeptService;
+import org.whale.system.service.UserService;
 
-import com.alibaba.fastjson.JSON;
+import java.util.List;
 
+@Log(module = "部门", opt = "", desc = "")
 @Controller
 @RequestMapping("/dept")
 public class DeptRouter extends BaseRouter {
@@ -33,6 +35,7 @@ public class DeptRouter extends BaseRouter {
 	@Auth(code="dept:list", name="查询部门")
 	@RequestMapping("/goTree")
 	public ModelAndView goTree(){
+
 		String nodes = "[]";
 		List<Dept> depts = this.deptService.queryAll();
 		if(depts != null){
@@ -74,7 +77,8 @@ public class DeptRouter extends BaseRouter {
 				.addObject("pid", pid)
 				.addObject("orderNo", this.deptService.getNextOrder(pid));
 	}
-	
+
+	@Log(opt = "新增", desc = "新增部门: {} 编码:{}")
 	@Auth(code="dept:save", name="新增部门")
 	@ResponseBody
 	@RequestMapping("/doSave")
@@ -85,7 +89,9 @@ public class DeptRouter extends BaseRouter {
 		if(dept.getDeptType() == null){
 			dept.setDeptType("1");
 		}
+
 		this.deptService.save(dept);
+		LogHelper.addPlaceHolder(dept.getDeptName(), dept.getDeptCode());
 		return Rs.success();
 	}
 	
@@ -109,7 +115,8 @@ public class DeptRouter extends BaseRouter {
 		this.deptService.update(dept);
 		return Rs.success();
 	}
-	
+
+	@Log(opt = "删除", desc = "删除部门: {}")
 	@Auth(code="dept:del", name="删除部门")
 	@ResponseBody
 	@RequestMapping("/doDelete")
@@ -125,8 +132,9 @@ public class DeptRouter extends BaseRouter {
 		if(this.userService.count(Cmd.newCmd(User.class).eq("deptId", id)) > 0){
 			return Rs.fail("部门["+this.deptService.get(id).getDeptName()+"]下存在用户，不能删除");
 		}
-		
 		this.deptService.delete(id);
+
+		LogHelper.addPlaceHolder(id);
 		return Rs.success();
 	}
 

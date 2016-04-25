@@ -23,6 +23,10 @@ public class ThreadContext {
 	public static final String KEY_LOG_PREX_TIME = "log_prexTime";
 	/**创建时间 */
 	public static final String KEY_LOG_URI = "log_uri";
+	/**日志：客户端IP地址 */
+	public static final String KEY_LOG_IP = "log_ip";
+	/**日志：@Log desc()模板 {} 对应参数 */
+	public static final String KEY_LOG_DATAS = "log_datas";
 	/**创建时间 */
 	public static final String KEY_REQUEST = "request";
 	/**创建时间 */

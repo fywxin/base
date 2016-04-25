@@ -33,6 +33,12 @@
 			<artifactId>model-dict</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+	  <dependency>
+		  <groupId>org.whale</groupId>
+		  <artifactId>model-log</artifactId>
+		  <version>${project.parent.version}</version>
+		  <scope>provided</scope>
+	  </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>

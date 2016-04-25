@@ -101,7 +101,7 @@
 		<appender-ref ref="whaleLog" />
 	</logger>
 	<root>
-		<level value="WARN" />
+		<level value="debug" />
 		<appender-ref ref="consoleAppender" />
 		<appender-ref ref="allLog" />
 	</root>
