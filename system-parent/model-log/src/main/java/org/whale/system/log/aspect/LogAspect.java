@@ -58,7 +58,6 @@ public class LogAspect {
 		int len = pjp.getArgs() == null ? 0 : pjp.getArgs().length;
 		String key = className + "#" + methodName+"#"+len;
 
-		LogInfoCache.put(key, null);
 		LogInfo logInfo = LogInfoCache.get(key);
 		if (logInfo == null){
 			synchronized (lock){
@@ -100,7 +99,7 @@ public class LogAspect {
 	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
 		LogInfo logInfo = this.get(pjp);
 
-		UserContext uc = UserContext.get();
+		UserContext uc = UserContext.getOrNull();
 		if(uc != null){
 			logInfo.setUserName(uc.getUserName());
 			logInfo.setIp(uc.getIp());
