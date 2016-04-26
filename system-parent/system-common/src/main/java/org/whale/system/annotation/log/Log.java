@@ -20,16 +20,10 @@ public @interface Log {
     String module() default "";
 
     /**
-     * 操作
-     * @return
-     */
-    String opt();
-
-    /**
      * 描述 占位符{}
      * 值通过线程上下文传递
      *
      * @return
      */
-    String desc();
+    String value();
 }

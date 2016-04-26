@@ -5,52 +5,40 @@
 <%@include file="/jsp/grid.jsp" %>
 <title>日志</title>
 <script type="text/javascript">
-var rsStatus = {1:"<button type='button' class='btn btn-success btn-ss' style='cursor:default'><i class='fa fa-check'></i> 成功</button>",
-				2:"<button type='button' class='btn btn-warning btn-ss' style='cursor:default'><i class='fa fa-exclamation'></i> 系统异常</button>",
-				3:"<button type='button' class='btn btn-warning btn-ss' style='cursor:default'><i class='fa fa-check'></i> OrmException</button>",
-				4:"<button type='button' class='btn btn-info btn-ss' style='cursor:default'><i class='fa fa-minus'></i> 运行时异常</button>",
-				5:"<button type='button' class='btn btn-danger btn-ss' style='cursor:default'><i class='fa fa-times'></i> 业务异常</button>",
-				6:"<button type='button' class='btn btn-info btn-ss' style='cursor:default'><i class='fa fa-info'></i> 未知异常</button>"};
+var rsStatus = {0:"<button type='button' class='btn btn-success btn-ss' style='cursor:default'><i class='fa fa-check'></i> 成功</button>",
+				1:"<button type='button' class='btn btn-warning btn-ss' style='cursor:default'><i class='fa fa-exclamation'></i> 系统异常</button>",
+				2:"<button type='button' class='btn btn-warning btn-ss' style='cursor:default'><i class='fa fa-check'></i> OrmException</button>",
+				3:"<button type='button' class='btn btn-info btn-ss' style='cursor:default'><i class='fa fa-minus'></i> 运行时异常</button>",
+				4:"<button type='button' class='btn btn-danger btn-ss' style='cursor:default'><i class='fa fa-times'></i> 业务异常</button>",
+				10:"<button type='button' class='btn btn-info btn-ss' style='cursor:default'><i class='fa fa-info'></i> 未知异常</button>"};
 var time = new Date();
 $(function(){
 	$("#gridTable").grid({
-	    url: '${ctx}/log/doList',
+	    url: '${ctx}/logInfo/doList',
 	    idField: 'id',
 	    columns: [
 		{
-	        field: 'opt',
-	        title: '操作',
-	        width: '7%',
-	        align: 'center',
-	        formatter: function(value, row, index){
-	        	return '<a href="javascript:;" class="link" onclick=go("查看日志","${ctx}/log/goView?id='+row.id+'") >查看</a>';
-			}
+	        field: 'clazzMethod',
+	        title: '对象',
+			width: '15%',
+				formatter: function(value, row, index){
+					return "<a href='javascript:;' onclick=\"go('用户查看','${ctx}/logInfo/goView?id="+row.id+"')\" >"+row.clazz+"#"+row.method+"</a>";
+				}
 	    }, {
-	        field: 'cnName',
-	        width: '10%',
-	        title: '对象名称'
+			field: 'module',
+			width: '6%',
+			title: '模块'
+		}, {
+			field: 'info',
+			title: '日志描述'
 	    }, {
-	        field: 'tableName',
-	        title: '表名称',
-	        width: '10%'
-	    }, {
-	        field: 'uri',
-	        title: 'uri'
-	    }, {
-	        field: 'opt',
-	        title: '操作类型',
-	        width: '5%'
-	    }, {
-	        field: 'time',
+	        field: 'costTime',
 	        title: '耗时',
-	        width: '8%',
-	        formatter: function(value, row, index){
-	        	return row.methodCostTime+'<span class="link-sep">|</span>'+row.costTime;
-			}
+	        width: '5%'
 	    }, {
 	        field: 'ip',
 	        title: 'ip地址',
-	        width: '9%'
+	        width: '7%'
 	    }, {
 	        field: 'createTime',
 	        title: '创建时间',
@@ -63,7 +51,7 @@ $(function(){
 	        title: '操作人',
 	        width: '7%'
 	    }, {
-	        field: 'rsType',
+	        field: 'rs',
 	        title: '结果',
 	        width: '7%',
 	        formatter: function(value, row, index){
@@ -89,85 +77,66 @@ $(function(){
 					<tr>
 						<td class="td-label">处理结果</td>
 						<td>
-							<select id="rsType" name="rsType" data-placeholder="选择省份..." class="chosen-select" style="width: 165px;">
+							<select id="rs" name="rs" data-placeholder="选择异常..." class="chosen-select" style="width: 165px;">
 								<option value="">--请选择--</option>
-								<option value="1">处理成功</option>
-								<option value="11">返回异常</option>
+								<option value="0">处理成功</option>
 								<optgroup td-label="异常">
-									<option value="2">系统异常</option>
-									<option value="3">ORM异常</option>
-									<option value="4">运行时异常</option>
-									<option value="5">业务异常</option>
-									<option value="0">其他异常</option>
+									<option value="1">系统异常</option>
+									<option value="2">ORM异常</option>
+									<option value="3">运行时异常</option>
+									<option value="4">业务异常</option>
+									<option value="10">其他异常</option>
 								</optgroup>
 							</select>
 						</td>
-						<td class="td-label">操作类型</td>
+						<td class="td-label">模块</td>
 						<td>
-							<select id="opt" name="opt" style="width: 165px;">
+							<select id="module" name="module" style="width: 165px;">
 								<option value="">--请选择--</option>
-								<option value="dll">变更操作</option>
-								<optgroup td-label="详细变更操作" >
-									<option value="save" >新增</option>
-									<option value="saves" >循环新增</option>
-									<option value="saveBatch" >批量新增</option>
-									<option value="update" >修改</option>
-									<option value="saves" >循环修改</option>
-									<option value="updateBatch" >批量修改</option>
-									<option value="delete" >删除</option>
-									<option value="deleteBy" >按条件删除</option>
-									<option value="deleteBatch" >批量删除</option>
-								</optgroup>
-								<option value="find">查询操作</option>
-								<optgroup td-label="详细查询操作" >
-									<option value="get" >根据ID获取对象</option>
-									<option value="getObject" >按条件获取对象</option>
-									<option value="query" >对象列表查询</option>
-									<option value="queryPage" >分页查询</option>
-									<option value="queryAll">全量查询</option>
-									<option value="queryForNumber" >数字查询</option>
-									<option value="queryForList">queryForList</option>
-									<option value="queryForMap">queryForMap</option>
-									<option value="queryOther">queryOther</option>
-								</optgroup>
+								<option value="部门">部门</option>
+								<option value="用户">用户</option>
+								<option value="角色">角色</option>
+								<option value="字典">字典</option>
+								<option value="字典元素">字典元素</option>
+
 							</select>
 						</td>
-						<td class="td-label">所属应用</td>
+						<td class="td-label">操作信息</td>
 						<td>
-							<input type="text" id="appId" name="appId" style="width:160px;" value="${item.appId}" />
+							<input type="text" id="info" name="info" style="width:160px;"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="td-label">方法耗时</td>
+
+						<td class="td-label">操作人</td>
 						<td>
-							>&nbsp;<input type="text" id="methodCostTime" name="methodCostTime" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:145px;padding:1px;" />
+							<input type="text" id="userName" name="userName" style="width:160px;" value="${item.userName}" />
+
 						</td>
-					
-						<td class="td-label">调用耗时</td>
-						<td>
-							>&nbsp;<input type="text" id="costTime" name="costTime"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:145px;padding:1px;" />
-						</td>
-					
 						<td class="td-label">操作时间</td>
 						<td>
 							<input type="text" style="width:130px;" id="startTime" name="startTime" />
 							至
 							<input type="text" style="width:130px;" id="endTime" name="endTime" />
 						</td>
+						<td class="td-label">IP</td>
+						<td>
+							<input type="text" id="ip" name="ip" style="width:160px;" />
+						</td>
 					</tr>
 					<tr>
-						<td class="td-label">表名称</td>
+						<td class="td-label">类名</td>
 						<td>
-							<input type="text" id="tableName" name="tableName" style="width:160px;" value="${item.tableName}" />
+							<input type="text" id="clazz" name="clazz" style="width:160px;" />
 						</td>
-						<td class="td-label">uri</td>
+						<td class="td-label">方法名</td>
 						<td>
-							<input type="text" id="uri" name="uri" style="width:160px;" value="${item.uri}" />
+							<input type="text" id="method" name="method" style="width:160px;" />
 						</td>
-						<td class="td-label">操作人</td>
+						<td class="td-label">调用耗时</td>
 						<td>
-							<input type="text" id="userName" name="userName" style="width:160px;" value="${item.userName}" />&nbsp;&nbsp;
-       						<button type="button" class="btn btn-success btn-xs" onclick="search()"><i class="fa fa-search" ></i> 查  询</button>
+							<label class="label label-danger">></label><input type="text" id="costTime" name="costTime"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:135px;margin-left: 5px;" />
+							<button type="button" class="btn btn-success btn-xs" onclick="search()"><i class="fa fa-search" ></i> 查  询</button>
 						</td>
 					</tr>
 				</tbody>

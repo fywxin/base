@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.whale.system.annotation.log.Log;
 import org.whale.system.base.UserContext;
+import org.whale.system.common.exception.BusinessException;
+import org.whale.system.common.exception.OrmException;
+import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.log.domain.LogInfo;
@@ -69,8 +72,7 @@ public class LogAspect {
 					Method method = signature.getMethod();
 
 					Log logMethod = (Log)method.getAnnotation(Log.class);
-					logInfo.setOpt(logMethod.opt());
-					logInfo.setInfo(logMethod.desc() + ".");
+					logInfo.setInfo(logMethod.value() + ".");
 					logInfo.splitDesc();
 
 					if (Strings.isBlank(logMethod.module())){
@@ -116,17 +118,30 @@ public class LogAspect {
 			this.logStoreService.addLogRecvQueue(logInfo);
 			//一定要返回该对象，否则前台返回空
 			return rs;
-		}catch(Throwable e){
+		}catch(Throwable ex){
 			logInfo.setCostTime(new Long(System.currentTimeMillis() - startTime).intValue());
-			logInfo.setRs(LogInfo.RS_EXP);
-			logInfo.setInfo(e == null || e.getMessage() == null ? "异常" : (e.getMessage().length() > 255 ? e.getMessage().substring(0, 255) : e.getMessage()));
+
+			if(ex instanceof BusinessException || ex.getCause() instanceof BusinessException){
+				logInfo.setRs(LogInfo.RS_BusinessException);
+			}else if(ex instanceof OrmException || ex.getCause() instanceof OrmException){
+				logInfo.setRs(LogInfo.RS_OrmException);
+			}else if(ex instanceof SysException || ex.getCause() instanceof SysException){
+				logInfo.setRs(LogInfo.RS_SysException);
+			}else if(ex instanceof RuntimeException || ex.getCause() instanceof RuntimeException){
+				logInfo.setRs(LogInfo.RS_RunTimeException);
+			}else{
+				logInfo.setRs(LogInfo.RS_OTHER);
+			}
+			String exInfo = this.getExceptionInfo(ex);
+
+			logInfo.setInfo(exInfo.length() > 255 ? exInfo.substring(0, 255) : exInfo);
 			Object[] args = pjp.getArgs();
 			if (args != null && args.length > 0){
 				String params = JSON.toJSONString(args);
 				logInfo.setParams(params.length() > 65534 ? params.substring(0, 65534) : params);
 			}
 			this.logStoreService.addLogRecvQueue(logInfo);
-			throw e;
+			throw ex;
 		}
 	}
 
@@ -137,7 +152,7 @@ public class LogAspect {
 	 */
 	private void replaceDesc(LogInfo logInfo){
 		String desc = logInfo.getInfo();
-		String[] args = (String[])ThreadContext.getContext().get(ThreadContext.KEY_LOG_DATAS);
+		String[] args = (String[]) ThreadContext.getContext().get(ThreadContext.KEY_LOG_DATAS);
 		if (args != null){
 			StringBuilder strb = new StringBuilder(logInfo.getInfo().length()*2);
 			if (args.length != logInfo.getSplitDescItem().size()-1){
@@ -155,5 +170,15 @@ public class LogAspect {
 			logInfo.setInfo(strb.toString());
 		}
 	}
-	
+
+
+	private String getExceptionInfo(Throwable ex){
+		StringBuilder strb = new StringBuilder();
+		StackTraceElement[] trace = ex.getStackTrace();
+
+		for (StackTraceElement s : trace) {
+			strb.append("\tat ").append(s).append("\r\n");
+		}
+		return strb.toString();
+	}
 }

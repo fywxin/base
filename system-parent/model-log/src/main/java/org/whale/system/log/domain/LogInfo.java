@@ -18,7 +18,11 @@ public class LogInfo extends BaseEntry {
 
     public static final Integer RS_SUCCESS = 0;
 
-    public static final Integer RS_EXP = 1;
+    public static final Integer RS_SysException = 1;
+    public static final Integer RS_OrmException = 2;
+    public static final Integer RS_RunTimeException = 3;
+    public static final Integer RS_BusinessException = 4;
+    public static final Integer RS_OTHER = 10;
 
     @Id
     @Column(cnName = "id")
@@ -32,9 +36,6 @@ public class LogInfo extends BaseEntry {
 
     @Column(cnName = "中文模块名")
     private String module;
-
-    @Column(cnName = "操作名")
-    private String opt;
 
     @Column(cnName = "日志描述")
     private String info;
@@ -64,7 +65,6 @@ public class LogInfo extends BaseEntry {
         logInfo.setClazz(this.getClazz());
         logInfo.setMethod(this.getMethod());
         logInfo.setModule(this.getModule());
-        logInfo.setOpt(this.getOpt());
         logInfo.setInfo(this.getInfo());
         logInfo.setCreateTime(System.currentTimeMillis());
         logInfo.setSplitDescItem(this.getSplitDescItem());
@@ -113,14 +113,6 @@ public class LogInfo extends BaseEntry {
 
     public void setModule(String module) {
         this.module = module;
-    }
-
-    public String getOpt() {
-        return opt;
-    }
-
-    public void setOpt(String opt) {
-        this.opt = opt;
     }
 
     public String getInfo() {
@@ -192,7 +184,6 @@ public class LogInfo extends BaseEntry {
         return "LogInfo{" +
                 "method='" + method + '\'' +
                 ", clazz='" + clazz + '\'' +
-                ", opt='" + opt + '\'' +
                 ", info='" + info + '\'' +
                 ", module='" + module + '\'' +
                 '}';

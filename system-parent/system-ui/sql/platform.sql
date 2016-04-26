@@ -239,7 +239,6 @@ CREATE TABLE `sys_log_info` (
 `clazz`  varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调用类' ,
 `method`  varchar(48) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调用方法' ,
 `module`  varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '中文模块名' ,
-`opt`  varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作名' ,
 `info`  varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志描述' ,
 `params`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '方法参数' ,
 `ip`  varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,

@@ -1,4 +1,4 @@
-package org.whale.system.log.service;
+package org.whale.system.annotation.log;
 
 import com.alibaba.fastjson.JSON;
 import org.whale.system.common.util.ReflectionUtil;

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.annotation.auth.AuthAdmin;
+import org.whale.system.annotation.log.Log;
+import org.whale.system.annotation.log.LogHelper;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
@@ -25,6 +27,7 @@ import org.whale.system.service.DictService;
 
 import com.alibaba.fastjson.JSON;
 
+@Log(module = "字典", value = "")
 @Controller
 @RequestMapping("/dict")
 public class DictRouter extends BaseRouter {
@@ -133,6 +136,7 @@ public class DictRouter extends BaseRouter {
 	 * 保存操作
 	 * @param dict
 	 */
+	@Log("新增字典 名称:{}, 编码：{}")
 	@Auth(code="dict:save",name="新增字典")
 	@ResponseBody
 	@RequestMapping("/doSave")
@@ -140,6 +144,8 @@ public class DictRouter extends BaseRouter {
 		dict.setStatus(SysConstant.STATUS_NORMAL);
 		this.dictService.save(dict);
 		this.dictCacheService.putDict(dict.getDictCode());
+
+		LogHelper.addPlaceHolder(dict.getDictName(), dict.getDictCode());
 		return Rs.success(dict.getDictId());
 	}
 	
@@ -147,6 +153,7 @@ public class DictRouter extends BaseRouter {
 	 * 更新操作
 	 * @param dict
 	 */
+	@Log("修改字典 名称:{}, 编码：{}")
 	@Auth(code="dict:update",name="修改字典")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
@@ -156,6 +163,8 @@ public class DictRouter extends BaseRouter {
 		
 		this.dictService.update(dict);
 		this.dictCacheService.putDict(dict.getDictCode());
+
+		LogHelper.addPlaceHolder(dict.getDictName(), dict.getDictCode());
 		return Rs.success();
 	}
 	
@@ -163,6 +172,7 @@ public class DictRouter extends BaseRouter {
 	 * 删除操作
 	 * @param dictId
 	 */
+	@Log("删除字典 名称:{}, 编码：{}")
 	@Auth(code="dict:del",name="删除字典")
 	@ResponseBody
 	@RequestMapping("/doDelete")
@@ -173,6 +183,8 @@ public class DictRouter extends BaseRouter {
 		Dict dict = this.dictService.get(dictId);
 		this.dictService.transDelete(dictId);
 		this.dictCacheService.delDict(Arrays.asList(dict.getDictCode()));
+
+		LogHelper.addPlaceHolder(dict.getDictName(), dict.getDictCode());
 		return Rs.success();
 	}
 	

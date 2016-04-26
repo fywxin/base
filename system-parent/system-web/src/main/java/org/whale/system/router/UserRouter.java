@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
+import org.whale.system.annotation.log.Log;
+import org.whale.system.annotation.log.LogHelper;
 import org.whale.system.auth.cache.UserAuthCacheService;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.base.Cmd;
@@ -28,6 +30,7 @@ import org.whale.system.service.UserService;
 
 import com.alibaba.fastjson.JSON;
 
+@Log(module = "用户", value = "")
 @Controller
 @RequestMapping("/user")
 public class UserRouter extends BaseRouter {
@@ -93,7 +96,8 @@ public class UserRouter extends BaseRouter {
 				.addObject("nodes", JSON.toJSONString(depts))
 				.addObject("deptId", deptId);
 	}
-	
+
+	@Log("新增用户 {}")
 	@Auth(code="user:save",name="新增用户")
 	@ResponseBody
 	@RequestMapping("/doSave")
@@ -107,9 +111,11 @@ public class UserRouter extends BaseRouter {
 		}
 
 		this.userService.save(user);
+
+		LogHelper.addPlaceHolder(user);
 		return Rs.success();
 	}
-	
+
 	@Auth(code="user:update",name="修改用户")
 	@RequestMapping("/goUpdate")
 	public ModelAndView goUpdate(Long userId){
@@ -120,12 +126,14 @@ public class UserRouter extends BaseRouter {
 		if(depts != null && depts.size() > 0){
 			nodes = JSON.toJSONString(depts);
 		}
+
 		return new ModelAndView("system/user/user_update")
 				.addObject("item", user)
 				.addObject("nodes", nodes)
 				.addObject("rootName", DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "ITEM_DEPT_ROOT"));
 	}
-	
+
+	@Log("修改用户 {}")
 	@Auth(code="user:update",name="修改用户")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
@@ -140,6 +148,8 @@ public class UserRouter extends BaseRouter {
 		}
 		
 		this.userService.update(user);
+
+		LogHelper.addPlaceHolder(user);
 		return Rs.success();
 	}
 
@@ -178,6 +188,7 @@ public class UserRouter extends BaseRouter {
 	 * @param roleIdS
 	 * @return
 	 */
+	@Log("用户分配角色 用户:{} 分配角色：{}")
 	@Auth(code="user:role",name="分配角色")
 	@ResponseBody
 	@RequestMapping("/doSetUserRole")
@@ -185,6 +196,7 @@ public class UserRouter extends BaseRouter {
 		if(userId == null){
 			return Rs.fail("用户不能为空");
 		}
+
 		List<Long> roleIds = LangUtil.splitIds(roleIdS);
 		
 		//TODO check out law
@@ -213,6 +225,7 @@ public class UserRouter extends BaseRouter {
 	 * @param newPassword2
 	 * @return
 	 */
+	@Log("修改密码 用户:{} ,旧密码：{}, 新密码：{}")
 	@ResponseBody
 	@RequestMapping("/doChangePassword")
 	public Rs doChangePassword(String oldPassword, String newPassword1, String newPassword2) {
@@ -247,6 +260,8 @@ public class UserRouter extends BaseRouter {
 		this.userService.updatePassword(uc.getUserId(), newPassword1.trim());
 		
 		WebUtil.getSession().removeAttribute(SysConstant.USER_CONTEXT_KEY);
+
+		LogHelper.addPlaceHolder(UserContext.userName(), oldPassword, newPassword1);
 		return Rs.success("修改密码成功");
 	}
 	
@@ -282,8 +297,9 @@ public class UserRouter extends BaseRouter {
 	public ModelAndView goUserMainPage(){
 		return new ModelAndView("system/user/user_main_page");
 	}
-	
-	
+
+
+	@Log("删除用户 用户:{}")
 	@Auth(code="user:del",name="删除用户")
 	@ResponseBody
 	@RequestMapping("/doDelete")
@@ -316,34 +332,43 @@ public class UserRouter extends BaseRouter {
 			this.userService.delete(userId);
 			this.userAuthCacheService.delUserAuth(userId);
 		}
-		
+
+		LogHelper.addPlaceHolder(user.getUserName());
 		return Rs.success();
 	}
-	
+
+	@Log("重置密码 用户:{}")
 	@Auth(code="user:restPassword",name="重置密码")
 	@ResponseBody
 	@RequestMapping("/doRestPassword")
 	public Rs doRestPassword(Long userId){
-		if(userId != null){
+		User user = this.userService.get(userId);
+		if(user != null){
+
 			this.userService.updatePassword(userId, SysConstant.USER_DEFAULT_PASSWORD);
+
+			LogHelper.addPlaceHolder(user.getUserName());
 			return Rs.success();
 		}else{
 			return Rs.fail("请选择要重置密码的用户");
 		}
 	}
-	
+
+	@Log("启禁用户 用户:{}, 状态")
 	@Auth(code="user:status",name="启禁用户")
 	@ResponseBody
 	@RequestMapping("/doChangeState")
 	public Rs doChangeState(Long userId, Integer status){
-		if(userId == null || this.userService.get(userId) == null){
+		User user = this.userService.get(userId);
+		if(user == null){
 			return Rs.fail("用户不存在");
 		}
 		if(status != SysConstant.STATUS_NORMAL && status != SysConstant.STATUS_UNUSE){
 			return Rs.fail("用户状态码错误");
 		}
-		
-		this.userService.updateState(userId, status);
+		this.userService.updateState(user, status);
+
+		LogHelper.addPlaceHolder(user.getUserName(), status == SysConstant.STATUS_NORMAL ? "启用" : "禁用");
 		return Rs.success("设置用户状态成功！");
 	}
 	

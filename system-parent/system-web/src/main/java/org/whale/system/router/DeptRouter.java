@@ -16,13 +16,13 @@ import org.whale.system.base.Rs;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.domain.Dept;
 import org.whale.system.domain.User;
-import org.whale.system.log.service.LogHelper;
+import org.whale.system.annotation.log.LogHelper;
 import org.whale.system.service.DeptService;
 import org.whale.system.service.UserService;
 
 import java.util.List;
 
-@Log(module = "部门", opt = "", desc = "")
+@Log(module = "部门", value = "")
 @Controller
 @RequestMapping("/dept")
 public class DeptRouter extends BaseRouter {
@@ -78,7 +78,7 @@ public class DeptRouter extends BaseRouter {
 				.addObject("orderNo", this.deptService.getNextOrder(pid));
 	}
 
-	@Log(opt = "新增", desc = "新增部门: {} 编码:{}")
+	@Log("新增部门 名称: {},编码:{}")
 	@Auth(code="dept:save", name="新增部门")
 	@ResponseBody
 	@RequestMapping("/doSave")
@@ -107,16 +107,19 @@ public class DeptRouter extends BaseRouter {
 				.addObject("item", dept)
 				.addObject("nodes", JSON.toJSONString(this.deptService.queryAll()));
 	}
-	
+
+	@Log("修改部门 id: {}, 名称:{}")
 	@Auth(code="dept:update", name="修改部门")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
 	public Rs doUpdate(Dept dept){
+
 		this.deptService.update(dept);
+		LogHelper.addPlaceHolder(dept.getId(), dept.getDeptName());
 		return Rs.success();
 	}
 
-	@Log(opt = "删除", desc = "删除部门: {}")
+	@Log("删除部门 {}")
 	@Auth(code="dept:del", name="删除部门")
 	@ResponseBody
 	@RequestMapping("/doDelete")

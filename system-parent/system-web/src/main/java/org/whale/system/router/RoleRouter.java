@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.whale.system.annotation.log.Log;
+import org.whale.system.annotation.log.LogHelper;
 import org.whale.system.auth.cache.UserAuthCacheService;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.base.Page;
@@ -40,6 +42,7 @@ import com.alibaba.fastjson.JSON;
  * @author 王金绍
  * 2014年9月6日-下午3:11:14
  */
+@Log(module = "角色", value = "")
 @Controller
 @RequestMapping("/role")
 public class RoleRouter extends BaseRouter {
@@ -94,11 +97,14 @@ public class RoleRouter extends BaseRouter {
 	 * 保存操作
 	 * @param role
 	 */
+	@Log("新增角色 角色名：{},编码：{}")
 	@org.whale.system.annotation.auth.Auth(code="role:save",name="新增角色")
 	@ResponseBody
 	@RequestMapping("/doSave")
 	public Rs doSave(Role role){	
 		this.roleService.save(role);
+
+		LogHelper.addPlaceHolder(role.getRoleName(), role.getRoleCode());
 		return Rs.success();
 	}
 	
@@ -118,6 +124,7 @@ public class RoleRouter extends BaseRouter {
 	 * 更新操作
 	 * @param role
 	 */
+	@Log("修改角色 角色名：{},编码：{}")
 	@org.whale.system.annotation.auth.Auth(code="role:update",name="修改角色")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
@@ -134,6 +141,8 @@ public class RoleRouter extends BaseRouter {
 			role.setCanDelFlag(true);
 		}
 		this.roleService.update(role);
+
+		LogHelper.addPlaceHolder(role.getRoleName(), role.getRoleCode());
 		return Rs.success();
 	}
 
@@ -149,7 +158,8 @@ public class RoleRouter extends BaseRouter {
 		Role role = this.roleService.get(roleId);
 		return new ModelAndView("system/role/role_view").addObject("item", role);
 	}
-	
+
+
 	@org.whale.system.annotation.auth.Auth(code="role:auth",name="分配权限")
 	@RequestMapping("/goSetRoleAuth")
 	public ModelAndView goSetRoleAuth(Long roleId){
@@ -219,13 +229,15 @@ public class RoleRouter extends BaseRouter {
 				.addObject("hasAuths", hasAuths == null ? "[]" : JSON.toJSONString(hasAuths))
 				.addObject("allMenus", allMenus == null ? "[]" : JSON.toJSONString(allMenus));
 	}
-	
+
+	@Log("角色分配权限 角色名：{},权限编码：{}")
 	@org.whale.system.annotation.auth.Auth(code="role:auth",name="分配权限")
 	@ResponseBody
 	@RequestMapping("/doSetRoleAuth")
 	public Rs doSetRoleAuth(Long roleId, String authCodeS){
-		if(roleId == null) {
-			return Rs.fail("数据错误");
+		Role role = this.roleService.get(roleId);
+		if(role == null) {
+			return Rs.fail("角色不存在");
 		}
 		String[] authCodes = null;
 		if(Strings.isNotBlank(authCodeS)){
@@ -238,30 +250,39 @@ public class RoleRouter extends BaseRouter {
 		if(dictCacheService.isValue(DictConstant.DICT_SYS_CONF, DictConstant.DICT_ITEM_FLUSH_AUTH, "auto")){
 			this.userAuthCacheService.init(null);
 		}
-		
+
+		LogHelper.addPlaceHolder(role.getRoleName(), authCodeS);
 		return Rs.success();
 	}
 	
 	/**
 	 * 删除操作
 	 */
+	@Log("删除角色 角色名：{}, 角色编码：{}")
 	@org.whale.system.annotation.auth.Auth(code="role:del",name="删除角色")
 	@ResponseBody
 	@RequestMapping("/doDelete")
 	public Rs doDelete(Long id){
+		Role role = this.roleService.get(id);
+		if(role == null) {
+			return Rs.fail("角色不存在");
+		}
 		this.roleService.delete(id);
 		if(dictCacheService.isValue(DictConstant.DICT_SYS_CONF, DictConstant.DICT_ITEM_FLUSH_AUTH, "auto")){
 			this.userAuthCacheService.init(null);
 		}
-		
+
+		LogHelper.addPlaceHolder(role.getRoleName(), role.getRoleCode());
 		return Rs.success();
 	}
-	
+
+	@Log("启禁角色 角色：{}, 状态：{}")
 	@org.whale.system.annotation.auth.Auth(code="role:status",name="启禁角色")
 	@ResponseBody
 	@RequestMapping("/doChangeState")
 	public Rs doChangeState(Long roleId, Integer status){
-		if(roleId == null || this.roleService.get(roleId) == null){
+		Role role = this.roleService.get(roleId);
+		if(role == null) {
 			return Rs.fail("角色不存在");
 		}
 		
@@ -274,7 +295,8 @@ public class RoleRouter extends BaseRouter {
 		if(dictCacheService.isValue(DictConstant.DICT_SYS_CONF, DictConstant.DICT_ITEM_FLUSH_AUTH, "auto")){
 			this.userAuthCacheService.init(null);
 		}
-		
+
+		LogHelper.addPlaceHolder(role.getRoleName(), status == SysConstant.STATUS_NORMAL ? "启用" : "禁用");
 		return Rs.success();
 	}
 }

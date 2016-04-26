@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
+import org.whale.system.annotation.log.Log;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
@@ -16,9 +17,11 @@ import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.util.LangUtil;
 import org.whale.system.domain.Dict;
 import org.whale.system.domain.DictItem;
+import org.whale.system.annotation.log.LogHelper;
 import org.whale.system.service.DictItemService;
 import org.whale.system.service.DictService;
 
+@Log(module = "字典元素", value = "")
 @Controller
 @RequestMapping("/dictItem")
 public class DictItemRouter extends BaseRouter {
@@ -76,6 +79,7 @@ public class DictItemRouter extends BaseRouter {
 	 * 保存操作
 	 * @param dictItem
 	 */
+	@Log("新增字典元素 名称:{}, 编码：{}, 值：{}")
 	@Auth(code="dictItem:save",name="新增元素")
 	@ResponseBody
 	@RequestMapping("/doSave")
@@ -91,7 +95,8 @@ public class DictItemRouter extends BaseRouter {
 		this.dictItemService.save(dictItem);
 		Dict dict = this.dictService.get(dictItem.getDictId());
 		this.dictCacheService.putDict(dict.getDictCode());
-		
+
+		LogHelper.addPlaceHolder(dictItem.getItemName(), dictItem.getItemCode(), dictItem.getItemVal());
 		return Rs.success(dictItem.getDictItemId());
 	}
 	
@@ -130,6 +135,7 @@ public class DictItemRouter extends BaseRouter {
 	 * 更新操作
 	 * @param dictItem
 	 */
+	@Log("修改字典元素 名称:{}, 编码：{}, 值：{}")
 	@Auth(code="dictItem:update",name="修改元素")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
@@ -142,6 +148,8 @@ public class DictItemRouter extends BaseRouter {
 		
 		Dict dict = this.dictService.get(dictItem.getDictId());
 		this.dictCacheService.putDict(dict.getDictCode());
+
+		LogHelper.addPlaceHolder(dictItem.getItemName(), dictItem.getItemCode(), dictItem.getItemVal());
 		return Rs.success();
 	}
 	
@@ -149,6 +157,7 @@ public class DictItemRouter extends BaseRouter {
 	 * 删除操作
 	 * @param ids
 	 */
+	@Log("删除字典元素 名称:{}, 编码：{}")
 	@Auth(code="dictItem:del",name="删除元素")
 	@ResponseBody
 	@RequestMapping("/doDelete")
@@ -164,9 +173,12 @@ public class DictItemRouter extends BaseRouter {
 		this.dictItemService.deleteBatch(dictItemIds);
 		Dict dict = this.dictService.get(dictItem.getDictId());
 		this.dictCacheService.putDict(dict.getDictCode());
+
+		LogHelper.addPlaceHolder(dictItem.getItemName(), dictItem.getItemCode());
 		return Rs.success();
 	}
-	
+
+	@Log("启禁字典元素 名称:{}, 编码：{}, 状态:{}")
 	@Auth(code="dictItem:status",name="启禁元素")
 	@ResponseBody
 	@RequestMapping("/doChangeState")
@@ -185,6 +197,8 @@ public class DictItemRouter extends BaseRouter {
 		
 		Dict dict = this.dictService.get(dictItem.getDictId());
 		this.dictCacheService.putDict(dict.getDictCode());
+
+		LogHelper.addPlaceHolder(dictItem.getItemName(), dictItem.getItemCode(), status == SysConstant.STATUS_NORMAL? "启用":"禁用");
 		return Rs.success();
 	}
 }

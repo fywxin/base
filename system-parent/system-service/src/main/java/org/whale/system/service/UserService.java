@@ -1,5 +1,6 @@
 package org.whale.system.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -7,14 +8,18 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Service;
+import org.whale.system.annotation.log.LogHelper;
 import org.whale.system.base.BaseCrudEvent;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.encrypt.SaltEncrypt;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.LangUtil;
+import org.whale.system.common.util.ListUtil;
 import org.whale.system.common.util.Strings;
+import org.whale.system.dao.RoleDao;
 import org.whale.system.dao.UserDao;
 import org.whale.system.dao.UserRoleDao;
+import org.whale.system.domain.Role;
 import org.whale.system.domain.User;
 import org.whale.system.domain.UserRole;
 import org.whale.system.jdbc.IOrmDao;
@@ -29,6 +34,8 @@ public class UserService extends BaseService<User, Long> {
 	private UserRoleDao userRoleDao;
 	@Autowired(required = false)
 	private List<UserEvent> list;
+	@Autowired
+	private RoleDao roleDao;
 	
 	private boolean sort = false;
 	
@@ -83,14 +90,7 @@ public class UserService extends BaseService<User, Long> {
 		this.fireEvent(user, BaseCrudEvent.AFTER_UPDATE);
 	}
 	
-	public void updateState(Long userId, int status) {
-		if(null == userId){
-			return ;
-		}
-		User user = this.userDao.get(userId);
-		if(user == null)
-			return ;
-		
+	public void updateState(User user, int status) {
 		LangUtil.trim(user);
 		this.fireEvent(user, UserEvent.BEFORE_SETSTATUS, status);
 		user.setStatus(status);
@@ -120,20 +120,30 @@ public class UserService extends BaseService<User, Long> {
 	}
 	
 	public void transSaveUserRole(Long userId, List<Long> roleIds){
-		if(userId == null)
+		User user = this.get(userId);
+		if(user == null)
 			throw new SysException("userId == null");
-		
+
+		List<String> roleNames = new ArrayList<String>();
 		this.userRoleDao.deleteByUserId(userId);
 		if(roleIds != null && roleIds.size() > 0){
 			UserRole userRole = null;
-			for(Long roleId : roleIds){
-				//TODO check duplicate
+			Role role = null;
+			for(Long roleId : ListUtil.toHashSet(roleIds)){
+				role = this.roleDao.get(roleId);
+				if (role == null){
+					continue;
+				}
+
 				userRole = new UserRole();
 				userRole.setRoleId(roleId);
 				userRole.setUserId(userId);
 				this.userRoleDao.save(userRole);
+				roleNames.add(role.getRoleName());
 			}
 		}
+
+		LogHelper.addPlaceHolder(user.getUserName(), ListUtil.join(roleNames));
 	}
 	
 	@Override

@@ -1,11 +1,13 @@
 package org.whale.system.log.domain;
 
-import org.whale.system.base.Page;
-
 /**
  * Created by 王金绍 on 2016/4/25.
  */
-public class LogQueryReq extends Page {
+public class LogQueryReq {
+
+    private String clazz;
+
+    private String method;
 
     private String module;
 
@@ -15,11 +17,29 @@ public class LogQueryReq extends Page {
 
     private String ip;
 
-    private Long startTime;
+    private Integer costTime;
 
-    private Long endTime;
+    private String startTime;
 
-    private Integer rsType;
+    private String endTime;
+
+    private Integer rs;
+
+    public String getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(String clazz) {
+        this.clazz = clazz;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
 
     public String getModule() {
         return module;
@@ -53,27 +73,35 @@ public class LogQueryReq extends Page {
         this.ip = ip;
     }
 
-    public Long getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Long startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Long getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Long endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
-    public Integer getRsType() {
-        return rsType;
+    public Integer getRs() {
+        return rs;
     }
 
-    public void setRsType(Integer rsType) {
-        this.rsType = rsType;
+    public void setRs(Integer rs) {
+        this.rs = rs;
+    }
+
+    public Integer getCostTime() {
+        return costTime;
+    }
+
+    public void setCostTime(Integer costTime) {
+        this.costTime = costTime;
     }
 }
