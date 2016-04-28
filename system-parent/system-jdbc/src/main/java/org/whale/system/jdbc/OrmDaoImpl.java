@@ -69,7 +69,8 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	public void save(T t){
 		final OrmValue ormValue = this.valueBulider.getSave(t);
 		Object idVal = ReflectionUtil.getFieldValue(t, this._getOrmTable().getIdCol().getAttrName());
-		if(idVal == null && DbKind.isMysql()){
+		//防止id 被非空过滤器设置为0时，不去主动获取id
+		if((idVal == null || ((idVal instanceof Number) && ((Number) idVal).intValue() == 0)) && DbKind.isMysql()){
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			this.jdbcTemplate.update(new PreparedStatementCreator(){
 

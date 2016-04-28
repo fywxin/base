@@ -39,7 +39,7 @@
 	<bean id="authManager" class="org.whale.system.auth.service.DefalutAuthManager"></bean>
 	<bean id="authBeanStore" class="org.whale.system.auth.scan.AuthBeanStore"></bean>
 
-	<bean class="org.whale.system.jdbc.filter.dll.impl.NullFiter"></bean>
+	<bean class="org.whale.system.jdbc.filter.dll.impl.NullFilter"></bean>
 	
 	<!-- 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
 		<property name="maxTotal" value="${redis.pool.maxTotal}" />

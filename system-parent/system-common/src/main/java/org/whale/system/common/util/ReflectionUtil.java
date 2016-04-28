@@ -62,7 +62,7 @@ public class ReflectionUtil {
 	public static void invokeSetterMethod(Object target, String propertyName, Object value, Class<?> propertyType) {
 		Class<?> type = propertyType != null ? propertyType : value.getClass();
 		String setterMethodName = "set" + Strings.capitalize(propertyName);
-		invokeMethod(target, setterMethodName, new Class[] { type }, new Object[] { value });
+		invokeMethod(target, setterMethodName, new Class[]{type}, new Object[]{value});
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class ReflectionUtil {
 	/**
 	 * 强行设置Field可访问.
 	 */
-	protected static void makeAccessible(final Field field) {
+	public static void makeAccessible(final Field field) {
 		if (!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers())) {
 			field.setAccessible(true);
 		}
