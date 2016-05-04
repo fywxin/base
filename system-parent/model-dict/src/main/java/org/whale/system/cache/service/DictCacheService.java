@@ -1,16 +1,9 @@
 package org.whale.system.cache.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.whale.system.cache.ICacheService;
 import org.whale.system.common.constant.OrderNumConstant;
 import org.whale.system.common.constant.SysConstant;
@@ -24,9 +17,8 @@ import org.whale.system.domain.Dict;
 import org.whale.system.domain.DictItem;
 import org.whale.system.spring.SpringContextHolder;
 
-import com.alibaba.fastjson.JSON;
+import java.util.*;
 
-@Component
 public class DictCacheService implements Bootable{
 	
 	private static final Logger logger = LoggerFactory.getLogger(DictCacheService.class);
@@ -37,7 +29,7 @@ public class DictCacheService implements Bootable{
 	private DictDao dictDao;
 	@Autowired
 	private DictItemDao dictItemDao;
-	@Autowired(required=false)
+
 	private ICacheService<Dict> cacheService;
 	
 	
@@ -447,5 +439,9 @@ public class DictCacheService implements Bootable{
 	@Override
 	public int getOrder() {
 		return OrderNumConstant.DICT_CACHE_INIT_ORDER;
+	}
+
+	public void setCacheService(ICacheService<Dict> cacheService) {
+		this.cacheService = cacheService;
 	}
 }

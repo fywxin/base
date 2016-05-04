@@ -38,6 +38,9 @@
 	<bean id="userAuthCacheService" class="org.whale.system.auth.cache.UserAuthCacheService">
 		<property name="cacheService" ref="simpleJvmCacheService"></property>
 	</bean>
+	<bean id="dictCacheService" class="org.whale.system.cache.service.DictCacheService">
+		<property name="cacheService" ref="simpleJvmCacheService"></property>
+	</bean>
 
 	<bean class="org.whale.system.jdbc.filter.dll.impl.NullFilter"></bean>
 	
