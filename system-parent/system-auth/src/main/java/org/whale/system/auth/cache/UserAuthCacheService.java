@@ -40,7 +40,7 @@ public class UserAuthCacheService implements Bootable{
 	private AuthDao authDao;
 	@Autowired
 	private MenuDao menuDao;
-	@Autowired(required=false)
+
 	private ICacheService<UserAuth> cacheService;
 	
 	public void initUserAuths(){
@@ -206,5 +206,8 @@ public class UserAuthCacheService implements Bootable{
 	public int getOrder() {
 		return OrderNumConstant.AUTH_CACHE_INIT_ORDER;
 	}
-	
+
+	public void setCacheService(ICacheService<UserAuth> cacheService) {
+		this.cacheService = cacheService;
+	}
 }

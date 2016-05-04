@@ -20,7 +20,7 @@ import org.whale.system.jdbc.orm.sql.SqlBulider;
 import org.whale.system.jdbc.orm.table.OrmTableBulider;
 import org.whale.system.jdbc.orm.value.ValueBulider;
 import org.whale.system.jdbc.util.AnnotationUtil;
-import org.whale.system.jdbc.util.RowMapperBulider;
+import org.whale.system.jdbc.util.RowMapperBuilder;
 
 /**
  * ORM 容器上下文
@@ -34,7 +34,7 @@ public class OrmContext extends EntryContext {
 	private static Logger logger = LoggerFactory.getLogger(OrmContext.class);
 	
 	@Autowired
-	private RowMapperBulider rowMapperBulider;
+	private RowMapperBuilder rowMapperBuilder;
 	@Autowired
 	private OrmTableBulider ormTableBulider;
 	@Autowired
@@ -76,7 +76,7 @@ public class OrmContext extends EntryContext {
 		ormSqls.add(getAll);
 		
 		//添加RowMapper缓存对象
-		RowMapper<?> rowMapper = this.rowMapperBulider.bulidRowMapper(clazz, ormTable.getOrmCols());
+		RowMapper<?> rowMapper = this.rowMapperBuilder.buildRowMapper(clazz, ormTable.getOrmCols());
 		logger.info("ORM: 类[{}] 解析RowMapper完成!", clazz.getName());
 		
 		ormClass.setOrmTable(ormTable);

@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
@@ -25,7 +27,9 @@ import org.whale.system.jdbc.orm.entry.OrmColumn;
  * 2014年9月7日-下午4:26:47
  */
 @Component
-public class RowMapperBulider {
+public class RowMapperBuilder {
+
+	private static Logger logger = LoggerFactory.getLogger(RowMapperBuilder.class);
 
 	@Autowired
 	private DefaultLobHandler lobHandler;
@@ -40,7 +44,7 @@ public class RowMapperBulider {
 	 * @return
 	 */
 	@SuppressWarnings("all")
-	public RowMapper<?> bulidRowMapper(final Class<?> clazz, final List<OrmColumn> list){
+	public RowMapper<?> buildRowMapper(final Class<?> clazz, final List<OrmColumn> list){
 		RowMapper<?> rowMapper = new RowMapper() {
 			@Override
 			public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -59,6 +63,12 @@ public class RowMapperBulider {
 								AnnotationUtil.setFieldValue(obj, col.getField(), bg.longValue());
 							continue ;
 						}
+						if(java.sql.Types.INTEGER == col.getType()){
+							BigDecimal bg = rs.getBigDecimal(col.getSqlName());
+							if(bg != null)
+								AnnotationUtil.setFieldValue(obj, col.getField(), bg.intValue());
+							continue ;
+						}
 						//不能用java.sql.Date 否则 时分秒 的值为 0
 						if(java.sql.Types.TIMESTAMP == col.getType() || java.sql.Types.DATE == col.getType()){
 							Timestamp time = rs.getTimestamp(col.getSqlName());
@@ -67,13 +77,6 @@ public class RowMapperBulider {
 								continue ;
 							}
 						}
-						if(java.sql.Types.INTEGER == col.getType()){
-							BigDecimal bg = rs.getBigDecimal(col.getSqlName());
-							if(bg != null)
-								AnnotationUtil.setFieldValue(obj, col.getField(), bg.intValue());
-							continue ;
-						}
-						
 						if(java.sql.Types.BOOLEAN == col.getType()){
 							AnnotationUtil.setFieldValue(obj, col.getField(), rs.getBoolean(col.getSqlName()));
 							continue ;
@@ -134,9 +137,9 @@ public class RowMapperBulider {
 						AnnotationUtil.setFieldValue(obj, col.getField(), rs.getObject(col.getSqlName()));
 					}
 				} catch (InstantiationException e) {
-					e.printStackTrace();
+					logger.error("设置值异常", e);
 				} catch (IllegalAccessException e) {
-					e.printStackTrace();
+					logger.error("设置值异常", e);
 				}
 				return obj;
 			}

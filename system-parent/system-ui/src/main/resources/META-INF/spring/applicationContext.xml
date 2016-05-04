@@ -32,12 +32,12 @@
 		</property>
 	</bean>
 	
-	<bean id="jvmCacheService" class="org.whale.system.cache.impl.JvmCacheService"></bean>
+	<bean id="simpleJvmCacheService" class="org.whale.system.cache.impl.SimpleJvmCacheService"></bean>
 	
 	<!-- 系统权限过滤 -->
-	<bean id="userAuthCacheService" class="org.whale.system.auth.cache.UserAuthCacheService"></bean>
-	<bean id="authManager" class="org.whale.system.auth.service.DefalutAuthManager"></bean>
-	<bean id="authBeanStore" class="org.whale.system.auth.scan.AuthBeanStore"></bean>
+	<bean id="userAuthCacheService" class="org.whale.system.auth.cache.UserAuthCacheService">
+		<property name="cacheService" ref="simpleJvmCacheService"></property>
+	</bean>
 
 	<bean class="org.whale.system.jdbc.filter.dll.impl.NullFilter"></bean>
 	

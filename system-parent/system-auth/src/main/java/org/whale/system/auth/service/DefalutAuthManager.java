@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.aspectj.lang.JoinPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.whale.system.auth.cache.UserAuthCacheService;
 import org.whale.system.auth.domain.AuthBean;
 import org.whale.system.auth.domain.UserAuth;
@@ -12,6 +13,7 @@ import org.whale.system.common.exception.ForbidVisitException;
 import org.whale.system.common.exception.NotLoginException;
 import org.whale.system.common.util.ThreadContext;
 
+@Component
 public class DefalutAuthManager implements IauthManager {
 	
 	@Autowired

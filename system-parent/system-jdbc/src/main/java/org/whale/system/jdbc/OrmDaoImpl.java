@@ -26,11 +26,13 @@ import org.whale.system.base.Cmd;
 import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
 import org.whale.system.base.Iquery.SqlType;
+import org.whale.system.common.exception.OrmException;
 import org.whale.system.common.exception.StaleObjectStateException;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
+import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 import org.whale.system.jdbc.orm.entry.OrmValue;
 import org.whale.system.jdbc.orm.value.ValueBulider;
@@ -68,7 +70,8 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 */
 	public void save(T t){
 		final OrmValue ormValue = this.valueBulider.getSave(t);
-		Object idVal = ReflectionUtil.getFieldValue(t, this._getOrmTable().getIdCol().getAttrName());
+		OrmColumn idCol = this._getOrmTable().getIdCol();
+		Object idVal = ReflectionUtil.getFieldValue(t, idCol.getAttrName());
 		//防止id 被非空过滤器设置为0时，不去主动获取id
 		if((idVal == null || ((idVal instanceof Number) && ((Number) idVal).intValue() == 0)) && DbKind.isMysql()){
 			KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -87,10 +90,18 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				}
 				
 			}, keyHolder);
-			Field idFile = this._getOrmTable().getIdCol().getField();
+
+			Field idFile = idCol.getField();
 			idFile.setAccessible(true);
 			try {
-				ReflectionUtil.writeField(idFile, t, keyHolder.getKey().longValue());
+				if (idCol.getType() == Types.BIGINT){
+					ReflectionUtil.writeField(idFile, t, keyHolder.getKey().longValue());
+				}else if (idCol.getType() == Types.INTEGER){
+					ReflectionUtil.writeField(idFile, t, keyHolder.getKey().intValue());
+				}else{
+					logger.warn("自增主键类型存在问题，非Integer或Long");
+					ReflectionUtil.writeField(idFile, t, keyHolder.getKey().shortValue());
+				}
 			} catch (Exception e) {
 				logger.error("设置主键值异常", e);
 			}
@@ -444,7 +455,4 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		return Cmd.newCmd(clazz);
 	}
 
-	
-
-	
 }

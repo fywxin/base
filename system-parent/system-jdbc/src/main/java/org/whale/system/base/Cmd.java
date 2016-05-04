@@ -21,7 +21,7 @@ public class Cmd implements Iquery{
 	
 	private OrmTable ormTable;
 	
-	//查询条件
+	//返回字段
 	private StringBuilder select;
 	//查询表对象
 	private StringBuilder from;
@@ -88,7 +88,7 @@ public class Cmd implements Iquery{
 	
 	public String getGetSql() {
 		if(getSql == null){
-			StringBuilder strb = new StringBuilder();
+			StringBuilder strb = new StringBuilder(50);
 			strb.append(ormTable.getSqlHeadPrefix()).append(" WHERE 1=1 ").append(where.toString());
 			if(limit != null){
 				strb.append(limit);
@@ -101,7 +101,7 @@ public class Cmd implements Iquery{
 
 	public String getQuerySql() {
 		if(querySql == null){
-			StringBuilder strb = new StringBuilder();
+			StringBuilder strb = new StringBuilder(200);
 			
 			if(this.select == null){
 				if(this.from == null){
@@ -140,7 +140,7 @@ public class Cmd implements Iquery{
 	
 	public String getCountSql() {
 		if(countSql == null){
-			StringBuilder strb = new StringBuilder();
+			StringBuilder strb = new StringBuilder(100);
 			strb.append("SELECT COUNT(1) FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(where.toString());
 			if(limit != null){
 				strb.append(limit);
@@ -161,7 +161,7 @@ public class Cmd implements Iquery{
 	 */
 	public Cmd select(String... cols){
 		if(this.select == null){
-			select = new StringBuilder();
+			select = new StringBuilder(100);
 		}
 		
 		if(cols == null || cols.length < 1){
@@ -188,7 +188,7 @@ public class Cmd implements Iquery{
 	 */
 	public Cmd selectWrap(String sql){
 		if(this.select == null){
-			select = new StringBuilder();
+			select = new StringBuilder(50);
 		}
 		select.append(sql.trim());
 		return this;
@@ -211,7 +211,7 @@ public class Cmd implements Iquery{
 	 */
 	public Cmd fromWrap(String sql){
 		if(this.from == null){
-			from = new StringBuilder();
+			from = new StringBuilder(30);
 		}
 		from.append(sql);
 		return this;
@@ -230,7 +230,7 @@ public class Cmd implements Iquery{
 	@SuppressWarnings("all")
 	public Cmd whereWrap(String sql, Object value){
 		if(this.where == null){
-			this.where = new StringBuilder();
+			this.where = new StringBuilder(50);
 		}
 		this.where.append(sql);
 		
@@ -252,7 +252,7 @@ public class Cmd implements Iquery{
 	 */
 	public Cmd asc(String col){
 		if(order == null){
-			order = new StringBuilder();
+			order = new StringBuilder(20);
 		}
 		col = this.fixCol(col);
 		order.append(col).append(" ASC,");
@@ -266,7 +266,7 @@ public class Cmd implements Iquery{
 	 */
 	public Cmd desc(String col){
 		if(order == null){
-			order = new StringBuilder();
+			order = new StringBuilder(20);
 		}
 		col = this.fixCol(col);
 		order.append(col).append(" DESC,");
@@ -281,7 +281,7 @@ public class Cmd implements Iquery{
 	 */
 	public Cmd limit(int from, int size){
 		if(this.limit == null){
-			limit = new StringBuilder();
+			limit = new StringBuilder(20);
 		}
 		limit.append(" LIMIT ").append(from).append(", ").append(size);
 		

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.whale.system.auth.domain.AuthBean;
 import org.whale.system.base.Cmd;
@@ -27,6 +28,7 @@ import org.whale.system.domain.RoleAuth;
  * @author wjs
  * @date 2014年12月23日 下午10:56:48
  */
+@Component
 public class AuthBeanStore {
 
 	@Autowired
@@ -193,9 +195,5 @@ public class AuthBeanStore {
 		
 		return urlSet;
 	}
-	
-	public static void main(String[] args) {
-		String a="/sdwe/{dfwe}/";
-		System.out.println(a.substring(0, a.indexOf("{")-1));
-	}
+
 }

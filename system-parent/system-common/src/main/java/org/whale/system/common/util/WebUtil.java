@@ -148,7 +148,7 @@ public class WebUtil {
 		response.setHeader("Content-type", "application/json");  
 		response.setContentType("text/xml;charset=utf-8");
 
-		//response.setHeader("Access-Control-Allow-Origin", "*");//解决跨域问题
+		response.setHeader("Access-Control-Allow-Origin", "*");//解决跨域问题
 		ServletOutputStream out = null;
 		try {
 			out = response.getOutputStream();
@@ -178,7 +178,7 @@ public class WebUtil {
 		//response.setContentType("text/xml;charset=utf-8");
 		response.setContentType("application/json;charset=UTF-8");
 
-		//response.setHeader("Access-Control-Allow-Origin", "*");//解决跨域问题
+		response.setHeader("Access-Control-Allow-Origin", "*");//解决跨域问题
 		PrintWriter out = null;
 		try {
 			out = response.getWriter();

@@ -26,10 +26,10 @@ public class JvmCacheService<M extends Serializable> extends AbstractCacheServic
 	private static final Long maxCacheNum = PropertiesUtil.getValueLong("cache.jvm.maxCacheNum", 393216L);
 	
 	//当前缓存记录数，由于 ConcurrentHashMap 的size方法会锁定整个表，所以退而取其次, 高并发情况下可能存在误差，有必要矫正
-	private AtomicLong num = new AtomicLong(0);
+	public AtomicLong num = new AtomicLong(0);
 	
 	//丢失的更新记录累积
-	private AtomicInteger lostRec = new AtomicInteger(0);
+	public AtomicInteger lostRec = new AtomicInteger(0);
 	
 	public JvmCacheService() {
 		Thread thread = new JvmCacheExpScanThread();
