@@ -15,6 +15,7 @@ import org.whale.system.base.UserContext;
 import org.whale.system.common.exception.BusinessException;
 import org.whale.system.common.exception.OrmException;
 import org.whale.system.common.exception.SysException;
+import org.whale.system.common.util.ListUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.ThreadContext;
 import org.whale.system.log.domain.LogInfo;
@@ -22,6 +23,7 @@ import org.whale.system.log.service.LogStoreService;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -136,8 +138,18 @@ public class LogAspect {
 			logInfo.setInfo(exInfo.length() > 255 ? exInfo.substring(0, 255) : exInfo);
 			Object[] args = pjp.getArgs();
 			if (args != null && args.length > 0){
-				String params = JSON.toJSONString(args);
-				logInfo.setParams(params.length() > 65534 ? params.substring(0, 65534) : params);
+				List<Object> paramList = ListUtil.asList(args);
+				for (int i=paramList.size()-1; i>=0; i--){
+					if (paramList.get(i) != null && paramList.get(i).getClass().getName().startsWith("org.apache.catalina.connector")){
+						paramList.remove(i);
+					}
+				}
+				try {
+					String params = JSON.toJSONString(paramList);
+					logInfo.setParams(params.length() > 65534 ? params.substring(0, 65534) : params);
+				}catch (Exception e){
+					logger.error("获取参数JSON序列化异常:", e);
+				}
 			}
 			this.logStoreService.addLogRecvQueue(logInfo);
 			throw ex;

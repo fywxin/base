@@ -9,11 +9,21 @@
    <name>auth</name>
    <tag-class>org.whale.system.auth.tag.AuthTag</tag-class>
 
-   <attribute>
-     <name>authCode</name>
-     <required>true</required>
-     <rtexprvalue>true</rtexprvalue>
-   </attribute>
+	<attribute>
+	 	<name>authCode</name>
+	 	<required>true</required>
+	 	<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	 <attribute>
+		 <name>authAdmin</name>
+		 <required>false</required>
+		 <rtexprvalue>false</rtexprvalue>
+	 </attribute>
+	 <attribute>
+		 <name>authLogin</name>
+		 <required>false</required>
+		 <rtexprvalue>false</rtexprvalue>
+	 </attribute>
  </tag>
 
 

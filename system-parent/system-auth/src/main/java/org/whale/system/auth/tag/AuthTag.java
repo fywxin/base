@@ -18,12 +18,13 @@ public class AuthTag extends TagSupport {
 	
 	/**权限码，开发人员提供与相应的操作的权限码，系统根据此权限码进行过滤 */
 	private String authCode;
+
+	private boolean authAdmin;
+
+	private boolean authLogin;
 	
 	@Override
 	public int doStartTag() throws JspException {
-		if(Strings.isBlank(authCode))
-			return EVAL_BODY_INCLUDE;
-		
 		UserContext uc = (UserContext)ThreadContext.getContext().get(ThreadContext.KEY_USER_CONTEXT);
 		HttpServletRequest request =null;
 		if(uc == null){
@@ -48,7 +49,12 @@ public class AuthTag extends TagSupport {
 		if(uc != null){
 			if(uc.isSuperAdmin())
 				return EVAL_BODY_INCLUDE;
-			
+			if (authAdmin){
+				return SKIP_BODY;
+			}
+			if (authLogin){
+				return EVAL_BODY_INCLUDE;
+			}
 			if(UserAuthCacheService.getThis().getUserAuth(uc.getUserId()).getAuthCodes().contains(authCode)){
 				return EVAL_BODY_INCLUDE;
 			}else{
@@ -67,4 +73,19 @@ public class AuthTag extends TagSupport {
 		this.authCode = authCode;
 	}
 
+	public boolean isAuthAdmin() {
+		return authAdmin;
+	}
+
+	public void setAuthAdmin(boolean authAdmin) {
+		this.authAdmin = authAdmin;
+	}
+
+	public boolean isAuthLogin() {
+		return authLogin;
+	}
+
+	public void setAuthLogin(boolean authLogin) {
+		this.authLogin = authLogin;
+	}
 }

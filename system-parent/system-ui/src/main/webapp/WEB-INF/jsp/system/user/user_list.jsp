@@ -47,6 +47,10 @@ $(function(){
 	                strArr.push('<span class="link-sep">|</span>');
 	                strArr.push('<a href="javascript:;" class="link" onclick=go("分配角色","${ctx}/user/goSetUserRole?userId='+row.userId+'") >分配角色</a>');
 	                </tag:auth>
+					<tag:auth authCode="" authAdmin="true">
+					strArr.push('<span class="link-sep">|</span>');
+					strArr.push('<a href="javascript:;" class="link" onclick=mock('+row.userId+') > 模拟</a>');
+					</tag:auth>
 	            }
 
         		return strArr.join("");
@@ -108,11 +112,18 @@ function setStatus(id,name,type){
 	}
 	$.confirm({info:'您确定要[ '+opt+' ]用户[ '+name+' ]吗？', url : url});
 }
+	function mock(userId){
+	$.get('${ctx}/mockLogin?userId='+userId, function(obj){
+		if(obj.rs){
+			window.top.location.reload();
+		}else{
+			$.alert(obj.msg);
+		}
+	});
+}
 </script>
 </head>
-
 <body style="overflow: hidden;">
-
 	<div class="my_gridBox">
 		<form id="queryForm" >
 			<table class="query">

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -45,10 +46,20 @@
           <ul id="main-menu" class="nav navbar-nav navbar-right">
             <li class="dropdown hidden-xs">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-user padding-right-small" style="position:relative;top: 3px;"></span> ${uc.realName }
+                    <c:if test="${uc.isMock}">
+                        <i class="fa fa-exclamation-triangle" style="position:relative;top: 3px;color: red;font-size: larger;" title="模拟用户">${uc.realName } [模拟]</i>
+                    </c:if>
+                    <c:if test="${!uc.isMock}">
+                        <span class="glyphicon glyphicon-user padding-right-small" style="position:relative;top: 3px;">${uc.realName }</span>
+                    </c:if>
                     <i class="fa fa-caret-down"></i>
                 </a>
               <ul class="dropdown-menu">
+                  <c:if test="${uc.isMock}">
+                      <li><a href="javascript:;" onclick="admin()">返回管理员</a></li>
+                      <li class="divider"></li>
+                  </c:if>
+
                 <li><a href="javascript:;">个人资料</a></li>
                 <li class="divider"></li>
                 <li><a href="javascript:;" onclick="changePassword()">修改密码</a></li>
@@ -61,7 +72,7 @@
         </div>
       </div>
     <div class="sidebar-nav" id="menuDiv" style="width: 200px;overflow: auto;">
-    	<ul>${uc.customDatas.menuStr }</ul>
+    	<ul>${uc.ext.menuStr }</ul>
     </div>
     <div class="content" style="padding: 3px 5px 0px 3px;overflow: hidden;margin-left: 200px;">
     	<ul class="nav nav-tabs" id="topTab">
@@ -80,6 +91,17 @@
 <script src="${html }/js/main/index.js"></script>
 <script type="text/javascript">
 var ctx="${ctx}";
+<c:if test="${uc.isMock}">
+    function admin(){
+        $.get("${ctx}/adminLogin", function (obj) {
+            if(obj.rs){
+                window.location.reload();
+            }else{
+                $.alert(obj.msg);
+            }
+        })
+    }
+</c:if>
 </script>
 </body>
 </html>

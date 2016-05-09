@@ -20,6 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.whale.system.annotation.auth.AuthAdmin;
+import org.whale.system.annotation.auth.AuthLogin;
 import org.whale.system.auth.cache.UserAuthCacheService;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.base.Rs;
@@ -28,10 +30,7 @@ import org.whale.system.base.UserContextAccessor;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.DictConstant;
 import org.whale.system.common.constant.SysConstant;
-import org.whale.system.common.util.Strings;
-import org.whale.system.common.util.ThreadContext;
-import org.whale.system.common.util.TimeUtil;
-import org.whale.system.common.util.WebUtil;
+import org.whale.system.common.util.*;
 import org.whale.system.domain.Dept;
 import org.whale.system.domain.Menu;
 import org.whale.system.domain.Role;
@@ -63,6 +62,40 @@ public class MainRouter extends BaseRouter {
 	private RoleService roleService;
 	
 	private Boolean sort = Boolean.FALSE;
+
+	/**
+	 * 返回管理员
+	 * @return
+	 */
+	@AuthLogin
+	@ResponseBody
+	@RequestMapping("/adminLogin")
+	public Rs adminLogin(){
+		if (!UserContext.get().getIsMock()){
+			return Rs.fail("用户不存在");
+		}
+		this.bindUserContext(this.userService.getByUserName("admin"));
+		return Rs.success();
+	}
+
+	/**
+	 * 模拟登录
+	 * @param userId
+	 * @return
+	 */
+	@AuthAdmin
+	@ResponseBody
+	@RequestMapping("/mockLogin")
+	public Rs mockLogin(Long userId){
+		User user = this.userService.get(userId);
+		if (user == null){
+			return Rs.fail("用户["+userId+"]不存在");
+		}
+		this.bindUserContext(user);
+		UserContext uc = UserContext.get();
+		ReflectionUtil.setFieldValue(uc, "isMock", true);
+		return Rs.success();
+	}
 
 	
 	/**
@@ -180,7 +213,7 @@ public class MainRouter extends BaseRouter {
 	 * 绑定用户上下文
 	 * @param user
 	 */
-	private void bindUserContext(User user){
+	public void bindUserContext(User user){
 		UserContext uc = new UserContext();
 		uc.setIp(WebUtil.getIp());
 		uc.setLoginTime(new Date());
@@ -196,19 +229,13 @@ public class MainRouter extends BaseRouter {
 				dept.setDeptCode("ROOT");
 				dept.setDeptName(DictCacheService.getThis().getItemValue(DictConstant.DICT_SYS_CONF, "ITEM_DEPT_ROOT"));
 			}
-			uc.getCustomDatas().put("dept", dept);
+			uc.getExt().put("dept", dept);
 		}
-		
-		uc.setSuperAdmin(user.getAdminFlag());
+
+		ReflectionUtil.setFieldValue(uc, "isSuperAdmin", user.getAdminFlag());
 		if(!uc.isSuperAdmin()){
 			List<Role> roles = this.roleService.getByUserId(uc.getUserId());
-			uc.getCustomDatas().put("roles", roles);
-		}
-		
-		if(accessores != null && accessores.size() > 0){
-			for(UserContextAccessor accessor : this.getAccessores()){
-				accessor.addCustomDatas(uc);
-			}
+			uc.getExt().put("roles", roles);
 		}
 		
 		HttpSession session = WebUtil.getSession();
@@ -218,6 +245,12 @@ public class MainRouter extends BaseRouter {
 		//绑定菜单
 		this.attachMenu();
 		UserContext.set(uc);
+
+		if(accessores != null && accessores.size() > 0){
+			for(UserContextAccessor accessor : this.getAccessores()){
+				accessor.onLogin(uc);
+			}
+		}
 	}
 	
 	/**
@@ -287,7 +320,7 @@ public class MainRouter extends BaseRouter {
 	@RequestMapping("/main")
 	public ModelAndView main() {
 		UserContext uc = this.getUserContext();
-		if(uc.getCustomDatas().get("menuStr") == null){
+		if(uc.getExt().get("menuStr") == null){
 			this.attachMenu();
 		}
 		
@@ -363,7 +396,7 @@ public class MainRouter extends BaseRouter {
 				activce=false;
 			}
 		}
-		uc.getCustomDatas().put("menuStr", strb.toString());
+		uc.getExt().put("menuStr", strb.toString());
 	}
 
 	private String createMenuTree(Menu node, Map<Long, List<Menu>> pidMenus, int level, boolean activce){

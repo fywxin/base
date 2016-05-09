@@ -86,17 +86,16 @@ public class UserContext implements Serializable{
 	
 	private Integer userType;
 	
-	private Map<String, Object> customDatas = new HashMap<String, Object>();
+	private Map<String, Object> ext = new HashMap<String, Object>();
 	
 	private boolean isSuperAdmin;
+
+	//是否模拟用户
+	private boolean isMock;
 	
 
 	public boolean isSuperAdmin() {
 		return isSuperAdmin;
-	}
-
-	public void setSuperAdmin(boolean isSuperAdmin) {
-		this.isSuperAdmin = isSuperAdmin;
 	}
 
 	public Long getUserId() {
@@ -155,12 +154,15 @@ public class UserContext implements Serializable{
 		this.userType = userType;
 	}
 
-	public Map<String, Object> getCustomDatas() {
-		return customDatas;
+	public Map<String, Object> getExt() {
+		return ext;
 	}
 
-	public void setCustomDatas(Map<String, Object> customDatas) {
-		this.customDatas = customDatas;
+	public void setExt(Map<String, Object> ext) {
+		this.ext = ext;
 	}
-	
+
+	public boolean getIsMock() {
+		return isMock;
+	}
 }
