@@ -72,7 +72,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		final OrmValue ormValue = this.valueBulider.getSave(t);
 		OrmColumn idCol = this._getOrmTable().getIdCol();
 		Object idVal = ReflectionUtil.getFieldValue(t, idCol.getAttrName());
-		
+
 		boolean idIsEmpty = (idVal == null || ((idVal instanceof Number) && ((Number) idVal).intValue() == 0));
 		if (!idCol.getIdAuto() && idIsEmpty){
 			throw new OrmException("非自增主键，ID不能为空或0");

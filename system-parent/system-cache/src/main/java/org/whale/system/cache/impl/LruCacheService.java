@@ -1,19 +1,15 @@
 package org.whale.system.cache.impl;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whale.system.cache.impl.jvm.CacheEntry;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.util.PropertiesUtil;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 /**
@@ -30,7 +26,18 @@ public class LruCacheService<M extends Serializable> extends AbstractCacheServic
 	
 	private static final Long CACHE_SCAN_INTERVAL = PropertiesUtil.getValueInt("cache.jvm.exp.interval", 10) * 1000L;
 
+	private final ReentrantReadWriteLock rwl;
+
+	private final Lock r;
+
+	private final Lock w;
+
+
 	public LruCacheService() {
+		rwl = new ReentrantReadWriteLock();
+		r = rwl.readLock();
+		w = rwl.writeLock();
+
 		this.cache = new LinkedHashMap<String, CacheEntry>() {
 			private static final long serialVersionUID = -3834209229668463829L;
 
@@ -49,17 +56,25 @@ public class LruCacheService<M extends Serializable> extends AbstractCacheServic
 	
 	@Override
 	public void doPut(String cacheName, String key, M value, Integer seconds) {
-		synchronized (cache) {
-			this.cache.put(this.getKey(cacheName, key), new CacheEntry(value, seconds));
+		String k =  this.getKey(cacheName, key);
+		CacheEntry cacheEntry = new CacheEntry(value, seconds);
+		w.lock();
+		try{
+			this.cache.put(k, cacheEntry);
+		}finally {
+			w.unlock();
 		}
 	}
 
 	@Override
 	public void mdoPut(String cacheName, Map<String, M> keyValues, Integer seconds) {
-		synchronized (cache) {
+		w.lock();
+		try{
 			for(Map.Entry<String, M> entry : keyValues.entrySet()){
 				this.cache.put(this.getKey(cacheName, entry.getKey()), new CacheEntry(entry.getValue(), seconds));
 			}
+		}finally {
+			w.unlock();
 		}
 	}
 
@@ -67,20 +82,25 @@ public class LruCacheService<M extends Serializable> extends AbstractCacheServic
 	@Override
 	@SuppressWarnings("all")
 	public M doGet(String cacheName, String key) {
-		synchronized (cache) {
-			CacheEntry cacheEntry = (CacheEntry)this.cache.get(this.getKey(cacheName, key));
+		String k =  this.getKey(cacheName, key);
+		r.lock();
+		try {
+			CacheEntry cacheEntry = (CacheEntry)this.cache.get(k);
 			if(cacheEntry == null)
 				return null;
 			cacheEntry.updateLastActiveTime();
 			return (M)cacheEntry.getValue();
+		}finally {
+			r.unlock();
 		}
 	}
 
 	@Override
 	@SuppressWarnings("all")
 	public List<M> mdoGet(String cacheName, List<String> keys) {
-		synchronized (cache) {
-			List<M> rs = new ArrayList<M>(keys.size());
+		List<M> rs = new ArrayList<M>(keys.size());
+		r.lock();
+		try {
 			CacheEntry cacheEntry = null;
 			for(String key : keys){
 				cacheEntry = (CacheEntry)this.cache.get(this.getKey(cacheName, key));
@@ -92,49 +112,64 @@ public class LruCacheService<M extends Serializable> extends AbstractCacheServic
 				}
 			}
 			return rs;
+		}finally {
+			r.unlock();
 		}
 	}
 
 	@Override
 	public void doDel(String cacheName, String key) {
-		synchronized (cache) {
-			this.cache.remove(this.getKey(cacheName, key));
+		String k =  this.getKey(cacheName, key);
+		w.lock();
+		try {
+			this.cache.remove(k);
+		}finally {
+			w.unlock();
 		}
 	}
 
 	@Override
 	public void mdoDel(String cacheName, List<String> keys) {
-		synchronized (cache) {
+		w.lock();
+		try {
 			for(String key : keys){
 				this.cache.remove(this.getKey(cacheName, key));
 			}
+		}finally {
+			w.unlock();
 		}
 	}
 	
 	@Override
 	public void clear(String cacheName) {
-		synchronized (cache) {
+		w.lock();
+		try {
 			Set<String> keys = this.cache.keySet();
 			for (String key : keys) {
 				if (key.startsWith(cacheName + "_")) {
 					this.cache.remove(key);
 				}
 			}
+		}finally {
+			w.unlock();
 		}
 	}
 
 	@Override
 	public Set<String> getKeys(String cacheName) {
 		Set<String> ks = new HashSet<String>();
-		synchronized (cache) {
+		r.lock();
+		try {
 			Set<String> keys = this.cache.keySet();
 			for (String key : keys) {
 				if (key.startsWith(cacheName + "_")) {
 					ks.add(key);
 				}
 			}
+			return ks;
+		}finally {
+			r.unlock();
 		}
-		return ks;
 	}
 
 
