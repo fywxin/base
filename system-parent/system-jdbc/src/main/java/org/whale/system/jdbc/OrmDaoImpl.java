@@ -72,38 +72,47 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		final OrmValue ormValue = this.valueBulider.getSave(t);
 		OrmColumn idCol = this._getOrmTable().getIdCol();
 		Object idVal = ReflectionUtil.getFieldValue(t, idCol.getAttrName());
+		
+		boolean idIsEmpty = (idVal == null || ((idVal instanceof Number) && ((Number) idVal).intValue() == 0));
+		if (!idCol.getIdAuto() && idIsEmpty){
+			throw new OrmException("非自增主键，ID不能为空或0");
+		}
 		//防止id 被非空过滤器设置为0时，不去主动获取id
-		if((idVal == null || ((idVal instanceof Number) && ((Number) idVal).intValue() == 0)) && DbKind.isMysql()){
-			KeyHolder keyHolder = new GeneratedKeyHolder();
-			this.jdbcTemplate.update(new PreparedStatementCreator(){
+		if(idCol.getIdAuto() && idIsEmpty){
+			if (DbKind.isMysql()){//mysql 获取主键
+				KeyHolder keyHolder = new GeneratedKeyHolder();
+				this.jdbcTemplate.update(new PreparedStatementCreator(){
 
-				@Override
-				public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-					PreparedStatement ps = con.prepareStatement(ormValue.getSql(), Statement.RETURN_GENERATED_KEYS);
-					if(ormValue.getArgs() != null){
-						int i=1;
-						for(Object obj : ormValue.getArgs()){
-							ps.setObject(i++, obj);
+					@Override
+					public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+						PreparedStatement ps = con.prepareStatement(ormValue.getSql(), Statement.RETURN_GENERATED_KEYS);
+						if(ormValue.getArgs() != null){
+							int i=1;
+							for(Object obj : ormValue.getArgs()){
+								ps.setObject(i++, obj);
+							}
 						}
+						return ps;
 					}
-					return ps;
-				}
-				
-			}, keyHolder);
 
-			Field idFile = idCol.getField();
-			idFile.setAccessible(true);
-			try {
-				if (idCol.getType() == Types.BIGINT){
-					ReflectionUtil.writeField(idFile, t, keyHolder.getKey().longValue());
-				}else if (idCol.getType() == Types.INTEGER){
-					ReflectionUtil.writeField(idFile, t, keyHolder.getKey().intValue());
-				}else{
-					logger.warn("自增主键类型存在问题，非Integer或Long");
-					ReflectionUtil.writeField(idFile, t, keyHolder.getKey().shortValue());
+				}, keyHolder);
+
+				Field idFile = idCol.getField();
+				idFile.setAccessible(true);
+				try {
+					if (idCol.getType() == Types.BIGINT){
+						ReflectionUtil.writeField(idFile, t, keyHolder.getKey().longValue());
+					}else if (idCol.getType() == Types.INTEGER){
+						ReflectionUtil.writeField(idFile, t, keyHolder.getKey().intValue());
+					}else{
+						logger.warn("自增主键类型存在问题，非Integer或Long");
+						ReflectionUtil.writeField(idFile, t, keyHolder.getKey().shortValue());
+					}
+				} catch (Exception e) {
+					logger.error("设置主键值异常", e);
 				}
-			} catch (Exception e) {
-				logger.error("设置主键值异常", e);
+			}else if(DbKind.isOracle()){
+
 			}
 		}else{
 			this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
