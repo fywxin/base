@@ -41,8 +41,9 @@ public class LruCacheService<M extends Serializable> extends AbstractCacheServic
 		this.cache = new LinkedHashMap<String, CacheEntry>() {
 			private static final long serialVersionUID = -3834209229668463829L;
 
+			//一定要是 Map.Entry<String, CacheEntry>, Entry<String, CacheEntry>则编译不通过
 			@Override
-			protected boolean removeEldestEntry(Entry<String, CacheEntry> eldest) {
+			protected boolean removeEldestEntry(Map.Entry<String, CacheEntry> eldest) {
 				return size() > PropertiesUtil.getValueInt("cache.lru.size", SysConstant.MAX_LRU_CACHE_SIZE);
 			}
 		};

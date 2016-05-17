@@ -1,8 +1,6 @@
 package org.whale.ext.code;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,8 +45,8 @@ public class CodeEngine {
 		Map<String, Object> root = new HashMap<String, Object>();
 		root.put("domain", domain);
 		
-		Template temp = this.loadCfg().getTemplate(ftlName+".ftl");
-		FileWriter fw = null;
+		Template temp = this.loadCfg().getTemplate(ftlName+".ftl", "UTF-8");
+		OutputStreamWriter fw = null;
 		try {
 			File file = new File(toFile);
 			if(!file.getParentFile().exists()){
@@ -58,7 +56,7 @@ public class CodeEngine {
 				file.createNewFile();
 				file.setWritable(true);
 			}
-			fw = new FileWriter(file);
+			fw = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 			temp.process(root, fw);
 			fw.flush();
 		} finally{

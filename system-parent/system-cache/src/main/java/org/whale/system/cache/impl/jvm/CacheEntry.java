@@ -1,5 +1,6 @@
 package org.whale.system.cache.impl.jvm;
 
+import java.io.Serializable;
 import java.lang.ref.SoftReference;
 
 /**
@@ -9,8 +10,9 @@ import java.lang.ref.SoftReference;
  * 2014年10月24日-上午11:49:25
  */
 @SuppressWarnings("all")
-public class CacheEntry {
-	
+public class CacheEntry implements Serializable {
+	private static final long serialVersionUID = 423452345L;
+
 	private Object value;
 	/**不会过期 */
 	private boolean forever = true;

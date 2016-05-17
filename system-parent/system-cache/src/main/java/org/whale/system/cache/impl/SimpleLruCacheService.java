@@ -28,14 +28,14 @@ public class SimpleLruCacheService<M extends Serializable> extends AbstractCache
 
     public SimpleLruCacheService() {
         rwl = new ReentrantReadWriteLock();
-        r = rwl.readLock();
-        w = rwl.writeLock();
+        r  = rwl.readLock();
+        w= rwl.writeLock();
 
-        this.cache = new LinkedHashMap<String, M>() {
+        cache = new LinkedHashMap<String, M>() {
             private static final long serialVersionUID = -3834209229668463829L;
 
             @Override
-            protected boolean removeEldestEntry(Entry<String, M> eldest) {
+            protected boolean removeEldestEntry(Map.Entry<String, M> eldest) {
                 return size() > PropertiesUtil.getValueInt("cache.lru.size", SysConstant.MAX_LRU_CACHE_SIZE);
             }
         };
@@ -70,7 +70,7 @@ public class SimpleLruCacheService<M extends Serializable> extends AbstractCache
         String k =  this.getKey(cacheName, key);
         r.lock();
         try {
-            return this.cache.get(k);
+            return (M)this.cache.get(k);
         }finally {
             r.unlock();
         }
@@ -82,7 +82,7 @@ public class SimpleLruCacheService<M extends Serializable> extends AbstractCache
         r.lock();
         try {
             for(String key : keys){
-                rs.add(this.cache.get(this.getKey(cacheName, key)));
+                rs.add((M)this.cache.get(this.getKey(cacheName, key)));
             }
             return rs;
         }finally {
