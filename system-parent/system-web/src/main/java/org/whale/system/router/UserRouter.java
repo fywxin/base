@@ -1,7 +1,6 @@
 package org.whale.system.router;
 
-import java.util.List;
-
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,11 +10,7 @@ import org.whale.system.annotation.auth.Auth;
 import org.whale.system.annotation.log.Log;
 import org.whale.system.annotation.log.LogHelper;
 import org.whale.system.auth.cache.UserAuthCacheService;
-import org.whale.system.base.BaseRouter;
-import org.whale.system.base.Cmd;
-import org.whale.system.base.Page;
-import org.whale.system.base.Rs;
-import org.whale.system.base.UserContext;
+import org.whale.system.base.*;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.DictConstant;
 import org.whale.system.common.constant.SysConstant;
@@ -28,7 +23,7 @@ import org.whale.system.service.DeptService;
 import org.whale.system.service.RoleService;
 import org.whale.system.service.UserService;
 
-import com.alibaba.fastjson.JSON;
+import java.util.List;
 
 @Log(module = "用户", value = "")
 @Controller
@@ -197,8 +192,8 @@ public class UserRouter extends BaseRouter {
 			return Rs.fail("用户不能为空");
 		}
 
-		List<Long> roleIds = LangUtil.splitIds(roleIdS);
-		
+		List<Long> roleIds = ListUtil.longList(roleIdS);
+
 		//TODO check out law
 		
 		this.userService.transSaveUserRole(userId, roleIds);
@@ -314,7 +309,7 @@ public class UserRouter extends BaseRouter {
 			return Rs.fail("你未登录，请重新登录");
 		}
 		
-		List<Long> idList = LangUtil.splitIds(ids);
+		List<Long> idList = ListUtil.longList(ids);
 		if(idList.contains(uc.getUserId())){
 			return Rs.fail("亲，你在自杀吗？");
 		}

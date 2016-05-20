@@ -15,7 +15,7 @@ import org.whale.system.base.BaseRouter;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.common.exception.OrmException;
 import org.whale.system.common.exception.SysException;
-import org.whale.system.common.util.LangUtil;
+import org.whale.system.common.util.ListUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.WebUtil;
 <#if domain.treeModel == 3>
@@ -116,7 +116,7 @@ public class ${domain.domainName}Router extends BaseRouter {
 		if(Strings.isBlank(ids)){
 			return Rs.fail("请选择要删除的记录");
 		}
-		List<Long> idList = LangUtil.splitIds(ids);
+		List<${domain.idAttr.type}> idList = ListUtil.longList(ids);
 		this.${domain.domainName?uncap_first}Service.deleteBatch(idList);
 
 		return Rs.success("["+idList.size()+"]条记录删除成功");

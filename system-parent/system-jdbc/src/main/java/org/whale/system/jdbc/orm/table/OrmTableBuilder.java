@@ -8,7 +8,7 @@ import org.whale.system.jdbc.orm.entry.OrmTable;
  * @author wjs
  * 2014年9月6日-下午1:58:58
  */
-public interface OrmTableBulider {
+public interface OrmTableBuilder {
 
 	OrmTable parse(Class<?> clazz);
 }

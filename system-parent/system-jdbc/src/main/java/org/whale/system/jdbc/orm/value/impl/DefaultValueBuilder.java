@@ -8,97 +8,97 @@ import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmSql;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 import org.whale.system.jdbc.orm.entry.OrmValue;
-import org.whale.system.jdbc.orm.value.ValueBulider;
+import org.whale.system.jdbc.orm.value.ValueBuilder;
 
 @Component
-public class DefaultValueBulider implements ValueBulider {
+public class DefaultValueBuilder implements ValueBuilder {
 	
 	@Autowired
 	private OrmContext ormContext;
 	@Autowired
-	private ValueSaveBulider valueSaveBulider;
+	private ValueSaveBuilder valueSaveBuilder;
 	@Autowired
-	private ValueUpdateBulider valueUpdateBulider;
+	private ValueUpdateBuilder valueUpdateBuilder;
 	@Autowired
-	private ValueDelBulider valueDelBulider;
+	private ValueDelBuilder valueDelBuilder;
 	@Autowired
-	private ValueGetBulider valueGetBulider;
+	private ValueGetBuilder valueGetBuilder;
 	
 	@Override
 	public OrmValue getSave(Object obj) {
 		if(obj == null) return null;
 		OrmSql ormSql = ormContext.getOrmSql(obj.getClass(), OrmSql.OPT_SAVE);
-		return this.valueSaveBulider.getSave(obj, ormSql);
+		return this.valueSaveBuilder.getSave(obj, ormSql);
 	}
 
 	@Override
 	public OrmValue getSave(List<?> objs) {
 		if(objs == null || objs.size() < 1) return null;
 		OrmSql ormSql = ormContext.getOrmSql(objs.get(0).getClass(), OrmSql.OPT_SAVE_BATCH);
-		return this.valueSaveBulider.getSave(objs, ormSql);
+		return this.valueSaveBuilder.getSave(objs, ormSql);
 	}
 
 	@Override
 	public OrmValue getUpdate(Object obj) {
 		if(obj == null) return null;
 		OrmSql ormSql = ormContext.getOrmSql(obj.getClass(), OrmSql.OPT_UPDATE);
-		return this.valueUpdateBulider.getUpdate(obj, ormSql);
+		return this.valueUpdateBuilder.getUpdate(obj, ormSql);
 	}
 	
 	@Override
 	public OrmValue getUpdate(List<?> objs) {
 		if(objs == null || objs.size() < 1) return null;
 		OrmSql ormSql = ormContext.getOrmSql(objs.get(0).getClass(), OrmSql.OPT_UPDATE);
-		return this.valueUpdateBulider.getUpdate(objs, ormSql);
+		return this.valueUpdateBuilder.getUpdate(objs, ormSql);
 	}
 
 	@Override
 	public OrmValue getDelete(Class<?> clazz, Object pk) {
 		if(pk == null) return null;
 		OrmSql ormSql = ormContext.getOrmSql(clazz, OrmSql.OPT_DELETE);
-		return this.valueDelBulider.getDelete(pk, ormSql);
+		return this.valueDelBuilder.getDelete(pk, ormSql);
 	}
 
 	@Override
 	public OrmValue getClear(Class<?> clazz, List<?> pks) {
 		if(pks == null || pks.size() < 1) return null;
 		OrmSql ormSql = ormContext.getOrmSql(clazz, OrmSql.OPT_DELETE);
-		return this.valueDelBulider.getClear(pks, ormSql);
+		return this.valueDelBuilder.getClear(pks, ormSql);
 	}
 
 	@Override
 	public OrmValue getDeleteX(Object obj) {
 		if(obj == null) return null;
 		OrmSql ormSql = ormContext.getOrmSql(obj.getClass(), OrmSql.OPT_DELETE);
-		return this.valueDelBulider.getDeleteX(obj, ormSql);
+		return this.valueDelBuilder.getDeleteX(obj, ormSql);
 	}
 	
 	@Override
 	public OrmValue getDeleteBy(Object obj) {
 		if(obj == null) return null;
 		OrmTable ormTable = ormContext.getOrmTable(obj.getClass());
-		return this.valueDelBulider.getDeleteBy(obj, ormTable);
+		return this.valueDelBuilder.getDeleteBy(obj, ormTable);
 	}
 
 	@Override
 	public OrmValue getClearX(List<?> objs) {
 		if(objs == null || objs.size() < 1) return null;
 		OrmSql ormSql = ormContext.getOrmSql(objs.get(0).getClass(), OrmSql.OPT_DELETE);
-		return this.valueDelBulider.getClearX(objs, ormSql);
+		return this.valueDelBuilder.getClearX(objs, ormSql);
 	}
 
 	@Override
 	public OrmValue getGet(Class<?> clazz, Object pk) {
 		if(pk == null) return null;
 		OrmSql ormSql = ormContext.getOrmSql(clazz, OrmSql.OPT_GET);
-		return this.valueGetBulider.getGet(pk, ormSql);
+		return this.valueGetBuilder.getGet(pk, ormSql);
 	}
 
 	@Override
 	public OrmValue getGetX(Object obj) {
 		if(obj == null) return null;
 		OrmSql ormSql = ormContext.getOrmSql(obj.getClass(), OrmSql.OPT_GET);
-		return this.valueGetBulider.getGetX(obj, ormSql);
+		return this.valueGetBuilder.getGetX(obj, ormSql);
 	}
 	
 	@Override
@@ -111,21 +111,21 @@ public class DefaultValueBulider implements ValueBulider {
 	public OrmValue getUpdateNotNull(Object obj) {
 		if(obj == null) return null;
 		OrmTable ormTable = ormContext.getOrmTable(obj.getClass());
-		return this.valueUpdateBulider.getUpdateNotNull(obj, ormTable);
+		return this.valueUpdateBuilder.getUpdateNotNull(obj, ormTable);
 	}
 
 	@Override
 	public OrmValue getQuery(Object obj) {
 		if(obj == null) return null;
 		OrmTable ormTable = ormContext.getOrmTable(obj.getClass());
-		return this.valueGetBulider.getQuery(obj, ormTable, false);
+		return this.valueGetBuilder.getQuery(obj, ormTable, false);
 	}
 	
 	@Override
 	public OrmValue getQueryLike(Object obj) {
 		if(obj == null) return null;
 		OrmTable ormTable = ormContext.getOrmTable(obj.getClass());
-		return this.valueGetBulider.getQuery(obj, ormTable, true);
+		return this.valueGetBuilder.getQuery(obj, ormTable, true);
 	}
 
 }

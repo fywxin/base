@@ -10,7 +10,7 @@ import org.whale.system.jdbc.orm.entry.OrmTable;
  * @author wjs
  * 2014年9月6日-下午1:54:15
  */
-public interface SqlBulider {
+public interface SqlBuilder {
 
-	OrmSql bulid(OrmTable ormTable, int opType);
+	OrmSql build(OrmTable ormTable, int opType);
 }

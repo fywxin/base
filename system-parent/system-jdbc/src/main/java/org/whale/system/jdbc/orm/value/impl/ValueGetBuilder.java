@@ -14,7 +14,7 @@ import org.whale.system.jdbc.orm.entry.OrmValue;
 import org.whale.system.jdbc.util.AnnotationUtil;
 
 @Component
-public class ValueGetBulider {
+public class ValueGetBuilder {
 
 	public OrmValue getGet(Object pk, OrmSql ormSql) {
 		OrmValue ormValue = new OrmValue(ormSql);

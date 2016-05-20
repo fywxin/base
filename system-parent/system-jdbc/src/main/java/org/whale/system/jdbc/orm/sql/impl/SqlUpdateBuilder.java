@@ -13,11 +13,11 @@ import org.whale.system.jdbc.orm.entry.OrmSql;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 
 @Component
-public class SqlUpdateBulider {
+public class SqlUpdateBuilder {
 	
-	private static Logger logger = LoggerFactory.getLogger(SqlUpdateBulider.class);
+	private static Logger logger = LoggerFactory.getLogger(SqlUpdateBuilder.class);
 
-	public OrmSql bulidUpdate(OrmTable ormTable){
+	public OrmSql buildUpdate(OrmTable ormTable){
 		OrmSql ormSql = new OrmSql();
 		
 		List<OrmColumn> cols = ormTable.getOrmCols();

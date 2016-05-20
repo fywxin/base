@@ -5,40 +5,40 @@ import org.springframework.stereotype.Component;
 import org.whale.system.common.exception.OrmException;
 import org.whale.system.jdbc.orm.entry.OrmSql;
 import org.whale.system.jdbc.orm.entry.OrmTable;
-import org.whale.system.jdbc.orm.sql.SqlBulider;
+import org.whale.system.jdbc.orm.sql.SqlBuilder;
 
 
 @Component
-public class DefaultSqlBulider implements SqlBulider {
+public class DefaultSqlBuilder implements SqlBuilder {
 	
 	@Autowired
-	private SqlSaveBulider sqlSaveBulider;
+	private SqlSaveBuilder sqlSaveBuilder;
 	@Autowired
-	private SqlUpdateBulider sqlUpdateBulider;
+	private SqlUpdateBuilder sqlUpdateBuilder;
 	@Autowired
-	private SqlDelBulider sqlDelBulider;
+	private SqlDelBuilder sqlDelBuilder;
 	@Autowired
-	private SqlGetBulider sqlGetBulider;
+	private SqlGetBuilder sqlGetBuilder;
 
 	@Override
-	public OrmSql bulid(OrmTable ormTable, int opType) {
+	public OrmSql build(OrmTable ormTable, int opType) {
 		if(OrmSql.OPT_SAVE == opType){
-			return this.sqlSaveBulider.bulidSave(ormTable);
+			return this.sqlSaveBuilder.buildSave(ormTable);
 		}
 		if(OrmSql.OPT_SAVE_BATCH == opType){
-			return this.sqlSaveBulider.bulidSaveBatch(ormTable);
+			return this.sqlSaveBuilder.buildSaveBatch(ormTable);
 		}
 		if(OrmSql.OPT_UPDATE == opType){
-			return this.sqlUpdateBulider.bulidUpdate(ormTable);
+			return this.sqlUpdateBuilder.buildUpdate(ormTable);
 		}
 		if(OrmSql.OPT_DELETE == opType){
-			return this.sqlDelBulider.bulidDelete(ormTable);
+			return this.sqlDelBuilder.buildDelete(ormTable);
 		}
 		if(OrmSql.OPT_GET == opType){
-			return this.sqlGetBulider.bulidGet(ormTable);
+			return this.sqlGetBuilder.buildGet(ormTable);
 		}
 		if(OrmSql.OPT_GET_ALL == opType){
-			return this.sqlGetBulider.bulidGetAll(ormTable);
+			return this.sqlGetBuilder.buildGetAll(ormTable);
 		}
 		
 		throw new OrmException("操作类型错误");

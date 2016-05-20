@@ -5,7 +5,7 @@ import java.util.List;
 import org.whale.system.jdbc.orm.entry.OrmValue;
 
 
-public interface ValueBulider {
+public interface ValueBuilder {
 
 	OrmValue getSave(Object obj);
 	

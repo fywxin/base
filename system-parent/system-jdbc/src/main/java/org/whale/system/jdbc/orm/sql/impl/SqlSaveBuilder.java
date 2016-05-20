@@ -21,9 +21,9 @@ import org.whale.system.jdbc.util.DbKind;
  * 2014年9月6日-下午1:57:56
  */
 @Component
-public class SqlSaveBulider {
+public class SqlSaveBuilder {
 	
-	private static Logger logger = LoggerFactory.getLogger(SqlSaveBulider.class);
+	private static Logger logger = LoggerFactory.getLogger(SqlSaveBuilder.class);
 	
 	/**
 	 * 
@@ -36,7 +36,7 @@ public class SqlSaveBulider {
 	 *@param table
 	 *
 	 */
-	public OrmSql bulidSave(OrmTable table){
+	public OrmSql buildSave(OrmTable table){
 		OrmSql ormSql = new OrmSql();
 		List<OrmColumn> cols = table.getOrmCols();
 		
@@ -86,7 +86,7 @@ public class SqlSaveBulider {
 	 *@param table
 	 *
 	 */
-	public OrmSql bulidSaveBatch(OrmTable table){
+	public OrmSql buildSaveBatch(OrmTable table){
 		OrmSql ormSql = new OrmSql();
 		List<OrmColumn> cols = table.getOrmCols();
 		

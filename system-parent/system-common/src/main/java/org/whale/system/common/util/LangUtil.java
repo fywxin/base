@@ -1,21 +1,15 @@
 package org.whale.system.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 常用工具类
@@ -52,159 +46,6 @@ public final class LangUtil {
             return ((Map<?, ?>) obj).isEmpty();
         return false;
     }
-
-	/**
-	 * 将以多个ID组成的字符串，分割组装成List<Long> 
-	 * 默认分割为","
-	 * @param ids 多个ID组成的字符串
-	 * @return
-	 */
-	public static List<Long> splitIds(String ids){
-		return splitIds(ids, ",");
-	}
-	
-	/**
-	 * 将以多个ID组成的字符串，分割组装成List<Long> 
-	 * @param ids 多个ID组成的字符串
-	 * @param splitStr 分割符
-	 * @return
-	 */
-	public static List<Long> splitIds(String ids, String splitStr){
-		if(Strings.isBlank(ids))
-			return null;
-		if(Strings.isBlank(splitStr)){
-			splitStr = ",";
-		}
-		String[] idS = ids.split(splitStr);
-		List<Long> list = new ArrayList<Long>(idS.length);
-		for(String id : idS){
-			if(Strings.isNotBlank(id))
-				try {
-					list.add(Long.valueOf(id.trim()));
-				} catch (NumberFormatException e) {
-					logger.error("ID转换成Long类型出错", e);
-					throw new RuntimeException("ID转换成Long类型出错", e);
-				}
-		}
-		return list;
-	}
-	
-	/**
-	 * 默认 "," 拼接ID列表 为字符串
-	 * @param idList ID列表
-	 * @return
-	 */
-	public static String joinIds(List<Long> idList){
-		return joinIds(idList, ",");
-	}
-	
-	/**
-	 * 以拼接符 拼接ID列表 为字符串
-	 * @param idList  ID列表
-	 * @param joinStr  拼接符
-	 * @return
-	 */
-	public static String joinIds(Collection<Long> idList, String joinStr){
-		return joinList(idList, joinStr);
-	}
-	
-	/**
-	 * 默认 "," 拼接列表 为字符串
-	 * @param list
-	 * @return
-	 */
-	
-	public static String joinList(Collection list){
-		return joinIds(list, ",");
-	}
-	
-	/**
-	 * 以拼接符 拼接ID列表 为字符串
-	 * @param list
-	 * @param joinStr
-	 * @return
-	 */
-	public static String joinList(Collection list, String joinStr){
-		if(list == null || list.size()<1)
-			return "";
-		if(Strings.isBlank(joinStr)){
-			joinStr = ",";
-		}
-		StringBuilder strb = new StringBuilder();
-		for(Object obj : list){
-			if(obj != null){
-				strb.append(joinStr).append(obj.toString());
-			}
-		}
-		if(strb.length() > 0)
-			return strb.substring(joinStr.length());
-		return "";
-	}
-	
-	public static String joinEntityList(List<?> list, String attrName) {
-		return joinEntityList(list, attrName, ",");
-	}
-	
-	public static String joinEntityList(List<?> list, String attrName, String joinStr) {
-		if(list == null || list.size()<1 || Strings.isBlank(attrName))
-			return null;
-		StringBuilder strb = new StringBuilder();
-		for(Object obj : list){
-			if(obj == null)
-				continue;
-			Field[] fields =  obj.getClass().getDeclaredFields();
-			if(fields != null && fields.length > 0){
-				for(Field field : fields){
-					if(field.getName().equals(attrName)){
-						Object val= ReflectionUtil.readField(field, obj, true);
-						
-						if(val != null && Strings.isNotBlank(val.toString()))
-							strb.append(joinStr).append(val.toString().trim());
-					}
-				}
-			}
-		}
-		if(strb.length() > joinStr.length()){
-			return strb.substring(joinStr.length());
-		}
-		return strb.toString();
-	}
-	
-	/**
-	 * 获取对象列表中的ID集合
-	 * @param list
-	 * @return
-	 */
-	public static List<Long> getIdList(List<?> list){
-		return getIdList(list, "id");
-	}
-	
-	/**
-	 * 获取对象列表中的ID集合
-	 * @param list
-	 * @return
-	 */
-	public static List<Long> getIdList(List<?> list, String idColName){
-		if(list == null || list.size()<1 || Strings.isBlank(idColName))
-			return null;
-		List<Long> idList = new ArrayList<Long>(list.size());
-		for(Object obj : list){
-			if(obj == null)
-				continue;
-			Field[] fields =  obj.getClass().getDeclaredFields();
-			if(fields != null && fields.length > 0){
-				for(Field field : fields){
-					if(field.getName().equals(idColName)){
-						Object val = ReflectionUtil.readField(field, obj, true);
-						
-						if(val != null && Strings.isNotBlank(val.toString()))
-							idList.add(Long.valueOf(val.toString()));
-					}
-				}
-			}
-		}
-		return idList;
-	}
 	
 	/**
 	 * 通过反射将对象内所有字符串属性值 进行trim() 
@@ -234,7 +75,7 @@ public final class LangUtil {
 						if(val != null){
 							if(escapeList != null && escapeList.indexOf(field.getName()) != -1)
 								continue;
-							ReflectionUtil.writeField(field, obj, val.toString().trim(), true);
+							ReflectionUtil.writeField(field, obj, ((String)val).trim(), true);
 						}else{
 							ReflectionUtil.writeField(field, obj, "", true);
 						}
@@ -248,15 +89,15 @@ public final class LangUtil {
 								ReflectionUtil.writeField(field, obj, 0D, true);
 							}else if(field.getType().toString().equals("class java.lang.Float")){
 								ReflectionUtil.writeField(field, obj, 0F, true);
+							}else if(field.getType().toString().equals("class java.lang.Boolean")){
+								ReflectionUtil.writeField(field, obj, false, true);
 							}
 						}
 					}
 				}
 			}
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("trim 异常",e);
 		}
 		return obj;
 	}
@@ -277,10 +118,6 @@ public final class LangUtil {
             return false;
         }
     }
-    
-    
-
-    
     
     public static String bulidOptions(Map<String, Object> labelValMap, Object defVal){
     	return bulidOptions(labelValMap, defVal, true);

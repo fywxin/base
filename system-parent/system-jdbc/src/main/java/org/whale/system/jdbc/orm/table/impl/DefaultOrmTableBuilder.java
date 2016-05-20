@@ -39,7 +39,7 @@ import org.whale.system.jdbc.orm.event.OrmColumnGenEvent;
 import org.whale.system.jdbc.orm.event.OrmEventMuliter;
 import org.whale.system.jdbc.orm.event.OrmTableGenEvent;
 import org.whale.system.jdbc.orm.table.ColumnExtInfoReader;
-import org.whale.system.jdbc.orm.table.OrmTableBulider;
+import org.whale.system.jdbc.orm.table.OrmTableBuilder;
 import org.whale.system.jdbc.orm.table.TableExtInfoReader;
 import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
@@ -51,9 +51,9 @@ import org.whale.system.jdbc.util.DbKind;
  * 2014年9月6日-下午1:59:55
  */
 @Component
-public class DefaultOrmTableBulider implements OrmTableBulider {
+public class DefaultOrmTableBuilder implements OrmTableBuilder {
 	
-	private static Logger logger = LoggerFactory.getLogger(DefaultOrmTableBulider.class);
+	private static Logger logger = LoggerFactory.getLogger(DefaultOrmTableBuilder.class);
 	
 	@Autowired
 	private CamelTableNameParser camelTableNameParser;
@@ -66,7 +66,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	@Resource(name="entryContext")
 	private EntryContext entryContext;
 	@Autowired
-	private TableBulider tableBulider;
+	private TableBuilder tableBuilder;
 	@Autowired
 	private OrmEventMuliter omEventMuliter;
 	
@@ -92,7 +92,7 @@ public class DefaultOrmTableBulider implements OrmTableBulider {
 	public OrmTable parse(Class<?> clazz) {
 		Atable table = this.entryContext.getTable(clazz);
 		if(table == null){
-			table = this.tableBulider.parse(clazz);
+			table = this.tableBuilder.parse(clazz);
 			this.entryContext.putTable(clazz, table);
 		}
 		OrmTable ormTable = new OrmTable(table); //设置类基本属性

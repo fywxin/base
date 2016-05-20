@@ -16,9 +16,9 @@ import org.whale.system.jdbc.orm.entry.OrmClass;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmSql;
 import org.whale.system.jdbc.orm.entry.OrmTable;
-import org.whale.system.jdbc.orm.sql.SqlBulider;
-import org.whale.system.jdbc.orm.table.OrmTableBulider;
-import org.whale.system.jdbc.orm.value.ValueBulider;
+import org.whale.system.jdbc.orm.sql.SqlBuilder;
+import org.whale.system.jdbc.orm.table.OrmTableBuilder;
+import org.whale.system.jdbc.orm.value.ValueBuilder;
 import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.RowMapperBuilder;
 
@@ -36,11 +36,11 @@ public class OrmContext extends EntryContext {
 	@Autowired
 	private RowMapperBuilder rowMapperBuilder;
 	@Autowired
-	private OrmTableBulider ormTableBulider;
+	private OrmTableBuilder ormTableBuilder;
 	@Autowired
-	private SqlBulider sqlBulider;
+	private SqlBuilder sqlBuilder;
 	@Autowired
-	protected ValueBulider valueBulider;
+	protected ValueBuilder valueBuilder;
 	
 	private final Map<Class<?>, OrmClass> ormClassCache = new HashMap<Class<?>, OrmClass>();
 	//锁
@@ -58,15 +58,15 @@ public class OrmContext extends EntryContext {
 		logger.info("ORM: 类[{}] 开始解析...", clazz.getName());
 		OrmClass ormClass = new OrmClass();
 					
-		OrmTable ormTable = this.ormTableBulider.parse(clazz);
+		OrmTable ormTable = this.ormTableBuilder.parse(clazz);
 		
 		List<OrmSql> ormSqls = new ArrayList<OrmSql>(OrmSql.OPT_MAX);
-		OrmSql save = sqlBulider.bulid(ormTable, OrmSql.OPT_SAVE);
-		OrmSql saveBatch = sqlBulider.bulid(ormTable, OrmSql.OPT_SAVE_BATCH);
-		OrmSql update = sqlBulider.bulid(ormTable, OrmSql.OPT_UPDATE);
-		OrmSql delete = sqlBulider.bulid(ormTable, OrmSql.OPT_DELETE);
-		OrmSql get = sqlBulider.bulid(ormTable, OrmSql.OPT_GET);
-		OrmSql getAll = sqlBulider.bulid(ormTable, OrmSql.OPT_GET_ALL);
+		OrmSql save = sqlBuilder.build(ormTable, OrmSql.OPT_SAVE);
+		OrmSql saveBatch = sqlBuilder.build(ormTable, OrmSql.OPT_SAVE_BATCH);
+		OrmSql update = sqlBuilder.build(ormTable, OrmSql.OPT_UPDATE);
+		OrmSql delete = sqlBuilder.build(ormTable, OrmSql.OPT_DELETE);
+		OrmSql get = sqlBuilder.build(ormTable, OrmSql.OPT_GET);
+		OrmSql getAll = sqlBuilder.build(ormTable, OrmSql.OPT_GET_ALL);
 		
 		ormSqls.add(save);
 		ormSqls.add(saveBatch);

@@ -15,7 +15,7 @@ import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
 
 @Component
-public class ValueSaveBulider {
+public class ValueSaveBuilder {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;

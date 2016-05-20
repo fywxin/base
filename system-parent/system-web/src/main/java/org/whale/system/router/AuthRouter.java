@@ -1,8 +1,5 @@
 package org.whale.system.router;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +12,7 @@ import org.whale.system.base.Rs;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.exception.BusinessException;
-import org.whale.system.common.util.LangUtil;
+import org.whale.system.common.util.ListUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.TreeUtil;
 import org.whale.system.domain.Auth;
@@ -24,6 +21,9 @@ import org.whale.system.domain.User;
 import org.whale.system.service.AuthService;
 import org.whale.system.service.MenuService;
 import org.whale.system.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/auth")
@@ -97,14 +97,14 @@ public class AuthRouter extends BaseRouter {
 					List<Menu> menus = this.menuService.queryAll();
 					List<Menu> leafMenus = TreeUtil.getAllSubLeaf(menus, menuId);
 					if(leafMenus != null){
-						menuIds = LangUtil.getIdList(leafMenus,"menuId");
+						menuIds = ListUtil.listCol(leafMenus, "menuId");
 					}
 					if(menuIds == null){
 						menuIds = new ArrayList<Long>(1);
 						menuIds.add(-1L);
 					}
 				}
-				strb.append(" AND t.menuId in(").append(LangUtil.joinIds(menuIds)).append(")");
+				strb.append(" AND t.menuId in(").append(ListUtil.join(menuIds)).append(")");
 			}else{
 				if(menuId != null && menuId.equals(-99L)){
 					strb.append(" AND (t.menuId IS NULL OR t.menuId = 0) ");

@@ -17,9 +17,9 @@ import org.whale.system.jdbc.orm.entry.Atable;
  * 2014年9月6日-下午1:48:33
  */
 @Component
-public class TableBulider {
+public class TableBuilder {
 	
-	private static Logger logger = LoggerFactory.getLogger(TableBulider.class);
+	private static Logger logger = LoggerFactory.getLogger(TableBuilder.class);
 
 	public Atable parse(Class<?> clazz){
 		Atable table = new Atable();

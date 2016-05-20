@@ -1,7 +1,5 @@
 package org.whale.system.router;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,17 +7,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.annotation.log.Log;
+import org.whale.system.annotation.log.LogHelper;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.SysConstant;
-import org.whale.system.common.util.LangUtil;
+import org.whale.system.common.util.ListUtil;
 import org.whale.system.domain.Dict;
 import org.whale.system.domain.DictItem;
-import org.whale.system.annotation.log.LogHelper;
 import org.whale.system.service.DictItemService;
 import org.whale.system.service.DictService;
+
+import java.util.List;
 
 @Log(module = "字典元素", value = "")
 @Controller
@@ -162,7 +162,7 @@ public class DictItemRouter extends BaseRouter {
 	@ResponseBody
 	@RequestMapping("/doDelete")
 	public Rs doDelete(String ids){
-		List<Long> dictItemIds = LangUtil.splitIds(ids);
+		List<Long> dictItemIds = ListUtil.longList(ids);
 		if(dictItemIds == null || dictItemIds.size() < 1){
 			return Rs.fail("请选择待删除记录");
 		}

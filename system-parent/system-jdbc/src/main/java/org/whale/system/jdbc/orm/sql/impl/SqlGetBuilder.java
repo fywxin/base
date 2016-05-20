@@ -13,11 +13,11 @@ import org.whale.system.jdbc.orm.entry.OrmSql;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 
 @Component
-public class SqlGetBulider {
+public class SqlGetBuilder {
 	
-	private static Logger logger = LoggerFactory.getLogger(SqlGetBulider.class);
+	private static Logger logger = LoggerFactory.getLogger(SqlGetBuilder.class);
 
-	public OrmSql bulidGet(OrmTable ormTable){
+	public OrmSql buildGet(OrmTable ormTable){
 		OrmSql ormSql = new OrmSql();
 		
 		List<Field> fields = new ArrayList<Field>(1);
@@ -44,7 +44,7 @@ public class SqlGetBulider {
 		return ormSql;
 	}
 	
-	public OrmSql bulidGetAll(OrmTable ormTable){
+	public OrmSql buildGetAll(OrmTable ormTable){
 		OrmSql ormSql = new OrmSql();
 		
 		List<Field> fields = new ArrayList<Field>(1);
@@ -52,7 +52,7 @@ public class SqlGetBulider {
 		List<OrmColumn> sCols = new ArrayList<OrmColumn>(1);
 		
 		StringBuilder strb = new StringBuilder();
-		strb.append(ormTable.getSqlHeadPrefix());
+		strb.append(ormTable.getSqlHeadPrefix()).append(ormTable.getSqlOrderSuffix());
 
 		ormSql.setArgTypes(ListUtil.toArray(argTypes));
 		ormSql.setCols(sCols);

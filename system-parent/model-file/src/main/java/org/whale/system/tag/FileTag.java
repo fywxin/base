@@ -1,17 +1,16 @@
 package org.whale.system.tag;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.whale.system.common.util.ListUtil;
+import org.whale.system.common.util.Strings;
+import org.whale.system.domain.FileInfo;
+import org.whale.system.service.FileInfoService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
-
-import org.whale.system.common.util.LangUtil;
-import org.whale.system.common.util.Strings;
-import org.whale.system.domain.FileInfo;
-import org.whale.system.service.FileInfoService;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -119,7 +118,7 @@ public class FileTag extends TagSupport {
 				strb.append("	<div id=\"fileSel_"+this.id+"\" >选择文件</div>\n");
 			}
 		}
-		strb.append("	<input type=\"hidden\" id=\""+this.id+"\" name=\""+this.id+"\" value=\"").append(value.trim()).append("\" fileid=\"").append(LangUtil.joinIds(fileIds)).append("\" />\n")
+		strb.append("	<input type=\"hidden\" id=\""+this.id+"\" name=\""+this.id+"\" value=\"").append(value.trim()).append("\" fileid=\"").append(ListUtil.join(fileIds)).append("\" />\n")
 			.append("</div>\n\n");
 		
 		return strb.toString();
@@ -141,7 +140,6 @@ public class FileTag extends TagSupport {
 	/**
 	 * 初始化Uploadify
 	 * @param request
-	 * @param formData
 	 * @return
 	 */
 	private String bulidUploadJs(HttpServletRequest request){

@@ -1,5 +1,8 @@
 package org.whale.system.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -12,6 +15,8 @@ import java.util.*;
  * @since V1.0
  */
 public class ListUtil {
+    private static final Logger logger = LoggerFactory.getLogger(ListUtil.class);
+
     public static final String DEFAULT_DELIMITER = ",";
 
     /**
@@ -452,6 +457,79 @@ public class ListUtil {
                     list.add(t1);
                 }
             }
+        }
+        return list;
+    }
+
+    /**
+     * 将以多个ID组成的字符串，分割组装成List<Long>
+     * 默认分割为","
+     * @param ids 多个ID组成的字符串
+     * @return
+     */
+    public static List<Long> longList(String ids){
+        return longList(ids, ",");
+    }
+
+    /**
+     * 将以多个ID组成的字符串，分割组装成List<Long>
+     * @param ids 多个ID组成的字符串
+     * @param splitStr 分割符
+     * @return
+     */
+    public static List<Long> longList(String ids, String splitStr){
+        if(Strings.isBlank(ids))
+            return null;
+        if(Strings.isBlank(splitStr)){
+            splitStr = ",";
+        }
+        String[] idS = ids.split(splitStr);
+        List<Long> list = new ArrayList<Long>(idS.length);
+        for(String id : idS){
+            if(Strings.isNotBlank(id))
+                try {
+                    list.add(Long.parseLong(id.trim()));
+                } catch (NumberFormatException e) {
+                    logger.error("ID转换成Long类型出错", e);
+                    throw new RuntimeException("ID转换成Long类型出错", e);
+                }
+        }
+        return list;
+    }
+
+
+    /**
+     * 将以多个ID组成的字符串，分割组装成List<Long>
+     * 默认分割为","
+     * @param ids 多个ID组成的字符串
+     * @return
+     */
+    public static List<Integer> intList(String ids){
+        return intList(ids, ",");
+    }
+
+    /**
+     * 将以多个ID组成的字符串，分割组装成List<Long>
+     * @param ids 多个ID组成的字符串
+     * @param splitStr 分割符
+     * @return
+     */
+    public static List<Integer> intList(String ids, String splitStr){
+        if(Strings.isBlank(ids))
+            return null;
+        if(Strings.isBlank(splitStr)){
+            splitStr = ",";
+        }
+        String[] idS = ids.split(splitStr);
+        List<Integer> list = new ArrayList<Integer>(idS.length);
+        for(String id : idS){
+            if(Strings.isNotBlank(id))
+                try {
+                    list.add(Integer.parseInt(id.trim()));
+                } catch (NumberFormatException e) {
+                    logger.error("ID转换成Integer类型出错", e);
+                    throw new RuntimeException("ID转换成Integer类型出错", e);
+                }
         }
         return list;
     }

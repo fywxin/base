@@ -14,7 +14,7 @@ import org.whale.system.jdbc.orm.entry.OrmValue;
 import org.whale.system.jdbc.util.AnnotationUtil;
 
 @Component
-public class ValueDelBulider {
+public class ValueDelBuilder {
 
 	/**
 	 * 

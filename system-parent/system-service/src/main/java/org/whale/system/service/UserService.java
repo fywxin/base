@@ -1,10 +1,5 @@
 package org.whale.system.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Service;
@@ -13,7 +8,6 @@ import org.whale.system.base.BaseCrudEvent;
 import org.whale.system.common.constant.SysConstant;
 import org.whale.system.common.encrypt.SaltEncrypt;
 import org.whale.system.common.exception.SysException;
-import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.ListUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.RoleDao;
@@ -24,6 +18,11 @@ import org.whale.system.domain.User;
 import org.whale.system.domain.UserRole;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.service.event.UserEvent;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService extends BaseService<User, Long> {
@@ -61,7 +60,6 @@ public class UserService extends BaseService<User, Long> {
 		} catch (Exception e) {
 			throw new SysException("设置密码出现异常");
 		}
-		LangUtil.trim(user);
 		this.fireEvent(user, BaseCrudEvent.BEFORE_SAVE);
 		this.userDao.save(user);
 		this.fireEvent(user, BaseCrudEvent.AFTER_SAVE);
@@ -84,17 +82,17 @@ public class UserService extends BaseService<User, Long> {
 			user.setStatus(oldUser.getStatus());
 		if(user.getUserType() == null)
 			user.setUserType(oldUser.getUserType());
-		LangUtil.trim(user);
 		this.fireEvent(user, BaseCrudEvent.BEFORE_UPDATE);
 		this.userDao.update(user);
 		this.fireEvent(user, BaseCrudEvent.AFTER_UPDATE);
 	}
 	
 	public void updateState(User user, int status) {
-		LangUtil.trim(user);
 		this.fireEvent(user, UserEvent.BEFORE_SETSTATUS, status);
-		user.setStatus(status);
-		this.userDao.update(user);
+		User userUpdate = new User();
+		userUpdate.setStatus(status);
+		userUpdate.setUserId(user.getUserId());
+		this.userDao.updateNotNull(userUpdate);
 		this.fireEvent(user, UserEvent.AFTER_SETSTATUS);
 	}
 	
@@ -115,7 +113,6 @@ public class UserService extends BaseService<User, Long> {
 		} catch (Exception e) {
 			throw new SysException("设置密码出现异常");
 		}
-		LangUtil.trim(user);
 		this.userDao.update(user);
 	}
 	

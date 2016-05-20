@@ -13,11 +13,11 @@ import org.whale.system.jdbc.orm.entry.OrmSql;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 
 @Component
-public class SqlDelBulider {
+public class SqlDelBuilder {
 	
-	private static Logger logger = LoggerFactory.getLogger(SqlDelBulider.class);
+	private static Logger logger = LoggerFactory.getLogger(SqlDelBuilder.class);
 
-	public OrmSql bulidDelete(OrmTable ormTable){
+	public OrmSql buildDelete(OrmTable ormTable){
 		OrmSql ormSql = new OrmSql();
 		
 		List<Field> fields = new ArrayList<Field>(1);

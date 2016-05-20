@@ -108,7 +108,7 @@ public class OrmTable extends Atable {
 	 */
 	public String getSqlOrderSuffix(){
 		if(sqlOrderSuffixStr == null){
-			StringBuilder strb = new StringBuilder(" ");
+			StringBuilder strb = new StringBuilder("");
 			if(orderCols != null && orderCols.size() > 0){
 				strb.append(" ORDER BY ");
 				for(OrmColumn orderCol : orderCols){

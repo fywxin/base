@@ -35,7 +35,7 @@ import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 import org.whale.system.jdbc.orm.entry.OrmValue;
-import org.whale.system.jdbc.orm.value.ValueBulider;
+import org.whale.system.jdbc.orm.value.ValueBuilder;
 import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
 
@@ -50,7 +50,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 	@Autowired
-	protected ValueBulider valueBulider;
+	protected ValueBuilder valueBuilder;
 	
 	//该类Dao 插件上下文
 	@Autowired
@@ -69,7 +69,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @param t
 	 */
 	public void save(T t){
-		final OrmValue ormValue = this.valueBulider.getSave(t);
+		final OrmValue ormValue = this.valueBuilder.getSave(t);
 		OrmColumn idCol = this._getOrmTable().getIdCol();
 		Object idVal = ReflectionUtil.getFieldValue(t, idCol.getAttrName());
 
@@ -130,7 +130,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			this.save(list.get(0));
 			return ;
 		}
-		OrmValue ormValues = this.valueBulider.getSave(list);
+		OrmValue ormValues = this.valueBuilder.getSave(list);
 		if(ormValues == null) 
 			return ;
 		
@@ -142,7 +142,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @param t
 	 */
 	public void update(T t){
-		OrmValue ormValues = this.valueBulider.getUpdate(t);
+		OrmValue ormValues = this.valueBuilder.getUpdate(t);
 		if(ormValues == null) 
 			return ;
 		
@@ -155,7 +155,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	
 	@Override
 	public void updateNotNull(T t) {
-		OrmValue ormValue = this.valueBulider.getUpdateNotNull(t);
+		OrmValue ormValue = this.valueBuilder.getUpdateNotNull(t);
 		if(ormValue == null)
 			return ;
 		int col = this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
@@ -176,7 +176,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			return ;
 		}
 		
-		OrmValue ormValues = this.valueBulider.getUpdate(list);
+		OrmValue ormValues = this.valueBuilder.getUpdate(list);
 		if(ormValues == null) 
 			return ;
 		
@@ -194,7 +194,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @param id
 	 */
 	public void delete(PK id){
-		OrmValue ormValues = this.valueBulider.getDelete(getClazz(), id);
+		OrmValue ormValues = this.valueBuilder.getDelete(getClazz(), id);
 		if(ormValues == null) 
 			return ;
 		
@@ -211,7 +211,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 			this.delete(ids.get(0));
 			return ;
 		}
-		OrmValue ormValues = this.valueBulider.getClear(getClazz(), ids);
+		OrmValue ormValues = this.valueBuilder.getClear(getClazz(), ids);
 		if(ormValues == null) 
 			return ;
 		
@@ -231,7 +231,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @return
 	 */
 	public T get(PK id){
-		OrmValue ormValues = this.valueBulider.getGet(getClazz(), id);
+		OrmValue ormValues = this.valueBuilder.getGet(getClazz(), id);
 		if(ormValues == null) return null;
 		List<T> list = (List<T>)this.jdbcTemplate.query(ormValues.getSql(), ormValues.getArgs(), this.rowMapper);
 		if(list == null || list.size() < 1) return null;
@@ -254,7 +254,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @return
 	 */
 	public List<T> queryAll(){
-		OrmValue ormValues = this.valueBulider.getAll(this.getClazz());
+		OrmValue ormValues = this.valueBuilder.getAll(this.getClazz());
 		if(ormValues == null) return null;
 		return (List<T>)this.jdbcTemplate.query(ormValues.getSql(), this.rowMapper);
 	}
