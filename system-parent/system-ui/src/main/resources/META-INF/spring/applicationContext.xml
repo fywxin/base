@@ -44,40 +44,6 @@
 
 	<bean class="org.whale.system.jdbc.filter.dll.impl.NullFilter"></bean>
 	
-	<!-- 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
-		<property name="maxTotal" value="${redis.pool.maxTotal}" />
-		<property name="maxIdle" value="${redis.pool.maxIdle}" />
-		<property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}" />
-		<property name="testOnBorrow" value="${redis.pool.testOnBorrow}" />
-	</bean>
-	
-	<bean id="jedisPool" class="redis.clients.jedis.JedisPool" destroy-method="destroy">
-		<constructor-arg index="0" ref="jedisPoolConfig" />
-		<constructor-arg index="1" value="${redis.ip}" />
-		<constructor-arg index="2" value="${redis.port}" />
-		<constructor-arg index="3" value="${redis.timeout}" />
-		<constructor-arg index="4" value="${redis.password}" />
-	</bean>
-	
-	<bean id="jedisTemplate" class="org.whale.system.cache.impl.redis.JedisTemplate">
-		<constructor-arg ref="jedisPool" />
-	</bean>
-	
-	<bean id="codeJson" class="org.whale.system.cache.code.CodeJson"></bean>
-	<bean id="codeHessian" class="org.whale.system.cache.code.CodeHessian"></bean>
-	<bean id="codeProtoBuf" class="org.whale.system.cache.code.CodeProtoBuf"></bean>
-	<bean id="redisService" class="org.whale.system.cache.impl.RedisService">
-		<property name="defCode" ref="codeHessian"></property>
-		<property name="codeMap">
-			<map>
-				<entry key="SES_NaMe" value-ref="codeHessian"></entry>
-				<entry key="c_Dict" value-ref="codeHessian"></entry>
-				<entry key="c_Auth" value-ref="codeHessian"></entry>
-			</map>
-		</property>
-	</bean>
-	 -->
-	
 	
 <!-- 	<bean id="JavaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> -->
 <!-- 		<property name="host" value="${mail.host}"></property> -->
@@ -86,12 +52,12 @@
 <!-- 		<property name="password" value="${mail.password}"></property> -->
 <!-- 	</bean> -->
 
-	<bean id="vaildRouterParamAop" class="org.whale.system.spring.VaildRouterParamAop"/>
+	<bean id="validRouterParamAop" class="org.whale.system.spring.ValidRouterParamAop"/>
 	<aop:config proxy-target-class="true">
-        <aop:aspect ref="vaildRouterParamAop">
-            <aop:pointcut id="vaildPointcut" expression="execution(* org.whale.*.router.*.*(..))"/>
+        <aop:aspect ref="validRouterParamAop">
+            <aop:pointcut id="validPointcut" expression="execution(* org.whale.*.router.*.*(..))"/>
             
-            <aop:before pointcut-ref="vaildPointcut" method="doBefore"/>
+            <aop:before pointcut-ref="validPointcut" method="doBefore"/>
         </aop:aspect>
     </aop:config>
 

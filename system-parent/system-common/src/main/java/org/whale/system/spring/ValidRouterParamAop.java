@@ -22,7 +22,7 @@ import org.whale.system.common.util.ValidUtil;
  * @author wjs
  * @date 2015年11月10日 下午6:33:53
  */
-public class VaildRouterParamAop {
+public class ValidRouterParamAop {
 
 	public void doBefore(JoinPoint joinPoint) {
 		Object[] args = joinPoint.getArgs();

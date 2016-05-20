@@ -23,7 +23,7 @@ import org.whale.system.common.exception.SysException;
 public class RedisService<M extends Serializable> extends AbstractCacheService<M> {
 	
 	@Autowired
-	private JedisTemplate JedisTemplate;
+	private JedisTemplate jedisTemplate;
 	//默认编码
 	private Code<M> defCode;
 	//按不同字典选择编码解码器
@@ -42,9 +42,9 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 		
 		try {
 			if(seconds == null || seconds < 1){
-				this.JedisTemplate.set(keyByte, valByte);
+				this.jedisTemplate.set(keyByte, valByte);
 			}else{
-				this.JedisTemplate.setex(keyByte, valByte, seconds);
+				this.jedisTemplate.setex(keyByte, valByte, seconds);
 			}
 		} catch (Exception e) {
 			throw new RemoteCacheException("Redis缓存出现异常！", e);
@@ -64,9 +64,9 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 		}
 		try {
 			if(seconds == null || seconds < 1){
-				this.JedisTemplate.msetByte(keyBytes, valBytes);
+				this.jedisTemplate.msetByte(keyBytes, valBytes);
 			}else{
-				this.JedisTemplate.msetexByte(keyBytes, valBytes, seconds);
+				this.jedisTemplate.msetexByte(keyBytes, valBytes, seconds);
 			}
 		} catch (Exception e) {
 			throw new RemoteCacheException("Redis缓存出现异常！", e);
@@ -76,7 +76,7 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 	public M doGet(String cacheName, String key) {
 		byte[] bytes = null;
 		try {
-			bytes = this.JedisTemplate.get(this.getByteKey(cacheName, key));
+			bytes = this.jedisTemplate.get(this.getByteKey(cacheName, key));
 		} catch (Exception e) {
 			throw new RemoteCacheException("Redis缓存出现异常！", e);
 		}
@@ -105,7 +105,7 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 		List<byte[]> rsBytes = null;
 		if(keyBytes.size() > 0){
 			try {
-				rsBytes = this.JedisTemplate.mgetByte(keyBytes);
+				rsBytes = this.jedisTemplate.mgetByte(keyBytes);
 			} catch (Exception e) {
 				throw new RemoteCacheException("Redis缓存出现异常！", e);
 			}
@@ -127,7 +127,7 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 	@Override
 	public void doDel(String cacheName, String key) {
 		try {
-			this.JedisTemplate.del(this.getByteKey(cacheName, key));
+			this.jedisTemplate.del(this.getByteKey(cacheName, key));
 		} catch (Exception e) {
 			throw new RemoteCacheException("Redis缓存出现异常！", e);
 		}
@@ -144,7 +144,7 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 		}
 		if(keyBytes.size() > 0){
 			try {
-				this.JedisTemplate.del(keyBytes);
+				this.jedisTemplate.del(keyBytes);
 			} catch (Exception e) {
 				throw new RemoteCacheException("Redis缓存出现异常！", e);
 			}
@@ -157,11 +157,11 @@ public class RedisService<M extends Serializable> extends AbstractCacheService<M
 	}
 	@Override
 	public Object getNativeCache() {
-		return this.JedisTemplate;
+		return this.jedisTemplate;
 	}
 	@Override
 	public Set<String> getKeys(String cacheName) {
-		return JedisTemplate.keys(cacheName+"*");
+		return jedisTemplate.keys(cacheName+"*");
 	}
 	
 	
