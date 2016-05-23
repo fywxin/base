@@ -15,35 +15,35 @@
     <link href="${html }/ui/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="${html }/ui/stylesheets/theme.css" rel="stylesheet">
     <link href="${html }/ui/stylesheets/premium.css" rel="stylesheet">
-    
-	<style type="text/css">
-	body {font-family: Helvetica, Georgia, Arial, sans-serif, 宋体;font-size: 13px;_font-size: 12px}
-	.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {color: #fff;}
+
+    <style type="text/css">
+        body {font-family: Helvetica, Georgia, Arial, sans-serif, 宋体;font-size: 13px;_font-size: 12px}
+        .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {color: #fff;}
     </style>
     <!--[if lt IE 9]>
-      <script src="${html }/js/html5shiv.min.js"></script>
+    <script src="${html }/js/html5shiv.min.js"></script>
     <![endif]-->
 </head>
 
 <body class=" theme-blue" style="overflow: hidden;">
-	<!--[if lt IE 7 ]> <body class="ie ie6" style="overflow: hidden;"> <![endif]-->
-  	<!--[if IE 7 ]> <body class="ie ie7 " style="overflow: hidden;"> <![endif]-->
-  	<!--[if IE 8 ]> <body class="ie ie8 " style="overflow: hidden;"> <![endif]-->
-  	<!--[if IE 9 ]> <body class="ie ie9 " style="overflow: hidden;"> <![endif]-->
-  	<!--[if (gt IE 9)|!(IE)]><!--> 
-  	<!--<![endif]-->
+<!--[if lt IE 7 ]> <body class="ie ie6" style="overflow: hidden;"> <![endif]-->
+<!--[if IE 7 ]> <body class="ie ie7 " style="overflow: hidden;"> <![endif]-->
+<!--[if IE 8 ]> <body class="ie ie8 " style="overflow: hidden;"> <![endif]-->
+<!--[if IE 9 ]> <body class="ie ie9 " style="overflow: hidden;"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<!--<![endif]-->
 
-    <div class="navbar navbar-default" role="navigation" >
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+<div class="navbar navbar-default" role="navigation" >
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-          </button>
-          <a class="" href="index.html"><span class="navbar-brand"><span class="fa fa-paper-plane"></span> Whale</span></a></div>
-        <div class="navbar-collapse collapse" style="height: 1px;">
-          <ul id="main-menu" class="nav navbar-nav navbar-right">
+        </button>
+        <a class="" href="index.html"><span class="navbar-brand"><span class="fa fa-paper-plane"></span> Whale</span></a></div>
+    <div class="navbar-collapse collapse" style="height: 1px;">
+        <ul id="main-menu" class="nav navbar-nav navbar-right">
             <li class="dropdown hidden-xs">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <c:if test="${uc.isMock}">
@@ -54,44 +54,164 @@
                     </c:if>
                     <i class="fa fa-caret-down"></i>
                 </a>
-              <ul class="dropdown-menu">
-                  <c:if test="${uc.isMock}">
-                      <li><a href="javascript:;" onclick="admin()">返回管理员</a></li>
-                      <li class="divider"></li>
-                  </c:if>
+                <ul class="dropdown-menu">
+                    <c:if test="${uc.isMock}">
+                        <li><a href="javascript:;" onclick="admin()">返回管理员</a></li>
+                        <li class="divider"></li>
+                    </c:if>
 
-                <li><a href="javascript:;">个人资料</a></li>
-                <li class="divider"></li>
-                <li><a href="javascript:;" onclick="changePassword()">修改密码</a></li>
-                <li class="divider"></li>
-                <li><a href="javascript:;" onclick="loginOut()">安全退出</a></li>
-              </ul>
+                    <li><a href="javascript:;">个人资料</a></li>
+                    <li class="divider"></li>
+                    <li><a href="javascript:;" onclick="changePassword()">修改密码</a></li>
+                    <li class="divider"></li>
+                    <li><a href="javascript:;" onclick="loginOut()">安全退出</a></li>
+                </ul>
             </li>
-          </ul>
+        </ul>
 
-        </div>
-      </div>
-    <div class="sidebar-nav" id="menuDiv" style="width: 200px;overflow: auto;">
-    	<ul>${uc.ext.menuStr }</ul>
     </div>
-    <div class="content" style="padding: 3px 5px 0px 3px;overflow: hidden;margin-left: 200px;">
-    	<ul class="nav nav-tabs" id="topTab">
-    		<li id="liMain" onclick="goTab(1)" class="active"><a href="#"></a></li>
-    		<li id="liSub" onclick="goTab(2)" style="display:none;"><a href="#"></a></li>
-		</ul>
-        <iframe id="frameMain" name="frameMain" src="" style="overflow:hidden;" scrolling="no" frameborder="no" width="100%" ></iframe>
-        <iframe id="frameSub" name="frameSub" src="" style="overflow:hidden;display: none;" scrolling="no" frameborder="no" width="100%" ></iframe>
-    </div>
-    
+</div>
+<div class="sidebar-nav" id="menuDiv" style="width: 200px;overflow: auto;">
+    <ul>${uc.ext.menuStr }</ul>
+</div>
+<style type="text/css">
+    .content-tabs {
+        position: relative;
+        height: 42px;
+        background: #fafafa;
+        line-height: 40px;
+        border-bottom: solid 2px #2f4050;
+    }
+    .content-tabs .roll-left {
+        margin-left: 10px;
+        left: 0;
+        border-right: solid 1px #eee;
+    }
+    .content-tabs .roll-nav, .page-tabs-list {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        color: #999;
+        z-index: 2;
+        top: 0;
+    }
+    nav.page-tabs .page-tabs-content {
+        float: left;
+    }
+    .content-tabs button {
+        background: #fff;
+        border: 0;
+        height: 40px;
+        width: 40px;
+        outline: 0;
+    }
+    nav.page-tabs {
+        margin-left: 40px;
+        width: 100000px;
+        height: 40px;
+        overflow: hidden;
+    }
+    article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+        display: block;
+    }
+
+    .roll-right.J_tabRight {
+        right: 140px;
+    }
+    .content-tabs .roll-right {
+        right: 0;
+        border-left: solid 1px #eee;
+    }
+    .content-tabs .roll-nav, .page-tabs-list {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        color: #999;
+        z-index: 2;
+        top: 0;
+    }
+    .content-tabs button {
+        background: #fff;
+        border: 0;
+        height: 40px;
+        width: 40px;
+        outline: 0;
+    }
+
+    .page-tabs a {
+        color: #999;
+        display: block;
+        float: left;
+        border-right: solid 1px #eee;
+        padding: 0 15px;
+    }
+    .J_menuTab {
+        -webkit-transition: all .3s ease-out 0s;
+        transition: all .3s ease-out 0s;
+    }
+    a {
+        cursor: pointer;
+    }
+    a {
+        color: #337ab7;
+        text-decoration: none;
+    }
+    a {
+        background-color: transparent;
+    }
+    .roll-right.btn-group {
+        right: 60px;
+        width: 80px;
+        padding: 0;
+    }
+    .content-tabs .roll-right {
+        right: 0;
+        border-left: solid 1px #eee;
+    }
+    .content-tabs .roll-nav, .page-tabs-list {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        color: #999;
+        z-index: 2;
+        top: 0;
+    }
+    .btn-group, .btn-group-vertical {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #content-main {
+        height: calc(100% - 140px);
+        overflow: hidden;
+    }
+
+    .page-tabs a.active {
+        background: #2f4050;
+        color: #a7b1c2;
+    }
+</style>
+
+<div class="content" id="topContent" style="padding: 0px 5px 0px 5px;overflow: hidden;margin-left: 200px;">
+
+</div>
+
 <script src="${html }/js/jquery-1.11.1.min.js"></script>
 <script src="${html }/js/cookie.js"></script>
 <script src="${html }/ui/bootstrap/js/bootstrap.js"></script>
 <script src="${html }/plugins/layer/layer.min.js"></script>
 <script src="${html }/js/fun.js"></script>
 <script src="${html }/js/main/index.js"></script>
+<script src="${html }/js/main/tab.js"></script>
 <script type="text/javascript">
-var ctx="${ctx}";
-<c:if test="${uc.isMock}">
+    var ctx="${ctx}";
+    var tab = new Tab({});
+
+    <c:if test="${uc.isMock}">
     function admin(){
         $.get("${ctx}/adminLogin", function (obj) {
             if(obj.rs){
@@ -101,7 +221,8 @@ var ctx="${ctx}";
             }
         })
     }
-</c:if>
+    </c:if>
+
 </script>
 </body>
 </html>
