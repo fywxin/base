@@ -9,8 +9,6 @@ var Tab=function (param) {
     this.init();
 };
 
-
-
 Tab.prototype = {
     init: function(){
         var $tab = $("<div>" +
@@ -35,7 +33,7 @@ Tab.prototype = {
         var t = this;
         $("#tabMain").on("click","a", function(){
             var rid = $(this).attr("id");
-            t.actTabById(rid.substring(2));
+            t.actTab(rid.substring(2));
         });
         $("#tabMain").on("dblclick","a", function(){
             var rid = $(this).attr("id");
@@ -64,7 +62,6 @@ Tab.prototype = {
         target.attr('src', url).load(function () {
             //关闭loading提示
             layer.close(loading);
-
         });
     },
 
@@ -73,7 +70,7 @@ Tab.prototype = {
         if(tabHere == null){
             this._insertTab(param, true);
         }else{
-            this.actTab(tabHere);
+            this.actTab(param.id);
         }
     },
 
@@ -95,28 +92,20 @@ Tab.prototype = {
         $("#f_"+param.id).attr("src", param.url);
 
         $('.J_mainContent iframe:visible').load(function () {
-            //iframe加载完成后隐藏loading提示
             layer.close(loading);
         });
         this.tabArr.push(param);
         this._move4Add();
     },
 
-    actTabById: function(id){
-        var obj = this.getTab(id);
-        if(obj != null){
-            this.actTab(obj);
-        }
-
-    },
-
-    actTab: function(param){
+    actTab: function(id){
         var preActiveTabId = this.activeTabId;
         $("#t_"+preActiveTabId).removeClass("active");
         $("#f_"+preActiveTabId).hide();
 
-        $("#t_"+param.id).addClass("active");
-        $("#f_"+param.id).show();
+        $("#t_"+id).addClass("active");
+        $("#f_"+id).show();
+        this.activeTabId = id;
 
         // 总宽度
         var countWidth = $("#tabBar").width() - 80;
@@ -128,26 +117,47 @@ Tab.prototype = {
         var marginLeftVal = parseInt($('#tabMain').css('margin-left'));
 
         //当前tab左边位置
-        var curLeft = $("#t_"+param.id).offset().left;
+        var curLeft = $("#t_"+id).offset().left - 200;
+
+        //当前激活tab左边位置
+        var activeLeft = $("#t_"+preActiveTabId).offset().left - 200;
 
         if(visibleWidth > countWidth){
-            if((curLeft-200) < countWidth){
-                $('#tabMain').animate({
-                    marginLeft: '10px'
-                });
-            }else{
-                if(curLeft > visibleWidth)    {
-                    $('#tabMain').animate({
-                        marginLeft: (visibleWidth - curLeft-marginLeftVal) + 'px'
-                    });
-                }else{
+            console.info("curLeft="+curLeft+", activeLeft="+activeLeft+", countWidth="+countWidth+", visibleWidth="+visibleWidth+", marginLeftVal="+marginLeftVal);
+            var visiblePosition = curLeft+marginLeftVal;
 
+            console.info("visiblePosition="+visiblePosition);
+            if((curLeft>0 && curLeft < countWidth) || (visiblePosition > 0 && visiblePosition < countWidth)){//可视区域 ,不移动
+                if((curLeft>0 && curLeft < countWidth)){
+                    console.info("可视区域curLeft:"+curLeft);
+                }else{
+                    console.info("可视区域visiblePosition:"+visiblePosition);
+                }
+
+            }else{
+                var distance = activeLeft - curLeft;
+
+                if(distance > 0){//左边
+                    var pos = distance+marginLeftVal;
+                    if(-pos<distance){
+                        $('#tabMain').animate({
+                            marginLeft: '10px'
+                        });
+                    }else{
+                        $('#tabMain').animate({
+                            marginLeft: pos+'px'
+                        });
+                    }
+                }else{//右边
+                    var pos = distance+marginLeftVal;
+                    $('#tabMain').animate({
+                        marginLeft: pos+'px'
+                    });
                 }
             }
         }
-
-        this.activeTabId = param.id;
     },
+
 
     delTab: function(id){
         if(id == this.home.id){
@@ -228,13 +238,6 @@ Tab.prototype = {
     },
 
     _move4Add: function(){
-        /*var len = $("#tabBar").width()- $("#tabMain").width()-80;
-         if(len < 0){
-         $("#tabMain").animate({
-         marginLeft:len+"px"
-         });
-         }*/
-
         // 总宽度
         var countWidth = $("#tabBar").width() - 80;
 
