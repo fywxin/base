@@ -77,7 +77,7 @@ Tab.prototype = {
     _insertTab: function(param, show){
 
         $("#tabMain").append("<a class='J_menuTab' id='t_"+param.id+"'>"+param.name+" <i class='fa fa-times-circle'></i></a>");
-        $("#frameMain").append("<iframe class='J_iframe' id='f_"+param.id+"' width='100%' height='100%' frameborder='0' style='display: none;'></iframe>");
+        $("#frameMain").append("<iframe class='J_iframe' id='f_"+param.id+"' width='100%' height='"+($.h()-65)+"px' frameborder='0' style='display: none;'></iframe>");
 
         if(show){
             var preActiveTabId = this.activeTabId;
@@ -91,7 +91,7 @@ Tab.prototype = {
         var loading = layer.load();
         $("#f_"+param.id).attr("src", param.url);
 
-        $('.J_mainContent iframe:visible').load(function () {
+        $("#f_"+param.id).load(function () {
             layer.close(loading);
         });
         this.tabArr.push(param);

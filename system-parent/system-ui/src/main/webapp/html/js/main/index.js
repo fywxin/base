@@ -15,7 +15,7 @@ function goMain(name, url){
 	}else{
 		$("#frameMain").show().attr("src", ctx+url+"&"+new Date().getTime());
 	}
-	
+
 	return false;
 }
 
@@ -42,7 +42,7 @@ function resetListHead(){
 		try{
 			window.frameMain.listFrame.resetWidth();
 		}catch(e2){
-			
+
 		}
 	}
 }
@@ -79,17 +79,17 @@ $(function() {
 
 function loginOut(){
 	$.ajax({
-		    url: ctx+"/loginOut",
-		    type: 'post',
-		    error: function(){
-		        window.location.href=ctx;
-		    },
-		    success: function(obj){
-		    	$.cookie("userName", null);
-	    		$.cookie("encryptedPwd", null); 
-		    	window.location.href=ctx;
-			}
-		});
+		url: ctx+"/loginOut",
+		type: 'post',
+		error: function(){
+			window.location.href=ctx;
+		},
+		success: function(obj){
+			$.cookie("userName", null);
+			$.cookie("encryptedPwd", null);
+			window.location.href=ctx;
+		}
+	});
 }
 
 function changePassword(){

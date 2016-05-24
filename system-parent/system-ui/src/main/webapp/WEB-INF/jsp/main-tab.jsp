@@ -74,13 +74,127 @@
 <div class="sidebar-nav" id="menuDiv" style="width: 200px;overflow: auto;">
     <ul>${uc.ext.menuStr }</ul>
 </div>
-<div class="content" style="padding: 3px 5px 0px 3px;overflow: hidden;margin-left: 200px;">
-    <ul class="nav nav-tabs" id="topTab">
-        <li id="liMain" onclick="goTab(1)" class="active"><a href="#"></a></li>
-        <li id="liSub" onclick="goTab(2)" style="display:none;"><a href="#"></a></li>
-    </ul>
-    <iframe id="frameMain" name="frameMain" src="" style="overflow:hidden;" scrolling="no" frameborder="no" width="100%" ></iframe>
-    <iframe id="frameSub" name="frameSub" src="" style="overflow:hidden;display: none;" scrolling="no" frameborder="no" width="100%" ></iframe>
+<style type="text/css">
+    .content-tabs {
+        position: relative;
+        height: 42px;
+        background: #fafafa;
+        line-height: 40px;
+        border-bottom: solid 2px #2f4050;
+    }
+    .content-tabs .roll-left {
+        margin-left: 10px;
+        left: 0;
+        border-right: solid 1px #eee;
+    }
+    .content-tabs .roll-nav {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        color: #999;
+        z-index: 2;
+        top: 0;
+    }
+    nav.page-tabs .page-tabs-content {
+        float: left;
+    }
+    .content-tabs button {
+        background: #fff;
+        border: 0;
+        height: 40px;
+        width: 40px;
+        outline: 0;
+    }
+    nav.page-tabs {
+        margin-left: 40px;
+        width: 100000px;
+        height: 40px;
+        overflow: hidden;
+    }
+
+    .roll-right.J_tabRight {
+        right: 140px;
+    }
+    .content-tabs .roll-right {
+        right: 0;
+        border-left: solid 1px #eee;
+    }
+    .content-tabs .roll-nav {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        color: #999;
+        z-index: 2;
+        top: 0;
+    }
+    .content-tabs button {
+        background: #fff;
+        border: 0;
+        height: 40px;
+        width: 40px;
+        outline: 0;
+    }
+
+    .page-tabs a {
+        color: #999;
+        display: block;
+        float: left;
+        border-right: solid 1px #eee;
+        padding: 0 15px;
+    }
+    .J_menuTab {
+        -webkit-transition: all .3s ease-out 0s;
+        transition: all .3s ease-out 0s;
+    }
+    a {
+        cursor: pointer;
+    }
+    a {
+        color: #337ab7;
+        text-decoration: none;
+    }
+    a {
+        background-color: transparent;
+    }
+    .roll-right.btn-group {
+        right: 60px;
+        width: 80px;
+        padding: 0;
+    }
+    .content-tabs .roll-right {
+        right: 0;
+        border-left: solid 1px #eee;
+    }
+    .content-tabs .roll-nav, .page-tabs-list {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        color: #999;
+        z-index: 2;
+        top: 0;
+    }
+    .btn-group, .btn-group-vertical {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #frameMain {
+        overflow: hidden;
+        padding: 1px 14px;
+    }
+
+    .page-tabs a.active {
+        background: #2f4050;
+        color: #a7b1c2;
+    }
+</style>
+
+<div class="content" id="topContent" style="padding: 0px 5px 0px 5px;overflow: hidden;margin-left: 200px;">
+
 </div>
 
 <script src="${html }/js/jquery-1.11.1.min.js"></script>
@@ -89,8 +203,11 @@
 <script src="${html }/plugins/layer/layer.min.js"></script>
 <script src="${html }/js/fun.js"></script>
 <script src="${html }/js/main/index.js"></script>
+<script src="${html }/js/main/tab.js"></script>
 <script type="text/javascript">
     var ctx="${ctx}";
+    var tab = new Tab({});
+
     <c:if test="${uc.isMock}">
     function admin(){
         $.get("${ctx}/adminLogin", function (obj) {

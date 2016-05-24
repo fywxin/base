@@ -52,6 +52,7 @@ $(document).ready(function(){
 		zNodes[i].isParent = (zNodes[i].menuType != 3);
 		zNodes[i].open = (zNodes[i].menuType != 3);
 	}
+	$("#treeDiv, #listFrame").height($.h());
 	zNodes.push({"menuId": "-99", "parentId": 0, "isParent": false, "menuType": 4, menuName: "未分配菜单权限"})
 	zTree = $.fn.zTree.init($("#tree"), setting, zNodes);
 });
@@ -62,7 +63,7 @@ function clickTree(treeNode){
 }
 </script>
 </head>
-<body>
+<body class="my_gridBody gray-bg">
 	<div class="container-fluid">
 		<div class="row">
 		  <div class="col-xs-2" id="treeDiv" style="padding: 0px;overflow: auto;">
