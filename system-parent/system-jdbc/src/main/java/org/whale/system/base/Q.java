@@ -155,6 +155,8 @@ public class Q implements Iquery{
 	/**
 	 * 加入查询返回字段
 	 * 只适用于分页
+	 *
+	 * select {col1}, {col2}, {col3}... from
 	 * 
 	 * @param cols
 	 * @return
@@ -183,6 +185,8 @@ public class Q implements Iquery{
 	
 	/**
 	 * 加入自定义Sql
+	 *  select {sql} from
+	 *
 	 * @param sql
 	 * @return
 	 */
@@ -191,6 +195,23 @@ public class Q implements Iquery{
 			select = new StringBuilder(50);
 		}
 		select.append(sql.trim());
+		return this;
+	}
+
+	/**
+	 * select t.*, {appendSql} from
+	 *
+	 * @param appendSql
+	 * @return
+	 */
+	public Q selectAppend(String appendSql){
+		if(this.select == null){
+			select = new StringBuilder(150);
+		}
+		if (!appendSql.trim().startsWith(",")){
+			appendSql = ","+appendSql;
+		}
+		select.append(ormTable.getSqlColPrexs()).append(appendSql.trim());
 		return this;
 	}
 	

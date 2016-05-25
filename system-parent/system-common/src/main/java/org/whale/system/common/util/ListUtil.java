@@ -290,7 +290,7 @@ public class ListUtil {
      * 
      * @param arrays
      */
-    public static <T> void reverse(T[] arrays) {
+    public static <T> T[] reverse(T[] arrays) {
         int size = arrays.length;
         for (int i = 0; i < size; i++) {
             int ih = i;
@@ -303,6 +303,28 @@ public class ListUtil {
             arrays[ih] = swap;
             arrays[it] = ah;
         }
+        return arrays;
+    }
+
+    /**
+     * 将列表内容倒排序
+     * @param list
+     * @param <T>
+     */
+    public static <T> List<T> reverse(List<T> list) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            int ih = i;
+            int it = size - 1 - i;
+            if (ih == it || ih > it) {
+                break;
+            }
+            T ah = list.get(ih);
+            T swap = list.get(it);
+            list.set(ih, swap);
+            list.set(it, ah);
+        }
+        return list;
     }
     
     /**

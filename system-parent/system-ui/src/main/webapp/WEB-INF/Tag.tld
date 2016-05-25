@@ -226,8 +226,14 @@
 	  <name>search</name>
 	  <required>false</required>
 	  <rtexprvalue>true</rtexprvalue>
-	  <description></description>
+	  <description>是否显示搜索</description>
 	</attribute>
+	 <attribute>
+		 <name>showCleanBut</name>
+		 <required>false</required>
+		 <rtexprvalue>true</rtexprvalue>
+		 <description>是否显示清空按钮</description>
+	 </attribute>
  </tag>
  
   <tag>

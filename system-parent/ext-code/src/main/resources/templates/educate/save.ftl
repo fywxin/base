@@ -30,10 +30,10 @@ $(function() {
 <body>
 <div id="bodyDiv" style="margin-top:10px;overflow-x: hidden;">
     <div id="infoBoxDiv" class="my_infoBox alert alert-danger"></div>
-    <div class="row">
+    <div class="row" style="margin-left: 0px;">
         <form class="form-horizontal m-t" id="dataForm">
 <#list domain.formAttrs as fAttr>
-        <div class="form-group">
+        <div class="form-group" style="margin-left: 0px;">
             <label class="col-sm-3 col-md-2 col-lg-1 control-label"><#if !fAttr.isNull><i>*</i></#if>${fAttr.cnName}：</label>
             <div class="col-sm-9 col-md-10 col-lg-11 form-inline"  style="padding-left:0px;">
                 <#if fAttr.formType == "dict">

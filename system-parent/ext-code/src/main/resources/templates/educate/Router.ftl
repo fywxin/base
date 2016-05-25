@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import org.whale.system.base.Cmd;
 import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
 import org.whale.system.base.BaseRouter;
 import org.whale.system.annotation.auth.Auth;
-import org.whale.system.common.exception.OrmException;
-import org.whale.system.common.exception.SysException;
+import org.whale.system.annotation.jdbc.Validate;
+import org.whale.system.common.exception.BusinessException;
 import org.whale.system.common.util.ListUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.WebUtil;
@@ -72,7 +71,7 @@ public class ${domain.domainName}Router extends BaseRouter {
 	@Auth(code="${domain.domainName?uncap_first}:save", name="新增${domain.domainCnName}")
 	@ResponseBody
 	@RequestMapping("/doSave")
-	public Rs doSave(${domain.domainName} ${domain.domainName?uncap_first}){
+	public Rs doSave(@Validate ${domain.domainName} ${domain.domainName?uncap_first}){
 	
 		this.${domain.domainName?uncap_first}Service.save(${domain.domainName?uncap_first});
 		return Rs.success();
@@ -83,7 +82,7 @@ public class ${domain.domainName}Router extends BaseRouter {
 	public ModelAndView goUpdate(${domain.idAttr.type} id){
 		${domain.domainName} ${domain.domainName?uncap_first} = null;
 		if(id == null || (${domain.domainName?uncap_first} = this.${domain.domainName?uncap_first}Service.get(id)) == null ){
-			throw new SysException("查找不到 ${domain.domainCnName} id="+id);
+			throw new BusinessException("查找不到 ${domain.domainCnName} id="+id);
 		}
 		return new ModelAndView("yb/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_update").addObject("item", ${domain.domainName?uncap_first});
 	}
@@ -91,7 +90,7 @@ public class ${domain.domainName}Router extends BaseRouter {
 	@Auth(code="${domain.domainName?uncap_first}:update", name="更新${domain.domainCnName}")
 	@ResponseBody
 	@RequestMapping("/doUpdate")
-	public Rs doUpdate(${domain.domainName} ${domain.domainName?uncap_first}){
+	public Rs doUpdate(@Validate ${domain.domainName} ${domain.domainName?uncap_first}){
 	
 		this.${domain.domainName?uncap_first}Service.update(${domain.domainName?uncap_first});
 		return Rs.success();
@@ -102,7 +101,7 @@ public class ${domain.domainName}Router extends BaseRouter {
 	public ModelAndView goView(${domain.idAttr.type} id){
 		${domain.domainName} ${domain.domainName?uncap_first} = this.${domain.domainName?uncap_first}Service.get(id);
 		if(${domain.domainName?uncap_first} == null){
-			throw new SysException("查找不到 ${domain.domainCnName} id="+id);
+			throw new BusinessException("查找不到 ${domain.domainCnName} id="+id);
 		}
 		
 		return new ModelAndView("yb/${domain.domainName?uncap_first}/${domain.domainName?uncap_first}_view")
