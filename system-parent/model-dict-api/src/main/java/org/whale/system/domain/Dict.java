@@ -15,6 +15,13 @@ public class Dict implements Serializable{
 
 	private static final long serialVersionUID = 232331L;
 
+	/**字典编码 */
+	public static final String F_dictId = "dictId";
+	/**字典名称 */
+	public static final String F_dictName = "dictName";
+	/**字典编码 */
+	public static final String F_dictCode = "dictCode";
+
 	@Id
 	@Column(cnName="id")
 	private Long dictId;

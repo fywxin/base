@@ -9,6 +9,12 @@ import org.whale.system.base.BaseEntry;
 public class RoleAuth extends BaseEntry {
 	private static final long serialVersionUID = 1L;
 
+	/**角色ID */
+	public static final String F_roleId = "roleId";
+
+	/**权限编码 */
+	public static final String F_authCode = "authCode";
+
 	@Id
 	private Long roleAuthId;
 	

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.whale.system.base.Cmd;
+import org.whale.system.base.Q;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.AuthDao;
@@ -59,7 +59,7 @@ public class MenuService extends BaseService<Menu, Long> {
 	}
 	
 	public String checkDelete(Long menuId){
-		if(this.count(Cmd.newCmd(Menu.class).eq("parentId", menuId)) > 0){
+		if(this.count(Q.newQ(Menu.class).eq(Menu.F_parentId, menuId)) > 0){
 			return "存在子菜单，不能删除";
 		}
 		List<Auth>auths = this.authDao.getByMenuId(menuId);

@@ -15,6 +15,11 @@ import org.whale.system.base.BaseEntry;
 public class Auth extends BaseEntry {
 	private static final long serialVersionUID = -43543112425L;
 
+	/**权限编码 */
+	public static final String F_authCode = "authCode";
+	/**菜单ID */
+	public static final String F_menuId = "menuId";
+
 	@Id(auto=false)
 	@Column(cnName="权限编码")
 	private String authCode;

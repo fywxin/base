@@ -15,6 +15,14 @@ public class DictItem  implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+	/**所属字典ID */
+	public static final String F_dictId = "dictId";
+	/**元素名称 */
+	public static final String F_itemName = "itemName";
+	/**元素编码 */
+	public static final String F_itemCode = "itemCode";
+
+
 	@Id
 	@Column(cnName="id")
 	private Long dictItemId;

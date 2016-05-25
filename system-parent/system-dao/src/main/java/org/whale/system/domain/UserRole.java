@@ -11,6 +11,12 @@ public class UserRole extends BaseEntry {
 
 	private static final long serialVersionUID = 1L;
 
+	/**角色ID */
+	public static final String F_roleId = "roleId";
+
+	/**用户ID */
+	public static final String F_userId = "userId";
+
 	@Id
 	@Column(cnName="userRoleId")
 	private Long userRoleId;

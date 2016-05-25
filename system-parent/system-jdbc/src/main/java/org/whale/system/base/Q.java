@@ -17,7 +17,7 @@ import org.whale.system.spring.SpringContextHolder;
  * @author wjs
  *
  */
-public class Cmd implements Iquery{
+public class Q implements Iquery{
 	
 	private OrmTable ormTable;
 	
@@ -43,11 +43,11 @@ public class Cmd implements Iquery{
 	private String countSql;
 	
 	
-	public static Cmd newCmd(Class<?> clazz){
-		return new Cmd(clazz);
+	public static Q newQ(Class<?> clazz){
+		return new Q(clazz);
 	}
 	
-	public Cmd(Class<?> clazz) {
+	public Q(Class<?> clazz) {
         OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
 		ormTable = ormContext.getOrmTable(clazz);
     }
@@ -159,7 +159,7 @@ public class Cmd implements Iquery{
 	 * @param cols
 	 * @return
 	 */
-	public Cmd select(String... cols){
+	public Q select(String... cols){
 		if(this.select == null){
 			select = new StringBuilder(100);
 		}
@@ -186,7 +186,7 @@ public class Cmd implements Iquery{
 	 * @param sql
 	 * @return
 	 */
-	public Cmd selectWrap(String sql){
+	public Q selectWrap(String sql){
 		if(this.select == null){
 			select = new StringBuilder(50);
 		}
@@ -199,7 +199,7 @@ public class Cmd implements Iquery{
 	 * 
 	 * @return
 	 */
-	public Cmd from(){
+	public Q from(){
 		
 		return this;
 	}
@@ -209,7 +209,7 @@ public class Cmd implements Iquery{
 	 * @param sql
 	 * @return
 	 */
-	public Cmd fromWrap(String sql){
+	public Q fromWrap(String sql){
 		if(this.from == null){
 			from = new StringBuilder(30);
 		}
@@ -217,7 +217,7 @@ public class Cmd implements Iquery{
 		return this;
 	}
 	
-	public Cmd where(){
+	public Q where(){
 		return this;
 	}
 	
@@ -228,7 +228,7 @@ public class Cmd implements Iquery{
 	 * @return
 	 */
 	@SuppressWarnings("all")
-	public Cmd whereWrap(String sql, Object value){
+	public Q whereWrap(String sql, Object value){
 		if(this.where == null){
 			this.where = new StringBuilder(50);
 		}
@@ -250,7 +250,7 @@ public class Cmd implements Iquery{
 	 * @param col
 	 * @return
 	 */
-	public Cmd asc(String col){
+	public Q asc(String col){
 		if(order == null){
 			order = new StringBuilder(20);
 		}
@@ -264,7 +264,7 @@ public class Cmd implements Iquery{
 	 * @param col
 	 * @return
 	 */
-	public Cmd desc(String col){
+	public Q desc(String col){
 		if(order == null){
 			order = new StringBuilder(20);
 		}
@@ -279,7 +279,7 @@ public class Cmd implements Iquery{
 	 * @param size
 	 * @return
 	 */
-	public Cmd limit(int from, int size){
+	public Q limit(int from, int size){
 		if(this.limit == null){
 			limit = new StringBuilder(20);
 		}
@@ -295,7 +295,7 @@ public class Cmd implements Iquery{
 	 * @param value
 	 * @return
 	 */
-	public Cmd eq(String col, Object value){
+	public Q eq(String col, Object value){
 		if(value == null){
 			return this;
 		}
@@ -309,7 +309,7 @@ public class Cmd implements Iquery{
 	 * @param value
 	 * @return
 	 */
-	public Cmd like(String col, Object value){
+	public Q like(String col, Object value){
 		if(value == null){
 			return this;
 		}
@@ -323,7 +323,7 @@ public class Cmd implements Iquery{
 	 * @param value
 	 * @return
 	 */
-	public Cmd and(String condition, Object value){
+	public Q and(String condition, Object value){
 		where.append(" AND ").append(condition);
 		if (value != null){
 			args.add(value);
@@ -338,7 +338,7 @@ public class Cmd implements Iquery{
 	 * @param values
 	 * @return
 	 */
-	public Cmd and(String condition, List<Object> values){
+	public Q and(String condition, List<Object> values){
 		where.append(" AND ").append(condition);
 		if (values != null && values.size() > 0){
 			args.addAll(values);
@@ -355,7 +355,7 @@ public class Cmd implements Iquery{
 	 * @return
 	 */
 	@SuppressWarnings("all")
-	public Cmd and(String col, String opt, Object value){
+	public Q and(String col, String opt, Object value){
 		col = this.fixCol(col);
 			
 		if("=".equals(opt)){

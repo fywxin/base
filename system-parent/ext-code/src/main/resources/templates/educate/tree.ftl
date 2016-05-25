@@ -41,7 +41,7 @@
         }
     };
 
-    var zNodes ="${"$"+"{nodes}"};
+    var zNodes =${"$"+"{nodes}"};
     $(document).ready(function(){
         $("#treeDiv, #listFrame").height($.h());
         zTree = $.fn.zTree.init($("#tree"), setting, zNodes);

@@ -65,16 +65,16 @@ public class UserRouter extends BaseRouter {
 	@RequestMapping("/doList")
 	public Page doList(String userName, String realName, Long deptId){
 		Page page = this.newPage();
-		Cmd cmd = page.newCmd(User.class)
+		Q q = page.newQ(User.class)
 					.select("userId","userName","realName","deptId","email","phone","status", "adminFlag" )
 					.selectWrap(",(select d.deptName from sys_dept d where d.id = t.deptId) as deptName")
-					.like("userName", userName)
-					.like("realName", realName);
+					.like(User.F_userName, userName)
+					.like(User.F_realName, realName);
 		if(deptId != null && !deptId.equals(0L)){
-			cmd.eq("deptId", deptId);
+			q.eq(User.F_deptId, deptId);
 		}
 		if(!UserContext.get().isSuperAdmin()){
-			cmd.eq("adminFlag", false);
+			q.eq(User.F_adminFlag, false);
 		}
 		
 		this.userService.queryPage(page);

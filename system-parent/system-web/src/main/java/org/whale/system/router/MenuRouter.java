@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.whale.system.annotation.auth.Auth;
 import org.whale.system.base.BaseRouter;
-import org.whale.system.base.Cmd;
+import org.whale.system.base.Q;
 import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
-import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.domain.Menu;
 import org.whale.system.service.MenuService;
@@ -50,10 +49,10 @@ public class MenuRouter extends BaseRouter {
 	@RequestMapping("/doList")
 	public Page doList(Long parentId){
 		Page page = this.newPage();
-		Cmd cmd = page.newCmd(Menu.class);
-		cmd.select().selectWrap(",(SELECT p.menuName from sys_menu p WHERE p.menuId = t.parentId) as parentName ");
+		Q q = page.newQ(Menu.class);
+		q.select().selectWrap(",(SELECT p.menuName from sys_menu p WHERE p.menuId = t.parentId) as parentName ");
 		if (parentId != null && parentId != 0l){
-			cmd.eq("parentId", parentId);
+			q.eq(Menu.F_parentId, parentId);
 		}
 
 		this.menuService.queryPage(page);

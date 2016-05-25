@@ -10,7 +10,7 @@ import org.whale.system.annotation.auth.Auth;
 import org.whale.system.annotation.jdbc.Validate;
 import org.whale.system.annotation.log.Log;
 import org.whale.system.base.BaseRouter;
-import org.whale.system.base.Cmd;
+import org.whale.system.base.Q;
 import org.whale.system.base.Page;
 import org.whale.system.base.Rs;
 import org.whale.system.common.exception.SysException;
@@ -58,12 +58,12 @@ public class DeptRouter extends BaseRouter {
 	@RequestMapping("/doList")
 	public Page doList(Long pid, String deptName, String deptCode, Integer limit){
 		Page page = this.newPage();
-		Cmd cmd = page.newCmd(Dept.class);
-		cmd.select().selectWrap(",(SELECT p.deptName FROM sys_dept p WHERE p.id = t.pid) parentName ");
+		Q q = page.newQ(Dept.class);
+		q.select().selectWrap(",(SELECT p.deptName FROM sys_dept p WHERE p.id = t.pid) parentName ");
 		if(pid != null && pid != 0L){
-			cmd.eq("pid", pid);
+			q.eq(Dept.F_pid, pid);
 		}
-		cmd.like("deptName", deptName).like("deptCode", deptCode).asc("pid").desc("orderNo");
+		q.like(Dept.F_deptName, deptName).like(Dept.F_deptCode, deptCode).asc(Dept.F_pid).desc(Dept.F_orderNo);
 		this.deptService.queryPage(page);
 		
 		return page;
@@ -128,11 +128,11 @@ public class DeptRouter extends BaseRouter {
 			return Rs.fail("请选择要删除的记录");
 		}
 		
-		if(this.deptService.count(Cmd.newCmd(Dept.class).eq("pid", id)) > 0){
+		if(this.deptService.count(Q.newQ(Dept.class).eq("pid", id)) > 0){
 			return Rs.fail("部门["+this.deptService.get(id).getDeptName()+"]下存在子部门，不能删除");
 		}
 		
-		if(this.userService.count(Cmd.newCmd(User.class).eq("deptId", id)) > 0){
+		if(this.userService.count(Q.newQ(User.class).eq("deptId", id)) > 0){
 			return Rs.fail("部门["+this.deptService.get(id).getDeptName()+"]下存在用户，不能删除");
 		}
 		this.deptService.delete(id);

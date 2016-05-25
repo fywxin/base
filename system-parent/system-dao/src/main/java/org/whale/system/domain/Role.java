@@ -11,6 +11,12 @@ import org.whale.system.base.BaseEntry;
 @Table(value="sys_role", cnName="角色")
 public class Role extends BaseEntry{
 	private static final long serialVersionUID = 1L;
+
+	/**角色名 */
+	public static final String F_roleName = "roleName";
+
+	/**角色编码 */
+	public static final String F_roleCode = "roleCode";
 	
 	@Id
 	@Column(cnName="id")

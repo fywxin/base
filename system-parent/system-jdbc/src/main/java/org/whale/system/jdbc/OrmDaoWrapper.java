@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.whale.system.base.Iquery;
 import org.whale.system.base.Iquery.SqlType;
 import org.whale.system.base.Page;
-import org.whale.system.base.Query;
+import org.whale.system.base.Find;
 import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.jdbc.filter.BaseDaoFilterService;
 
@@ -74,7 +74,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 	
 	public void delete(String sql, Object... objs){
-		this.delete(Query.newQuery(sql, objs));
+		this.delete(Find.newQuery(sql, objs));
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 	
 	public T get(String sql, Object... objs){
-		return this.get(Query.newQuery(sql, objs));
+		return this.get(Find.newQuery(sql, objs));
 	}
 	
 	
@@ -114,7 +114,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 	
 	public List<T> query(String sql, Object... objs) {
-		return this.query(Query.newQuery(sql, objs));
+		return this.query(Find.newQuery(sql, objs));
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 	
 	public Integer count(String sql, Object... objs) {
-		return this.count(Query.newQuery(sql, objs));
+		return this.count(Find.newQuery(sql, objs));
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 	
 	public List<Map<String, Object>> queryForList(String sql, Object... objs) {
-		return this.queryForList(Query.newQuery(sql, objs));
+		return this.queryForList(Find.newQuery(sql, objs));
 	}
 	
 	public <M> List<M> query(Class<M> clazz, Iquery query){
@@ -165,7 +165,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 	
 	public <M> List<M> query(Class<M> clazz, String sql, Object... objs){
-		List<Map<String, Object>> rs = this.queryForList(Query.newQuery(sql, objs).setClazz(clazz));
+		List<Map<String, Object>> rs = this.queryForList(Find.newQuery(sql, objs).setClazz(clazz));
 		if(rs == null || rs.size() < 1){
 			return null;
 		}
@@ -199,7 +199,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 	
 	public Map<String, Object> queryForMap(String sql, Object... objs) {
-		return this.queryForMap(Query.newQuery(sql, objs));
+		return this.queryForMap(Find.newQuery(sql, objs));
 	}
 
 	@Override

@@ -58,7 +58,7 @@ public class DictItemRouter extends BaseRouter {
 	@RequestMapping("/doList")
 	public Page doList(Long dictId, String itemName, String itemCode){
 		Page page = this.newPage();
-		page.newCmd(DictItem.class).eq("dictId", dictId).like("itemName", itemName).like("itemCode", itemCode);
+		page.newQ(DictItem.class).eq(DictItem.F_dictId, dictId).like(DictItem.F_itemName, itemName).like(DictItem.F_itemCode, itemCode);
 		
 		this.dictItemService.queryPage(page);
 		

@@ -13,12 +13,12 @@ public class UserDao extends BaseDao<User, Long> {
 	
 	public List<User> getByDeptId(Long deptId){
 
-		return this.query(this.cmd().eq("deptId", deptId));
+		return this.query(this.q().eq(User.F_deptId, deptId));
 	}
 
 	public User getByUserName(String userName){
 
-		return this.get(this.cmd().eq("userName", userName));
+		return this.get(this.q().eq(User.F_userName, userName));
 	}
 	
 	final String findAuthIds_SQL ="select ra.authId "+

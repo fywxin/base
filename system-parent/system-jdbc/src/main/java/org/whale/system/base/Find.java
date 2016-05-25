@@ -1,6 +1,6 @@
 package org.whale.system.base;
 
-public class Query implements Iquery {
+public class Find implements Iquery {
 	
 	private String sql;
 	
@@ -8,11 +8,11 @@ public class Query implements Iquery {
 	
 	private Class<?> clazz;
 	
-	public static Query newQuery(String sql, Object... args){
-		return new Query(sql, args);
+	public static Find newQuery(String sql, Object... args){
+		return new Find(sql, args);
 	}
 	
-	public Query(String sql, Object... args){
+	public Find(String sql, Object... args){
 		this.sql = sql;
 		this.args = args;
 	}
@@ -32,7 +32,7 @@ public class Query implements Iquery {
 		return clazz;
 	}
 
-	public Query setClazz(Class<?> clazz) {
+	public Find setClazz(Class<?> clazz) {
 		this.clazz = clazz;
 		return this;
 	}

@@ -16,7 +16,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
 	 */
     public Dept getByDeptCode(String deptCode) {
 
-    	return this.get(this.cmd().eq("deptCode", deptCode));
+    	return this.get(this.q().eq(Dept.F_deptCode, deptCode));
     }
     
     /**
@@ -26,7 +26,7 @@ public class DeptDao extends BaseDao<Dept, Long> {
      */
     public List<Dept> getByPid(Long pid){
     	
-    	return this.query(cmd().eq("pid", pid));
+    	return this.query(q().eq(Dept.F_pid, pid));
     }
 	
     /**

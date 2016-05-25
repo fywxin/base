@@ -19,6 +19,15 @@ import org.whale.system.domain.Dept;
 public class Dept extends BaseEntry {
 
 	private static final long serialVersionUID = -1410859166676l;
+
+	/**部门名称 */
+	public static final String F_deptName = "deptName";
+	/**部门编码 */
+	public static final String F_deptCode = "deptCode";
+	/**父部门 */
+	public static final String F_pid = "pid";
+	/**排序 */
+	public static final String F_orderNo = "orderNo";
 	
 	@Id
 	@Column(name="id", cnName="id")

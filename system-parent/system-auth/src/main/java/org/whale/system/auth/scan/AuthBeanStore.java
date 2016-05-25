@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.whale.system.auth.domain.AuthBean;
-import org.whale.system.base.Cmd;
+import org.whale.system.base.Q;
 import org.whale.system.common.exception.SysException;
 import org.whale.system.common.util.Strings;
 import org.whale.system.dao.AuthDao;
@@ -91,7 +91,7 @@ public class AuthBeanStore {
 			auths.add(auth);
 		}
 		
-		this.authDao.delete(Cmd.newCmd(Auth.class));
+		this.authDao.delete(Q.newQ(Auth.class));
 		this.authDao.saveBatch(auths);
 		
 		return warn.toString();

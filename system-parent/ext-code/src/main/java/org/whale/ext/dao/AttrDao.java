@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 import org.whale.ext.domain.Attr;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Query;
+import org.whale.system.base.Find;
 import org.whale.system.jdbc.util.DbKind;
 
 @Repository
@@ -14,7 +14,7 @@ public class AttrDao extends BaseDao<Attr, Long> {
 	
 	public List<Attr> queryByDomainId(Long domainId){
 		
-		return this.query(this.cmd().eq("domainId", domainId));
+		return this.query(this.q().eq("domainId", domainId));
 	}
 	
 	
@@ -56,9 +56,9 @@ public class AttrDao extends BaseDao<Attr, Long> {
 	 */
 	public List<Map<String, Object>> queryColsByTable(String table){
 		if(DbKind.isMysql()){
-			return this.queryForList(Query.newQuery(queryColsByTable_MYSQL, table));
+			return this.queryForList(Find.newQuery(queryColsByTable_MYSQL, table));
 		}else{
-			return this.queryForList(Query.newQuery(queryColsByTable_ORACLE, table));
+			return this.queryForList(Find.newQuery(queryColsByTable_ORACLE, table));
 		}
 	}
 }

@@ -11,21 +11,21 @@ public class RoleAuthDao extends BaseDao<RoleAuth, Long> {
 
 	public List<RoleAuth> getByRoleId(Long roleId){
 		
-		return this.query(this.cmd().eq("roleId", roleId));
+		return this.query(this.q().eq(RoleAuth.F_roleId, roleId));
 	}
 		
 	public List<RoleAuth> getByAuthCode(String authCode){
 		
-		return this.query(this.cmd().eq("authCode", authCode));
+		return this.query(this.q().eq(RoleAuth.F_authCode, authCode));
 	}
 	
 	public void deleteByRoleId(Long roleId){
 		
-		this.delete(this.cmd().eq("roleId", roleId));
+		this.delete(this.q().eq(RoleAuth.F_roleId, roleId));
 	}
 	
 	public void deleteByAuthCode(String authCode){
 		
-		this.delete(this.cmd().eq("authCode", authCode));
+		this.delete(this.q().eq(RoleAuth.F_authCode, authCode));
 	}
 }

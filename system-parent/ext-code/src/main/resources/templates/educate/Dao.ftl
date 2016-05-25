@@ -22,7 +22,7 @@ public class ${domain.domainName}Dao extends BaseDao<${domain.domainName}, ${dom
 	 * @return
 	 */
     public ${domain.domainName} getBy${attr.name?cap_first }(${attr.type} ${attr.name}) {
-    	return this.getBy(this.cmd().and("${attr.sqlName}",${attr.name}));
+    	return this.getBy(this.cmd().and(${domain.domainName}.F_${attr.name}, ${attr.name}));
     }
     </#if>
 </#list>

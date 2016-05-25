@@ -15,25 +15,25 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	 */
 	public List<Menu> getDirMenus(){
 		
-		return this.query(this.cmd().and("menuType", "!=", 3));
+		return this.query(this.q().and(Menu.F_menuType, "!=", 3));
 	}
 	
 	public List<Menu> getByParentId(Long parentId){
 		
-		return this.query(this.cmd().eq("parentId", parentId));
+		return this.query(this.q().eq(Menu.F_parentId, parentId));
 	}
 	
 	public List<Menu> getMenuByType(Integer menuType){
-		return this.query(this.cmd().eq("menuType", menuType));
+		return this.query(this.q().eq(Menu.F_menuType, menuType));
 	}
 	
 	public List<Menu> getPublicMenus(){
-		return this.query(this.cmd().eq("menuType", 3).eq("isPublic", 1));
+		return this.query(this.q().eq(Menu.F_menuType, 3).eq(Menu.F_publicFlag, true));
 	}
 	
 	public Menu getByMenuName(String menuName){
 		
-		return this.get(this.cmd().eq("menuName", menuName));
+		return this.get(this.q().eq(Menu.F_menuName, menuName));
 	}
 	
 	final String getCurOrder_SQL = "select max(orderNo) from sys_menu where parentId = ?";

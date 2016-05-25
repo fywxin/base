@@ -27,6 +27,15 @@ public class Menu extends BaseEntry implements TreeNode{
 	
 	public static final Integer MENU_URL = 3;
 
+	/**父id */
+	public static final String F_parentId = "parentId";
+	/**菜单名称 */
+	public static final String F_menuName = "menuName";
+	/**菜单类型 */
+	public static final String F_menuType = "menuType";
+	/**是否公共 */
+	public static final String F_publicFlag = "publicFlag";
+
 	@Id
 	@Column(cnName="id")
 	private Long menuId;

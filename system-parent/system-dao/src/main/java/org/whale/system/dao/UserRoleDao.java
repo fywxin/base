@@ -19,12 +19,12 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 
 	public List<UserRole> getByRoleId(Long roleId){
 		
-		return this.query(this.cmd().eq("roleId", roleId));
+		return this.query(this.q().eq(UserRole.F_roleId, roleId));
 	}
 	
 	public List<UserRole> getByUserId(Long userId){
 		
-		return this.query(this.cmd().eq("userId", userId));
+		return this.query(this.q().eq(UserRole.F_userId, userId));
 	}
 	
 	final String queryRoleByUserId_SQL = "SELECT t.* FROM sys_role t, sys_user_role ur WHERE t.roleId = ur.roleId  AND ur.userId = ?  order by t.roleId";
@@ -46,11 +46,11 @@ public class UserRoleDao extends BaseDao<UserRole, Long> {
 	
 	public void deleteByRoleId(Long roleId){
 		
-		this.delete(this.cmd().eq("roleId", roleId));
+		this.delete(this.q().eq(UserRole.F_roleId, roleId));
 	}
 	
 	public void deleteByUserId(Long userId){
 		
-		this.delete(this.cmd().eq("userId", userId));
+		this.delete(this.q().eq(UserRole.F_userId, userId));
 	}
 }

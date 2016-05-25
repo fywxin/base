@@ -40,16 +40,16 @@ public class Page implements Serializable {
 	private List<Object> args = new ArrayList<Object>();
 	
 	/**动态拼接查询 */
-	private Iquery cmd;
+	private Iquery q;
 	
 	/**返回结果data 的类型，默认为Map<String, Object> */
 	private Class<?> dataClass;
 	
 	
-	public Cmd newCmd(Class<?> clazz){
-		Cmd cmd = Cmd.newCmd(clazz);
-		this.setCmd(cmd);
-		return cmd;
+	public Q newQ(Class<?> clazz){
+		Q q = Q.newQ(clazz);
+		this.setQ(q);
+		return q;
 	}
 
 	public long getTotalPages() {
@@ -81,12 +81,12 @@ public class Page implements Serializable {
 	}
 	
 	private void exeCmd(){
-		if(this.cmd == null){
+		if(this.q == null){
 			throw new SysException("Page 分页语句为空");
 		}
-		this.sql = this.cmd.getSql(SqlType.QUERY);
-		this.countSql = this.cmd.getSql(SqlType.COUNT);
-		for(Object obj : this.cmd.getArgs()){
+		this.sql = this.q.getSql(SqlType.QUERY);
+		this.countSql = this.q.getSql(SqlType.COUNT);
+		for(Object obj : this.q.getArgs()){
 			this.args.add(obj);
 		}
 		
@@ -94,12 +94,12 @@ public class Page implements Serializable {
 
 	// ----------------------------------------------------get set----------------------------------------
 
-	public Iquery getCmd() {
-		return cmd;
+	public Iquery getQ() {
+		return q;
 	}
 
-	public void setCmd(Iquery cmd) {
-		this.cmd = cmd;
+	public void setQ(Iquery q) {
+		this.q = q;
 	}
 
 	public int getPageSize() {

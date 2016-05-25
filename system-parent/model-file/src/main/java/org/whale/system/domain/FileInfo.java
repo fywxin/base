@@ -42,6 +42,11 @@ public class FileInfo extends BaseEntry {
 	public static final Integer TYPE_EXE = 5;
 	/** 文件类型 6.媒体文件 */
 	public static final Integer TYPE_MEDIA = 6;
+
+	/**原文件名 */
+	public static final String F_realFileName = "realFileName";
+	/**url访问地址 */
+	public static final String F_urlPath = "urlPath";
 	
 	public static HashMap<Integer, String> extMap = new HashMap<Integer, String>();
 

@@ -11,7 +11,7 @@ public class RoleDao extends BaseDao<Role, Long> {
 
 	public Role getByRoleCode(String roleCode){
 
-		return this.get(this.cmd().eq("roleCode", roleCode));
+		return this.get(this.q().eq(Role.F_roleCode, roleCode));
 	}
 	
 	final String getByUserId_SQL = "SELECT r.* FROM sys_user_role ur, sys_role r WHERE ur.userId = ? AND ur.roleId = r.roleId";

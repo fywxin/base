@@ -22,7 +22,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Cmd;
+import org.whale.system.base.Q;
 import org.whale.system.base.Iquery;
 import org.whale.system.base.Page;
 import org.whale.system.base.Iquery.SqlType;
@@ -329,7 +329,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		page.setCountSql(null);
 		page.setSql(null);
 		page.args().clear();
-		page.setCmd(null);
+		page.setQ(null);
 	}
 
 	@Override
@@ -460,8 +460,8 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	}
 */
 	@Override
-	public Cmd cmd() {
-		return Cmd.newCmd(clazz);
+	public Q q() {
+		return Q.newQ(clazz);
 	}
 
 }

@@ -1,15 +1,6 @@
 package org.whale.system.router;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +16,6 @@ import org.whale.system.base.UserContext;
 import org.whale.system.cache.service.DictCacheService;
 import org.whale.system.common.constant.DictConstant;
 import org.whale.system.common.constant.SysConstant;
-import org.whale.system.common.util.LangUtil;
 import org.whale.system.common.util.Strings;
 import org.whale.system.domain.Auth;
 import org.whale.system.domain.Menu;
@@ -34,7 +24,7 @@ import org.whale.system.service.AuthService;
 import org.whale.system.service.MenuService;
 import org.whale.system.service.RoleService;
 
-import com.alibaba.fastjson.JSON;
+import java.util.*;
 
 /**
  * 角色管理
@@ -73,9 +63,9 @@ public class RoleRouter extends BaseRouter {
 	@org.whale.system.annotation.auth.Auth(code="role:list",name="查询角色")
 	@ResponseBody
 	@RequestMapping("/doList")
-	public Page doList(HttpServletResponse response, String roleName, String roleCode){
+	public Page doList(String roleName, String roleCode){
 		Page page = this.newPage();
-		page.newCmd(Role.class).like("roleName", roleName).like("roleCode", roleCode);
+		page.newQ(Role.class).like(Role.F_roleName, roleName).like(Role.F_roleCode, roleCode);
 		
 		this.roleService.queryPage(page);
 		

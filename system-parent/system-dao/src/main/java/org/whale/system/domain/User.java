@@ -10,6 +10,15 @@ import org.whale.system.base.BaseEntry;
 @Table(value="sys_user", cnName="用户")
 public class User extends BaseEntry {
 	private static final long serialVersionUID = 1L;
+
+	/**用户名 */
+	public static final String F_userName = "userName";
+	/**真实姓名 */
+	public static final String F_realName = "realName";
+	/**所属部门 */
+	public static final String F_deptId = "deptId";
+	/**是否管理员 */
+	public static final String F_adminFlag = "adminFlag";
 	
 	@Id
 	@Column(cnName="userId")

@@ -22,7 +22,14 @@ import org.whale.system.base.BaseEntry;
 @Table(value="${domain.domainSqlName}", cnName="${domain.domainCnName}")
 public class ${domain.domainName} extends BaseEntry {
 	private static final long serialVersionUID = -${.now?long?c}l;
-	
+
+<#list domain.attrs as attr >
+	<#if !attr.isId>
+	/** ${attr.cnName} */
+	public static final String F_${attr.name} = "${attr.sqlName}";
+	</#if>
+</#list>
+
 	@Id
 	@Column(name="${domain.idAttr.sqlName}", cnName="${domain.idAttr.cnName}")
 	private ${domain.idAttr.type} ${domain.idAttr.name};

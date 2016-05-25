@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 import org.whale.system.base.BaseDao;
-import org.whale.system.base.Cmd;
+import org.whale.system.base.Q;
 import org.whale.system.domain.Auth;
 
 @Repository
@@ -15,7 +15,7 @@ public class AuthDao extends BaseDao<Auth, String> {
 
 	public List<Auth> getByMenuId(Long menuId){
 		
-		return this.query(Cmd.newCmd(Auth.class).eq("menuId", menuId));
+		return this.query(Q.newQ(Auth.class).eq(Auth.F_menuId, menuId));
 	}
 	
 	String getByRoleId_SQL = "SELECT a.* FROM sys_role_auth ra, sys_auth a WHERE ra.roleId = ? AND a.authCode = ra.authCode ";

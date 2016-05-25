@@ -2,7 +2,7 @@ package org.whale.system.log.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.whale.system.base.Cmd;
+import org.whale.system.base.Q;
 import org.whale.system.base.Page;
 import org.whale.system.common.util.Strings;
 import org.whale.system.common.util.TimeUtil;
@@ -23,7 +23,7 @@ public class LogInfoService extends BaseService<LogInfo, Long> {
 
     public void queryPage(Page page, LogQueryReq logQueryReq){
 
-        Cmd cmd = page.newCmd(LogInfo.class)
+        Q q = page.newQ(LogInfo.class)
                 .eq("module", logQueryReq.getModule())
                 .eq("method", logQueryReq.getMethod())
                 .eq("clazz", logQueryReq.getClazz())

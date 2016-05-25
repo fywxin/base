@@ -102,7 +102,7 @@ public class DictRouter extends BaseRouter {
 	@RequestMapping("/doList")
 	public Page doList(String dictName, String dictCode){
 		Page page = this.newPage();
-		page.newCmd(Dict.class).like("dictName", dictName).like("dictCode", dictCode);
+		page.newQ(Dict.class).like(Dict.F_dictName, dictName).like(Dict.F_dictCode, dictCode);
 		
 		this.dictService.queryPage(page);
 		
