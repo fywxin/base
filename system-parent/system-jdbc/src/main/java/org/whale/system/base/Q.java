@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmTable;
@@ -18,7 +21,9 @@ import org.whale.system.spring.SpringContextHolder;
  *
  */
 public class Q implements Iquery{
-	
+
+	private static Logger logger = LoggerFactory.getLogger("动态查询");
+
 	private OrmTable ormTable;
 	
 	//返回字段
@@ -82,7 +87,10 @@ public class Q implements Iquery{
 			}
 			delSql = strb.toString();
 		}
-		
+		if(logger.isDebugEnabled()){
+			logger.debug("del: "+delSql);
+			logger.debug(JSON.toJSONString(args));
+		}
 		return delSql;
 	}
 	
@@ -95,6 +103,10 @@ public class Q implements Iquery{
 			}
 			
 			getSql = strb.toString();
+		}
+		if(logger.isDebugEnabled()){
+			logger.debug("get: "+getSql);
+			logger.debug(JSON.toJSONString(args));
 		}
 		return getSql;
 	}
@@ -134,6 +146,10 @@ public class Q implements Iquery{
 			
 			querySql = strb.toString();
 		}
+		if(logger.isDebugEnabled()){
+			logger.debug("query: "+querySql);
+			logger.debug(JSON.toJSONString(args));
+		}
 		return querySql;
 	}
 	
@@ -146,6 +162,10 @@ public class Q implements Iquery{
 				strb.append(limit);
 			}
 			countSql = strb.toString();
+		}
+		if(logger.isDebugEnabled()){
+			logger.debug("count: "+countSql);
+			logger.debug(JSON.toJSONString(args));
 		}
 		return countSql;
 	}
