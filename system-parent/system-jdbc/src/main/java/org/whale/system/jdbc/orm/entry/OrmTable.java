@@ -26,6 +26,8 @@ public class OrmTable extends Atable {
 	private String sequence;
 	/** 数据库 所对应的拥有者  */
 	private String tableSchemaOwner;
+	/** 保证插入只有一条记录，重复记录将被忽略 */
+	private boolean unique;
 	/** 主键字段 */
 	private OrmColumn idCol;
 	/** 所有 @Column 字段 */
@@ -286,5 +288,12 @@ public class OrmTable extends Atable {
 	public void setOrmColMap(Map<String, OrmColumn> ormColMap) {
 		this.ormColMap = ormColMap;
 	}
-	
+
+	public boolean getUnique() {
+		return unique;
+	}
+
+	public void setUnique(boolean unique) {
+		this.unique = unique;
+	}
 }

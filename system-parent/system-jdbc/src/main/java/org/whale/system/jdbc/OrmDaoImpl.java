@@ -81,14 +81,14 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		if(idCol.getIdAuto() && idIsEmpty){
 			if (DbKind.isMysql()){//mysql 获取主键
 				KeyHolder keyHolder = new GeneratedKeyHolder();
-				this.jdbcTemplate.update(new PreparedStatementCreator(){
+				int i = this.jdbcTemplate.update(new PreparedStatementCreator() {
 
 					@Override
 					public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 						PreparedStatement ps = con.prepareStatement(ormValue.getSql(), Statement.RETURN_GENERATED_KEYS);
-						if(ormValue.getArgs() != null){
-							int i=1;
-							for(Object obj : ormValue.getArgs()){
+						if (ormValue.getArgs() != null) {
+							int i = 1;
+							for (Object obj : ormValue.getArgs()) {
 								ps.setObject(i++, obj);
 							}
 						}
@@ -96,6 +96,11 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 					}
 
 				}, keyHolder);
+
+				if (ormTable.getUnique() && i == 0){
+					logger.info("存在重复记录，该插入被忽略 {}", t);
+					return;
+				}
 
 				Field idFile = idCol.getField();
 				idFile.setAccessible(true);

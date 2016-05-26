@@ -22,7 +22,7 @@ import org.whale.system.spring.SpringContextHolder;
  */
 public class Q implements Iquery{
 
-	private static Logger logger = LoggerFactory.getLogger("动态查询");
+	private static Logger logger = LoggerFactory.getLogger(Q.class);
 
 	private OrmTable ormTable;
 	
@@ -88,8 +88,7 @@ public class Q implements Iquery{
 			delSql = strb.toString();
 		}
 		if(logger.isDebugEnabled()){
-			logger.debug("del: "+delSql);
-			logger.debug(JSON.toJSONString(args));
+			logger.debug("del: [\n"+delSql+"\n"+JSON.toJSONString(args)+"\n]");
 		}
 		return delSql;
 	}
@@ -105,8 +104,7 @@ public class Q implements Iquery{
 			getSql = strb.toString();
 		}
 		if(logger.isDebugEnabled()){
-			logger.debug("get: "+getSql);
-			logger.debug(JSON.toJSONString(args));
+			logger.debug("get: [\n"+getSql+"\n"+JSON.toJSONString(args)+"\n]");
 		}
 		return getSql;
 	}
@@ -147,8 +145,7 @@ public class Q implements Iquery{
 			querySql = strb.toString();
 		}
 		if(logger.isDebugEnabled()){
-			logger.debug("query: "+querySql);
-			logger.debug(JSON.toJSONString(args));
+			logger.debug("query: [\n"+querySql+"\n"+JSON.toJSONString(args)+"\n]");
 		}
 		return querySql;
 	}
@@ -164,8 +161,7 @@ public class Q implements Iquery{
 			countSql = strb.toString();
 		}
 		if(logger.isDebugEnabled()){
-			logger.debug("count: "+countSql);
-			logger.debug(JSON.toJSONString(args));
+			logger.debug("count: [\n"+countSql+"\n"+JSON.toJSONString(args)+"\n]");
 		}
 		return countSql;
 	}

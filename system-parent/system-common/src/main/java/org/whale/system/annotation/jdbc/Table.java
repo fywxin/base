@@ -28,6 +28,26 @@ public @interface Table {
 	String sequence() default "";
 	/** 数据库拥有人 ORACLE */
 	String schema() default "";
+
+	/**
+	 * 保证插入只有一条记录，重复记录将被忽略  insert ignore into
+	 * 【确定存在唯一主键，使用方式2】
+	 * 兼容ORACLE 带验证！
+	 *
+	 * 参考：http://www.suiyiwen.com/question/4293
+	 *
+	 *  uniqueIndex 为false 时，采用方式 1
+	 *  方式1： insert into ...select ... not exists
+	 *  方式2：insert ignore into
+	 *
+	 *  @Unique与@Column(unique=true)区别：
+	 *
+	 *  @Unique： 发现重复记录，丢弃本次插入，不抛出异常
+	 *  @Column(unique=true): 先查询，然后再插入，并不能保证唯一的原子性，同时会抛出异常
+	 *
+	 * Created by 王金绍 on 2016/5/26.
+	 */
+	boolean unique() default false;
 	
 	/**
 	 * 

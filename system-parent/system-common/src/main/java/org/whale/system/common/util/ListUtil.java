@@ -284,27 +284,6 @@ public class ListUtil {
         Class<T> type = (Class<T>) list.peek().getClass();
         return list.toArray((T[]) Array.newInstance(type, list.size()));
     }
-    
-    /**
-     * 将数组内容倒着排序
-     * 
-     * @param arrays
-     */
-    public static <T> T[] reverse(T[] arrays) {
-        int size = arrays.length;
-        for (int i = 0; i < size; i++) {
-            int ih = i;
-            int it = size - 1 - i;
-            if (ih == it || ih > it) {
-                break;
-            }
-            T ah = arrays[ih];
-            T swap = arrays[it];
-            arrays[ih] = swap;
-            arrays[it] = ah;
-        }
-        return arrays;
-    }
 
     /**
      * 将列表内容倒排序

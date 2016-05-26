@@ -43,7 +43,12 @@ public class SqlSaveBuilder {
 		List<Integer> argTypes = new ArrayList<Integer>(cols.size());
 		List<Field> fields = new ArrayList<Field>(cols.size());
 		
-		StringBuilder sql = new StringBuilder("INSERT INTO ");
+		StringBuilder sql = new StringBuilder("INSERT");
+		if (table.getUnique()){
+			sql.append(" ignore");
+		}
+		sql.append(" INTO ");
+
 		sql.append(table.getTableDbName()).append("(");
 		
 		StringBuilder temp = new StringBuilder();

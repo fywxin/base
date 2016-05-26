@@ -128,8 +128,7 @@ public class DefaultOrmTableBuilder implements OrmTableBuilder {
 	 *功能说明: 封装table
 	 *创建人: wjs
 	 *创建时间:2013-3-19 下午12:44:08
-	 *@param clazz
-	 *@param ormTable void
+	 *@param ormTable
 	 *
 	 */
 	private void parseTable(OrmTable ormTable){
@@ -163,6 +162,9 @@ public class DefaultOrmTableBuilder implements OrmTableBuilder {
 		if(Strings.isNotBlank(table.cnName())){
 			ormTable.setTableCnName(table.cnName());
 		}
+		//保证插入只有一条记录，重复记录将被忽略
+		ormTable.setUnique(table.unique());
+
 		//当javabean 字段没有定义@Column是，javabean属性转为数据库字段的规则
 		ormTable.setColumnFormat(table.colFormat());
 		while (ormTable.getParent() != null) {
