@@ -83,6 +83,11 @@ public class Q implements Iquery{
 			StringBuilder strb = new StringBuilder();
 			strb.append("DELETE t FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(where.toString());
 			if(limit != null){
+				if(order == null){
+					strb.append(ormTable.getSqlOrderSuffix());
+				}else{
+					strb.append(" ORDER BY ").append(order.deleteCharAt(order.length()-1));
+				}
 				strb.append(limit);
 			}
 			delSql = strb.toString();
