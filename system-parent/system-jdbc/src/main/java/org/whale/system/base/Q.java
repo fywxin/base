@@ -98,11 +98,17 @@ public class Q implements Iquery{
 			StringBuilder strb = new StringBuilder(50);
 			strb.append(ormTable.getSqlHeadPrefix()).append(" WHERE 1=1 ").append(where.toString());
 			if(limit != null){
+				if(order == null){
+					strb.append(ormTable.getSqlOrderSuffix());
+				}else{
+					strb.append(" ORDER BY ").append(order.deleteCharAt(order.length()-1));
+				}
 				strb.append(limit);
 			}
-			
 			getSql = strb.toString();
+
 		}
+
 		if(logger.isDebugEnabled()){
 			logger.debug("get: [\n"+getSql+"\n"+JSON.toJSONString(args)+"\n]");
 		}
@@ -292,7 +298,7 @@ public class Q implements Iquery{
 			order = new StringBuilder(20);
 		}
 		col = this.fixCol(col);
-		order.append(col).append(" ASC,");
+		order.append("t.").append(col).append(" ASC,");
 		return this;
 	}
 	
@@ -306,7 +312,7 @@ public class Q implements Iquery{
 			order = new StringBuilder(20);
 		}
 		col = this.fixCol(col);
-		order.append(col).append(" DESC,");
+		order.append("t.").append(col).append(" DESC,");
 		return this;
 	}
 	
