@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.whale.system.common.exception.OrmException;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.util.AnnotationUtil;
 
@@ -36,10 +37,12 @@ public class OrmRowMapper<T> implements RowMapper<T> {
     public T mapRow(ResultSet rs, int rowNum) throws SQLException {
         T obj = null;
         String tmp = null;
+        OrmColumn colCopy = null;
         try {
             obj = mappedClass.newInstance();
             //对应关系见 http://hi.baidu.com/linyongboole/item/d3749cbff69121422bebe302
             for(OrmColumn col : ormColumnList){
+                colCopy = col;
                 if(Types.VARCHAR == col.getType()){
                     AnnotationUtil.setFieldValue(obj, col.getField(), rs.getString(col.getSqlName()));
                     continue ;
@@ -133,10 +136,11 @@ public class OrmRowMapper<T> implements RowMapper<T> {
                 AnnotationUtil.setFieldValue(obj, col.getField(), rs.getObject(col.getSqlName()));
             }
 
-        } catch (InstantiationException e) {
-            logger.error("设置值异常", e);
-        } catch (IllegalAccessException e) {
-            logger.error("设置值异常", e);
+        } catch (Exception e) {
+            if (e instanceof OrmException){
+                throw (OrmException)e;
+            }
+            throw new OrmException("设置对象["+mappedClass.getName()+"]的字段["+colCopy.getField().getName()+"]值["+rs.getObject(colCopy.getSqlName())+"]异常",e);
         }
         return obj;
     }

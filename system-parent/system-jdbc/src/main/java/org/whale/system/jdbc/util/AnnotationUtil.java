@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.whale.system.common.exception.OrmException;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 
 public class AnnotationUtil {
@@ -30,7 +31,7 @@ public class AnnotationUtil {
             fieldValue = field.get(obj);
             if (fieldValue == null) return null;
         } catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new OrmException("读取对象["+obj.getClass().getName()+"]的字段["+field.getName()+"]值异常",e);
         }
         return fieldValue;
     }
@@ -48,7 +49,7 @@ public class AnnotationUtil {
         	field.setAccessible(true);
             field.set(obj, value);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new OrmException("设置对象["+obj.getClass().getName()+"]的字段["+field.getName()+"]值["+value+"]异常",e);
         }
     }
 	
