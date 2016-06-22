@@ -45,6 +45,11 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	private Class<T> clazz;
 	//rowMapper 转换器
 	private RowMapper<T> rowMapper;
+
+	private RowMapperResultSetExtractor<T> oneRowMapperResultSetExtractor;
+
+	private RowMapperResultSetExtractor<T> anyRowMapperResultSetExtractor;
+
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 	@Autowired
@@ -236,7 +241,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	public T get(PK id){
 		OrmValue ormValues = this.valueBuilder.getGet(getClazz(), id);
 		if(ormValues == null) return null;
-		List<T> list = (List<T>)this.jdbcTemplate.query(ormValues.getSql(), ormValues.getArgs(), new RowMapperResultSetExtractor<T>(rowMapper, 1));
+		List<T> list = this.jdbcTemplate.query(ormValues.getSql(), ormValues.getArgs(), oneRowMapperResultSetExtractor);
 		if(list == null || list.size() < 1) return null;
 		return list.get(0);
 	}
@@ -245,7 +250,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 按自定义条件获取
 	 */
 	public T get(Iquery query){
-		List<T> list = this.jdbcTemplate.query(query.getSql(SqlType.GET), query.getArgs(), new RowMapperResultSetExtractor<T>(rowMapper, 1));
+		List<T> list = this.jdbcTemplate.query(query.getSql(SqlType.GET), query.getArgs(), oneRowMapperResultSetExtractor);
 		
 		if(list == null || list.size() < 1)
 			return null;
@@ -259,15 +264,14 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	public List<T> queryAll(){
 		OrmValue ormValues = this.valueBuilder.getAll(this.getClazz());
 		if(ormValues == null) return null;
-		return (List<T>)this.jdbcTemplate.query(ormValues.getSql(), this.rowMapper);
+		return this.jdbcTemplate.query(ormValues.getSql(), anyRowMapperResultSetExtractor);
 	}
 	
 	/**
 	 * 按自定义条件查询
 	 */
 	public List<T> query(Iquery query){
-		
-		return this.jdbcTemplate.query(query.getSql(SqlType.QUERY), query.getArgs(), this.rowMapper);
+		return this.jdbcTemplate.query(query.getSql(SqlType.QUERY), query.getArgs(), anyRowMapperResultSetExtractor);
 	}
 	
 	/**
@@ -323,7 +327,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				page.setData((List<Map<String, Object>>)this.jdbcTemplate.query(sql, params.toArray(), new RowMapperResultSetExtractor(new ColumnMapRowMapper(), page.getPageSize())));
 			//指定返回类型，通常用于接口，这直接返回该类型结果
 			}else{
-				page.setData((List<?>) this.jdbcTemplate.query(sql, params.toArray(), new RowMapperResultSetExtractor(RowMapperBuilder.get(page.getDataClass()), page.getPageSize())));
+				page.setData((List<?>) this.jdbcTemplate.query(sql, params.toArray(), page.getPageSize() > 50 ? anyRowMapperResultSetExtractor : new RowMapperResultSetExtractor(RowMapperBuilder.get(page.getDataClass()), page.getPageSize())));
 			}
 		}else{
 			page.setData(new ArrayList(0));
@@ -421,6 +425,8 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 
 	public void setRowMapper(RowMapper<T> rowMapper) {
 		this.rowMapper = rowMapper;
+		this.oneRowMapperResultSetExtractor = new RowMapperResultSetExtractor(rowMapper, 1);
+		this.anyRowMapperResultSetExtractor = new RowMapperResultSetExtractor(rowMapper);
 	}
 
 
