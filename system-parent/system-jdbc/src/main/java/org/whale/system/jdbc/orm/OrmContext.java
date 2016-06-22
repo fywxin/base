@@ -1,11 +1,5 @@
 package org.whale.system.jdbc.orm;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +14,13 @@ import org.whale.system.jdbc.orm.sql.SqlBuilder;
 import org.whale.system.jdbc.orm.table.OrmTableBuilder;
 import org.whale.system.jdbc.orm.value.ValueBuilder;
 import org.whale.system.jdbc.util.AnnotationUtil;
-import org.whale.system.jdbc.util.RowMapperBuilder;
+import org.whale.system.jdbc.orm.rowMapper.RowMapperBuilder;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ORM 容器上下文
@@ -54,7 +54,7 @@ public class OrmContext extends EntryContext {
 	 *@param clazz void
 	 *
 	 */
-	public OrmClass parse(Class<?> clazz){
+	public <M> OrmClass parse(Class<M> clazz){
 		logger.info("ORM: 类[{}] 开始解析...", clazz.getName());
 		OrmClass ormClass = new OrmClass();
 					
@@ -76,7 +76,7 @@ public class OrmContext extends EntryContext {
 		ormSqls.add(getAll);
 		
 		//添加RowMapper缓存对象
-		RowMapper<?> rowMapper = this.rowMapperBuilder.buildRowMapper(clazz, ormTable.getOrmCols());
+		RowMapper<?> rowMapper = this.rowMapperBuilder.get(clazz, ormTable.getOrmCols());
 		logger.info("ORM: 类[{}] 解析RowMapper完成!", clazz.getName());
 		
 		ormClass.setOrmTable(ormTable);

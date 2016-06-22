@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.whale.system.common.exception.OrmException;
 import org.whale.system.jdbc.IOrmDao;
 import org.whale.system.jdbc.filter.dll.BaseDaoDllFilterWarpper;
@@ -24,6 +25,8 @@ public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> 
 	
 	@Autowired
 	private OrmContext ormContext;
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 
 	@Override
 	public void beforeSave(T obj, IOrmDao<T, PK> baseDao) {
@@ -85,9 +88,9 @@ public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> 
 				cols.add(colDefined);
 			}
 			List<Object> args = AnnotationUtil.getColumnValues(obj, cols);
-			rs = baseDao.getJdbcTemplate().queryForList(sql, args.toArray());
+			rs = jdbcTemplate.queryForList(sql, args.toArray());
 		}else{
-			rs = baseDao.getJdbcTemplate().queryForList(sql);
+			rs = jdbcTemplate.queryForList(sql);
 		}
 		if(rs == null || rs.size() == 0) return ;
 		if(rs.size() > 1 || rs.get(0).keySet().size() > 1)

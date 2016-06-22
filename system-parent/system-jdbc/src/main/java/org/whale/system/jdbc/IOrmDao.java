@@ -116,12 +116,6 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	List<Map<String, Object>> queryForList(Iquery query);
 	
 	Map<String, Object> queryForMap(Iquery query);
-	
-	//-----------------------------------代理 spring JdbcTemplate 接口---------------------------------
-
-	JdbcTemplate getJdbcTemplate();
-	
-	RowMapper<T> getRowMapper();
 
 	
 	//--------------------------------------本Orm提供的内部容器访问方法---------------------------------------

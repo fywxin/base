@@ -1,20 +1,20 @@
 package org.whale.system.jdbc.orm;
 
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import org.whale.system.base.BaseDao;
 import org.whale.system.common.constant.OrderNumConstant;
 import org.whale.system.common.util.Bootable;
-import org.whale.system.base.BaseDao;
 import org.whale.system.jdbc.orm.alter.DbInfoFetcher;
 import org.whale.system.jdbc.orm.entry.OrmClass;
 import org.whale.system.spring.SpringContextHolder;
+
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 初始化所有所有的orm实体
@@ -65,7 +65,7 @@ public class InitOrmCache implements Bootable {
 				
 				logger.info("ORM：初始化类["+clazz.getName()+"]配置信息...");
 				OrmClass ormclass = ormContext.getOrmClass(clazz);
-				
+
 				//使用反射设置RowMapper，优化IOrmDao接口
 				setRowMapper.invoke(dao, ormclass.getRowMapper());
 				

@@ -415,17 +415,8 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		this._getOrmTable();
 	}
 
-	public RowMapper<T> getRowMapper() {
-		return rowMapper;
-	}
-
 	public void setRowMapper(RowMapper<T> rowMapper) {
 		this.rowMapper = rowMapper;
-	}
-
-	@Override
-	public JdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
 	}
 
 

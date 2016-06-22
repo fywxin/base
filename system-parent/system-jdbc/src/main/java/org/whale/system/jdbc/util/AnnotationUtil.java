@@ -29,10 +29,8 @@ public class AnnotationUtil {
         	field.setAccessible(true);
             fieldValue = field.get(obj);
             if (fieldValue == null) return null;
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+			throw new RuntimeException(e);
         }
         return fieldValue;
     }
@@ -49,10 +47,8 @@ public class AnnotationUtil {
         try {
         	field.setAccessible(true);
             field.set(obj, value);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 	
