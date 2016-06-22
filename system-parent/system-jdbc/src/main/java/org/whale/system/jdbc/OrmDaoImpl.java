@@ -15,10 +15,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.whale.system.base.BaseDao;
@@ -35,6 +32,7 @@ import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 import org.whale.system.jdbc.orm.entry.OrmValue;
+import org.whale.system.jdbc.orm.rowMapper.RowMapperBuilder;
 import org.whale.system.jdbc.orm.value.ValueBuilder;
 import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
@@ -238,7 +236,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	public T get(PK id){
 		OrmValue ormValues = this.valueBuilder.getGet(getClazz(), id);
 		if(ormValues == null) return null;
-		List<T> list = (List<T>)this.jdbcTemplate.query(ormValues.getSql(), ormValues.getArgs(), this.rowMapper);
+		List<T> list = (List<T>)this.jdbcTemplate.query(ormValues.getSql(), ormValues.getArgs(), new RowMapperResultSetExtractor<T>(rowMapper, 1));
 		if(list == null || list.size() < 1) return null;
 		return list.get(0);
 	}
@@ -247,7 +245,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 按自定义条件获取
 	 */
 	public T get(Iquery query){
-		List<T> list = this.jdbcTemplate.query(query.getSql(SqlType.GET), query.getArgs(), this.rowMapper);
+		List<T> list = this.jdbcTemplate.query(query.getSql(SqlType.GET), query.getArgs(), new RowMapperResultSetExtractor<T>(rowMapper, 1));
 		
 		if(list == null || list.size() < 1)
 			return null;
@@ -319,9 +317,14 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 					params.add(page.getOffset()+page.getPageSize());
 					params.add(page.getOffset());
 				}
-				
 			}
-			page.setData(this.jdbcTemplate.queryForList(sql, params.toArray()));
+			//未指定返回类型，则采用List<Map, Object>模式返回
+			if (page.getDataClass() == null){
+				page.setData((List<Map<String, Object>>)this.jdbcTemplate.query(sql, params.toArray(), new RowMapperResultSetExtractor(new ColumnMapRowMapper(), page.getPageSize())));
+			//指定返回类型，通常用于接口，这直接返回该类型结果
+			}else{
+				page.setData((List<?>) this.jdbcTemplate.query(sql, params.toArray(), new RowMapperResultSetExtractor(RowMapperBuilder.get(page.getDataClass()), page.getPageSize())));
+			}
 		}else{
 			page.setData(new ArrayList(0));
 		}
@@ -335,6 +338,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		page.setSql(null);
 		page.args().clear();
 		page.setQ(null);
+		page.setDataClass(null);
 	}
 
 	@Override

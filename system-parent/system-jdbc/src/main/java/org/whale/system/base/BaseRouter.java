@@ -44,6 +44,17 @@ public abstract class BaseRouter {
 		WebUtil.getRequest().setAttribute("page", page);
 		return page;
 	}
+
+	/**
+	 * 获取分页信息, 并设置返回类型为clazz
+	 * @param clazz
+	 * @return
+	 */
+	protected Page newPage(Class clazz){
+		Page page = this.newPage();
+		page.setDataClass(clazz);
+		return page;
+	}
 	
 	private Integer getInt(HttpServletRequest request, String key, Integer defVal){
 		String obj = request.getParameter(key);

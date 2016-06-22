@@ -10,11 +10,11 @@ import org.whale.system.jdbc.orm.entry.OrmClass;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmSql;
 import org.whale.system.jdbc.orm.entry.OrmTable;
+import org.whale.system.jdbc.orm.rowMapper.RowMapperBuilder;
 import org.whale.system.jdbc.orm.sql.SqlBuilder;
 import org.whale.system.jdbc.orm.table.OrmTableBuilder;
 import org.whale.system.jdbc.orm.value.ValueBuilder;
 import org.whale.system.jdbc.util.AnnotationUtil;
-import org.whale.system.jdbc.orm.rowMapper.RowMapperBuilder;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -32,9 +32,7 @@ import java.util.Map;
 public class OrmContext extends EntryContext {
 	
 	private static Logger logger = LoggerFactory.getLogger(OrmContext.class);
-	
-	@Autowired
-	private RowMapperBuilder rowMapperBuilder;
+
 	@Autowired
 	private OrmTableBuilder ormTableBuilder;
 	@Autowired
@@ -76,7 +74,7 @@ public class OrmContext extends EntryContext {
 		ormSqls.add(getAll);
 		
 		//添加RowMapper缓存对象
-		RowMapper<?> rowMapper = this.rowMapperBuilder.get(clazz, ormTable.getOrmCols());
+		RowMapper<?> rowMapper = RowMapperBuilder.get(clazz, ormTable.getOrmCols());
 		logger.info("ORM: 类[{}] 解析RowMapper完成!", clazz.getName());
 		
 		ormClass.setOrmTable(ormTable);
