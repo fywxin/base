@@ -59,20 +59,20 @@ public class Q implements Iquery{
 	
 	@Override
 	public String getSql(SqlType sqlType) {
-		if(sqlType == null){
-			return this.getQuerySql();
+		if(sqlType == null || sqlType == SqlType.QUERY){
+			return this.sqlQuery();
 		}else if(sqlType == SqlType.GET){
-			return this.getGetSql();
+			return this.sqlGet();
 		}else if(sqlType == SqlType.COUNT){
-			return this.getCountSql();
+			return this.sqlCount();
 		}else if(sqlType == SqlType.DEL){
-			return this.getDelSql();
+			return this.sqlDel();
 		}else{
-			return this.getQuerySql();
+			return this.sqlQuery();
 		}
 	}
 
-	public String getDelSql() {
+	public String sqlDel() {
 		if(delSql == null){
 			StringBuilder strb = new StringBuilder();
 			strb.append("DELETE t FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(where.toString());
@@ -87,12 +87,12 @@ public class Q implements Iquery{
 			delSql = strb.toString();
 		}
 		if(logger.isDebugEnabled()){
-			logger.debug("del: [\n"+delSql+"\n"+JSON.toJSONString(args)+"\n]");
+			logger.debug("del: [\n" + delSql + "\n" + JSON.toJSONString(args) + "\n]");
 		}
 		return delSql;
 	}
 	
-	public String getGetSql() {
+	public String sqlGet() {
 		if(getSql == null){
 			StringBuilder strb = new StringBuilder(50);
 			strb.append(ormTable.getSqlHeadPrefix()).append(" WHERE 1=1 ").append(where.toString());
@@ -114,7 +114,7 @@ public class Q implements Iquery{
 		return getSql;
 	}
 
-	public String getQuerySql() {
+	public String sqlQuery() {
 		if(querySql == null){
 			StringBuilder strb = new StringBuilder(200);
 			
@@ -150,13 +150,13 @@ public class Q implements Iquery{
 			querySql = strb.toString();
 		}
 		if(logger.isDebugEnabled()){
-			logger.debug("query: [\n"+querySql+"\n"+JSON.toJSONString(args)+"\n]");
+			logger.debug("query: [\n" + querySql + "\n" + JSON.toJSONString(args) + "\n]");
 		}
 		return querySql;
 	}
 	
 	
-	public String getCountSql() {
+	public String sqlCount() {
 		if(countSql == null){
 			StringBuilder strb = new StringBuilder(100);
 			strb.append("SELECT COUNT(1) FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(where.toString());
