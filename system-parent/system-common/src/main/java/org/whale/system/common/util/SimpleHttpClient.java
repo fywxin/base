@@ -44,7 +44,7 @@ public class SimpleHttpClient {
 	
 	// 连接超时
 	private int connectionTimeout = 60000;
-	// 读超时
+	// 读超时, read exception 调整此值
 	private int readTimeout = 60000;
 	//打印慢日志，超过slowTime将被打印到日志中
 	private Integer slowTime;

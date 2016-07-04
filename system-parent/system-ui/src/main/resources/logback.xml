@@ -41,6 +41,15 @@
 			</Pattern>
 		</encoder>
 	</appender>
+
+	<appender name="jdbcLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>../logs/jdbc.log</File>
+		<append>true</append>
+	</appender>
+	<appender name="transLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>../logs/trans.log</File>
+		<append>true</append>
+	</appender>
 	
 	<appender name="whaleLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<File>c://whale.log</File>
@@ -99,6 +108,16 @@
 		<level value="INFO" />
 		<appender-ref ref="consoleAppender" />
 		<appender-ref ref="whaleLog" />
+	</logger>
+	<logger name="org.springframework.jdbc" additivity="true">
+		<level value="debug" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="jdbcLog" />
+	</logger>
+	<logger name="org.springframework.transaction" additivity="true">
+		<level value="debug" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="transLog" />
 	</logger>
 	<root>
 		<level value="INFO" />
