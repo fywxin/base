@@ -350,7 +350,7 @@ public class Q implements Iquery{
 	 * @param list
 	 * @return
 	 */
-	public Q in(String col, Collection<Object> list){
+	public Q in(String col, Collection list){
 		if(list == null || list.size() < 1){
 			return this;
 		}else if(list.size() == 1){
@@ -385,33 +385,6 @@ public class Q implements Iquery{
 		return this;
 	}
 
-
-	/**
-	 * 自适应模式
-	 *
-	 * @param condition
-	 * @return
-	 */
-	public Q and(String condition){
-		where.append(" AND ").append(condition);
-		return this;
-	}
-
-	/**
-	 * 自适应模式
-	 *
-	 * @param condition
-	 * @param value
-	 * @return
-	 */
-	public Q and(String condition, Object value){
-		where.append(" AND ").append(condition);
-		if (value != null){
-			args.add(value);
-		}
-		return this;
-	}
-
 	/**
 	 * 自适应模式
 	 *
@@ -419,10 +392,12 @@ public class Q implements Iquery{
 	 * @param values
 	 * @return
 	 */
-	public Q and(String condition, List<Object> values){
+	public Q and(String condition, Object... values){
 		where.append(" AND ").append(condition);
-		if (values != null && values.size() > 0){
-			args.addAll(values);
+		if (values != null && values.length > 0){
+			for (Object obj : values){
+				args.add(obj);
+			}
 		}
 		return this;
 	}
