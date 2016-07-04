@@ -1,4 +1,6 @@
 base
 ====
 
-基础开发平台
+整体架构图
+
+![image](https://github.com/ButBueatiful/dotvim/raw/master/screenshots/vim-screenshot.jpg)
