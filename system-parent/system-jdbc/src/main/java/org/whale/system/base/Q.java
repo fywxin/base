@@ -72,12 +72,6 @@ public class Q implements Iquery{
 		}
 	}
 
-	@Override
-	public Object[] getArgs() {
-		return args.toArray();
-	}
-	
-	
 	public String getDelSql() {
 		if(delSql == null){
 			StringBuilder strb = new StringBuilder();
@@ -172,13 +166,13 @@ public class Q implements Iquery{
 			countSql = strb.toString();
 		}
 		if(logger.isDebugEnabled()){
-			logger.debug("count: [\n"+countSql+"\n"+JSON.toJSONString(args)+"\n]");
+			logger.debug("count: [\n" + countSql + "\n" + JSON.toJSONString(args) + "\n]");
 		}
 		return countSql;
 	}
-	
-	
-	
+
+//------------------------------------------------------------------------------------------------------
+
 	/**
 	 * 加入查询返回字段
 	 * 只适用于分页
@@ -204,7 +198,7 @@ public class Q implements Iquery{
 					select.append("t.").append(this.fixCol(col)).append(",");
 				}
 			}
-			select.deleteCharAt(select.length()-1);
+			select.deleteCharAt(select.length() - 1);
 		}
 		
 		return this;
@@ -213,6 +207,8 @@ public class Q implements Iquery{
 	/**
 	 * 加入自定义Sql
 	 *  select {sql} from
+	 *
+	 *  select t.*, {appendSql} from -> this.select().selectWrap("{sql}")
 	 *
 	 * @param sql
 	 * @return
@@ -224,120 +220,11 @@ public class Q implements Iquery{
 		select.append(sql.trim());
 		return this;
 	}
+	
+//------------------------------------------------------------------------------------------------------
 
 	/**
-	 * select t.*, {appendSql} from
-	 *
-	 * @param appendSql
-	 * @return
-	 */
-	public Q selectAppend(String appendSql){
-		if(this.select == null){
-			select = new StringBuilder(150);
-		}
-		if (!appendSql.trim().startsWith(",")){
-			appendSql = ","+appendSql;
-		}
-		select.append(ormTable.getSqlColPrexs()).append(appendSql.trim());
-		return this;
-	}
-	
-	/**
-	 * 查询当前表
-	 * 
-	 * @return
-	 */
-	public Q from(){
-		
-		return this;
-	}
-	
-	/**
-	 * 多表查询拼接
-	 * @param sql
-	 * @return
-	 */
-	public Q fromWrap(String sql){
-		if(this.from == null){
-			from = new StringBuilder(30);
-		}
-		from.append(sql);
-		return this;
-	}
-	
-	public Q where(){
-		return this;
-	}
-	
-	/**
-	 * 加入自定义Sql
-	 * @param sql
-	 * @param value
-	 * @return
-	 */
-	@SuppressWarnings("all")
-	public Q whereWrap(String sql, Object value){
-		if(this.where == null){
-			this.where = new StringBuilder(50);
-		}
-		this.where.append(sql);
-		
-		if(value != null){
-			if(value instanceof Collection){
-				this.args.addAll((Collection)value);
-			}else{
-				this.args.add(value);
-			}
-		}
-		
-		return this;
-	}
-	
-	/**
-	 * 按字段递增
-	 * @param col
-	 * @return
-	 */
-	public Q asc(String col){
-		if(order == null){
-			order = new StringBuilder(20);
-		}
-		col = this.fixCol(col);
-		order.append("t.").append(col).append(" ASC,");
-		return this;
-	}
-	
-	/**
-	 * 按字段递减
-	 * @param col
-	 * @return
-	 */
-	public Q desc(String col){
-		if(order == null){
-			order = new StringBuilder(20);
-		}
-		col = this.fixCol(col);
-		order.append("t.").append(col).append(" DESC,");
-		return this;
-	}
-	
-	/**
-	 * 记录查询范围限制
-	 * @param from
-	 * @param size
-	 * @return
-	 */
-	public Q limit(int from, int size){
-		if(this.limit == null){
-			limit = new StringBuilder(20);
-		}
-		limit.append(" LIMIT ").append(from).append(", ").append(size);
-		
-		return this;
-	}
-
-	/**
-	 * 创建 and = 条件语句
+	 * 等于 =
 	 * null 不查询
 	 * @param col
 	 * @param value
@@ -345,23 +232,169 @@ public class Q implements Iquery{
 	 */
 	public Q eq(String col, Object value){
 		if(value == null){
-			return this;
+			where.append(" AND t.").append(col).append(" IS NULL");
+		}else{
+			where.append(" AND t.").append(col).append(" = ?");
+			args.add(value);
 		}
-		return this.and(col, "=", value);
+		return this;
 	}
 	
 	/**
-	 * 创建 and like 条件语句
+	 * like
 	 * null 不查询
 	 * @param col
 	 * @param value
 	 * @return
 	 */
 	public Q like(String col, Object value){
+		if(value == null || Strings.isBlank(value.toString())){
+			return this;
+		}else{
+			where.append(" AND t.").append(col).append(" LIKE ?");
+			String val = value.toString().trim();
+			if(val.startsWith("%") || val.endsWith("%")){
+				args.add(val);
+			}else{
+				args.add("%"+val+"%");
+			}
+		}
+		return this;
+	}
+
+
+
+	/**
+	 * 不等于 !=
+	 * @param col
+	 * @param value
+	 * @return
+	 */
+	public Q notEq(String col, Object value){
+		if(value == null){
+			where.append(" AND t.").append(col).append(" IS NOT NULL");
+		}else{
+			where.append(" AND t.").append(col).append(" != ?");
+			args.add(value);
+		}
+		return this;
+	}
+
+	/**
+	 * 大于 >
+	 * @param col
+	 * @param value
+	 * @return
+	 */
+	public Q gt(String col, Object value){
 		if(value == null){
 			return this;
+		}else{
+			where.append(" AND t.").append(col).append(" > ?");
+			args.add(value);
 		}
-		return this.and(col, "like", value);
+		return this;
+	}
+
+	/**
+	 * 大于等于 >=
+	 * @param col
+	 * @param value
+	 * @return
+	 */
+	public Q gtEq(String col, Object value){
+		if(value == null){
+			return this;
+		}else{
+			where.append(" AND t.").append(col).append(" >= ?");
+			args.add(value);
+		}
+		return this;
+	}
+
+	/**
+	 * 小于  <
+	 * @param col
+	 * @param value
+	 * @return
+	 */
+	public Q lt(String col, Object value) {
+		if(value == null){
+			return this;
+		}else{
+			where.append(" AND t.").append(col).append(" < ?");
+			args.add(value);
+		}
+		return this;
+	}
+
+	/**
+	 * 小于等于
+	 * @param col
+	 * @param value
+	 * @return
+	 */
+	public Q ltEq(String col, Object value) {
+		if(value == null){
+			return this;
+		}else{
+			where.append(" AND t.").append(col).append(" <= ?");
+			args.add(value);
+		}
+		return this;
+	}
+
+	/**
+	 * in
+	 * @param col
+	 * @param list
+	 * @return
+	 */
+	public Q in(String col, Collection<Object> list){
+		if(list == null || list.size() < 1){
+			return this;
+		}else if(list.size() == 1){
+			return this.eq(col, list.iterator().next());
+		}else{
+			where.append(" AND t.").append(col).append(" IN (");
+			for(Object val : list){
+				where.append("?,");
+			}
+			where.deleteCharAt(where.length()-1);
+			where.append(") ");
+			args.addAll(list);
+		}
+		return this;
+	}
+
+	/**
+	 * between
+	 * @param col
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public Q between(String col, Object from, Object to){
+		if(from == null || to == null){
+			throw new IllegalArgumentException("value must not null");
+		}
+
+		where.append(" AND t.").append(col).append(" BETWEEN ? AND ? ");
+		args.add(from);
+		args.add(to);
+		return this;
+	}
+
+
+	/**
+	 * 自适应模式
+	 *
+	 * @param condition
+	 * @return
+	 */
+	public Q and(String condition){
+		where.append(" AND ").append(condition);
+		return this;
 	}
 
 	/**
@@ -401,8 +434,9 @@ public class Q implements Iquery{
 	 * @param opt 可选值 [=, !=, like, >, >=, <, <=, in, between]
 	 * @param value
 	 * @return
-	 */
+
 	@SuppressWarnings("all")
+	@Deprecated
 	public Q and(String col, String opt, Object value){
 		col = this.fixCol(col);
 			
@@ -502,6 +536,50 @@ public class Q implements Iquery{
 		}
 		return this;
 	}
+	 */
+
+	/**
+	 * 按字段递增
+	 * @param col
+	 * @return
+	 */
+	public Q asc(String col){
+		if(order == null){
+			order = new StringBuilder(20);
+		}
+		col = this.fixCol(col);
+		order.append("t.").append(col).append(" ASC,");
+		return this;
+	}
+
+	/**
+	 * 按字段递减
+	 * @param col
+	 * @return
+	 */
+	public Q desc(String col){
+		if(order == null){
+			order = new StringBuilder(20);
+		}
+		col = this.fixCol(col);
+		order.append("t.").append(col).append(" DESC,");
+		return this;
+	}
+
+	/**
+	 * 记录查询范围限制
+	 * @param from
+	 * @param size
+	 * @return
+	 */
+	public Q limit(int from, int size){
+		if(this.limit == null){
+			limit = new StringBuilder(20);
+		}
+		limit.append(" LIMIT ").append(from).append(", ").append(size);
+
+		return this;
+	}
 	
 	private String fixCol(String col){
 		String newCol = this.ormTable.getJavaAsSqlColumn().get(col);
@@ -516,5 +594,8 @@ public class Q implements Iquery{
 		return null;
 	}
 
-	
+	@Override
+	public Object[] getArgs() {
+		return args.toArray();
+	}
 }

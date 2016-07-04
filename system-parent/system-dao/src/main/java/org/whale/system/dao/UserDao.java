@@ -12,12 +12,10 @@ import org.whale.system.domain.User;
 public class UserDao extends BaseDao<User, Long> {
 	
 	public List<User> getByDeptId(Long deptId){
-
 		return this.query(this.q().eq(User.F_deptId, deptId));
 	}
 
 	public User getByUserName(String userName){
-
 		return this.get(this.q().eq(User.F_userName, userName));
 	}
 	
@@ -28,7 +26,6 @@ public class UserDao extends BaseDao<User, Long> {
 			"and r.roleId = ra.roleId "+
 			"and r.status = 1";
 	public List<Long> findAuthIds(Long userId){
-		
 		List<Map<String, Object>> list = this.queryForList(findAuthIds_SQL, userId);
 		if(list == null || list.size() < 1)
 			return null;

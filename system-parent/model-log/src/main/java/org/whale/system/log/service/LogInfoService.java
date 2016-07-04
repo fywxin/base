@@ -31,9 +31,9 @@ public class LogInfoService extends BaseService<LogInfo, Long> {
                 .like("info", logQueryReq.getInfo())
                 .like("ip", logQueryReq.getIp())
                 .like("userName", logQueryReq.getUserName())
-                .and("costTime", ">=", logQueryReq.getCostTime())
-                .and("createTime", ">=", Strings.isNotBlank(logQueryReq.getStartTime()) ? TimeUtil.parseTime(logQueryReq.getStartTime()).getTime() : null)
-                .and("createTime", "<=", Strings.isNotBlank(logQueryReq.getEndTime()) ? TimeUtil.parseTime(logQueryReq.getEndTime()).getTime() : null)
+                .gtEq("costTime", logQueryReq.getCostTime())
+                .gtEq("createTime", Strings.isNotBlank(logQueryReq.getStartTime()) ? TimeUtil.parseTime(logQueryReq.getStartTime()).getTime() : null)
+                .ltEq("createTime", Strings.isNotBlank(logQueryReq.getEndTime()) ? TimeUtil.parseTime(logQueryReq.getEndTime()).getTime() : null)
                 .desc("createTime");
 
         this.logInfoDao.queryPage(page);

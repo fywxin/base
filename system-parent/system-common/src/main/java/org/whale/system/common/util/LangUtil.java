@@ -20,6 +20,30 @@ import java.util.Map;
 @SuppressWarnings("all")
 public final class LangUtil {
 	private static final Logger logger = LoggerFactory.getLogger(LangUtil.class);
+
+	public static long ip2long(String ip) {
+		String[] ips = ip.split("[.]");
+		return  16777216L * Long.parseLong(ips[0]) + 65536L * Long.parseLong(ips[1]) + 256 * Long.parseLong(ips[2]) + Long.parseLong(ips[3]);
+	}
+
+	/**
+	 * 整数转成ip地址.
+	 *
+	 * @param ipLong
+	 * @return
+	 */
+	public static String long2ip(long ipLong) {
+		//long ipLong = 1037591503;
+		long mask[] = {0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000};
+		long num = 0;
+		StringBuffer ipInfo = new StringBuffer();
+		for (int i = 0; i < 4; i++) {
+			num = (ipLong & mask[i]) >> (i * 8);
+			if (i > 0) ipInfo.insert(0, ".");
+			ipInfo.insert(0, Long.toString(num, 10));
+		}
+		return ipInfo.toString();
+	}
 	
 	/**
      * 判断一个对象是否为空。它支持如下对象类型：

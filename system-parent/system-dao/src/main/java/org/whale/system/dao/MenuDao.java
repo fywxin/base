@@ -15,7 +15,7 @@ public class MenuDao extends BaseDao<Menu, Long> {
 	 */
 	public List<Menu> getDirMenus(){
 		
-		return this.query(this.q().and(Menu.F_menuType, "!=", 3));
+		return this.query(this.q().notEq(Menu.F_menuType, 3));
 	}
 	
 	public List<Menu> getByParentId(Long parentId){
