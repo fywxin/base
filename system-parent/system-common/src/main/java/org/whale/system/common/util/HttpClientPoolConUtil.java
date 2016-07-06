@@ -2,6 +2,7 @@ package org.whale.system.common.util;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.params.ClientPNames;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
@@ -15,13 +16,15 @@ public class HttpClientPoolConUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger("httpClient");
 
+
+
 	private PoolingClientConnectionManager cm;
 
-	private DefaultHttpClient httpclient;
+	private CloseableHttpClient httpclient;
 	// 连接超时
-	private int connectionTimeout = 60000;
+	private int connectionTimeout = 60 * 1000;
 	// 读超时
-	private int readTimeout = 60000;
+	private int readTimeout = 60 * 1000 * 2;
 	// 连接池最大连接数
 	private int threadMaxTotal = 64;
 	// 每个路由最大连接数
@@ -44,8 +47,7 @@ public class HttpClientPoolConUtil {
 		cm.setMaxTotal(threadMaxTotal);
 		cm.setDefaultMaxPerRoute(maxPerRoute);//route最大连接数
 
-		httpclient = new DefaultHttpClient(cm, httpParams);
-		httpclient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(retryCount, requestSentRetryEnabled));
+		httpclient = new DefaultHttpClient(cm, httpParams);;
 		logger.info("httpClient 启动设置成功： {}", this);
 	}
 
@@ -55,7 +57,7 @@ public class HttpClientPoolConUtil {
 		}
 	}
 
-	public HttpClient getHttpclient() {
+	public CloseableHttpClient getHttpclient() {
 		return httpclient;
 	}
 

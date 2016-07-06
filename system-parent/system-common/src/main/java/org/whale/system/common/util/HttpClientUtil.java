@@ -18,6 +18,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
@@ -39,7 +40,7 @@ public class HttpClientUtil {
 	
 	private static final Logger logger = LoggerFactory.getLogger("PoolHttpClient");
 	// 客户端 
-	private static HttpClient httpClient;
+	private static CloseableHttpClient httpClient;
 	
 	
 	public static String get(String url, Map<String, String> headers){
@@ -118,11 +119,8 @@ public class HttpClientUtil {
 			}
 		}
 		if(Strings.isNotBlank(postStr)){
-			try {
 				httpPost.setEntity(new StringEntity(postStr.trim(), reqCharset));
-			} catch (UnsupportedEncodingException e) {
-				throw new HttpClientException(e);
-			}
+
 		}
 		return doExecute(httpPost, url, resCharset, contimeout, readtimeout);
 	}
@@ -245,7 +243,7 @@ public class HttpClientUtil {
 		return null;
 	}
 	
-	public static HttpClient getHttpClient() {
+	public static CloseableHttpClient getHttpClient() {
 		if(httpClient == null){
 			httpClient = SpringContextHolder.getBean(HttpClientPoolConUtil.class).getHttpclient();
 		}

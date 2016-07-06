@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,6 +20,7 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,9 +45,9 @@ public class SimpleHttpClient {
 	private static final Logger logger = LoggerFactory.getLogger("SimpleHttpClient");
 	
 	// 连接超时
-	private int connectionTimeout = 60000;
+	private int connectionTimeout = 60 * 1000;
 	// 读超时, read exception 调整此值
-	private int readTimeout = 60000;
+	private int readTimeout = 60 * 1000 * 2;
 	//打印慢日志，超过slowTime将被打印到日志中
 	private Integer slowTime;
 	
@@ -272,6 +274,7 @@ public class SimpleHttpClient {
 	
 	/**
 	 * http 请求执行体
+	 * http://ferreousbox.iteye.com/blog/157728
 	 * 
 	 * @param url  Url 地址
 	 * @param method  请求方法
@@ -291,20 +294,31 @@ public class SimpleHttpClient {
 		long start = System.currentTimeMillis();
 		try {
 			HttpURLConnection con = prepareConnection(new URL(url), method, header, contimeout, readtimeout);
+			byte[] datas = null;
+			boolean hasBody = "POST".equals(method) && Strings.isNotBlank(body);
+			if(hasBody){
+				datas = body.getBytes(Charsets.toCharset(reqCharset));
+				con.setFixedLengthStreamingMode(datas.length); //校验 和增加头 Content-Length ： XXX
+			}
+
 			con.connect();
 			
-			if("POST".equals(method) && Strings.isNotBlank(body)){
+			if(hasBody){
 				OutputStream ops = con.getOutputStream();
 				try{
 //					OutputStreamWriter writer = new OutputStreamWriter(ops, reqCharset);
 //					writer.write(body);
 //					writer.flush();
 
-					IOUtils.write(body, ops, reqCharset);
+//					IOUtils.write(body, ops, reqCharset);
+					ops.write(datas);
+					ops.flush();
+
 				}finally{
 					ops.close();
 				}
 			}
+			//Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase  返回头中得到
 			int resCode = con.getResponseCode();
 			
 			InputStream ips = con.getInputStream();
