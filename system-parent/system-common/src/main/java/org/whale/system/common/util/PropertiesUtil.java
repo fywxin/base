@@ -50,8 +50,8 @@ public class PropertiesUtil {
 		Map<String, String> map = new HashMap<String, String>();
 		Object value = null;
 		for(Object key : properties.keySet()){
-			value = properties.get(key);
 			if(key != null){
+				value = properties.get(key);
 				if(value == null){
 					map.put(key.toString(), null);
 				}else{
@@ -104,7 +104,7 @@ public class PropertiesUtil {
 	 *@param map void
 	 *
 	 */
-	public static void AddAll(Map<String, String> map){
+	public static void addAll(Map<String, String> map){
 		if(confMap == null){
 			confMap = map;
 		}else{

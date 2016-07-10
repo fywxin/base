@@ -210,9 +210,7 @@ public class HttpClientUtil {
 			
 			StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() >= HttpStatus.SC_MULTIPLE_CHOICES) {
-				if(response != null){
-					EntityUtils.consume(response.getEntity());
-				}
+				EntityUtils.consume(response.getEntity());
 				request.abort();
 				logger.warn("状态码错误！ url: {} state: {} resp: {}", url, statusLine.getStatusCode(), statusLine.getReasonPhrase());
 				throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());

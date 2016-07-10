@@ -54,6 +54,6 @@ public class OrmEventMuliter {
 			Collections.sort(temp, new OrderComparator());
 			cache.put(event.getClass(), temp);
 		}
-		return cache.get(event);
+		return cache.get(event.getClass());
 	}
 }

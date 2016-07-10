@@ -317,6 +317,7 @@ public class UserRouter extends BaseRouter {
 			user = this.userService.get(idList.get(i));
 			if(user == null){
 				idList.remove(i);
+				continue;
 			}
 			if(user.getAdminFlag()){
 				return Rs.fail("超级管理员不能被删除");

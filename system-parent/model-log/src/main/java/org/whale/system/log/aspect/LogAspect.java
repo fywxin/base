@@ -35,7 +35,7 @@ public class LogAspect {
 
 	private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
-	public Map<String, LogInfo> LogInfoCache = new HashMap<String, LogInfo>(256);
+	public Map<String, LogInfo> logInfoCache = new HashMap<String, LogInfo>(256);
 
 	public Object lock = new Object();
 
@@ -60,10 +60,10 @@ public class LogAspect {
 		int len = pjp.getArgs() == null ? 0 : pjp.getArgs().length;
 		String key = className + "#" + methodName+"#"+len;
 
-		LogInfo logInfo = LogInfoCache.get(key);
+		LogInfo logInfo = logInfoCache.get(key);
 		if (logInfo == null){
 			synchronized (lock){
-				logInfo = LogInfoCache.get(key);
+				logInfo = logInfoCache.get(key);
 				if (logInfo == null){
 					logInfo = new LogInfo();
 					logInfo.setClazz(className);
@@ -84,7 +84,7 @@ public class LogAspect {
 					}else{
 						logInfo.setModule(logMethod.module());
 					}
-					LogInfoCache.put(key, logInfo);
+					logInfoCache.put(key, logInfo);
 				}
 			}
 		}
@@ -113,7 +113,7 @@ public class LogAspect {
 		Long startTime =System.currentTimeMillis();
 		try{
 			Object rs = pjp.proceed();
-			logInfo.setCostTime(new Long(System.currentTimeMillis() - startTime).intValue());
+			logInfo.setCostTime(Long.valueOf(System.currentTimeMillis() - startTime).intValue());
 			logInfo.setRs(LogInfo.RS_SUCCESS);
 			this.replaceDesc(logInfo);
 			this.logStoreService.addLogRecvQueue(logInfo);
@@ -162,7 +162,6 @@ public class LogAspect {
 	 * @param logInfo
 	 */
 	private void replaceDesc(LogInfo logInfo){
-		String desc = logInfo.getInfo();
 		String[] args = (String[]) ThreadContext.getContext().get(ThreadContext.KEY_LOG_DATAS);
 		if (args != null){
 			StringBuilder strb = new StringBuilder(logInfo.getInfo().length()*2);

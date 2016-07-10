@@ -1,5 +1,6 @@
 package org.whale.system.jdbc.orm.alter;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -65,28 +66,62 @@ public class DbInfoFetcher {
 	}
 	
 	private Set<String> getTableNames() throws SQLException{
-		ResultSet rs = this.jdbcTemplate.getDataSource().getConnection().getMetaData().getTables(null, null, null, null);
-		Set<String> tableNames = new HashSet<String>(64);
-		while(rs.next()){
-			if(Strings.isNotBlank(rs.getString(3))){
-				tableNames.add(rs.getString(3).toUpperCase());
+		Connection con = null;
+		ResultSet rs = null;
+		try {
+			con = this.jdbcTemplate.getDataSource().getConnection();
+			rs = con.getMetaData().getTables(null, null, null, null);
+			Set<String> tableNames = new HashSet<String>(64);
+			while(rs.next()){
+				if(Strings.isNotBlank(rs.getString(3))){
+					tableNames.add(rs.getString(3).toUpperCase());
+				}
+			}
+			logger.info("ORM:数据库已存在表："+tableNames);
+			return tableNames;
+		}finally {
+			if (rs != null){
+				try {
+					rs.close();
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+			if (con != null){
+				try {
+					con.close();
+				}catch (Exception e){
+					e.printStackTrace();
+				}
 			}
 		}
-		logger.info("ORM:数据库已存在表："+tableNames);
-		return tableNames;
+
+
 	}
 	
 	private String getDbName() throws SQLException{
-		String driver = this.jdbcTemplate.getDataSource().getConnection().getMetaData().getDriverName();
-		if(driver.toUpperCase().contains("MYSQL")){
-			logger.info("ORM:数据库类型为：MYSQL");
-			return "MYSQL";
+		Connection con = null;
+		try {
+			con = this.jdbcTemplate.getDataSource().getConnection();
+			String driver = con.getMetaData().getDriverName();
+			if(driver.toUpperCase().contains("MYSQL")){
+				logger.info("ORM:数据库类型为：MYSQL");
+				return "MYSQL";
+			}
+			if(driver.toUpperCase().contains("ORACLE")){
+				logger.info("ORM:数据库类型为：ORACLE");
+				return "ORACLE";
+			}
+			return null;
+		}finally {
+			if (con != null){
+				try {
+					con.close();
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+			}
 		}
-		if(driver.toUpperCase().contains("ORACLE")){
-			logger.info("ORM:数据库类型为：ORACLE");
-			return "ORACLE";
-		}
-		return null;
 	}
 	
 	private Integer getCreateTableModel(){

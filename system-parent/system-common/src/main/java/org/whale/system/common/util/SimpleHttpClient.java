@@ -113,6 +113,7 @@ public class SimpleHttpClient {
 	 * @return
 	 */
 	public static String get(String url, Map<String, String> headers, String charset, Integer readTimeout) {
+
 		return get(url, headers, charset, null, readTimeout);
 	}
 	
@@ -290,7 +291,7 @@ public class SimpleHttpClient {
 			logger.debug("url:{}, method:{}, contimeout: {}, readtimeout: {}, reqCharset:{}, resCharset: {} \nheader: {}, \nbody:{}", 
 					url, method, contimeout, readtimeout, reqCharset, resCharset, header, body);
 		}
-		
+		String resStr = null;
 		long start = System.currentTimeMillis();
 		try {
 			HttpURLConnection con = prepareConnection(new URL(url), method, header, contimeout, readtimeout);
@@ -324,7 +325,7 @@ public class SimpleHttpClient {
 			//Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase  返回头中得到
 			int resCode = con.getResponseCode();
 
-			String resStr = null;
+
 			InputStream ips = null;
 			try{
 				ips = con.getInputStream();
@@ -348,11 +349,13 @@ public class SimpleHttpClient {
 					logger.debug("url:{}, 耗时[{}], 返回:\n {}" ,url, costTime, resStr);
 				}
 			}
-			return resStr;
+		} catch (RuntimeException e){
+			throw e;
 		} catch (Exception e) {
 			logger.error("HTTP调用异常", e);
 			throw new HttpClientIOException(e);
 		}
+		return resStr;
 	}
 
 	

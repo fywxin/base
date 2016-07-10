@@ -226,8 +226,8 @@ public class FileInfoRouter extends BaseRouter {
 		if (fileId == null || (fileInfo = this.fileInfoService.get(fileId)) == null) {
 			return Rs.fail("查找不到文件上传记录");
 		}
-		double radioX = new Double(divWidth) / fileInfo.getWidth();
-		double radioY = new Double(divHeight) / fileInfo.getHeight();
+		double radioX = divWidth / fileInfo.getWidth().doubleValue();
+		double radioY = divHeight / fileInfo.getHeight().doubleValue();
 
 		if (FileInfo.SAVE_DISK.equals(fileInfo.getSaveWay())) {
 			String filePath = fileInfo.getAbsolutePath();

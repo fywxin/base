@@ -53,8 +53,9 @@ public class CodeEngine {
 				FileUtils.forceMkdir(file.getParentFile());
 			}
 			if(!file.exists()){
-				file.createNewFile();
-				file.setWritable(true);
+				if (file.createNewFile()){
+					file.setWritable(true);
+				}
 			}
 			fw = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 			temp.process(root, fw);

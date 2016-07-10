@@ -43,8 +43,6 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	
 	//T类
 	private Class<T> clazz;
-	//rowMapper 转换器
-	private RowMapper<T> rowMapper;
 
 	private RowMapperResultSetExtractor<T> oneRowMapperResultSetExtractor;
 
@@ -424,7 +422,6 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	}
 
 	public void setRowMapper(RowMapper<T> rowMapper) {
-		this.rowMapper = rowMapper;
 		this.oneRowMapperResultSetExtractor = new RowMapperResultSetExtractor(rowMapper, 1);
 		this.anyRowMapperResultSetExtractor = new RowMapperResultSetExtractor(rowMapper);
 	}

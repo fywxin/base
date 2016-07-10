@@ -136,10 +136,11 @@ public class OrmRowMapper<T> implements RowMapper<T> {
                 AnnotationUtil.setFieldValue(obj, col.getField(), rs.getObject(col.getSqlName()));
             }
 
+        } catch (OrmException e){
+            throw e;
+        } catch (RuntimeException e){
+            throw e;
         } catch (Exception e) {
-            if (e instanceof OrmException){
-                throw (OrmException)e;
-            }
             throw new OrmException("设置对象["+mappedClass.getName()+"]的字段["+colCopy.getField().getName()+"]值["+rs.getObject(colCopy.getSqlName())+"]异常",e);
         }
         return obj;

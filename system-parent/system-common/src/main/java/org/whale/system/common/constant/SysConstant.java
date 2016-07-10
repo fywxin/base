@@ -28,7 +28,7 @@ public final class SysConstant {
 	/**逻辑false */
 	public static final String LOGIC_FALSE = "false";
 	
-	public static Integer MAX_LRU_CACHE_SIZE = 20000;
+	public static final Integer MAX_LRU_CACHE_SIZE = 20000;
 	
 	//是否需要验证码开关
 	//public static boolean VERITY_CODE_FLAG = false;

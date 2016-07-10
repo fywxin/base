@@ -22,8 +22,7 @@ public class LogInfoService extends BaseService<LogInfo, Long> {
     private LogInfoDao logInfoDao;
 
     public void queryPage(Page page, LogQueryReq logQueryReq){
-
-        Q q = page.newQ(LogInfo.class)
+        page.newQ(LogInfo.class)
                 .eq("module", logQueryReq.getModule())
                 .eq("method", logQueryReq.getMethod())
                 .eq("clazz", logQueryReq.getClazz())

@@ -732,23 +732,25 @@ public class ReflectionUtil {
      * @throws Exception
      */
     public static boolean isBaseDataType(Class<?> clazz) {   
-        return 
-        (   
-            clazz.equals(String.class) ||   
-            clazz.equals(Integer.class)||   
-            clazz.equals(Byte.class) ||   
-            clazz.equals(Long.class) ||   
-            clazz.equals(Double.class) ||   
-            clazz.equals(Float.class) ||   
-            clazz.equals(Character.class) ||   
-            clazz.equals(Short.class) ||   
-            clazz.equals(BigDecimal.class) ||   
-            clazz.equals(BigInteger.class) ||   
-            clazz.equals(Boolean.class) ||   
-            clazz.equals(Date.class) ||   
-            clazz.isPrimitive()   
-        );   
-    }
+//        return
+//        (
+//
+//            clazz.equals(String.class) ||
+//            clazz.equals(Integer.class)||
+//            clazz.equals(Byte.class) ||
+//            clazz.equals(Long.class) ||
+//            clazz.equals(Double.class) ||
+//            clazz.equals(Float.class) ||
+//            clazz.equals(Character.class) ||
+//            clazz.equals(Short.class) ||
+//            clazz.equals(BigDecimal.class) ||
+//            clazz.equals(BigInteger.class) ||
+//            clazz.equals(Boolean.class) ||
+//            clazz.equals(Date.class) ||
+//            clazz.isPrimitive()
+//        );
+		return clazz.isPrimitive() || clazz.equals(String.class)|| clazz.getSuperclass().equals(Number.class) || clazz.equals(Date.class);
+	}
 	
     
     public static void main(String[] args) {

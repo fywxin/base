@@ -100,11 +100,11 @@ public abstract class BaseService<T extends Serializable, PK extends Serializabl
 	}
 	
 	public List<Map<String, Object>> queryForList(Iquery query){
-		return this.queryForList(query);
+		return this.getDao().queryForList(query);
 	}
 	
 	public Map<String, Object> queryForMap(Iquery query){
-		return this.queryForMap(query);
+		return this.getDao().queryForMap(query);
 	}
 	
 	public abstract IOrmDao<T, PK> getDao();

@@ -454,7 +454,7 @@ public class MainRouter extends BaseRouter {
 			return null;
 		
 		if(!sort.booleanValue()){
-			synchronized(sort){
+			synchronized(this){
 				Collections.sort(accessores, new OrderComparator());
 			}
 		}

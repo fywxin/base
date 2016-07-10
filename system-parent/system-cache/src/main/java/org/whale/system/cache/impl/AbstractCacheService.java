@@ -25,28 +25,16 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 
 	@Override
 	public void put(String cacheName, String key, M value) {
-		if(logger.isDebugEnabled()){
-			logger.debug("put: {}_{} | {}",cacheName, key, JSON.toJSONString(value));
-		}
-		
 		this.put(cacheName, key, value, null);
 	}
 
 	@Override
 	public void mput(String cacheName, Map<String, M> keyValues) {
-		if(logger.isDebugEnabled()){
-			logger.debug("mput: {}_ | {}",cacheName, JSON.toJSONString(keyValues));
-		}
-		
 		this.mput(cacheName, keyValues, null);
 	}
 
 	@Override
 	public void put(String cacheName, String key, M value, Integer seconds) {
-		if(logger.isDebugEnabled()){
-			logger.debug("put: {}_{} |{} - {}",cacheName, key, seconds, JSON.toJSONString(value));
-		}
-		
 		if(Strings.isBlank(key))
 			return ;
 		this.doPut(cacheName, key, value, seconds);
@@ -56,10 +44,6 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 
 	@Override
 	public void mput(String cacheName, Map<String, M> keyValues, Integer seconds) {
-		if(logger.isDebugEnabled()){
-			logger.debug("mput: {}_ |{} - {}",cacheName, seconds, JSON.toJSONString(keyValues));
-		}
-		
 		if(keyValues == null || keyValues.size() < 1)
 			return ;
 		if(keyValues.size() == 1){
@@ -73,10 +57,6 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 
 	@Override
 	public M get(String cacheName, String key) {
-		if(logger.isDebugEnabled()){
-			logger.debug("get: {}_{}",cacheName, key);
-		}
-		
 		if(Strings.isBlank(key))
 			return null;
 		return this.doGet(cacheName, key);
@@ -87,10 +67,6 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 	@Override
 	@SuppressWarnings("all")
 	public List<M> mget(String cacheName, List<String> keys) {
-		if(logger.isDebugEnabled()){
-			logger.debug("mget: {}_{}",cacheName, keys);
-		}
-		
 		if(keys == null || keys.size() < 1)
 			return null;
 		if(keys.size() == 1)
@@ -102,10 +78,6 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 
 	@Override
 	public void del(String cacheName, String key) {
-		if(logger.isDebugEnabled()){
-			logger.debug("del: {}_{}",cacheName, key);
-		}
-		
 		if(key == null)
 			return ;
 	}
@@ -129,7 +101,6 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 	
 	public abstract void mdoDel(String cacheName, List<String> keys);
 	
-	
 	/**
 	 * 获取组合后的key值
 	 * 
@@ -149,5 +120,4 @@ public abstract class AbstractCacheService<M extends Serializable> implements IC
 		StringBuilder strb = new StringBuilder();
 		return strb.append(cacheName).append(":").append(key.toString()).toString();
 	}
-	
 }

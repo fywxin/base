@@ -33,7 +33,7 @@ public class MenuService extends BaseService<Menu, Long> {
 	}
 	
 	public List<Menu> getMenuByType(Integer menuType){
-		if(menuType != 1 || menuType != 2 || menuType != 3){
+		if(menuType != 1 && menuType != 2 && menuType != 3){
 			throw new SysException("menuType must in (1,2,3)");
 		}
 		return this.menuDao.getMenuByType(menuType);

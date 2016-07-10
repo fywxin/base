@@ -56,7 +56,9 @@ public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> 
 
 	@Override
 	public void beforeSaveBatch(List<T> objs, IOrmDao<T, PK> baseDao) {
-		this.beforeSaveBatch(objs, baseDao);
+		for (T obj : objs){
+			this.beforeSave(obj, baseDao);
+		}
 	}
 
 	@Override

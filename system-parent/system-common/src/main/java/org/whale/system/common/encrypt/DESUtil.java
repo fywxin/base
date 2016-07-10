@@ -49,7 +49,7 @@ public class DESUtil {
     }
 
     // 从十六进制字符串到字节数组转换
-    public static byte[] HexString2Bytes(String hexstr) {
+    public static byte[] hexString2Bytes(String hexstr) {
         byte[] b = new byte[hexstr.length() / 2];
         int j = 0;
         for (int i = 0; i < b.length; i++) {

@@ -358,10 +358,10 @@ public class AsynQuery implements Iquery{
 	public AsynQuery between(String col, Object small, Object big){
 		if(small == null || big == null)
 			throw new IllegalArgumentException("between 值不能为null");
-		if(likeParams == null){
-			likeParams = new HashMap<String, Object>();
+		if(betweenParams == null){
+			betweenParams = new HashMap<String, Between>();
 		}
-		likeParams.put(col, new Between(small, big));
+		betweenParams.put(col, new Between(small, big));
 		return this;
 	}
 	
@@ -373,7 +373,7 @@ public class AsynQuery implements Iquery{
 	 */
 	public AsynQuery in(String col, Object... objs){
 		if(objs == null || objs.length < 1){
-			this.eq(col, null);
+			return this.eq(col, null);
 		}
 		if(objs.length == 1){
 			this.eq(col, objs[0]);

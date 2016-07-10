@@ -1,6 +1,10 @@
 package org.whale.inf.api;
 
-public class Dept {
+import java.io.Serializable;
+
+public class Dept implements Serializable{
+
+	private static final long serialVersionUID = 42L;
 
 	private Long id;
 	

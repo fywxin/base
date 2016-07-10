@@ -21,11 +21,11 @@ public class Menu extends BaseEntry implements TreeNode{
 
 	private static final long serialVersionUID = -122342341L;
 	
-	public static final Integer MENU_TAB = 1;
+	public static final int MENU_TAB = 1;
 	
-	public static final Integer MENU_FOLDER = 2;
+	public static final int MENU_FOLDER = 2;
 	
-	public static final Integer MENU_URL = 3;
+	public static final int MENU_URL = 3;
 
 	/**父id */
 	public static final String F_parentId = "parentId";
@@ -184,8 +184,11 @@ public class Menu extends BaseEntry implements TreeNode{
 		if (getClass() != obj.getClass())
 			return false;
 		Menu other = (Menu) obj;
+		if (other.getMenuId() == null){
+			return this.getMenuId() == null;
+		}
 	
-		return other.getMenuId() == this.menuId;
+		return other.getMenuId().equals(this.menuId);
 	}
 
 	@Override

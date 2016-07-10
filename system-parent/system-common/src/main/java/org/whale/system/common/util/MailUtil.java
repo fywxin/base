@@ -89,9 +89,7 @@ public class MailUtil {
 	private static void doSendMail(MimeMessage mailMessage){
 		try{
             getMailSender().send(mailMessage);
-            if(retryMap.contains(mailMessage)){
-    			retryMap.remove(mailMessage);
-    		}
+			retryMap.remove(mailMessage);
         }catch(Exception e){
             Integer time = retryMap.get(mailMessage);
             if(time != null && time >= mailRetry){

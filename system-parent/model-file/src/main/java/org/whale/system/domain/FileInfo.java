@@ -48,7 +48,7 @@ public class FileInfo extends BaseEntry {
 	/**url访问地址 */
 	public static final String F_urlPath = "urlPath";
 	
-	public static HashMap<Integer, String> extMap = new HashMap<Integer, String>();
+	public static final HashMap<Integer, String> extMap = new HashMap<Integer, String>();
 
 	static{
 		extMap.put(FileInfo.TYPE_IMG, "gif,jpg,jpeg,png,bmp");
@@ -147,7 +147,7 @@ public class FileInfo extends BaseEntry {
   	
   	public Float getSizeMB() {
   		if(this.fileSize != null)
-  			return new Float(this.fileSize) /1024 / 1024;
+  			return this.fileSize /1024f / 1024f;
   		return -1.0f;
   	}
 	

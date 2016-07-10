@@ -113,7 +113,7 @@ public class OrmBeanPropertyRowMapper<T> implements RowMapper<T> {
                     catch (TypeMismatchException e) {
                         if (value == null && primitivesDefaultedForNullValue) {
                             logger.debug("Intercepted TypeMismatchException for row " + rowNumber +
-                                    " and column '" + column + "' with value " + value +
+                                    " and column '" + column + "' with value null " +
                                     " when setting property '" + pd.getName() + "' of type " + pd.getPropertyType() +
                                     " on object: " + mappedObject);
                         }

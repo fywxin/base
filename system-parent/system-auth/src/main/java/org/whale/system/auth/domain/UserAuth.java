@@ -50,20 +50,18 @@ public class UserAuth implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserAuth other = (UserAuth) obj;
-		if (userId == null) {
-			if (other.userId != null)
-				return false;
-		} else if (!userId.equals(other.userId))
-			return false;
-		return true;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		UserAuth userAuth = (UserAuth) o;
+
+		return !(userId != null ? !userId.equals(userAuth.userId) : userAuth.userId != null);
+
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return userId != null ? userId.hashCode() : 0;
+	}
 }

@@ -74,11 +74,8 @@ public class ValueSaveBuilder {
 		List<Object[]> batchArgs = new ArrayList<Object[]>(objs.size());
 		
 		List<OrmColumn> cols = ormSql.getCols();
-		List<Object> args = new ArrayList<Object>(cols.size());
-		
 		for(Object obj : objs){
-			args = this.getValues(obj, cols);
-			batchArgs.add(args.toArray());
+			batchArgs.add(this.getValues(obj, cols).toArray());
 		}
 		
 		ormValues.setBatchArgs(batchArgs);

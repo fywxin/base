@@ -197,15 +197,15 @@ public class JSCHUtil {
 			deployDir = deployDir.substring(1);
 			String[] pathNames = deployDir.split("/");
 			if(pathNames.length > 1){
-				String path = "";
+				StringBuilder path = new StringBuilder();
 				for(int i= pathNames.length-2; i>=0; i--){
 					for(int j=0; j<=i; j++){
-						path += "/"+pathNames[j];
+						path.append("/").append(pathNames[j]);
 					}
 					if(Strings.isNotBlank(path) && path.length() >1){
-						paths.add(path);
+						paths.add(path.toString());
 					}
-					path = "";
+					path.setLength(0);
 				}
 			}
 			

@@ -21,7 +21,7 @@ public class DateConverter implements Converter<String, Date> {
         }
 
         if (Strings.isNumeric(source)) {
-            return new Date(Long.valueOf(source));
+            return new Date(Long.parseLong(source));
         }
 
         return TimeUtil.parseTime(source);

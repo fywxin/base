@@ -65,18 +65,18 @@ public class UserAuthCacheService implements Bootable{
 	public void putUserAuth(Long userId){
 		UserAuth userAuth = this.getUserAuthFromDb(userId);
 		if(userAuth != null){
-			try{
-				if(cacheService == null){
-					logger.warn("缓存被禁用，采用无缓存模式运行！");
-				}else{
+
+			if(cacheService == null){
+				logger.warn("缓存被禁用，采用无缓存模式运行！");
+			}else{
+				try{
 					this.cacheService.put(CACHE_PREX, userId.toString(), userAuth, PropertiesUtil.getValueInt("cache.auth.expTime", 2592000));
 					if(logger.isDebugEnabled()){
 						logger.debug("AUTH: 获取用户["+userId+"]权限数据："+userAuth);
 					}
-					
+				}catch(RemoteCacheException e){
+					logger.error("CACHE: 远程缓存不可用, 设值失败！userId="+userId, e);
 				}
-			}catch(RemoteCacheException e){
-				logger.error("CACHE: 远程缓存不可用, 设值失败！userId="+userId, e);
 			}
 		}else{
 			logger.warn("AUTH: 数据库中查看不到userId="+userId);

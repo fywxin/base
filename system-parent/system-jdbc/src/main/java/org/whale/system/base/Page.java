@@ -40,7 +40,7 @@ public class Page implements Serializable {
 	private List<Object> args = new ArrayList<Object>();
 	
 	/**动态拼接查询 */
-	private Iquery q;
+	private transient Iquery q;
 	
 	/**返回结果data 的类型，默认为Map<String, Object> */
 	private Class<?> dataClass;
