@@ -49,7 +49,7 @@ public class SimpleHttpClient {
 	// 读超时, read exception 调整此值
 	private int readTimeout = 60 * 1000 * 2;
 	//打印慢日志，超过slowTime将被打印到日志中
-	private Integer slowTime;
+	private int slowTime = Integer.MAX_VALUE;
 	
 	private Map<String, String> commonHeaders	= new HashMap<String, String>();
 	
@@ -130,7 +130,7 @@ public class SimpleHttpClient {
 	}
 	
 	//------------------------------POST请求-----------------------------------
-	
+
 	
 	/**
 	 * POST请求
@@ -304,8 +304,9 @@ public class SimpleHttpClient {
 			con.connect();
 			
 			if(hasBody){
-				OutputStream ops = con.getOutputStream();
+				OutputStream ops = null;
 				try{
+					ops = con.getOutputStream();
 //					OutputStreamWriter writer = new OutputStreamWriter(ops, reqCharset);
 //					writer.write(body);
 //					writer.flush();
@@ -315,19 +316,23 @@ public class SimpleHttpClient {
 					ops.flush();
 
 				}finally{
-					ops.close();
+					if (ops != null){
+						ops.close();
+					}
 				}
 			}
 			//Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase  返回头中得到
 			int resCode = con.getResponseCode();
-			
-			InputStream ips = con.getInputStream();
 
 			String resStr = null;
+			InputStream ips = null;
 			try{
+				ips = con.getInputStream();
 				resStr = IOUtils.toString(ips, resCharset);
 			}finally{
-				ips.close();
+				if (ips != null) {
+					ips.close();
+				}
 			}
 			long costTime = System.currentTimeMillis()-start;
 			
@@ -336,10 +341,12 @@ public class SimpleHttpClient {
 				throw new HttpClientException("返回状态码["+resCode+"] 错误: "+resStr);
 			}
 			
-			if(slowTime != null && costTime > slowTime){
+			if(costTime > slowTime){
 				logger.warn("url:{}, 耗时[{}], 返回 :\n {}",url, costTime, resStr);
 			}else{
-				logger.debug("url:{}, 耗时[{}], 返回:\n {}" ,url, costTime, resStr);
+				if (logger.isDebugEnabled()){
+					logger.debug("url:{}, 耗时[{}], 返回:\n {}" ,url, costTime, resStr);
+				}
 			}
 			return resStr;
 		} catch (Exception e) {
