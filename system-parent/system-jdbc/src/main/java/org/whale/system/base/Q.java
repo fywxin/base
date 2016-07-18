@@ -225,15 +225,13 @@ public class Q implements Iquery{
 
 	/**
 	 * 等于 =
-	 * null 不查询
+	 *   null 不查询使用and
 	 * @param col
 	 * @param value
 	 * @return
 	 */
 	public Q eq(String col, Object value){
-		if(value == null){
-			where.append(" AND t.").append(col).append(" IS NULL");
-		}else{
+		if(value != null){
 			where.append(" AND t.").append(col).append(" = ?");
 			args.add(value);
 		}
@@ -248,9 +246,7 @@ public class Q implements Iquery{
 	 * @return
 	 */
 	public Q like(String col, Object value){
-		if(value == null || Strings.isBlank(value.toString())){
-			return this;
-		}else{
+		if(value != null && Strings.isNotBlank((String) value)){
 			where.append(" AND t.").append(col).append(" LIKE ?");
 			String val = value.toString().trim();
 			if(val.startsWith("%") || val.endsWith("%")){
@@ -266,14 +262,13 @@ public class Q implements Iquery{
 
 	/**
 	 * 不等于 !=
+	 *   null 不查询使用and
 	 * @param col
 	 * @param value
 	 * @return
 	 */
 	public Q notEq(String col, Object value){
-		if(value == null){
-			where.append(" AND t.").append(col).append(" IS NOT NULL");
-		}else{
+		if(value != null){
 			where.append(" AND t.").append(col).append(" != ?");
 			args.add(value);
 		}
@@ -287,9 +282,7 @@ public class Q implements Iquery{
 	 * @return
 	 */
 	public Q gt(String col, Object value){
-		if(value == null){
-			return this;
-		}else{
+		if(value != null){
 			where.append(" AND t.").append(col).append(" > ?");
 			args.add(value);
 		}
@@ -303,9 +296,7 @@ public class Q implements Iquery{
 	 * @return
 	 */
 	public Q gtEq(String col, Object value){
-		if(value == null){
-			return this;
-		}else{
+		if(value != null){
 			where.append(" AND t.").append(col).append(" >= ?");
 			args.add(value);
 		}
@@ -319,9 +310,7 @@ public class Q implements Iquery{
 	 * @return
 	 */
 	public Q lt(String col, Object value) {
-		if(value == null){
-			return this;
-		}else{
+		if(value != null){
 			where.append(" AND t.").append(col).append(" < ?");
 			args.add(value);
 		}
@@ -329,15 +318,13 @@ public class Q implements Iquery{
 	}
 
 	/**
-	 * 小于等于
+	 * 小于等于 <=
 	 * @param col
 	 * @param value
 	 * @return
 	 */
 	public Q ltEq(String col, Object value) {
-		if(value == null){
-			return this;
-		}else{
+		if(value != null){
 			where.append(" AND t.").append(col).append(" <= ?");
 			args.add(value);
 		}
@@ -345,7 +332,7 @@ public class Q implements Iquery{
 	}
 
 	/**
-	 * in
+	 * 范围查询 in
 	 * @param col
 	 * @param list
 	 * @return
@@ -368,7 +355,7 @@ public class Q implements Iquery{
 	}
 
 	/**
-	 * between
+	 * 区间查询 between
 	 * @param col
 	 * @param from
 	 * @param to
