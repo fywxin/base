@@ -33,11 +33,6 @@
 			<artifactId>model-file</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.whale</groupId>
-			<artifactId>inf-server</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<finalName>system-ui</finalName>

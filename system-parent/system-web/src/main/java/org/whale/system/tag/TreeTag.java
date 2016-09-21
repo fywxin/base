@@ -398,7 +398,7 @@ public class TreeTag extends TagSupport {
 
 		strb.append("	$(\"body\").append('<div id=\"menuContent_"+id+"\" style=\"display:none; position: absolute;z-index:9999;\">");
 		if(search)
-			strb.append("<div style=\"background: #D7DFE9;height:26px;width:"+maxWidth+";border:1px solid #617775;text-align: center;\"><input type=text size=22 id=KEYWORD_"+this.id+" title=\"请输入条件，按回车键搜索树\" /></div>");
+			strb.append("<div style=\"background: #D7DFE9;height:26px;width:"+maxWidth+";border:1px solid #617775;text-align: center;\"><input type=text size=22 id=KEYWORD_"+this.id+" title=\"请输入条件，按回车键搜索树\" style=\"width:100%;border-left:0px;border-right:0px;border-top:0px;border-bottom:1px solid;height:26px;\" /></div>");
 		strb.append("<ul id=\"tree_"+id+"\" class=\"ztree\" style=\"margin-top: 0px;border: 1px solid #617775;background: #f0f6e4;overflow:auto; width: "+maxWidth+";height: "+height+";\"></ul></div>');\n\n");
 		
 		return strb.toString();

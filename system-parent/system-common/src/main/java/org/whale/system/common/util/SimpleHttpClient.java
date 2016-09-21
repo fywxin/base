@@ -254,8 +254,8 @@ public class SimpleHttpClient {
 		return post(url, headers, postStr, null, null, charset, charset);
 	}
 	
-	public static String post(String url, Map<String, String> headers, String postStr, Integer timeout) {
-		return post(url, headers, postStr, timeout, timeout, null, null);
+	public static String post(String url, Map<String, String> headers, String postStr, Integer readTimeout) {
+		return post(url, headers, postStr, null, readTimeout, null, null);
 	}
 	
 	public static String post(String url, Map<String, String> headers, String postStr, Integer timeout, String charset) {
