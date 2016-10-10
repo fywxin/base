@@ -28,7 +28,5 @@ public class OrmValidKeyParser implements ValidKeyParser {
 	public boolean support(Object obj) {
 		return this.ormContext.contain(obj.getClass());
 	}
-
-	
 	
 }

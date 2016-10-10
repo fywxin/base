@@ -7,18 +7,8 @@ import java.util.Map;
 import org.whale.system.common.util.ValidUtil;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
-import org.whale.system.spring.SpringContextHolder;
 
 public class ValidOrmUtil {
-	
-	private static OrmContext ormContext;
-	
-	private static OrmContext getOrmContext(){
-		if(ormContext == null){
-			ormContext = SpringContextHolder.getBean(OrmContext.class);
-		}
-		return ormContext;
-	}
 	
 	/**
 	 * 校验
@@ -37,7 +27,8 @@ public class ValidOrmUtil {
 	 * @return
 	 */
 	public static Map<String, String> valid(Object obj, boolean append){
-		if(getOrmContext().contain(obj.getClass())){
+		OrmContext ormContext = OrmContext.getThis();
+		if(ormContext.contain(obj.getClass())){
 			List<OrmColumn> cols = ormContext.getOrmTable(obj.getClass()).getValidateCols();
 			if(cols == null || cols.size() < 1)
 				return null;

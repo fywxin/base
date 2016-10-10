@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.whale.system.common.util.Strings;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmTable;
-import org.whale.system.spring.SpringContextHolder;
 
 /**
  * 单表查询构造器, AND 条件联合查询
@@ -53,8 +52,7 @@ public class Q implements Iquery{
 	}
 	
 	public Q(Class<?> clazz) {
-        OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
-		ormTable = ormContext.getOrmTable(clazz);
+		ormTable = OrmContext.getThis().getOrmTable(clazz);
     }
 	
 	@Override

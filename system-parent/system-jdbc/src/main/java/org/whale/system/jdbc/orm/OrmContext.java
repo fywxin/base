@@ -15,6 +15,7 @@ import org.whale.system.jdbc.orm.sql.SqlBuilder;
 import org.whale.system.jdbc.orm.table.OrmTableBuilder;
 import org.whale.system.jdbc.orm.value.ValueBuilder;
 import org.whale.system.jdbc.util.AnnotationUtil;
+import org.whale.system.spring.SpringContextHolder;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -43,6 +44,15 @@ public class OrmContext extends EntryContext {
 	private final Map<Class<?>, OrmClass> ormClassCache = new HashMap<Class<?>, OrmClass>();
 	//锁
 	private Object lock = new Object();
+
+	private static OrmContext me = null;
+
+	public static OrmContext getThis(){
+		if (me == null){
+			me = SpringContextHolder.getBean(OrmContext.class);
+		}
+		return me;
+	}
 	
 	/**
 	 * 
