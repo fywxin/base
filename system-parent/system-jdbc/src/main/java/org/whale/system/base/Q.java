@@ -103,6 +103,8 @@ public class Q implements Iquery{
 					strb.append(" ORDER BY ").append(order.deleteCharAt(order.length()-1));
 				}
 				strb.append(limit);
+			}else{
+				strb.append(" limit 1");
 			}
 			getSql = strb.toString();
 
