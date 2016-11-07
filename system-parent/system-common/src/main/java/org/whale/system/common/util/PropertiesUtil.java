@@ -1,17 +1,18 @@
 package org.whale.system.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 
 /**
  * properties配置文件工具类
@@ -20,22 +21,76 @@ import org.springframework.core.io.ResourceLoader;
  * 2014年9月6日-下午1:32:29
  */
 public class PropertiesUtil {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
-	
+
 	/**缓存 */
 	private static Map<String, String> confMap = new HashMap<String, String>();
-	
+
+	private static final String PROPERTIES_FILE= "conf.properties";
+
 	private PropertiesUtil(){}
-	
+
 	static{
-		Map<String, String> map = readConf("conf.properties");
+		Map<String, String> map = readConf(PROPERTIES_FILE);
 		if(map != null && map.keySet().size() > 0)
 			confMap.putAll(map);
 	}
-	
+
 	/**
-	 * 
+	 * 保存到原来配置文件去
+	 */
+	public static boolean setProperty(String key, String value) {
+		Properties properties = loadProperties(PROPERTIES_FILE);
+		FileOutputStream fos = null;
+		try {
+			properties.setProperty(key, value);
+			fos = new java.io.FileOutputStream(PropertiesUtil.class.getClassLoader().getResource(PROPERTIES_FILE).getFile());
+			properties.store(fos, "");
+
+			return true;
+		} catch (Exception ex) {
+			logger.warn("store config", ex);
+			return false;
+		}finally {
+			if (fos != null){
+				try {
+					fos.close();
+				}catch (Exception e){
+
+				}
+			}
+		}
+	}
+
+	/**
+	 * 保存到原来配置文件去
+	 */
+	public static boolean setProperty(Map<String, String> data) {
+		Properties properties = loadProperties(PROPERTIES_FILE);
+		FileOutputStream fos = null;
+		try {
+			properties.putAll(data);
+			fos = new java.io.FileOutputStream(PropertiesUtil.class.getClassLoader().getResource(PROPERTIES_FILE).getFile());
+			properties.store(fos, "");
+			fos.close();
+			return true;
+		} catch (Exception ex) {
+			logger.warn("store config", ex);
+			return false;
+		}finally {
+			if (fos != null){
+				try {
+					fos.close();
+				}catch (Exception e){
+
+				}
+			}
+		}
+	}
+
+	/**
+	 *
 	 *功能说明: 读取配置文件信息返回Map
 	 *创建人: wjs
 	 *创建时间:2013-4-26 下午2:36:17
@@ -61,9 +116,9 @@ public class PropertiesUtil {
 		}
 		return map;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 *功能说明: 加载properties配置文件
 	 *创建人: wjs
 	 *创建时间:2013-4-26 下午2:36:45
@@ -74,7 +129,7 @@ public class PropertiesUtil {
 	public static Properties loadProperties(String... resourcesPaths) {
 		ResourceLoader resourceLoader = new DefaultResourceLoader();
 		Properties props = new Properties();
-		
+
 		for (String location : resourcesPaths) {
 			InputStream is = null;
 			try {
@@ -95,9 +150,9 @@ public class PropertiesUtil {
 		}
 		return props;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 *功能说明: 添加配置集合
 	 *创建人: wjs
 	 *创建时间:2013-4-26 下午2:42:11
@@ -113,9 +168,9 @@ public class PropertiesUtil {
 			}
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 *功能说明: 配置文件是否包含key的配置项
 	 *创建人: wjs
 	 *创建时间:2013-4-26 下午2:37:04
@@ -130,7 +185,7 @@ public class PropertiesUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 *功能说明:取值
 	 *创建人: wjs
 	 *创建时间:2013-4-26 下午2:37:33
@@ -143,9 +198,9 @@ public class PropertiesUtil {
 			return null;
 		return confMap.get(key);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 *功能说明: 取值，如果值为null，则使用默认值
 	 *创建人: wjs
 	 *创建时间:2013-4-26 下午2:38:09
@@ -160,7 +215,7 @@ public class PropertiesUtil {
 			val = defaultVal;
 		return val;
 	}
-	
+
 	public static Integer getValueInt(String key){
 		String val = getValue(key);
 		if(Strings.isBlank(val))
@@ -171,15 +226,15 @@ public class PropertiesUtil {
 			return null;
 		}
 	}
-	
+
 	public static Integer getValueInt(String key, Integer defaultVal){
 		Integer val = getValueInt(key);
-		
+
 		if(val == null)
 			return defaultVal;
 		return val;
 	}
-	
+
 	public static Long getValueLong(String key){
 		String val = getValue(key);
 		if(Strings.isBlank(val))
@@ -190,28 +245,28 @@ public class PropertiesUtil {
 			return null;
 		}
 	}
-	
+
 	public static Long getValueLong(String key, Long defaultVal){
 		Long val = getValueLong(key);
-		
+
 		if(val == null)
 			return defaultVal;
 		return val;
 	}
-	
+
 	public static Boolean getValueBoolean(String key){
 		return getValueBoolean(key, null);
 	}
-	
+
 	public static Boolean getValueBoolean(String key, Boolean defaultVal){
 		String val = getValue(key);
 		if(val == null)
 			return defaultVal;
 		return "true".equalsIgnoreCase(val);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 *功能说明:获取所有的配置项key集合
 	 *创建人: wjs
 	 *创建时间:2013-4-26 下午2:39:34

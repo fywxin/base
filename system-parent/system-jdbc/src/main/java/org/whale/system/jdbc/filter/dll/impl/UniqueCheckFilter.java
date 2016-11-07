@@ -18,6 +18,8 @@ import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 import org.whale.system.jdbc.util.AnnotationUtil;
 
+import javax.annotation.Resource;
+
 /**
  * 唯一值校验
  * 
@@ -28,8 +30,8 @@ import org.whale.system.jdbc.util.AnnotationUtil;
 @Component
 public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> extends BaseDaoDllFilterWarpper<T, PK> {
 
-	@Autowired
-	JdbcTemplate jdbcTemplate;
+	@Resource(name="jdbcTemplate")
+	private JdbcTemplate jdbcTemplate;
 	
 	@Override
 	public void beforeSave(T obj, IOrmDao<T, PK> baseDao) {

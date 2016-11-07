@@ -1,16 +1,14 @@
 package org.whale.system.jdbc;
 
+import org.whale.system.base.Iquery;
+import org.whale.system.base.Page;
+import org.whale.system.base.Q;
+import org.whale.system.jdbc.orm.OrmContext;
+import org.whale.system.jdbc.orm.entry.OrmTable;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.whale.system.base.Q;
-import org.whale.system.base.Iquery;
-import org.whale.system.base.Page;
-import org.whale.system.jdbc.orm.OrmContext;
-import org.whale.system.jdbc.orm.entry.OrmTable;
 
 /**
  * Dao 模板方法定义

@@ -8,13 +8,15 @@ import org.whale.system.common.exception.OrmException;
 import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmTable;
 
+import javax.annotation.Resource;
+
 public abstract class AbstractAlterTableService implements AlterTableService {
 	
 	private static Logger logger = LoggerFactory.getLogger(AbstractAlterTableService.class);
 
 	@Autowired
 	private OrmContext ormContext;
-	@Autowired
+	@Resource(name="jdbcTemplate")
 	JdbcTemplate jdbcTemplate;
 
 	public void createTable(Class<?> clazz){

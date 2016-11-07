@@ -14,10 +14,12 @@ import org.whale.system.jdbc.orm.entry.OrmValue;
 import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
 
+import javax.annotation.Resource;
+
 @Component
 public class ValueSaveBuilder {
 
-	@Autowired
+	@Resource(name="jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
 	
 	public OrmValue getSave(Object obj, OrmSql ormSql) {

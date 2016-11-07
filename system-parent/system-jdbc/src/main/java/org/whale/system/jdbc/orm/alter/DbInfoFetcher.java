@@ -18,6 +18,8 @@ import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.util.DbKind;
 import org.whale.system.spring.SpringContextHolder;
 
+import javax.annotation.Resource;
+
 @Component
 public class DbInfoFetcher {
 	private static Logger logger = LoggerFactory.getLogger(DbInfoFetcher.class);
@@ -25,8 +27,8 @@ public class DbInfoFetcher {
 	/** 自动创建表格键值常量 */
 	private static final String ORM_TABLE_DDL = "orm.table.ddl";
 
-	@Autowired
-	JdbcTemplate jdbcTemplate;
+	@Resource(name="jdbcTemplate")
+	private JdbcTemplate jdbcTemplate;
 	@Autowired
 	private OrmContext ormContext;
 	

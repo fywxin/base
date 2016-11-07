@@ -15,6 +15,8 @@ import org.whale.system.jdbc.orm.OrmContext;
 import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.util.AnnotationUtil;
 
+import javax.annotation.Resource;
+
 /**
  * 解析@SQL 默认不启用
  * 
@@ -25,7 +27,7 @@ public class ExeSqlOnSaveFilter<T extends Serializable,PK extends Serializable> 
 	
 	@Autowired
 	private OrmContext ormContext;
-	@Autowired
+	@Resource(name="jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
 
 	@Override

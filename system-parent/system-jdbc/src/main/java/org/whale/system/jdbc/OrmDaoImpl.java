@@ -37,6 +37,8 @@ import org.whale.system.jdbc.orm.value.ValueBuilder;
 import org.whale.system.jdbc.util.AnnotationUtil;
 import org.whale.system.jdbc.util.DbKind;
 
+import javax.annotation.Resource;
+
 public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implements IOrmDao<T, PK> {
 
 	private static Logger logger = LoggerFactory.getLogger(BaseDao.class);
@@ -48,7 +50,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 
 	private RowMapperResultSetExtractor<T> anyRowMapperResultSetExtractor;
 
-	@Autowired
+	@Resource(name="jdbcTemplate")
 	protected JdbcTemplate jdbcTemplate;
 	@Autowired
 	protected ValueBuilder valueBuilder;
