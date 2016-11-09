@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd	
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+	<!-- 启动对@AspectJ注解的支持 -->  
+	<aop:aspectj-autoproxy/>  
+	
+	<!-- 自动搜索@Component , @Service , @Repository等标注的类 不搜索@Controller的类 -->
+	<!-- 自动扫描组件，这里要把web下面的 controller去除，他们是在springMVC-servlet.xml中配置的，如果不去除会影响事务管理的。 -->
+	<context:component-scan base-package="org.whale" annotation-config="true">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:master-slave-db.properties</value>
+				<value>classpath:conf.properties</value>
+				<value>classpath:redis.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="writeDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	    <property name="url" value="${master.jdbcUrl}" />
+	    <property name="username" value="${master.user}" />
+	    <property name="password" value="${master.password}" />
+	    <!-- 配置初始化大小、最小、最大 -->
+	    <property name="initialSize" value="${initialSize}" />
+	    <property name="minIdle" value="${minIdle}" /> 
+	    <property name="maxActive" value="${maxActive}" />
+	 
+	    <!-- 配置获取连接等待超时的时间 -->
+	    <property name="maxWait" value="${maxWait}" />
+	 
+	    <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+	    <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+	 
+	    <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+	    <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+	  
+	    <property name="validationQuery" value="SELECT 'x'" />
+	    <property name="testWhileIdle" value="${testWhileIdle}" />
+	    <property name="testOnBorrow" value="${testOnBorrow}" />
+	    <property name="testOnReturn" value="${testOnReturn}" />
+	 
+	    <!-- 打开PSCache，并且指定每个连接上PSCache的大小 
+	    <property name="poolPreparedStatements" value="${poolPreparedStatements}" />
+	    <property name="maxPoolPreparedStatementPerConnectionSize" value="${maxPoolPreparedStatementPerConnectionSize}" />
+	 -->
+	    <!-- 配置监控统计拦截的filters -->
+	    <property name="filters" value="${filters}" /> 
+	</bean>
+	
+	<bean id="readDataSource4001" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	    <property name="url" value="${slave4001.jdbcUrl}" />
+	    <property name="username" value="${slave4001.user}" />
+	    <property name="password" value="${slave4001.password}" />
+	    <!-- 配置初始化大小、最小、最大 -->
+	    <property name="initialSize" value="${initialSize}" />
+	    <property name="minIdle" value="${minIdle}" /> 
+	    <property name="maxActive" value="${maxActive}" />
+	 
+	    <!-- 配置获取连接等待超时的时间 -->
+	    <property name="maxWait" value="${maxWait}" />
+	 
+	    <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+	    <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+	 
+	    <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+	    <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+	  
+	    <property name="validationQuery" value="SELECT 'x'" />
+	    <property name="testWhileIdle" value="${testWhileIdle}" />
+	    <property name="testOnBorrow" value="${testOnBorrow}" />
+	    <property name="testOnReturn" value="${testOnReturn}" />
+	 
+	    <!-- 打开PSCache，并且指定每个连接上PSCache的大小 
+	    <property name="poolPreparedStatements" value="${poolPreparedStatements}" />
+	    <property name="maxPoolPreparedStatementPerConnectionSize" value="${maxPoolPreparedStatementPerConnectionSize}" />
+	 -->
+	    <!-- 配置监控统计拦截的filters -->
+	    <property name="filters" value="${filters}" /> 
+	</bean>
+	
+	<bean id="readDataSource4002" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	    <property name="url" value="${slave4002.jdbcUrl}" />
+	    <property name="username" value="${slave4002.user}" />
+	    <property name="password" value="${slave4002.password}" />
+	    <!-- 配置初始化大小、最小、最大 -->
+	    <property name="initialSize" value="${initialSize}" />
+	    <property name="minIdle" value="${minIdle}" /> 
+	    <property name="maxActive" value="${maxActive}" />
+	 
+	    <!-- 配置获取连接等待超时的时间 -->
+	    <property name="maxWait" value="${maxWait}" />
+	 
+	    <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+	    <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+	 
+	    <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+	    <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+	  
+	    <property name="validationQuery" value="SELECT 'x'" />
+	    <property name="testWhileIdle" value="${testWhileIdle}" />
+	    <property name="testOnBorrow" value="${testOnBorrow}" />
+	    <property name="testOnReturn" value="${testOnReturn}" />
+	 
+	    <!-- 打开PSCache，并且指定每个连接上PSCache的大小 
+	    <property name="poolPreparedStatements" value="${poolPreparedStatements}" />
+	    <property name="maxPoolPreparedStatementPerConnectionSize" value="${maxPoolPreparedStatementPerConnectionSize}" />
+	 -->
+	    <!-- 配置监控统计拦截的filters -->
+	    <property name="filters" value="${filters}" /> 
+	</bean>
+	
+	<!-- 数据源聚合器 -->
+	<bean id="dynamicDataSource" class="org.whale.system.jdbc.readwrite.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<!-- write -->
+				<entry key="writeDataSource" value-ref="writeDataSource"/>
+				<!-- read -->
+				<entry key="readDataSource4001" value-ref="readDataSource4001"/>
+				<entry key="readDataSource4002" value-ref="readDataSource4002"/>
+			</map>
+
+		</property>
+		<property name="defaultTargetDataSource" ref="writeDataSource"/>
+	</bean>
+
+	<bean id="dynamicReadWriteFilter" class="org.whale.system.jdbc.readwrite.DynamicReadWriteFilter"></bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource">
+            <ref bean="dynamicDataSource"/>
+        </property>
+   	</bean>
+   	
+   	<bean id="defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler"/>
+
+	<!-- 定义事务管理器（声明式的事务） -->
+	<bean id="transactionManager"
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dynamicDataSource" />
+	</bean>
+
+	<bean id="focusWriteTransaction" class="org.whale.system.jdbc.readwrite.FocusWriteTransaction"></bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"></tx:annotation-driven>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="trans*" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="interceptorPointCuts"
+					  expression="execution(* org.whale.*.service.*.trans*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />
+		<aop:aspect order="-2147483648" ref="focusWriteTransaction">
+			<aop:around pointcut-ref="interceptorPointCuts" method="focusWrite"/>
+		</aop:aspect>
+	</aop:config>
+</beans>
+

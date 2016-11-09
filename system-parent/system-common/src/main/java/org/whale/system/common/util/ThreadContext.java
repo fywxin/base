@@ -37,6 +37,11 @@ public class ThreadContext {
 	public static final String KEY_CLIENT_CONTEXT = "client_context";
 	
 	public static final String KEY_SERVER_CONTEXT = "server_context";
+	/**动态数据源KEY */
+	public static final String DYNAMIC_DS_READ_MODE_FLAG = "dynamicDsRead";
+	/**事务方法，强制走主库标志Boolean */
+	public static final String DYNAMIC_DS_TRANS_FOCUS_WRITE_FLAG = "transWriteFlag";
+
 
 	private static final ThreadLocal<ThreadContext> LOCAL = new ThreadLocal<ThreadContext>() {
 		@Override
