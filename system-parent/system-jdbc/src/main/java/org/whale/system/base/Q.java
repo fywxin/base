@@ -258,6 +258,25 @@ public class Q implements Iquery{
 		return this;
 	}
 
+	/**
+	 * like 不区分大小写
+	 * @param col
+	 * @param value
+	 * @return
+	 */
+	public Q likeIgnoreCase(String col, Object value){
+		if(value != null && Strings.isNotBlank((String) value)){
+			where.append(" AND upper(t.").append(col).append(") LIKE ?");
+			String val = value.toString().trim().toUpperCase();
+			if(val.startsWith("%") || val.endsWith("%")){
+				args.add(val);
+			}else{
+				args.add("%"+val+"%");
+			}
+		}
+		return this;
+	}
+
 
 
 	/**
