@@ -9,7 +9,7 @@ import org.whale.system.jdbc.orm.entry.OrmColumn;
 import org.whale.system.jdbc.util.AnnotationUtil;
 
 import java.io.InputStream;
-import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.Date;
 import java.util.List;
@@ -47,11 +47,14 @@ public class OrmRowMapper<T> implements RowMapper<T> {
                     AnnotationUtil.setFieldValue(obj, col.getField(), rs.getString(col.getSqlName()));
                     continue ;
                 }
-                //TODO FIXME BIGINT 对应 LONG 与 BIGINT
                 if(Types.BIGINT == col.getType()){
                     tmp = rs.getString(col.getSqlName());
                     if (tmp != null && tmp.length() > 0){
-                        AnnotationUtil.setFieldValue(obj, col.getField(), Long.parseLong(tmp));
+                        if (col.getAttrType().getName().equals("java.math.BigInteger")){
+                            AnnotationUtil.setFieldValue(obj, col.getField(), new BigInteger(tmp));
+                        }else{
+                            AnnotationUtil.setFieldValue(obj, col.getField(), Long.parseLong(tmp));
+                        }
                     }
                     continue ;
                 }
@@ -116,19 +119,18 @@ public class OrmRowMapper<T> implements RowMapper<T> {
                     }
                 }
                 if(Types.CLOB == col.getType()){
-                    Type type = col.getField().getType();
-                    String t = type.toString();
-                    if("class java.lang.String".equals(t)){
+                    String t = col.getAttrType().getName();
+                    if("java.lang.String".equals(t)){
                         String value = lobHandler.getClobAsString(rs, col.getSqlName());
                         AnnotationUtil.setFieldValue(obj, col.getField(), value);
                         continue ;
                     }
-                    if("class java.io.InputStream".equals(t)){
+                    if("java.io.InputStream".equals(t)){
                         InputStream value = lobHandler.getBlobAsBinaryStream(rs, col.getSqlName());
                         AnnotationUtil.setFieldValue(obj, col.getField(), value);
                         continue ;
                     }
-                    if("class [Ljava.lang.Byte".equals(t) || "class [B".equals(t)){
+                    if("[Ljava.lang.Byte".equals(t) || "[B".equals(t)){
                         byte[] value = lobHandler.getBlobAsBytes(rs, col.getSqlName());
                         AnnotationUtil.setFieldValue(obj, col.getField(), value);
                         continue ;
@@ -138,8 +140,6 @@ public class OrmRowMapper<T> implements RowMapper<T> {
             }
 
         } catch (OrmException e){
-            throw e;
-        } catch (RuntimeException e){
             throw e;
         } catch (Exception e) {
             throw new OrmException("设置对象["+mappedClass.getName()+"]的字段["+colCopy.getField().getName()+"]值["+rs.getObject(colCopy.getSqlName())+"]异常",e);

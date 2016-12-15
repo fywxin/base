@@ -606,49 +606,50 @@ public class DefaultOrmTableBuilder implements OrmTableBuilder {
 	 *
 	 */
 	private int getFieldType(Acolumn acolumn){
-		//TODO type?
-		Type type = acolumn.getAttrType();
-		String t = type.toString();
+		String t = acolumn.getAttrType().getName();
 		//System.out.println(t + col.getSqlName() + column.type());
-		if(t.equals("class java.lang.Long") || t.equals("long")){
+		if(t.equals("java.lang.Long") || t.equals("long")){
 			return Types.BIGINT;
 		}
-		if(t.equals("class java.lang.Integer") || t.equals("int")){
+		if(t.equals("java.lang.Integer") || t.equals("int")){
 			return Types.INTEGER;
 		}
-		if(t.equals("class java.lang.Short") || t.equals("short")){
+		if(t.equals("java.lang.Short") || t.equals("short")){
 			return Types.SMALLINT;
 		}
-		if(t.equals("class java.lang.Byte") || t.equals("byte")){
+		if(t.equals("java.lang.Byte") || t.equals("byte")){
 			return Types.TINYINT;
 		}
-		if(t.equals("class java.lang.Double") || t.equals("double")){
+		if(t.equals("java.lang.Double") || t.equals("double")){
 			return Types.DOUBLE;
 		}
-		if(t.equals("class java.lang.Float") || t.equals("float")){
+		if(t.equals("java.lang.Float") || t.equals("float")){
 			return Types.FLOAT;
 		}
-		if(t.equals("class java.math.BigDecimal")){
+		if(t.equals("java.math.BigDecimal")){
 			return Types.DECIMAL;
 		}
-		if(t.equals("class java.math.BigInteger")){
+		if(t.equals("java.math.BigInteger")){
 			return Types.BIGINT;
 		}
-		if(t.equals("class java.lang.Boolean") || t.equals("boolean")){
+		if(t.equals("java.lang.Boolean") || t.equals("boolean")){
 			return Types.BOOLEAN;
 		}
 		//http://www.cnblogs.com/shihujiang/archive/2012/06/14/2548981.html
-		if(t.equals("class java.util.Date")){
+		if(t.equals("java.util.Date")){
 			
 			return Types.TIMESTAMP;
 			//dateTime获取值错误
 			//return Types.TIME;
 		}
-		if(t.equals("class java.sql.Time")){
+		if(t.equals("java.sql.Time")){
 			return Types.TIME;
 		}
-		if(t.equals("class java.sql.Timestamp")){
+		if(t.equals("java.sql.Timestamp")){
 			return Types.TIME;
+		}
+		if(t.startsWith("[")){
+			return Types.ARRAY;
 		}
 		return Types.VARCHAR;
 		//return column.type();

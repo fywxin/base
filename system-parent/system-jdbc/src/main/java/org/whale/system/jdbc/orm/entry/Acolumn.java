@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 
 public class Acolumn {
 	//字段类型 
-	private Type attrType;
+	private Class<?> attrType;
 	//字段名
 	private String attrName;
 	//字段中文名
@@ -26,10 +26,10 @@ public class Acolumn {
 	public void setField(Field field) {
 		this.field = field;
 	}
-	public Type getAttrType() {
+	public Class<?> getAttrType() {
 		return attrType;
 	}
-	public void setAttrType(Type attrType) {
+	public void setAttrType(Class<?> attrType) {
 		this.attrType = attrType;
 	}
 	public String getCnName() {
