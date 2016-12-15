@@ -41,9 +41,11 @@ public class TableBuilder {
 		List<Acolumn> list = new ArrayList<Acolumn>(fields.length);
 		Acolumn column = null;
 		for(Field field : fields) {
+			//排除 static 与 final 字段
+			if ((field.getModifiers()>>3) % 2 != 1 || (field.getModifiers()>>4) % 2 != 1){
+				continue;
+			}
 			field.setAccessible(true);
-			if (field.getName().equals("serialVersionUID")) continue;
-			
 			column = new Acolumn();
 			column.setAttrName(field.getName());
 			column.setAttrType(field.getType());

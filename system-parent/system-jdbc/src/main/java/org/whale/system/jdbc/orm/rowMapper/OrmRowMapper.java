@@ -47,6 +47,7 @@ public class OrmRowMapper<T> implements RowMapper<T> {
                     AnnotationUtil.setFieldValue(obj, col.getField(), rs.getString(col.getSqlName()));
                     continue ;
                 }
+                //TODO FIXME BIGINT 对应 LONG 与 BIGINT
                 if(Types.BIGINT == col.getType()){
                     tmp = rs.getString(col.getSqlName());
                     if (tmp != null && tmp.length() > 0){

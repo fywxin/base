@@ -10,6 +10,7 @@ import org.whale.system.base.Iquery;
 import org.whale.system.base.Iquery.SqlType;
 import org.whale.system.base.Page;
 import org.whale.system.base.Find;
+import org.whale.system.common.util.Mapper;
 import org.whale.system.common.util.ReflectionUtil;
 import org.whale.system.jdbc.filter.BaseDaoFilterService;
 
@@ -164,16 +165,7 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	}
 	
 	public <M> List<M> query(Class<M> clazz, String sql, Object... objs){
-		List<Map<String, Object>> rs = this.queryForList(Find.newQuery(sql, objs).setClazz(clazz));
-		if(rs == null || rs.size() < 1){
-			return null;
-		}
-		List<M> list = new ArrayList<M>(rs.size());
-
-		for(Map<String, Object> map : rs){
-			list.add(ReflectionUtil.map2Clazz(map, clazz));
-		}
-		return list;
+		return Mapper.map2List(this.queryForList(Find.newQuery(sql, objs).setClazz(clazz)), clazz);
 	}
 	
 	public <M> M get(Class<M> clazz, Iquery query){

@@ -2,12 +2,7 @@ package org.whale.system.jdbc.orm.table.impl;
 
 import java.lang.reflect.Type;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 
@@ -105,7 +100,7 @@ public class DefaultOrmTableBuilder implements OrmTableBuilder {
 		this.reParseTable(ormTable); //设置idCol,pkCols
 		logger.info("ORM:提取 类clazz={} ID字段完成 idColumn={}", clazz, ormTable.getIdCol());
 		this.exeTableExtInfoReaders(ormTable);
-		logger.info("ORM:执行 类table={} 扩展信息读取完成:{}",ormTable.getIdCol(), ormTable);
+		logger.info("ORM:执行 类table={} 扩展信息读取完成:{}", ormTable.getIdCol(), ormTable);
 		return ormTable;
 	}
 	
@@ -185,22 +180,31 @@ public class DefaultOrmTableBuilder implements OrmTableBuilder {
 		//表中定义的所有字段
 		List<Acolumn> acolumns = table.getCols();
 		List<OrmColumn> list = new ArrayList<OrmColumn>(acolumns.size());
+
 		OrmColumn ormColumn = null;
 		
 		boolean hasColAnnotation = this.searchColumnAnnotation(table);
-		
+
+		//判断子类与父类是否属性名一样， 子类覆盖父类字段
+		Set<String> colNameSet = new HashSet<String>();
 		for(Acolumn acolumn : acolumns){
 			ormColumn = this.fireAndParseColumn(table, acolumn, hasColAnnotation);
 			if(ormColumn == null)
 				continue;
 			list.add(ormColumn);
+			colNameSet.add(ormColumn.getAttrName());
 		}
 		
 		//获取父对象，向上递归解析字段结构
 		if(table.getParent() != null){
 			List<OrmColumn> superList = getColumns(table.getParent());
 			if(superList != null && superList.size() > 0){
-				list.addAll(superList);
+				for (OrmColumn superCol : superList){
+					if (!colNameSet.contains(superCol.getAttrName())){
+						colNameSet.add(superCol.getAttrName());
+						list.add(superCol);
+					}
+				}
 			}
 		}
 		
@@ -602,6 +606,7 @@ public class DefaultOrmTableBuilder implements OrmTableBuilder {
 	 *
 	 */
 	private int getFieldType(Acolumn acolumn){
+		//TODO type?
 		Type type = acolumn.getAttrType();
 		String t = type.toString();
 		//System.out.println(t + col.getSqlName() + column.type());
@@ -625,6 +630,9 @@ public class DefaultOrmTableBuilder implements OrmTableBuilder {
 		}
 		if(t.equals("class java.math.BigDecimal")){
 			return Types.DECIMAL;
+		}
+		if(t.equals("class java.math.BigInteger")){
+			return Types.BIGINT;
 		}
 		if(t.equals("class java.lang.Boolean") || t.equals("boolean")){
 			return Types.BOOLEAN;
