@@ -24,50 +24,50 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 * 保存实体
 	 * @param t
 	 */
-	void save(T t);
+	int save(T t);
 	
 	/**
 	 * 批量保存实体
 	 * @param list
 	 */
-	void saveBatch(List<T> list);
+	int[] saveBatch(List<T> list);
 	
 	/**
 	 * 更新实体
 	 * @param t
 	 */
-	void update(T t);
+	int update(T t);
 	
 	/**
 	 * 更新非空字段, id字段必须有值
 	 * 
 	 * @param t
 	 */
-	void updateNotNull(T t);
+	int updateNotNull(T t);
 	
 	/**
 	 * 批量更新多个实体
 	 * @param list
 	 */
-	void updateBatch(List<T> list);
+	int[] updateBatch(List<T> list);
 	
 	/**
 	 * 删除实体
 	 * @param id
 	 */
-	void delete(PK id);
+	int delete(PK id);
 	
 	/**
 	 * 删除多个实体
 	 * @param ids
 	 */
-	void deleteBatch(List<PK> ids);
+	int[] deleteBatch(List<PK> ids);
 	
 	/**
 	 * 按照自定义条件删除
 	 * @param query
 	 */
-	void delete(Iquery query);
+	int delete(Iquery query);
 	
 	/**
 	 * 获取单个对象

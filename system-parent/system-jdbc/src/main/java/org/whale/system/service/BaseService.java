@@ -19,14 +19,12 @@ public abstract class BaseService<T extends Serializable, PK extends Serializabl
 	
 	public void save(T t){
 		if(t == null)
-			throw new NullPointerException();
+			return;
 		getDao().save(t);
 	}
 	
 	public void saveBatch(List<T> list){
-		if(list == null)
-			throw new NullPointerException();
-		if(list.size() == 0)
+		if(list == null || list.size() == 0)
 			return ;
 		if(list.size() == 1){
 			this.save(list.get(0));
@@ -37,18 +35,18 @@ public abstract class BaseService<T extends Serializable, PK extends Serializabl
 	
 	public void update(T t){
 		if(t == null)
-			throw new NullPointerException();
+			return;
 		getDao().update(t);
 	}
 	
 	public void updateNotNull(T t){
+		if(t == null)
+			return;
 		getDao().updateNotNull(t);
 	}
 	
 	public void updateBatch(List<T> list){
-		if(list == null)
-			throw new NullPointerException();
-		if(list.size() == 0)
+		if(list == null || list.size() == 0)
 			return ;
 		if(list.size() == 1){
 			this.update(list.get(0));

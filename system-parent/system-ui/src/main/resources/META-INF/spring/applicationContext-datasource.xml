@@ -58,6 +58,7 @@
         <property name="dataSource">
             <ref bean="dataSource"/>
         </property>
+		<property name="maxRows" value="1000"></property>
    	</bean>
    	
    	<bean id="defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler"/>
