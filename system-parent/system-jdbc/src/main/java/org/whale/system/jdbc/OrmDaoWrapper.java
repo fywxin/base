@@ -26,63 +26,71 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 	private BaseDaoFilterService<T, PK> filter;
 
 	@Override
-	public void save(T t) {
+	public int save(T t) {
 		filter.exeBeforeSave(t, this);
-		super.save(t);
+		int i = super.save(t);
 		filter.exeAfterSave(t, this);
+		return i;
 	}
 
 	@Override
-	public void saveBatch(List<T> list) {
+	public int[] saveBatch(List<T> list) {
 		filter.exeBeforeSaveBatch(list, this);
-		super.saveBatch(list);
+		int[] intArr = super.saveBatch(list);
 		filter.exeAfterSaveBatch(list, this);
+		return intArr;
 	}
 
 	@Override
-	public void update(T t) {
+	public int update(T t) {
 		filter.exeBeforeUpdate(t, this);
-		super.update(t);
+		int i = super.update(t);
 		filter.exeAfterUpdate(t, this);
+		return i;
 	}
 	
 	@Override
-	public void updateNotNull(T t) {
+	public int updateNotNull(T t) {
 		filter.exeBeforeUpdateNotNull(t, this);
-		super.updateNotNull(t);
+		int i = super.updateNotNull(t);
 		filter.exeAfterUpdateNotNull(t, this);
+		return i;
 	}
 
 	@Override
-	public void updateBatch(List<T> list) {
+	public int[] updateBatch(List<T> list) {
 		filter.exeBeforeUpdateBatch(list, this);
-		super.updateBatch(list);
+		int[] intArr = super.updateBatch(list);
 		filter.exeAfterUpdateBatch(list, this);
+		return intArr;
 	}
 
 	@Override
-	public void delete(PK id) {
+	public int delete(PK id) {
 		filter.exeBeforeDelete(id, this);
-		super.delete(id);
+		int i = super.delete(id);
 		filter.exeAfterDelete(id, this);
+		return i;
 	}
 
 	@Override
-	public void deleteBatch(List<PK> ids) {
+	public int[] deleteBatch(List<PK> ids) {
 		filter.exeBeforeDeleteBatch(ids, this);
-		super.deleteBatch(ids);
+		int[] intArr = super.deleteBatch(ids);
 		filter.exeAfterDeleteBatch(ids, this);
+		return intArr;
 	}
 	
-	public void delete(String sql, Object... objs){
-		this.delete(Find.newQuery(sql, objs));
+	public int delete(String sql, Object... objs){
+		return this.delete(Find.newQuery(sql, objs));
 	}
 
 	@Override
-	public void delete(Iquery query) {
+	public int delete(Iquery query) {
 		filter.exeBeforeDelete(query, this);
-		super.delete(query);
+		int i = super.delete(query);
 		filter.exeAfterDelete(query, this);
+		return i;
 	}
 
 	@Override

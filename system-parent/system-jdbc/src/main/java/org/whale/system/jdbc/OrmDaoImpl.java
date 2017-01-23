@@ -71,7 +71,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 2. oracle 采用序列生成，所以无需主键回填
 	 * @param t
 	 */
-	public void save(T t){
+	public int save(T t){
 		final OrmValue ormValue = this.valueBuilder.getSave(t);
 		OrmColumn idCol = this._getOrmTable().getIdCol();
 		Object idVal = ReflectionUtil.getFieldValue(t, idCol.getAttrName());
@@ -102,7 +102,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 
 				if (ormTable.getUnique() && i == 0){
 					logger.info("存在重复记录，该插入被忽略 {}", t);
-					return;
+					return 0;
 				}
 
 				Field idFile = idCol.getField();
@@ -119,74 +119,82 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				} catch (Exception e) {
 					logger.error("设置主键值异常", e);
 				}
+				return i;
 			}else if(DbKind.isOracle()){
-
+				return 0;
 			}
 		}else{
-			this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
+			return this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
 		}
+		return 0;
 	}
 	
 	/**
 	 * 批量保存对象，效率更高，不会返回主键
 	 * @param list
 	 */
-	public void saveBatch(List<T> list){
+	public int[] saveBatch(List<T> list){
 		if(list == null || list.size() < 1)
-			return ;
+			return new int[0];
 		if(list.size() == 1){
-			this.save(list.get(0));
-			return ;
+			int[] intArr = new int[1];
+			int i =this.save(list.get(0));
+			intArr[0] = i;
+			return intArr;
 		}
 		OrmValue ormValues = this.valueBuilder.getSave(list);
-		if(ormValues == null) 
-			return ;
+		if(ormValues == null)
+			return new int[0];
 		
-		this.batch(ormValues);
+		return this.batch(ormValues);
     }
 	
 	/**
 	 * 更新对象
 	 * @param t
 	 */
-	public void update(T t){
+	public int update(T t){
 		OrmValue ormValues = this.valueBuilder.getUpdate(t);
 		if(ormValues == null) 
-			return ;
+			return 0;
 		
 		int col = this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
 		//乐观锁， 锁已过期，更新记录数为0，抛出异常
 		if(this._getOrmTable().getOptimisticLockCol() != null && col == 0){
 			throw new StaleObjectStateException("乐观锁，当前版本 ["+AnnotationUtil.getFieldValue(t, this._getOrmTable().getOptimisticLockCol().getField())+"] 已过期，更新失败！");
 		}
+		return col;
 	}
 	
 	@Override
-	public void updateNotNull(T t) {
+	public int updateNotNull(T t) {
 		OrmValue ormValue = this.valueBuilder.getUpdateNotNull(t);
 		if(ormValue == null)
-			return ;
+			return 0;
 		int col = this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
 		//乐观锁， 锁已过期，更新记录数为0，抛出异常
 		if(this._getOrmTable().getOptimisticLockCol() != null && col == 0){
 			throw new StaleObjectStateException("乐观锁，当前版本 ["+AnnotationUtil.getFieldValue(t, this._getOrmTable().getOptimisticLockCol().getField())+"] 已过期，更新失败！");
 		}
+		return col;
 	}
 	
 	/**
 	 * 批量更新对象，效率更高
 	 * @param list
 	 */
-	public void updateBatch(List<T> list){
-		if(list == null || list.size() < 1) return ;
+	public int[] updateBatch(List<T> list){
+		if(list == null || list.size() < 1) return new int[0];
 		if(list.size() == 1){
-			this.update(list.get(0));
-			return ;
+			int[] intArr = new int[1];
+			int i = this.update(list.get(0));
+			intArr[0] = i;
+			return intArr;
 		}
 		
 		OrmValue ormValues = this.valueBuilder.getUpdate(list);
-		if(ormValues == null) 
-			return ;
+		if(ormValues == null)
+			return new int[0];
 		
 		//乐观锁， 锁已过期，更新记录数为!=1，抛出异常
 		int[] rs = this.batch(ormValues);
@@ -195,42 +203,45 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				throw new StaleObjectStateException("乐观锁，批量更新失败！");
 			}
 		}
+		return rs;
 	}
 	
 	/**
 	 * 删除对象
 	 * @param id
 	 */
-	public void delete(PK id){
+	public int delete(PK id){
 		OrmValue ormValues = this.valueBuilder.getDelete(getClazz(), id);
 		if(ormValues == null) 
-			return ;
+			return 0;
 		
-		this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
+		return this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
 	}
 	
 	/**
 	 * 删除多个对象
 	 * @param ids
 	 */
-	public void deleteBatch(List<PK> ids) {
-		if(ids == null || ids.size() < 1) return ;
+	public int[] deleteBatch(List<PK> ids) {
+		if(ids == null || ids.size() < 1) return new int[0];
 		if(ids.size() == 1){
-			this.delete(ids.get(0));
-			return ;
+			int[] intArr = new int[1];
+			int i = this.delete(ids.get(0));
+			intArr[0] = i;
+			return intArr;
 		}
 		OrmValue ormValues = this.valueBuilder.getClear(getClazz(), ids);
-		if(ormValues == null) 
-			return ;
+		if(ormValues == null)
+			return new int[0];
 		
-		this.batch(ormValues);
+		return this.batch(ormValues);
 	}
 	
 	/**
 	 * 按自定义条件删除
 	 */
-	public void delete(Iquery query){
-		this.jdbcTemplate.update(query.getSql(SqlType.DEL), query.getArgs());
+	public int delete(Iquery query){
+		return this.jdbcTemplate.update(query.getSql(SqlType.DEL), query.getArgs());
 	}
 	
 	/**

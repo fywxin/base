@@ -29,14 +29,37 @@ public class ListUtil {
         return list == null || list.isEmpty();
     }
 
+    public static <T> List<T> copy(List<T> list){
+        if (list == null){
+            return null;
+        }
+        List<T> copys = new ArrayList<T>(list.size());
+        for (T t: list){
+            copys.add(t);
+        }
+        return copys;
+    }
+
+
     /**
-     * 列表是否不为空
-     *
+     * 将列表内容倒排序
      * @param list
-     * @return
+     * @param <T>
      */
-    public static boolean isNotEmpty(Collection<?> list) {
-        return !isEmpty(list);
+    public static <T> List<T> reverse(List<T> list) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            int ih = i;
+            int it = size - 1 - i;
+            if (ih == it || ih > it) {
+                break;
+            }
+            T ah = list.get(ih);
+            T swap = list.get(it);
+            list.set(ih, swap);
+            list.set(it, ah);
+        }
+        return list;
     }
 
     /**
@@ -155,69 +178,14 @@ public class ListUtil {
     public static <T> String join(Collection<T> list) {
         return join(list, DEFAULT_DELIMITER);
     }
-    
-    /**
-	 * 
-	 *功能说明: 列表转数组
-	 *创建人: wjs
-	 *创建时间:2013-3-14 下午5:37:16
-	 *@param list
-	 *@return int[]
-	 *
-	 */
-	public static int[] toArray(List<Integer> list){
-		if(list == null || list.size() < 1)
-			return null;
-		for(int i=0; i<list.size(); i++){
-			if(list.get(i) == null)
-				list.remove(i);
-		}
-		
-		int[] types = new int[list.size()];
-		for(int i=0; i<list.size(); i++){
-			types[i] = list.get(i);
-		}
-		return types;
-	}
 
     /**
-     * list对象转为Array对象
-     *
-     * @param list
-     * @return
-     */
-    public static String[] toArray(Collection<String> list) {
-        if (list == null) {
-            return null;
-        }
-
-        String[] ts = new String[list.size()];
-        list.toArray(ts);
-        return ts;
-    }
-
-    /**
-     * 数组转List对象
-     *
-     * @param array
+     * 合并数组里面的重复字段
+     * @param c
      * @param <T>
      * @return
      */
-    public static <T> List<T> asList(T... array) {
-        if (array == null) {
-            return null;
-        }
-
-        List<T> list = new ArrayList<T>(array.length);
-        for (T t : array) {
-            if (t != null) {
-                list.add(t);
-            }
-        }
-        return list;
-    }
-
-    public static <T> List<T> unique(List<T> c) {
+    public static <T> Collection<T> unique(Collection<T> c) {
         if (c != null && c.size() > 0) {
             Map<T, Integer> map = new LinkedHashMap<T, Integer>();
             for (T o : c) {
@@ -228,117 +196,9 @@ public class ListUtil {
         return c;
     }
 
-    public static <T extends Object> List<String> trim(List<T> list) {
-        if (list == null) {
-            return null;
-        }
-        List<String> newList = new ArrayList<String>();
-        for (Object o : list) {
-            if (o != null) {
-                newList.add(String.valueOf(o).trim());
-            }
-        }
-        return newList;
-    }
 
-    public static <K, V> Map<K, V> hashMap(K key, V value) {
-        Map<K, V> map = new HashMap<K, V>();
-        map.put(key, value);
-        return map;
-    }
 
-    public static Map hashMap(Object... keyValue ) {
-        Map map = new HashMap(keyValue.length);
-        for (int i=0; i<keyValue.length; i=i+2){
-            map.put(keyValue[i], keyValue[i+1]);
-        }
-        return map;
-    }
 
-    public static <T> Set<T> toHashSet(Collection<T> c) {
-        if (isEmpty(c)) {
-            return null;
-        }
-        Set<T> set = new HashSet<T>(c.size()*2);
-        set.addAll(c);
-        return set;
-    }
-    
-    /**
-     * 将多个数组，合并成一个数组。如果这些数组为空，则返回 null
-     * 
-     * @param arys
-     *            数组对象
-     * @return 合并后的数组对象
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T[] merge(T[]... arys) {
-        Queue<T> list = new LinkedList<T>();
-        for (T[] ary : arys)
-            if (null != ary)
-                for (T e : ary)
-                    if (null != e)
-                        list.add(e);
-        if (list.isEmpty())
-            return null;
-        Class<T> type = (Class<T>) list.peek().getClass();
-        return list.toArray((T[]) Array.newInstance(type, list.size()));
-    }
-
-    /**
-     * 将列表内容倒排序
-     * @param list
-     * @param <T>
-     */
-    public static <T> List<T> reverse(List<T> list) {
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
-            int ih = i;
-            int it = size - 1 - i;
-            if (ih == it || ih > it) {
-                break;
-            }
-            T ah = list.get(ih);
-            T swap = list.get(it);
-            list.set(ih, swap);
-            list.set(it, ah);
-        }
-        return list;
-    }
-    
-    /**
-     * 较方便的创建一个列表，比如：
-     * 
-     * <pre>
-     * List&lt;Pet&gt; pets = Lang.list(pet1, pet2, pet3);
-     * </pre>
-     * 
-     * 注，这里的 List，是 ArrayList 的实例
-     * 
-     * @param eles
-     *            可变参数
-     * @return 列表对象
-     */
-    public static <T> ArrayList<T> list(T... eles) {
-        ArrayList<T> list = new ArrayList<T>(eles.length);
-        for (T ele : eles)
-            list.add(ele);
-        return list;
-    }
-    
-    /**
-     * 创建一个 Hash 集合
-     * 
-     * @param eles
-     *            可变参数
-     * @return 集合对象
-     */
-    public static <T> Set<T> set(T... eles) {
-        Set<T> set = new HashSet<T>();
-        for (T ele : eles)
-            set.add(ele);
-        return set;
-    }
 
     /**
      * 获取对象列表中的 特地字段元素值
@@ -382,9 +242,69 @@ public class ListUtil {
         for(Object obj : list){
             if(obj == null)
                 continue;
-            rs.add((E)ReflectionUtil.readField(f, obj, true));
+            rs.add((E) ReflectionUtil.readField(f, obj, true));
         }
         return rs;
+    }
+
+    /**
+     * colName 的值唯一，建立索引
+     * List<T> 转 Map<colVal, T>
+     *
+     * @param list
+     * @param colName
+     * @param <T>
+     * @return
+     */
+    public static <K, T> Map<K, T> list2Map(List<T> list, String colName){
+        if(list == null || list.size()<1 || Strings.isBlank(colName))
+            return null;
+
+        Field f = ReflectionUtil.getDeclaredField(list.get(0), colName);
+        if (f == null){
+            throw new RuntimeException("字段"+colName+"找不到");
+        }
+        Map<K, T> map = new HashMap<K, T>(list.size() * 2);
+        for(T t : list){
+            if(t == null)
+                continue;
+            map.put((K) ReflectionUtil.readField(f, t, true), t);
+        }
+        return map;
+    }
+
+    /**
+     * colName 的值存在重复，按colName分组
+     * List<T> 转 Map<colVal, List<T>>
+     *
+     * @param list
+     * @param colName
+     * @param <T>
+     * @return
+     */
+    public static <K, T> Map<K, List<T>> list2MapGroup(List<T> list, String colName){
+        if(list == null || list.size()<1 || Strings.isBlank(colName))
+            return null;
+
+        Field f = ReflectionUtil.getDeclaredField(list.get(0), colName);
+        if (f == null){
+            throw new RuntimeException("字段"+colName+"找不到");
+        }
+        Map<K, List<T>> map = new HashMap<K, List<T>>(list.size());
+        List<T> tmp = null;
+        K colVal = null;
+        for(T t : list){
+            if(t == null)
+                continue;
+            colVal = (K)ReflectionUtil.readField(f, t, true);
+            tmp = map.get(colVal);
+            if (tmp == null){
+                tmp = new ArrayList<T>();
+                map.put(colVal, tmp);
+            }
+            tmp.add(t);
+        }
+        return map;
     }
 
     public static String joinCol(List<?> list, String colName) {
@@ -534,5 +454,85 @@ public class ListUtil {
         }
         return list;
     }
+
+
+    /**
+     * 数组转List对象
+     *
+     * @param array
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> asList(T... array) {
+        if (array == null) {
+            return null;
+        }
+
+        List<T> list = new ArrayList<T>(array.length);
+        for (T t : array) {
+            list.add(t);
+        }
+        return list;
+    }
+
+
+    public static <T> Set<T> asSet(T... array) {
+        if (array == null) {
+            return null;
+        }
+        Set<T> set = new HashSet<T>(array.length*2);
+        for (T t : array) {
+            set.add(t);
+        }
+        return set;
+    }
+
+
+
+    public static Map asMap(Object... keyValue ) {
+        if (keyValue.length % 2 != 0){
+            throw new IllegalArgumentException("参数个数必须是偶数个");
+        }
+        Map map = new HashMap(keyValue.length);
+        for (int i=0; i<keyValue.length; i=i+2){
+            map.put(keyValue[i], keyValue[i+1]);
+        }
+        return map;
+    }
+
+    /**
+     *
+     *功能说明: 列表转数组
+     *创建人: wjs
+     *创建时间:2013-3-14 下午5:37:16
+     *@param list
+     *@return int[]
+     *
+     */
+    public static int[] toArray(List<Integer> list){
+        if(list == null || list.size() < 1)
+            return null;
+        for(int i=0; i<list.size(); i++){
+            if(list.get(i) == null)
+                list.remove(i);
+        }
+
+        int[] types = new int[list.size()];
+        for(int i=0; i<list.size(); i++){
+            types[i] = list.get(i);
+        }
+        return types;
+    }
+
+    public static <T> Set<T> toHashSet(Collection<T> c) {
+        if (isEmpty(c)) {
+            return null;
+        }
+        Set<T> set = new HashSet<T>(c.size()*2);
+        set.addAll(c);
+        return set;
+    }
+
+
 }
 

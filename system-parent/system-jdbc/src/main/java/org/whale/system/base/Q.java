@@ -374,6 +374,29 @@ public class Q implements Iquery{
 	}
 
 	/**
+	 * 不在范围查询 not in
+	 * @param col
+	 * @param list
+	 * @return
+	 */
+	public Q notIn(String col, Collection list){
+		if(list == null || list.size() < 1){
+			return this;
+		}else if(list.size() == 1){
+			return this.eq(col, list.iterator().next());
+		}else{
+			where.append(" AND t.").append(col).append(" NOT IN (");
+			for(Object val : list){
+				where.append("?,");
+			}
+			where.deleteCharAt(where.length()-1);
+			where.append(") ");
+			args.addAll(list);
+		}
+		return this;
+	}
+
+	/**
 	 * 区间查询 between
 	 * @param col
 	 * @param from

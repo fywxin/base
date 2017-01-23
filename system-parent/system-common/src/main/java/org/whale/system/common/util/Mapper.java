@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.util.*;
 
 /**
+ * TODO 更新为策略模式，缓存类-字段-赋值策略  提升效率
  * Created by 王金绍 on 2016/12/13.
  */
 public class Mapper {
@@ -57,9 +58,9 @@ public class Mapper {
                 if(field == null){
                     field = lowCaseFieldMap.get(entry.getKey().toLowerCase());
                     if (field != null){
-                        logger.warn("类[" + clazz + "]属性[" + field.getName() + "]与数据库字段[" + entry.getKey() + "]大小写不一致");
+                        logger.info("类[" + clazz + "]属性[" + field.getName() + "]与数据库字段[" + entry.getKey() + "]大小写不一致");
                     }else{
-                        logger.warn("类[" + clazz + "]属性[" + field.getName() + "]查找不到");
+                        logger.info("类[" + clazz + "]属性[" + entry.getKey() + "]查找不到");
                         continue;
                     }
                 }
@@ -71,20 +72,16 @@ public class Mapper {
                     }
                 }catch(IllegalArgumentException e){
                     //类型为日期
-                    if(field.getType().equals(Date.class) && entry.getValue() != null){
-                        if(entry.getValue().getClass().equals(Long.class)){
-                            ReflectionUtil.writeField(field, m, TimeUtil.parse2Date((Long) entry.getValue()), true);
-                        }else if(entry.getValue().getClass().equals(String.class)){
-                            ReflectionUtil.writeField(field, m, TimeUtil.parseTime((String) entry.getValue()), true);
-                        }else{
-                            throw e;
+                    if(field.getType().equals(Date.class)){
+                        Date dateVal = CastValUtil.castToDate(entry.getValue());
+                        if (dateVal != null){
+                            ReflectionUtil.writeField(field, m, dateVal, true);
                         }
                         //类型为boolean
                     } else if((field.getType().equals(Boolean.class) || field.getType().getName().equals("boolean"))){
-                        if (entry.getValue() instanceof Number){
-                            ReflectionUtil.writeField(field, m, ((Number) entry.getValue()).shortValue() > 0, true);
-                        }else if (entry.getValue() instanceof String){
-                            ReflectionUtil.writeField(field, m, "true".equalsIgnoreCase((String)entry.getValue()), true);
+                        Boolean booleanVal = CastValUtil.castToBoolean(entry.getValue());
+                        if (booleanVal != null){
+                            ReflectionUtil.writeField(field, m, booleanVal, true);
                         }
                         //值为数字
                     }else if (entry.getValue() instanceof Number){
