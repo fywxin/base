@@ -67,8 +67,8 @@ public class CodeRouter extends BaseRouter {
 			
 			domain.setDomainSqlName(tableName);
 			domain.setDomainCnName(table.get("comments") == null ? "" : table.get("comments").toString());
-			if(tableName.startsWith("tb_")){
-				tableName = tableName.substring(3);
+			if(tableName.startsWith("tb_base_")){
+				tableName = tableName.substring(8);
 			}
 			domain.setDomainName(OrmUtil.sql2Camel(tableName));
 			domain.setAttrs(attrs);
@@ -78,7 +78,7 @@ public class CodeRouter extends BaseRouter {
 				for(Map<String, Object> col : cols){
 					attr = new Attr();
 					attr.setSqlName(col.get("name").toString());
-					attr.setCnName(col.get("comments") == null ? "" : col.get("comments").toString());
+					attr.setCnName(col.get("comments") == null ? "" : col.get("comments").toString().replaceAll(",", "，"));
 					String dbType = col.get("jdbcType").toString().toLowerCase();
 					attr.setDbType(dbType);
 					attr.setIsNull("1".equals(col.get("isNull").toString()));
@@ -90,8 +90,8 @@ public class CodeRouter extends BaseRouter {
 					}
 					attr.setInOrder(col.get("sort") == null ? 0 : Integer.parseInt(col.get("sort").toString()));
 					
-					//attr.setName(OrmUtil.sql2Camel(attr.getSqlName()));
-					attr.setName(attr.getSqlName());
+					attr.setName(OrmUtil.sql2Camel(attr.getSqlName()));
+					//attr.setName(attr.getSqlName());
 					
 					if(dbType.equalsIgnoreCase("tinyint") || dbType.equalsIgnoreCase("smallint") || dbType.equalsIgnoreCase("mediumint")){
 						attr.setType("Integer");
@@ -114,6 +114,10 @@ public class CodeRouter extends BaseRouter {
 					}else if(dbType.equalsIgnoreCase("datetime") || dbType.equalsIgnoreCase("date") || dbType.equalsIgnoreCase("timestamp")){
 						attr.setType("Date");
 					}else if(dbType.equalsIgnoreCase("bit") || dbType.equalsIgnoreCase("bit(1)")){
+						attr.setType("Boolean");
+					}else if(dbType.startsWith("decimal")){
+						attr.setType("Double");
+					}else if(dbType.equalsIgnoreCase("tinyint(1)")){
 						attr.setType("Boolean");
 					}else{
 						attr.setType("String");
