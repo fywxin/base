@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.whale.system.common.exception.SysException;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
@@ -39,7 +40,7 @@ public class Mapper {
             Class<?> glass = clazz;
             while (!glass.getName().equals("java.lang.Object")){
                 for(Field field : glass.getDeclaredFields()){
-                    if (!fieldMap.containsKey(field.getName()) && (field.getModifiers()>>3) % 2 != 1 && (field.getModifiers()>>4) % 2 != 1){//非static 或final 字段
+                    if (!fieldMap.containsKey(field.getName()) && (!Modifier.isStatic(field.getModifiers()) && !Modifier.isFinal(field.getModifiers()))){//非static 或final 字段
                         fieldMap.put(field.getName(), field);
                         lowCaseFieldMap.put(field.getName().toLowerCase(), field);
                     }

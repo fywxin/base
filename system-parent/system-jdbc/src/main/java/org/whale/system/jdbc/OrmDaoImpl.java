@@ -306,9 +306,9 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				//出现多个from值时，采用保守方式获取总记录数，但会降低效率
 				//TODO 是否要移除order by
 				if(temp.substring((index = temp.lastIndexOf("from"))+5).lastIndexOf("from") == -1){
-					countSql = "select count(1) "+sql.substring(index);
+					countSql = "select count(*) "+sql.substring(index);
 				}else{
-					countSql = "select count(1) from ("+sql+")";
+					countSql = "select count(*) from ("+sql+")";
 				}
 			}
 			page.setTotal(this.jdbcTemplate.queryForLong(countSql,params.toArray()));
@@ -338,8 +338,11 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				page.setData((List<Map<String, Object>>)this.jdbcTemplate.query(sql, params.toArray(), new RowMapperResultSetExtractor(new ColumnMapRowMapper(), page.getPageSize())));
 			//指定返回类型，通常用于接口，这直接返回该类型结果
 			}else{
-				page.setData((List<?>) this.jdbcTemplate.query(sql, params.toArray(), page.getPageSize() > 50 ? anyRowMapperResultSetExtractor : new RowMapperResultSetExtractor(RowMapperBuilder.get(page.getDataClass()), page.getPageSize())));
-			}
+				if (page.getDataClass().equals(this.getClazz())){
+					page.setData((List<?>) this.jdbcTemplate.query(sql, params.toArray(), page.getPageSize() > 50 ? anyRowMapperResultSetExtractor : new RowMapperResultSetExtractor(RowMapperBuilder.get(page.getDataClass()), page.getPageSize())));
+				}else{
+					page.setData(this.jdbcTemplate.queryForList(sql, params.toArray()));
+				}			}
 		}else{
 			page.setData(new ArrayList(0));
 		}

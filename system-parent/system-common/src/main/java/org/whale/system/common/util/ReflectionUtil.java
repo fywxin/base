@@ -1,14 +1,6 @@
 package org.whale.system.common.util;
 
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -673,6 +665,60 @@ public class ReflectionUtil {
 //        );
 		return clazz.isPrimitive() || clazz.equals(String.class)|| clazz.getSuperclass().equals(Number.class) || clazz.equals(Date.class);
 	}
-	
+
+
+	/**
+	 * 实例化泛型的实际类型参数
+	 * http://jisonami.iteye.com/blog/2282650
+	 *
+	 * @param type
+	 * @throws Exception
+	 */
+	public static Class getActualTypeArguments(Type type) throws Exception{
+		logger.debug("该类型是" + type);
+		// 参数化类型
+		if ( type instanceof ParameterizedType ) {
+			Type[] typeArguments = ((ParameterizedType)type).getActualTypeArguments();
+			for (int i = 0; i < typeArguments.length; i++) {
+				// 类型变量
+				if(typeArguments[i] instanceof TypeVariable){
+					logger.debug("第" + (i + 1) + "个泛型参数类型是类型变量" + typeArguments[i] + "，无法实例化。");
+				}
+				// 通配符表达式
+				else if(typeArguments[i] instanceof WildcardType){
+					logger.debug("第" + (i + 1) + "个泛型参数类型是通配符表达式" + typeArguments[i] + "，无法实例化。");
+				}
+				// 泛型的实际类型，即实际存在的类型
+				else if(typeArguments[i] instanceof Class){
+					logger.debug("第" + (i+1) +  "个泛型参数类型是:" + typeArguments[i] + "，可以直接实例化对象");
+					return (Class)typeArguments[i];
+				}
+			}
+			// 参数化类型数组或类型变量数组
+		} else if ( type instanceof GenericArrayType) {
+			logger.debug("该泛型类型是参数化类型数组或类型变量数组，可以获取其原始类型。");
+			Type componentType = ((GenericArrayType)type).getGenericComponentType();
+			// 类型变量
+			if(componentType instanceof TypeVariable){
+				logger.debug("该类型变量数组的原始类型是类型变量" + componentType + "，无法实例化。");
+			}
+			// 参数化类型，参数化类型数组或类型变量数组
+			// 参数化类型数组或类型变量数组也可以是多维的数组，getGenericComponentType()方法仅仅是去掉最右边的[]
+			else {
+				// 递归调用方法自身
+				getActualTypeArguments(componentType);
+			}
+		} else if( type instanceof TypeVariable){
+			logger.debug("该类型是类型变量");
+		}else if( type instanceof WildcardType){
+			logger.debug("该类型是通配符表达式");
+		} else if( type instanceof Class ){
+			logger.debug("该类型不是泛型类型");
+			return (Class) type;
+		} else {
+			throw new Exception();
+		}
+		return null;
+	}
 
 }

@@ -159,7 +159,7 @@ public class Q implements Iquery{
 	public String sqlCount() {
 		if(countSql == null){
 			StringBuilder strb = new StringBuilder(100);
-			strb.append("SELECT COUNT(1) FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(where.toString());
+			strb.append("SELECT COUNT(*) FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(where.toString());
 			if(limit != null){
 				strb.append(limit);
 			}
