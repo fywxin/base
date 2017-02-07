@@ -76,56 +76,63 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		final OrmValue ormValue = this.valueBuilder.getSave(t);
 		OrmColumn idCol = this._getOrmTable().getIdCol();
 		Object idVal = ReflectionUtil.getFieldValue(t, idCol.getAttrName());
+		if (idCol.getIdIgnore()){
+			this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
+		}else {
+			boolean idIsEmpty = (idVal == null || ((idVal instanceof Number) && ((Number) idVal).intValue() == 0));
+			if (!idCol.getIdAuto() && idIsEmpty) {
+				throw new OrmException("非自增主键，ID不能为空或0");
+			}
+			//防止id 被非空过滤器设置为0时，不去主动获取id
+			if (idCol.getIdAuto() && idIsEmpty) {
+				if (DbKind.isMysql()) {//mysql 获取主键
+					KeyHolder keyHolder = new GeneratedKeyHolder();
+					int i = this.jdbcTemplate.update(new PreparedStatementCreator() {
 
-		boolean idIsEmpty = (idVal == null || ((idVal instanceof Number) && ((Number) idVal).intValue() == 0));
-		if (!idCol.getIdAuto() && idIsEmpty){
-			throw new OrmException("非自增主键，ID不能为空或0");
-		}
-		//防止id 被非空过滤器设置为0时，不去主动获取id
-		if(idCol.getIdAuto() && idIsEmpty){
-			if (DbKind.isMysql()){//mysql 获取主键
-				KeyHolder keyHolder = new GeneratedKeyHolder();
-				int i = this.jdbcTemplate.update(new PreparedStatementCreator() {
-
-					@Override
-					public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-						PreparedStatement ps = con.prepareStatement(ormValue.getSql(), Statement.RETURN_GENERATED_KEYS);
-						if (ormValue.getArgs() != null) {
-							int i = 1;
-							for (Object obj : ormValue.getArgs()) {
-								ps.setObject(i++, obj);
+						@Override
+						public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+							PreparedStatement ps = con.prepareStatement(ormValue.getSql(), Statement.RETURN_GENERATED_KEYS);
+							if (ormValue.getArgs() != null) {
+								int i = 1;
+								for (Object obj : ormValue.getArgs()) {
+									ps.setObject(i++, obj);
+								}
 							}
+							return ps;
 						}
-						return ps;
+
+					}, keyHolder);
+
+					if (ormTable.getUnique() && i == 0) {
+						logger.info("存在重复记录，该插入被忽略 {}", t);
+						return 0;
 					}
 
-				}, keyHolder);
-
-				if (ormTable.getUnique() && i == 0){
-					logger.info("存在重复记录，该插入被忽略 {}", t);
+					Field idFile = idCol.getField();
+					idFile.setAccessible(true);
+					try {
+						if (idCol.getType() == Types.BIGINT) {
+							ReflectionUtil.writeField(idFile, t, keyHolder.getKey().longValue());
+						} else if (idCol.getType() == Types.INTEGER) {
+							ReflectionUtil.writeField(idFile, t, keyHolder.getKey().intValue());
+						} else {
+							logger.warn("自增主键类型存在问题，非Integer或Long");
+							ReflectionUtil.writeField(idFile, t, keyHolder.getKey().shortValue());
+						}
+					} catch (Exception e) {
+						logger.error("设置主键值异常", e);
+					}
+					return i;
+				} else if (DbKind.isOracle()) {
 					return 0;
 				}
-
-				Field idFile = idCol.getField();
-				idFile.setAccessible(true);
-				try {
-					if (idCol.getType() == Types.BIGINT){
-						ReflectionUtil.writeField(idFile, t, keyHolder.getKey().longValue());
-					}else if (idCol.getType() == Types.INTEGER){
-						ReflectionUtil.writeField(idFile, t, keyHolder.getKey().intValue());
-					}else{
-						logger.warn("自增主键类型存在问题，非Integer或Long");
-						ReflectionUtil.writeField(idFile, t, keyHolder.getKey().shortValue());
-					}
-				} catch (Exception e) {
-					logger.error("设置主键值异常", e);
+			} else {
+				if (idVal == null){
+					throw new OrmException("非自增主键，ID不能为空或0");
+				}else {
+					return this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
 				}
-				return i;
-			}else if(DbKind.isOracle()){
-				return 0;
 			}
-		}else{
-			return this.jdbcTemplate.update(ormValue.getSql(), ormValue.getArgs());
 		}
 		return 0;
 	}
@@ -158,7 +165,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	@Override
 	public int update(T t){
 		OrmValue ormValues = this.valueBuilder.getUpdate(t);
-		if(ormValues == null) 
+			if (ormValues == null)
 			return 0;
 		
 		int col = this.jdbcTemplate.update(ormValues.getSql(), ormValues.getArgs());
@@ -168,8 +175,8 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		}
 		return col;
 	}
-	
-	@Override
+
+		@Override
 	public int updateNotNull(T t) {
 		OrmValue ormValue = this.valueBuilder.getUpdateNotNull(t);
 		if(ormValue == null)
@@ -214,7 +221,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 删除对象
 	 * @param id
 	 */
-	@Override
+		@Override
 	public int delete(PK id){
 		OrmValue ormValues = this.valueBuilder.getDelete(getClazz(), id);
 		if(ormValues == null) 
@@ -242,12 +249,12 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		
 		return this.batch(ormValues);
 	}
-	
-	/**
-	 * 按自定义条件删除
-	 */
-	@Override
-	public int delete(Iquery query){
+
+		/**
+		 * 按自定义条件删除
+		 */
+		@Override
+		public int delete(Iquery query){
 		return this.jdbcTemplate.update(query.getSql(SqlType.DEL), query.getArgs());
 	}
 	
@@ -281,10 +288,10 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 获取所有记录
 	 * @return
 	 */
-	@Override
+		@Override
 	public List<T> queryAll(){
 		OrmValue ormValues = this.valueBuilder.getAll(this.getClazz());
-		if(ormValues == null) return null;
+			if (ormValues == null) return null;
 		return this.jdbcTemplate.query(ormValues.getSql(), anyRowMapperResultSetExtractor);
 	}
 	

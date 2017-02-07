@@ -19,4 +19,7 @@ public @interface Id {
 
 	/**是否自增主键，false时，值有开发者提供 */
 	boolean auto() default true;
+
+	/**是否虚拟id，可忽略 */
+	boolean ignore() default false;
 }

@@ -23,6 +23,8 @@ public class OrmColumn extends Acolumn {
 	private boolean isId = false;
 	//主键是否自增，非自增主键，值由开发人员提供，如UUID
 	private boolean idAuto = true;
+	//主键id是否可以忽略
+	private boolean idIgnore = false;
 	//是否复合主键
 	//private boolean isPk = false;
 	//是否唯一
@@ -167,7 +169,12 @@ public class OrmColumn extends Acolumn {
 	public void setValue(Object value) {
 		this.value = value;
 	}
-
+	public boolean getIdIgnore() {
+		return idIgnore;
+	}
+	public void setIdIgnore(boolean idIgnore) {
+		this.idIgnore = idIgnore;
+	}
 
 	@Override
 	public String toString() {

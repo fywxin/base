@@ -336,6 +336,7 @@ public class DefaultOrmTableBuilder implements OrmTableBuilder {
 		if(id != null){
 			ormColumn.setIsId(true);
 			ormColumn.setIdAuto(id.auto());
+			ormColumn.setIdIgnore(id.ignore());
 		}
 		
 		//字段附加SQL定义

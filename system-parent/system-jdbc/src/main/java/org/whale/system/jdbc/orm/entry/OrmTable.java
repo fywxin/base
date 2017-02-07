@@ -95,6 +95,9 @@ public class OrmTable extends Atable {
 		}
 		StringBuilder strb = new StringBuilder();
 		for(OrmColumn ormCol : ormCols){
+			if (ormCol.getIsId() && ormCol.getIdIgnore()){
+				continue;
+			}
 			strb.append(",").append(as).append(".").append(ormCol.getSqlName());
 		}
 		if(strb.length() > 1){
