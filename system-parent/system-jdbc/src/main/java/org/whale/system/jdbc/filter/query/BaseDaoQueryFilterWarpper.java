@@ -80,10 +80,10 @@ public abstract class BaseDaoQueryFilterWarpper<T extends Serializable,PK extend
 	}
 
 	@Override
-	public void beforeContain(IOrmDao<T, PK> baseDao, PK id){}
+	public void beforeExist(IOrmDao<T, PK> baseDao, PK id){}
 
 	@Override
-	public void afterContain(IOrmDao<T, PK> baseDao, boolean contain, PK id){}
+	public void afterExist(IOrmDao<T, PK> baseDao, boolean contain, PK id){}
 
 	@Override
 	public void beforeQueryForList(IOrmDao<T, PK> baseDao, Iquery query) {

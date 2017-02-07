@@ -114,7 +114,7 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 * @param id 记录ID
 	 * @return
 	 */
-	boolean contain(PK id);
+	boolean exist(PK id);
 	
 	
 	List<Map<String, Object>> queryForList(Iquery query);

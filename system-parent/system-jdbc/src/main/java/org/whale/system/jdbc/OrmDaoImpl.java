@@ -386,7 +386,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @return
 	 */
 	@Override
-	public boolean contain(PK id){
+	public boolean exist(PK id){
 		return this.count(this.q().eq(this._getOrmTable().getIdCol().getSqlName(), id)) > 0;
 	}
 

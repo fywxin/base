@@ -159,6 +159,16 @@ public class DynamicReadWriteFilter<T extends Serializable,PK extends Serializab
     }
 
     @Override
+    public void beforeExist(IOrmDao<T, PK> baseDao, PK id) {
+        ThreadContext.getContext().put(ThreadContext.DYNAMIC_DS_READ_MODE_FLAG, true);
+    }
+
+    @Override
+    public void afterExist(IOrmDao<T, PK> baseDao, boolean contain, PK id) {
+        ThreadContext.getContext().remove(ThreadContext.DYNAMIC_DS_READ_MODE_FLAG);
+    }
+
+    @Override
     public void beforeQueryForList(IOrmDao<T, PK> baseDao, Iquery query) {
         ThreadContext.getContext().put(ThreadContext.DYNAMIC_DS_READ_MODE_FLAG, true);
     }

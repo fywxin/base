@@ -225,15 +225,15 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 		}
 	}
 
-	public void exeBeforeContain(IOrmDao<T, PK> baseDao, PK id) {
+	public void exeBeforeExist(IOrmDao<T, PK> baseDao, PK id) {
 		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
-			filter.beforeContain(baseDao, id);
+			filter.beforeExist(baseDao, id);
 		}
 	}
 
-	public void exeAfterContain(IOrmDao<T, PK> baseDao, boolean contain, PK id) {
+	public void exeAfterExist(IOrmDao<T, PK> baseDao, boolean contain, PK id) {
 		for(int i=queryFilters.size()-1; i>=0; i--){
-			queryFilters.get(i).afterContain(baseDao, contain, id);
+			queryFilters.get(i).afterExist(baseDao, contain, id);
 		}
 	}
 	

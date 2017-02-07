@@ -171,10 +171,10 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		return rs;
 	}
 
-	public boolean contain(PK id){
-		filter.exeBeforeContain(this, id);
-		boolean rs = super.contain(id);
-		filter.exeAfterContain(this, rs, id);
+	public boolean exist(PK id){
+		filter.exeBeforeExist(this, id);
+		boolean rs = super.exist(id);
+		filter.exeAfterExist(this, rs, id);
 		return rs;
 	}
 	
