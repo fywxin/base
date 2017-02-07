@@ -71,6 +71,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 2. oracle 采用序列生成，所以无需主键回填
 	 * @param t
 	 */
+	@Override
 	public int save(T t){
 		final OrmValue ormValue = this.valueBuilder.getSave(t);
 		OrmColumn idCol = this._getOrmTable().getIdCol();
@@ -133,6 +134,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 批量保存对象，效率更高，不会返回主键
 	 * @param list
 	 */
+	@Override
 	public int[] saveBatch(List<T> list){
 		if(list == null || list.size() < 1)
 			return new int[0];
@@ -153,6 +155,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 更新对象
 	 * @param t
 	 */
+	@Override
 	public int update(T t){
 		OrmValue ormValues = this.valueBuilder.getUpdate(t);
 		if(ormValues == null) 
@@ -183,6 +186,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 批量更新对象，效率更高
 	 * @param list
 	 */
+	@Override
 	public int[] updateBatch(List<T> list){
 		if(list == null || list.size() < 1) return new int[0];
 		if(list.size() == 1){
@@ -210,6 +214,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 删除对象
 	 * @param id
 	 */
+	@Override
 	public int delete(PK id){
 		OrmValue ormValues = this.valueBuilder.getDelete(getClazz(), id);
 		if(ormValues == null) 
@@ -222,6 +227,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 删除多个对象
 	 * @param ids
 	 */
+	@Override
 	public int[] deleteBatch(List<PK> ids) {
 		if(ids == null || ids.size() < 1) return new int[0];
 		if(ids.size() == 1){
@@ -240,6 +246,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	/**
 	 * 按自定义条件删除
 	 */
+	@Override
 	public int delete(Iquery query){
 		return this.jdbcTemplate.update(query.getSql(SqlType.DEL), query.getArgs());
 	}
@@ -249,6 +256,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * @param id
 	 * @return
 	 */
+	@Override
 	public T get(PK id){
 		OrmValue ormValues = this.valueBuilder.getGet(getClazz(), id);
 		if(ormValues == null) return null;
@@ -260,6 +268,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	/**
 	 * 按自定义条件获取
 	 */
+	@Override
 	public T get(Iquery query){
 		List<T> list = this.jdbcTemplate.query(query.getSql(SqlType.GET), query.getArgs(), oneRowMapperResultSetExtractor);
 		
@@ -272,6 +281,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 获取所有记录
 	 * @return
 	 */
+	@Override
 	public List<T> queryAll(){
 		OrmValue ormValues = this.valueBuilder.getAll(this.getClazz());
 		if(ormValues == null) return null;
@@ -281,6 +291,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	/**
 	 * 按自定义条件查询
 	 */
+	@Override
 	public List<T> query(Iquery query){
 		return this.jdbcTemplate.query(query.getSql(SqlType.QUERY), query.getArgs(), anyRowMapperResultSetExtractor);
 	}
@@ -289,7 +300,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 	 * 分页查询
 	 * @param page
 	 */
-	@SuppressWarnings("all")
+	@Override
 	public void queryPage(Page page){
 		String sql = page.sql();
 		String countSql = page.countSql();
@@ -311,7 +322,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 					countSql = "select count(*) from ("+sql+")";
 				}
 			}
-			page.setTotal(this.jdbcTemplate.queryForLong(countSql,params.toArray()));
+			page.setTotal(this.jdbcTemplate.queryForObject(countSql, params.toArray(), Long.class));
 		}
 		
 		if(page.getTotal() > 0){
@@ -359,11 +370,26 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 		page.setDataClass(null);
 	}
 
+	/**
+	 * 记录总数
+	 * @param query
+	 * @return
+	 */
 	@Override
-	@SuppressWarnings("all")
 	public Integer count(Iquery query) {
-		return this.jdbcTemplate.queryForInt(query.getSql(SqlType.COUNT), query.getArgs());
+		return this.jdbcTemplate.queryForObject(query.getSql(SqlType.COUNT), query.getArgs(), Integer.class);
 	}
+
+	/**
+	 * 数据库是否存在本记录
+	 * @param id 记录ID
+	 * @return
+	 */
+	@Override
+	public boolean contain(PK id){
+		return this.count(this.q().eq(this._getOrmTable().getIdCol().getSqlName(), id)) > 0;
+	}
+
 	
 //--------------------------------------内部方法-----------------------------------------------
 	

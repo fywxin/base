@@ -83,7 +83,6 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 */
 	T get(Iquery query);
 	
-	
 	/**
 	 * 返回所有记录， 按id排序
 	 * @return
@@ -109,6 +108,13 @@ public interface IOrmDao<T extends Serializable,PK extends Serializable> {
 	 * @return
 	 */
 	Integer count(Iquery query);
+
+	/**
+	 * 数据库是否存在本记录
+	 * @param id 记录ID
+	 * @return
+	 */
+	boolean contain(PK id);
 	
 	
 	List<Map<String, Object>> queryForList(Iquery query);

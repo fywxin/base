@@ -170,6 +170,13 @@ public class OrmDaoWrapper<T extends Serializable,PK extends Serializable> exten
 		filter.exeAfterCount(this, rs, query);
 		return rs;
 	}
+
+	public boolean contain(PK id){
+		filter.exeBeforeContain(this, id);
+		boolean rs = super.contain(id);
+		filter.exeAfterContain(this, rs, id);
+		return rs;
+	}
 	
 	public List<Map<String, Object>> queryForList(String sql, Object... objs) {
 		return this.queryForList(Find.newQuery(sql, objs));

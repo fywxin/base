@@ -46,6 +46,10 @@ public interface BaseDaoQueryFilter<T extends Serializable,PK extends Serializab
 	void beforeCount(IOrmDao<T, PK> baseDao, Iquery query);
 	
 	void afterCount(IOrmDao<T, PK> baseDao, Number num, Iquery query);
+
+	void beforeContain(IOrmDao<T, PK> baseDao, PK id);
+
+	void afterContain(IOrmDao<T, PK> baseDao, boolean contain, PK id);
 	
 	
 	void beforeQueryForList(IOrmDao<T, PK> baseDao, Iquery query);

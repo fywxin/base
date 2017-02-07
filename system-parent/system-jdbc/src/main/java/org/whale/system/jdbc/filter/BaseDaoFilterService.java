@@ -224,6 +224,18 @@ public class BaseDaoFilterService<T extends Serializable,PK extends Serializable
 			queryFilters.get(i).afterCount(baseDao, num, query);
 		}
 	}
+
+	public void exeBeforeContain(IOrmDao<T, PK> baseDao, PK id) {
+		for(BaseDaoQueryFilter<T, PK> filter : queryFilters){
+			filter.beforeContain(baseDao, id);
+		}
+	}
+
+	public void exeAfterContain(IOrmDao<T, PK> baseDao, boolean contain, PK id) {
+		for(int i=queryFilters.size()-1; i>=0; i--){
+			queryFilters.get(i).afterContain(baseDao, contain, id);
+		}
+	}
 	
 	//---------------------------------------JdbcTemplate native ---------------------------
 	
