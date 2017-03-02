@@ -66,13 +66,15 @@ public class DefaultValueBuilder implements ValueBuilder {
 		return this.valueDelBuilder.getClear(pks, ormSql);
 	}
 
+	@Deprecated
 	@Override
 	public OrmValue getDeleteX(Object obj) {
 		if(obj == null) return null;
 		OrmSql ormSql = ormContext.getOrmSql(obj.getClass(), OrmSql.OPT_DELETE);
 		return this.valueDelBuilder.getDeleteX(obj, ormSql);
 	}
-	
+
+	@Deprecated
 	@Override
 	public OrmValue getDeleteBy(Object obj) {
 		if(obj == null) return null;
@@ -80,6 +82,7 @@ public class DefaultValueBuilder implements ValueBuilder {
 		return this.valueDelBuilder.getDeleteBy(obj, ormTable);
 	}
 
+	@Deprecated
 	@Override
 	public OrmValue getClearX(List<?> objs) {
 		if(objs == null || objs.size() < 1) return null;
@@ -94,6 +97,7 @@ public class DefaultValueBuilder implements ValueBuilder {
 		return this.valueGetBuilder.getGet(pk, ormSql);
 	}
 
+	@Deprecated
 	@Override
 	public OrmValue getGetX(Object obj) {
 		if(obj == null) return null;
@@ -114,13 +118,15 @@ public class DefaultValueBuilder implements ValueBuilder {
 		return this.valueUpdateBuilder.getUpdateNotNull(obj, ormTable);
 	}
 
+	@Deprecated
 	@Override
 	public OrmValue getQuery(Object obj) {
 		if(obj == null) return null;
 		OrmTable ormTable = ormContext.getOrmTable(obj.getClass());
 		return this.valueGetBuilder.getQuery(obj, ormTable, false);
 	}
-	
+
+	@Deprecated
 	@Override
 	public OrmValue getQueryLike(Object obj) {
 		if(obj == null) return null;

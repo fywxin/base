@@ -326,7 +326,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				if(temp.substring((index = temp.lastIndexOf("from"))+5).lastIndexOf("from") == -1){
 					countSql = "select count(*) "+sql.substring(index);
 				}else{
-					countSql = "select count(*) from ("+sql+")";
+					countSql = "select count(COUNT_TABLE_t.*) from ("+sql+") COUNT_TABLE_t";
 				}
 			}
 			page.setTotal(this.jdbcTemplate.queryForObject(countSql, params.toArray(), Long.class));
@@ -342,7 +342,7 @@ public class OrmDaoImpl<T extends Serializable,PK extends Serializable> implemen
 				}
 				params.add(page.getPageSize());
 			}else{
-				sql = "select * from (select row_.*, rownum rownum_ from ( "+sql+" ) row_ where rownum <=?) where rownum_>=?";
+				sql = "select all_obj_table_t.* from (select row_.*, rownum rownum_ from ( "+sql+" ) row_ where rownum <=?) all_obj_table_t where all_obj_table_t.rownum_>=?";
 				if(page.getOffset() == null){
 					params.add((page.getPageNo()+1) * page.getPageSize());
 					params.add(page.getPageNo() * page.getPageSize());

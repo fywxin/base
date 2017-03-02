@@ -48,4 +48,6 @@ public final class SysConstant {
 	public static final Boolean isRefreshAuth = false;
 	
 	public static final String UTF_8 = "UTF-8";
+
+	public static final int PAGE_SIZE = 20;
 }

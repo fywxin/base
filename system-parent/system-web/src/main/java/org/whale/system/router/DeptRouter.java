@@ -59,7 +59,7 @@ public class DeptRouter extends BaseRouter {
 	public Page doList(Long pid, String deptName, String deptCode, Integer limit){
 		Page page = this.newPage();
 		Q q = page.newQ(Dept.class);
-		q.select().selectWrap(",(SELECT p.deptName FROM sys_dept p WHERE p.id = t.pid) parentName ");
+		q.select().selectWrap(",(SELECT p.deptName FROM sys_dept p WHERE p.id = pid) parentName ");
 		if(pid != null && pid != 0L){
 			q.eq(Dept.F_pid, pid);
 		}

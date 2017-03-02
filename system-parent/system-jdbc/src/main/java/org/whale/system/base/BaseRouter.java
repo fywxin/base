@@ -29,11 +29,9 @@ public abstract class BaseRouter {
 	protected Page newPage(){
 		HttpServletRequest request = WebUtil.getRequest();
 		int pageNo = getInt(request, "page", 1);
-		int pageSize = getInt(request, "limit", 20);
-		if(pageSize < 1)
-			pageSize = 20;
-		if(pageSize > 100)
-			pageSize = 20;
+		int pageSize = getInt(request, "limit", SysConstant.PAGE_SIZE);
+		if(pageSize < 1  || pageSize > 1000)
+			pageSize = SysConstant.PAGE_SIZE;
 		if(pageNo < 1)
 			pageNo = 1;
 		Page page = new Page();

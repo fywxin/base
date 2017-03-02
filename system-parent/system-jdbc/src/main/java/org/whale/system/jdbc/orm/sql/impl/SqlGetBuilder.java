@@ -27,7 +27,7 @@ public class SqlGetBuilder {
 		strb.append(ormTable.getSqlHeadPrefix());
 		
 		OrmColumn idCol = ormTable.getIdCol();
-		strb.append(" WHERE t.").append(idCol.getSqlName()).append("=?");
+		strb.append(" WHERE ").append(idCol.getSqlName()).append("=?");
 		fields.add(idCol.getField());
 		argTypes.add(idCol.getType());
 		sCols.add(idCol);

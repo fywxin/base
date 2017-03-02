@@ -55,6 +55,7 @@ public class ValueGetBuilder {
 	 *@return OrmValue
 	 *
 	 */
+	@Deprecated
 	public OrmValue getQuery(Object obj, OrmTable ormTable, boolean likeQuery) {
 		OrmValue ormValue = new OrmValue();
 		List<OrmColumn> cols = ormTable.getOrmCols();
@@ -72,10 +73,10 @@ public class ValueGetBuilder {
 			if((val = AnnotationUtil.getFieldValue(obj, col.getField())) != null){
 				//字符串类型
 				if(likeQuery && java.sql.Types.VARCHAR == col.getType()){
-					conditionStrb.append(" and t.").append(col.getSqlName()).append(" like ? ");
+					conditionStrb.append(" and ").append(col.getSqlName()).append(" like ? ");
 					objs.add("%"+val.toString().trim()+"%");
 				}else{
-					conditionStrb.append(" and t.").append(col.getSqlName()).append("=? ");
+					conditionStrb.append(" and ").append(col.getSqlName()).append("=? ");
 					objs.add(val);
 				}
 				

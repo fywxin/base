@@ -84,26 +84,19 @@ public class OrmTable extends Atable {
 	
 	public String getSqlColPrexs(){
 		if(Strings.isBlank(sqlColPrexs)){
-			this.sqlColPrexs = this.getSqlColPrexs("t");
+			StringBuilder strb = new StringBuilder(80);
+			for(OrmColumn ormCol : ormCols){
+				if (ormCol.getIsId() && ormCol.getIdIgnore()){
+					continue;
+				}
+				strb.append(",").append(ormCol.getSqlName());
+			}
+			if(strb.length() > 1){
+				strb.deleteCharAt(0);
+			}
+			this.sqlColPrexs = strb.toString();
 		}
 		return sqlColPrexs;
-	}
-	
-	public String getSqlColPrexs(String as){
-		if(Strings.isBlank(as)){
-			as = "t";
-		}
-		StringBuilder strb = new StringBuilder();
-		for(OrmColumn ormCol : ormCols){
-			if (ormCol.getIsId() && ormCol.getIdIgnore()){
-				continue;
-			}
-			strb.append(",").append(as).append(".").append(ormCol.getSqlName());
-		}
-		if(strb.length() > 1){
-			strb.deleteCharAt(0);
-		}
-		return strb.toString();
 	}
 	
 	/**
@@ -113,11 +106,11 @@ public class OrmTable extends Atable {
 	 */
 	public String getSqlOrderSuffix(){
 		if(sqlOrderSuffixStr == null){
-			StringBuilder strb = new StringBuilder("");
+			StringBuilder strb = new StringBuilder(20);
 			if(orderCols != null && orderCols.size() > 0){
 				strb.append(" ORDER BY ");
 				for(OrmColumn orderCol : orderCols){
-					strb.append("t.").append(orderCol.getSqlName()).append(orderCol.getOrmOrder().getAsc()? " asc," : " desc,");
+					strb.append(orderCol.getSqlName()).append(orderCol.getOrmOrder().getAsc()? " asc," : " desc,");
 				}
 				strb.deleteCharAt(strb.length()-1);
 			}
@@ -135,9 +128,9 @@ public class OrmTable extends Atable {
 	 */
 	public String getSqlHeadPrefix(){
 		if(sqlHeadPrefixStr == null){
-			StringBuilder strb = new StringBuilder();
+			StringBuilder strb = new StringBuilder(100);
 			strb.append("SELECT ").append(getSqlColPrexs()).append(" ")
-				.append("FROM ").append(this.getTableDbName()).append(" t ");
+				.append("FROM ").append(this.getTableDbName());
 			sqlHeadPrefixStr = strb;
 		}
 		return sqlHeadPrefixStr.toString();

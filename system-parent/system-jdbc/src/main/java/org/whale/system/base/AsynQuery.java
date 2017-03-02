@@ -93,7 +93,7 @@ public class AsynQuery implements Iquery{
 		OrmTable ormTable = ormContext.getOrmTable(clazz);
 		
 		StringBuilder strb = new StringBuilder();
-		strb.append("DELETE FROM ").append(ormTable.getTableDbName()).append(" t ").append(this.bulidAfterFromSql());
+		strb.append("DELETE FROM ").append(ormTable.getTableDbName()).append(this.bulidAfterFromSql());
 		
 		return strb.toString();
 	}
@@ -123,7 +123,7 @@ public class AsynQuery implements Iquery{
 		}else{
 			strb.append(" ORDER BY ");
 			for(AsynQuery.Order order : orders){
-				strb.append("t.").append(order.getCol()).append(order.isAsc() ? " ASC,": " DESC,");
+				strb.append(order.getCol()).append(order.isAsc() ? " ASC,": " DESC,");
 			}
 			strb.deleteCharAt(strb.length()-1);
 		}
@@ -134,7 +134,7 @@ public class AsynQuery implements Iquery{
 		OrmContext ormContext = SpringContextHolder.getBean(OrmContext.class);
 		OrmTable ormTable = ormContext.getOrmTable(clazz);
 		StringBuilder strb = new StringBuilder();
-		strb.append("SELECT COUNT(1) FROM ").append(ormTable.getTableDbName()).append(" t ").append(this.bulidAfterFromSql());
+		strb.append("SELECT COUNT(1) FROM ").append(ormTable.getTableDbName()).append(this.bulidAfterFromSql());
 		
 		return strb.toString();
 	}
@@ -160,16 +160,16 @@ public class AsynQuery implements Iquery{
 			if(eqParams != null){
 				for(Map.Entry<String, Object> eq : eqParams.entrySet()){
 					if(eq.getValue() == null){
-						strb.append(" AND t.").append(eq.getKey()).append(" IS NULL ");
+						strb.append(" AND ").append(eq.getKey()).append(" IS NULL ");
 					}else{
-						strb.append(" AND t.").append(eq.getKey()).append(" = ? ");
+						strb.append(" AND ").append(eq.getKey()).append(" = ? ");
 						args.add(eq.getValue());
 					}
 				}
 			}
 			if(likeParams != null){
 				for(Map.Entry<String, Object> like : likeParams.entrySet()){
-					strb.append(" AND t.").append(like.getKey()).append(" LIKE ? ");
+					strb.append(" AND ").append(like.getKey()).append(" LIKE ? ");
 					String val = like.getValue().toString().trim();
 					if(val.startsWith("%") || val.endsWith("%")){
 						args.add(val);
@@ -181,40 +181,40 @@ public class AsynQuery implements Iquery{
 			if(neParams != null){
 				for(Map.Entry<String, Object> ne : neParams.entrySet()){
 					if(ne.getValue() == null){
-						strb.append(" AND t.").append(ne.getKey()).append(" IS NOT NULL ");
+						strb.append(" AND ").append(ne.getKey()).append(" IS NOT NULL ");
 					}else{
-						strb.append(" AND t.").append(ne.getKey()).append(" != ? ");
+						strb.append(" AND ").append(ne.getKey()).append(" != ? ");
 						args.add(ne.getValue());
 					}
 				}
 			}
 			if(gtParams != null){
 				for(Map.Entry<String, Object> gt : gtParams.entrySet()){
-					strb.append(" AND t.").append(gt.getKey()).append(" > ? ");
+					strb.append(" AND ").append(gt.getKey()).append(" > ? ");
 					args.add(gt.getValue());
 				}
 			}
 			if(gtEqParams != null){
 				for(Map.Entry<String, Object> gt : gtEqParams.entrySet()){
-					strb.append(" AND t.").append(gt.getKey()).append(" >= ? ");
+					strb.append(" AND ").append(gt.getKey()).append(" >= ? ");
 					args.add(gt.getValue());
 				}
 			}
 			if(ltParams != null){
 				for(Map.Entry<String, Object> lt : ltParams.entrySet()){
-					strb.append(" AND t.").append(lt.getKey()).append(" < ? ");
+					strb.append(" AND ").append(lt.getKey()).append(" < ? ");
 					args.add(lt.getValue());
 				}
 			}
 			if(ltEqParams != null){
 				for(Map.Entry<String, Object> lt : ltEqParams.entrySet()){
-					strb.append(" AND t.").append(lt.getKey()).append(" <= ? ");
+					strb.append(" AND ").append(lt.getKey()).append(" <= ? ");
 					args.add(lt.getValue());
 				}
 			}
 			if(inArrayParams != null){
 				for(Map.Entry<String, Set<Object>> in : inArrayParams.entrySet()){
-					strb.append(" AND t.").append(in.getKey()).append(" IN (");
+					strb.append(" AND ").append(in.getKey()).append(" IN (");
 					for(Object val : in.getValue()){
 						strb.append("?,");
 						args.add(val);
@@ -225,7 +225,7 @@ public class AsynQuery implements Iquery{
 			}
 			if(betweenParams != null){
 				for(Map.Entry<String, AsynQuery.Between> between : betweenParams.entrySet()){
-					strb.append(" AND t.").append(between.getKey()).append(" BETWEEN ? AND ? ");
+					strb.append(" AND ").append(between.getKey()).append(" BETWEEN ? AND ? ");
 					args.add(between.getValue().getBegin());
 					args.add(between.getValue().getEnd());
 				}

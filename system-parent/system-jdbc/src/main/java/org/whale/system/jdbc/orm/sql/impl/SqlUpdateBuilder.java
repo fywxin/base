@@ -27,17 +27,17 @@ public class SqlUpdateBuilder {
 		List<OrmColumn> sCols = new ArrayList<OrmColumn>(cols.size());
 		
 		StringBuilder sql = new StringBuilder("UPDATE ");
-		sql.append(ormTable.getTableDbName()).append(" t SET ");
+		sql.append(ormTable.getTableDbName()).append(" SET ");
 		
 		for(OrmColumn col : cols){
 			if(col.getIsId() || !col.getUpdateAble()) 
 				continue;
 			//乐观锁 t.version = t.version+1
 			if(col.getIsOptimisticLock()){
-				sql.append(" t.").append(col.getSqlName()).append("=(t.").append(col.getSqlName()).append("+1),");
+				sql.append(col.getSqlName()).append("=(").append(col.getSqlName()).append("+1),");
 				continue;
 			}
-			sql.append(" t.").append(col.getSqlName()).append("=?,");
+			sql.append(col.getSqlName()).append("=?,");
 			argTypes.add(col.getType());
 			fields.add(col.getField());
 			sCols.add(col);
@@ -45,7 +45,7 @@ public class SqlUpdateBuilder {
 		sql.deleteCharAt(sql.length()-1);
 		sql.append(" WHERE ");
 		OrmColumn idCol = ormTable.getIdCol();
-		sql.append("t.").append(idCol.getSqlName()).append("=?");
+		sql.append(idCol.getSqlName()).append("=?");
 		argTypes.add(idCol.getType());
 		fields.add(idCol.getField());
 		sCols.add(idCol);
@@ -53,7 +53,7 @@ public class SqlUpdateBuilder {
 		//乐观锁  AND t.version = ?
 		OrmColumn optimisticLockCol = ormTable.getOptimisticLockCol();
 		if(optimisticLockCol != null){
-			sql.append(" AND t.").append(optimisticLockCol.getSqlName()).append("=?");
+			sql.append(" AND ").append(optimisticLockCol.getSqlName()).append("=?");
 			argTypes.add(optimisticLockCol.getType());
 			fields.add(optimisticLockCol.getField());
 			sCols.add(optimisticLockCol);

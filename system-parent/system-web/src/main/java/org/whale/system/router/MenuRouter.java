@@ -50,7 +50,7 @@ public class MenuRouter extends BaseRouter {
 	public Page doList(Long parentId){
 		Page page = this.newPage();
 		Q q = page.newQ(Menu.class);
-		q.select().selectWrap(",(SELECT p.menuName from sys_menu p WHERE p.menuId = t.parentId) as parentName ");
+		q.select().selectWrap(",(SELECT p.menuName from sys_menu p WHERE p.menuId = parentId) as parentName ");
 		if (parentId != null && parentId != 0l){
 			q.eq(Menu.F_parentId, parentId);
 		}

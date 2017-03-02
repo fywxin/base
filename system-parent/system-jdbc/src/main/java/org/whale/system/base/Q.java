@@ -15,6 +15,8 @@ import org.whale.system.jdbc.orm.entry.OrmTable;
  * 单表查询构造器, AND 条件联合查询
  * col 支持java字段和sql字段
  * 参考nutz  OR 以后加入
+ *
+ * http://www.jooq.org/
  * 
  * @author wjs
  *
@@ -73,7 +75,7 @@ public class Q implements Iquery{
 	public String sqlDel() {
 		if(delSql == null){
 			StringBuilder strb = new StringBuilder();
-			strb.append("DELETE t FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(where.toString());
+			strb.append("DELETE FROM ").append(ormTable.getTableDbName()).append(" WHERE 1=1 ").append(where.toString());
 			if(limit != null){
 				if(order == null){
 					strb.append(ormTable.getSqlOrderSuffix());
@@ -122,16 +124,16 @@ public class Q implements Iquery{
 				if(this.from == null){
 					strb.append(ormTable.getSqlHeadPrefix());
 				}else{
-					strb.append("SELECT ").append(ormTable.getSqlColPrexs()).append(" FROM ").append(ormTable.getTableDbName()).append(" t").append(from);
+					strb.append("SELECT ").append(ormTable.getSqlColPrexs()).append(" FROM ").append(ormTable.getTableDbName()).append(from);
 				}
 			}else{
 				if(select.charAt(select.length()-1) == ','){
 					select.deleteCharAt(select.length()-1);
 				}
 				if(this.from == null){
-					strb.append("SELECT ").append(select).append(" FROM ").append(ormTable.getTableDbName()).append(" t");
+					strb.append("SELECT ").append(select).append(" FROM ").append(ormTable.getTableDbName());
 				}else{
-					strb.append("SELECT ").append(select).append(" FROM ").append(ormTable.getTableDbName()).append(" t").append(from);
+					strb.append("SELECT ").append(select).append(" FROM ").append(ormTable.getTableDbName()).append(from);
 				}
 			}
 			
@@ -159,7 +161,7 @@ public class Q implements Iquery{
 	public String sqlCount() {
 		if(countSql == null){
 			StringBuilder strb = new StringBuilder(100);
-			strb.append("SELECT COUNT(*) FROM ").append(ormTable.getTableDbName()).append(" t WHERE 1=1 ").append(where.toString());
+			strb.append("SELECT COUNT(*) FROM ").append(ormTable.getTableDbName()).append(" WHERE 1=1 ").append(where.toString());
 			if(limit != null){
 				strb.append(limit);
 			}
@@ -195,7 +197,7 @@ public class Q implements Iquery{
 				if(col.indexOf(")") != -1 || col.toLowerCase().indexOf("from") != -1){
 					select.append(col).append(",");
 				}else{
-					select.append("t.").append(this.fixCol(col)).append(",");
+					select.append(this.fixCol(col)).append(",");
 				}
 			}
 			select.deleteCharAt(select.length() - 1);
@@ -232,7 +234,7 @@ public class Q implements Iquery{
 	 */
 	public Q eq(String col, Object value){
 		if(value != null){
-			where.append(" AND t.").append(col).append(" = ?");
+			where.append(" AND ").append(col).append(" = ?");
 			args.add(value);
 		}
 		return this;
@@ -247,7 +249,7 @@ public class Q implements Iquery{
 	 */
 	public Q like(String col, Object value){
 		if(value != null && Strings.isNotBlank((String) value)){
-			where.append(" AND t.").append(col).append(" LIKE ?");
+			where.append(" AND ").append(col).append(" LIKE ?");
 			String val = value.toString().trim();
 			if(val.startsWith("%") || val.endsWith("%")){
 				args.add(val);
@@ -266,7 +268,7 @@ public class Q implements Iquery{
 	 */
 	public Q likeIgnoreCase(String col, Object value){
 		if(value != null && Strings.isNotBlank((String) value)){
-			where.append(" AND upper(t.").append(col).append(") LIKE ?");
+			where.append(" AND upper(").append(col).append(") LIKE ?");
 			String val = value.toString().trim().toUpperCase();
 			if(val.startsWith("%") || val.endsWith("%")){
 				args.add(val);
@@ -288,7 +290,7 @@ public class Q implements Iquery{
 	 */
 	public Q notEq(String col, Object value){
 		if(value != null){
-			where.append(" AND t.").append(col).append(" != ?");
+			where.append(" AND ").append(col).append(" != ?");
 			args.add(value);
 		}
 		return this;
@@ -302,7 +304,7 @@ public class Q implements Iquery{
 	 */
 	public Q gt(String col, Object value){
 		if(value != null){
-			where.append(" AND t.").append(col).append(" > ?");
+			where.append(" AND ").append(col).append(" > ?");
 			args.add(value);
 		}
 		return this;
@@ -316,7 +318,7 @@ public class Q implements Iquery{
 	 */
 	public Q gtEq(String col, Object value){
 		if(value != null){
-			where.append(" AND t.").append(col).append(" >= ?");
+			where.append(" AND ").append(col).append(" >= ?");
 			args.add(value);
 		}
 		return this;
@@ -330,7 +332,7 @@ public class Q implements Iquery{
 	 */
 	public Q lt(String col, Object value) {
 		if(value != null){
-			where.append(" AND t.").append(col).append(" < ?");
+			where.append(" AND ").append(col).append(" < ?");
 			args.add(value);
 		}
 		return this;
@@ -344,7 +346,7 @@ public class Q implements Iquery{
 	 */
 	public Q ltEq(String col, Object value) {
 		if(value != null){
-			where.append(" AND t.").append(col).append(" <= ?");
+			where.append(" AND ").append(col).append(" <= ?");
 			args.add(value);
 		}
 		return this;
@@ -362,7 +364,7 @@ public class Q implements Iquery{
 		}else if(list.size() == 1){
 			return this.eq(col, list.iterator().next());
 		}else{
-			where.append(" AND t.").append(col).append(" IN (");
+			where.append(" AND ").append(col).append(" IN (");
 			for(Object val : list){
 				where.append("?,");
 			}
@@ -385,7 +387,7 @@ public class Q implements Iquery{
 		}else if(list.size() == 1){
 			return this.eq(col, list.iterator().next());
 		}else{
-			where.append(" AND t.").append(col).append(" NOT IN (");
+			where.append(" AND ").append(col).append(" NOT IN (");
 			for(Object val : list){
 				where.append("?,");
 			}
@@ -408,7 +410,7 @@ public class Q implements Iquery{
 			throw new IllegalArgumentException("value must not null");
 		}
 
-		where.append(" AND t.").append(col).append(" BETWEEN ? AND ? ");
+		where.append(" AND ").append(col).append(" BETWEEN ? AND ? ");
 		args.add(from);
 		args.add(to);
 		return this;
@@ -552,7 +554,7 @@ public class Q implements Iquery{
 			order = new StringBuilder(20);
 		}
 		col = this.fixCol(col);
-		order.append("t.").append(col).append(" ASC,");
+		order.append(col).append(" ASC,");
 		return this;
 	}
 
@@ -566,7 +568,7 @@ public class Q implements Iquery{
 			order = new StringBuilder(20);
 		}
 		col = this.fixCol(col);
-		order.append("t.").append(col).append(" DESC,");
+		order.append(col).append(" DESC,");
 		return this;
 	}
 
