@@ -66,9 +66,8 @@ public class UserRouter extends BaseRouter {
 	public Page doList(String userName, String realName, Long deptId){
 		Page page = this.newPage();
 		Q q = page.newQ(User.class)
-					.select("userId","userName","realName","deptId","email","phone","status", "adminFlag" )
-					.selectWrap(",(select d.deptName from sys_dept d where d.id = deptId) as deptName")
-					.like(User.F_userName, userName)
+					.select("userId","userName","realName","deptId","email","phone","status", "adminFlag","(select d.deptName from sys_dept d where d.id = deptId) as deptName")
+					.likeIgnoreCase(User.F_userName, userName)
 					.like(User.F_realName, realName);
 		if(deptId != null && !deptId.equals(0L)){
 			q.eq(User.F_deptId, deptId);

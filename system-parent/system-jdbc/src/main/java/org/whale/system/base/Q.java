@@ -193,33 +193,11 @@ public class Q implements Iquery{
 			select.append(ormTable.getSqlColPrexs());
 		}else{
 			for(String col : cols){
-				//自定义字段
-				if(col.indexOf(")") != -1 || col.toLowerCase().indexOf("from") != -1){
-					select.append(col).append(",");
-				}else{
-					select.append(this.fixCol(col)).append(",");
-				}
+				select.append(col).append(",");
 			}
 			select.deleteCharAt(select.length() - 1);
 		}
 		
-		return this;
-	}
-	
-	/**
-	 * 加入自定义Sql
-	 *  select {sql} from
-	 *
-	 *  select t.*, {appendSql} from -> this.select().selectWrap("{sql}")
-	 *
-	 * @param sql
-	 * @return
-	 */
-	public Q selectWrap(String sql){
-		if(this.select == null){
-			select = new StringBuilder(50);
-		}
-		select.append(sql.trim());
 		return this;
 	}
 	
