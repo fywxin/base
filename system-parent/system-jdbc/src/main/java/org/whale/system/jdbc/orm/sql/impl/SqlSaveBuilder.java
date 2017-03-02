@@ -55,12 +55,10 @@ public class SqlSaveBuilder {
 		
 		for(int i=0; i<cols.size(); i++){
 			OrmColumn col = cols.get(i);
-			
-//			if(col.getIsId() && col.getIdAuto()){
-//				if(DbKind.isMysql()){
-//					continue;
-//				}
-//			}
+
+			if(col.getIsId() && col.getIdIgnore()){
+				continue;
+			}
 			
 			sql.append(col.getSqlName());
 			if(i != cols.size()-1)
@@ -106,12 +104,10 @@ public class SqlSaveBuilder {
 		
 		for(int i=0; i<cols.size(); i++){
 			OrmColumn col = cols.get(i);
-			
-//			if(col.getIsId() && col.getIdAuto()){
-//				if(DbKind.isMysql()){
-//					continue;
-//				}
-//			}
+
+			if(col.getIsId() && col.getIdIgnore()){
+				continue;
+			}
 			
 			sql.append(col.getSqlName());
 			if(i != cols.size()-1)

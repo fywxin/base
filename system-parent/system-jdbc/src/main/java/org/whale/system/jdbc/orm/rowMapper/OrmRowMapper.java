@@ -40,6 +40,9 @@ public class OrmRowMapper<T> implements RowMapper<T> {
             obj = mappedClass.newInstance();
             //对应关系见 http://hi.baidu.com/linyongboole/item/d3749cbff69121422bebe302
             for(OrmColumn col : ormColumnList){
+                if (col.getIdIgnore()){
+                    continue;
+                }
                 objVal = rs.getObject(col.getSqlName());
                 colCopy = col;
                 if(Types.VARCHAR == col.getType()){

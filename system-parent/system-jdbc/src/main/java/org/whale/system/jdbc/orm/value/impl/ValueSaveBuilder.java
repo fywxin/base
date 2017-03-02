@@ -28,7 +28,7 @@ public class ValueSaveBuilder {
 		
 		//如果有Id字段，获取Id字段自增序列值，并设置到实体中
 		OrmColumn idCol = ormTable.getIdCol();
-		if(idCol != null){
+		if(idCol != null && !idCol.getIdIgnore()){
 			Object value = null;
 			//ORACLE
 			if(idCol.getIdAuto()){
@@ -113,10 +113,10 @@ public class ValueSaveBuilder {
 		List<Object> args = new ArrayList<Object>(list.size());
 		Object val = null;
 		for(OrmColumn col : list){
-//			if(DbKind.isMysql()){
-//				if(col.getIsId() && col.getIdAuto())
-//					continue;
-//			}
+			if(col.getIsId() && col.getIdIgnore()){
+				continue;
+			}
+
 			val = AnnotationUtil.getFieldValue(obj, col.getField());
 //			if(!col.getNullAble() && val == null) 
 //				throw new OrmException("对象 ["+obj.getClass().getName()+"] 中字段 ["+col.getAttrName()+"] 值不能为空");
