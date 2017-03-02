@@ -37,6 +37,11 @@ public class Q implements Iquery{
 	private StringBuilder order;
 	//limit
 	private StringBuilder limit;
+	//group 分组
+	private StringBuilder groupBy;
+	//group 分组条件
+	private String having;
+
 	//参数
 	private List<Object> args = new ArrayList<Object>();
 	
@@ -96,6 +101,14 @@ public class Q implements Iquery{
 		if(getSql == null){
 			StringBuilder strb = new StringBuilder(50);
 			strb.append(ormTable.getSqlHeadPrefix()).append(" WHERE 1=1 ").append(where.toString());
+			
+			if (groupBy != null){
+				strb.append(" GROUP BY ").append(groupBy);
+				if (having != null){
+					strb.append(" HAVING ").append(having);
+				}
+			}
+
 			if(limit != null){
 				if(order == null){
 					strb.append(ormTable.getSqlOrderSuffix());
@@ -138,11 +151,18 @@ public class Q implements Iquery{
 			}
 			
 			strb.append(" WHERE 1=1 ").append(where);
+
+			if (groupBy != null){
+				strb.append(" GROUP BY ").append(groupBy);
+				if (having != null){
+					strb.append(" HAVING ").append(having);
+				}
+			}
 			
 			if(order == null){
 				strb.append(ormTable.getSqlOrderSuffix());
 			}else{
-				strb.append(" ORDER BY ").append(order.deleteCharAt(order.length()-1));
+				strb.append(" ORDER BY ").append(order.deleteCharAt(order.length() - 1));
 			}
 			
 			if(this.limit != null){
@@ -407,6 +427,37 @@ public class Q implements Iquery{
 			for (Object obj : values){
 				args.add(obj);
 			}
+		}
+		return this;
+	}
+
+	/**
+	 * 分组
+	 * @param cols
+	 * @return
+	 */
+	public Q groupBy(String... cols) {
+		if (cols.length == 0){
+			return this;
+		}
+		if (groupBy == null){
+			groupBy = new StringBuilder();
+		}
+		for (String col : cols){
+			groupBy.append(",").append(col);
+		}
+		groupBy.deleteCharAt(0);
+		return this;
+	}
+
+	/**
+	 * 分组条件
+	 * @param groupConditions
+	 * @return
+	 */
+	public Q having(String groupConditions){
+		if (Strings.isNotBlank(groupConditions)){
+			having = groupConditions;
 		}
 		return this;
 	}
