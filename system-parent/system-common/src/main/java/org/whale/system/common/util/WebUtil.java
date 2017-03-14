@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,7 +128,7 @@ public class WebUtil {
 	 * @param obj
 	 */
 	public static void print(HttpServletResponse response, Object obj){
-		doPrint(response, JSON.toJSONString(obj));
+		doPrint(response, JSON.toJSONString(obj, SerializerFeature.DisableCircularReferenceDetect));
 	}
 	
 	/**
@@ -293,7 +294,7 @@ public class WebUtil {
 		}
 	}
 	
-	static class Result{
+	public static class Result{
 		
 		private boolean rs = true;
 		
@@ -301,7 +302,9 @@ public class WebUtil {
 		
 		private String msg;
 		
-		private Object datas;
+		private Object data;
+
+		private String exception;
 		
 		public Result(){}
 		
@@ -310,10 +313,10 @@ public class WebUtil {
 			this.msg = msg;
 		}
 		
-		public Result(boolean rs, String msg, Object datas) {
+		public Result(boolean rs, String msg, Object data) {
 			this.rs = rs;
 			this.msg = msg;
-			this.datas = datas;
+			this.data = data;
 		}
 		
 		public Result(boolean rs, String msg, String code) {
@@ -322,11 +325,20 @@ public class WebUtil {
 			this.code = code;
 		}
 		
-		public Result(boolean rs, String msg, Object datas, String code) {
+		public Result(boolean rs, String msg, Object data, String code) {
 			this.rs = rs;
 			this.msg = msg;
-			this.datas = datas;
+			this.data = data;
 			this.code = code;
+		}
+
+		public Result exp(String exception){
+			this.exception = exception;
+			return this;
+		}
+
+		public String toJson(){
+			return JSON.toJSONString(this, SerializerFeature.DisableCircularReferenceDetect);
 		}
 		
 		
@@ -346,12 +358,12 @@ public class WebUtil {
 			this.msg = msg;
 		}
 
-		public Object getDatas() {
-			return datas;
+		public Object getData() {
+			return data;
 		}
 
-		public void setDatas(Object datas) {
-			this.datas = datas;
+		public void setData(Object data) {
+			this.data = data;
 		}
 
 		public String getCode() {
@@ -362,16 +374,18 @@ public class WebUtil {
 			this.code = code;
 		}
 
+		public String getException() {
+			return exception;
+		}
+
+		public void setException(String exception) {
+			this.exception = exception;
+		}
+
 		@Override
 		public String toString() {
-			StringBuilder strb = new StringBuilder("{\"rs\":");
-			strb.append(rs ? "true" : "false").append(",\"code\":\"").append(code)
-				.append("\",\"msg\":\"").append(null == msg ? "" : msg)
-				.append("\",\"datas\":").append(null == datas ? "{}" : JSON.toJSONString(datas))
-				.append("}");
-			return strb.toString();
+			return toJson();
 		}
-		
 	}
 	
 }
