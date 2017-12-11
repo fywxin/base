@@ -52,6 +52,8 @@ public class Q implements Iquery{
 	private String querySql;
 	
 	private String countSql;
+
+	private String tail;
 	
 	
 	public static Q newQ(Class<?> clazz){
@@ -91,6 +93,9 @@ public class Q implements Iquery{
 			}
 			delSql = strb.toString();
 		}
+		if (Strings.isNotBlank(tail)){
+			delSql += tail;
+		}
 		if(logger.isDebugEnabled()){
 			logger.debug("del: [\n" + delSql + "\n" + JSON.toJSONString(args) + "\n]");
 		}
@@ -121,6 +126,9 @@ public class Q implements Iquery{
 			}
 			getSql = strb.toString();
 
+		}
+		if (Strings.isNotBlank(tail)){
+			getSql += tail;
 		}
 
 		if(logger.isDebugEnabled()){
@@ -171,6 +179,9 @@ public class Q implements Iquery{
 			
 			querySql = strb.toString();
 		}
+		if (Strings.isNotBlank(tail)){
+			querySql += tail;
+		}
 		if(logger.isDebugEnabled()){
 			logger.debug("query: [\n" + querySql + "\n" + JSON.toJSONString(args) + "\n]");
 		}
@@ -186,6 +197,9 @@ public class Q implements Iquery{
 				strb.append(limit);
 			}
 			countSql = strb.toString();
+		}
+		if (Strings.isNotBlank(tail)){
+			countSql += tail;
 		}
 		if(logger.isDebugEnabled()){
 			logger.debug("count: [\n" + countSql + "\n" + JSON.toJSONString(args) + "\n]");
@@ -602,7 +616,7 @@ public class Q implements Iquery{
 	}
 
 	/**
-	 * 记录查询范围限制
+	 *
 	 * @param from
 	 * @param size
 	 * @return
@@ -614,6 +628,10 @@ public class Q implements Iquery{
 		limit.append(" LIMIT ").append(from).append(", ").append(size);
 
 		return this;
+	}
+
+	public void tail(String tail){
+		this.tail = " "+tail;
 	}
 	
 	private String fixCol(String col){
