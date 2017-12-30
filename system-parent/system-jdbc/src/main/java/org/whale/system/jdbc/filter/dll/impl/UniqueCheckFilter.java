@@ -43,7 +43,7 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 			Object val = AnnotationUtil.getFieldValue(obj, col.getField());
 			String sql = "select count(1) from "+baseDao._getOrmTable().getTableDbName()
 					+" where "+col.getSqlName()+"=?";
-			if(jdbcTemplate.queryForInt(sql, val) > 0){
+			if(jdbcTemplate.queryForObject(sql, Integer.class, val) > 0){
 				throw new BusinessException(col.getCnName()+"["+val+"] 已存在值");
 			}
 		}
@@ -76,7 +76,7 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 			for(Object colVal : entry.getValue()){
 				String sql = "select count(1) from "+baseDao._getOrmTable().getTableDbName()
 						+" where "+entry.getKey().getSqlName()+"=?";
-				if(jdbcTemplate.queryForInt(sql, colVal) > 0){
+				if(jdbcTemplate.queryForObject(sql, Integer.class, colVal) > 0){
 					throw new BusinessException(entry.getKey().getCnName()+"["+val+"] 已存在值");
 				}
 			}
@@ -103,7 +103,7 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 				
 				String sql = "select count(1) from "+ormTable.getTableDbName()
 						+" where "+col.getSqlName()+"=?";
-				if(jdbcTemplate.queryForInt(sql, val) > 0){
+				if(jdbcTemplate.queryForObject(sql, Integer.class, val) > 0){
 					throw new BusinessException(col.getCnName()+"["+val+"] 已存在值");
 				}
 			}
@@ -158,7 +158,7 @@ public class UniqueCheckFilter<T extends Serializable,PK extends Serializable> e
 				
 				String sql = "select count(1) from "+ormTable.getTableDbName()
 						+" where "+entry.getKey().getSqlName()+"=?";
-				if(jdbcTemplate.queryForInt(sql, colVal) > 0){
+				if(jdbcTemplate.queryForObject(sql, Integer.class, colVal) > 0){
 					throw new BusinessException(entry.getKey().getCnName()+"["+colVal+"] 已存在值");
 				}
 			}

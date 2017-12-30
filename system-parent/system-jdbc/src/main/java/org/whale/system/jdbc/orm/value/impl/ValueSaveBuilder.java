@@ -96,7 +96,7 @@ public class ValueSaveBuilder {
 	@SuppressWarnings("all")
 	private Object getNextId(String sequence){
 		String sql = "select "+sequence+".NEXTVAL from dual";
-		return this.jdbcTemplate.queryForLong(sql);
+		return this.jdbcTemplate.queryForObject(sql, Long.class);
 	}
 	
 	/**
