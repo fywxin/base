@@ -17,4 +17,4 @@ jdk8+tomcat8+spring4
 
 2. idea配置tomcat时，加入如上两个包依赖
 
-   ![image](https://github.com/fywxin/base/blob/master/doc/img/jsp.png)
+   ![image](https://github.com/fywxin/base/blob/develop-jdk8/doc/img/jsp.png)
