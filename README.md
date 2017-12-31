@@ -11,7 +11,7 @@ base
 java.lang.ClassNotFoundException: org.apache.jsp.index_jsp
 ```
 
-jdk8+tomcat8+spring4
+jdk8+tomcat7.0.57+spring4
 
 1. copy  jstl-1.2.jar 和 standard-1.1.2.jar 到tomcat8目录
 
